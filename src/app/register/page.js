@@ -12,17 +12,23 @@ function Register() {
     password: "",
     confirmPassword: "",
   });
+  const [errors, setErrors] = useState([]);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
+    setFormData((prev) => ({
+      ...prev,
       [id]: value,
     }));
   };
 
   async function handleRegister(e) {
     e.preventDefault();
+
+    if (formData.password !== formData.confirmPassword) {
+      setErrors([{ msg: "Passwords do not match", path: "confirmPassword" }]);
+      return;
+    }
 
     const data = {
       userName: formData.userName,
@@ -38,16 +44,42 @@ function Register() {
         body: JSON.stringify(data),
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
       const result = await response.json();
-      console.log(result);
+
+      if (!response.ok) {
+
+        setErrors(result.errors || [{ msg: "Registration failed" }]);
+      } else {
+        console.log(result);
+        setErrors([]);
+      }
     } catch (error) {
       console.error("Failed to register:", error);
+      setErrors([{ msg: "An unexpected error occurred", path: "general" }]);
     }
   }
+
+  const filteredErrors = errors.reduce(
+    (acc, err) => {
+      if (typeof err === "object" && err.path) {
+        if (!acc.fields.has(err.path)) {
+          acc.fields.add(err.path);
+          acc.list.push(err);
+        }
+      } else {
+        acc.list.push(err);
+      }
+      return acc;
+    },
+    { fields: new Set(), list: [] }
+  ).list;
+
+  const errorMap = {};
+  filteredErrors.forEach((err) => {
+    if (typeof err === "object" && err.path && !errorMap[err.path]) {
+      errorMap[err.path] = err.msg;
+    }
+  });
 
   return (
     <>
@@ -60,11 +92,15 @@ function Register() {
               type="text"
               id="userName"
               placeholder="Username"
+              autoComplete="username"
               value={formData.userName}
               onChange={handleChange}
               required
             />
           </div>
+          {errorMap.userName && (
+            <p className="errorMessage">{errorMap.userName}</p>
+          )}
           <div className="inputContainer">
             <i className="fa fa-id-card"></i>
             <input
@@ -76,39 +112,59 @@ function Register() {
               required
             />
           </div>
+          {errorMap.displayName && (
+            <p className="errorMessage">{errorMap.displayName}</p>
+          )}
           <div className="inputContainer">
             <i className="fa fa-envelope"></i>
             <input
               type="email"
               id="email"
               placeholder="Email"
+              autoComplete="email"
               value={formData.email}
               onChange={handleChange}
               required
             />
+
           </div>
+          {errorMap.email && (
+            <p className="errorMessage">{errorMap.email}</p>
+          )}
           <div className="inputContainer">
             <i className="fa fa-lock"></i>
             <input
               type="password"
               id="password"
               placeholder="Password"
+              autoComplete="new-password"
               value={formData.password}
               onChange={handleChange}
               required
             />
+
           </div>
+          {errorMap.password && (
+            <p className="errorMessage">{errorMap.password}</p>
+          )}
           <div className="inputContainer">
             <i className="fa fa-lock"></i>
             <input
               type="password"
               id="confirmPassword"
               placeholder="Confirm Password"
+              autoComplete="new-password"
               value={formData.confirmPassword}
               onChange={handleChange}
               required
             />
+
           </div>
+          {errorMap.confirmPassword && (
+            <p className="errorMessage">
+              {errorMap.confirmPassword}
+            </p>
+          )}
           <button type="submit">Register</button>
         </form>
         <p>
