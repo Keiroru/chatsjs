@@ -134,7 +134,8 @@ form button:hover {
     color: #e0e6ed;
     text-decoration: none;
     font-weight: bold;
-    transition: color 0.3s;
+    transition: color 0.5s;
+    text-decoration: underline;
 }
 
 .form p a:hover {
