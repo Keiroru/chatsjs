@@ -160,7 +160,7 @@ select:-webkit-autofill {
     transition: background-color 500000s;
 }
 
-@media screen and (max-width: 550px) {
+@media screen and (max-width: 500px) {
     .form {
         width: 95%;
     }

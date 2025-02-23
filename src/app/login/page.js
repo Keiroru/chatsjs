@@ -17,6 +17,7 @@ function Login() {
     try {
       const res = await fetch("http://localhost:3001/login", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
@@ -25,6 +26,7 @@ function Login() {
         setError(data.error);
         return;
       }
+
       console.log("Login successful");
     } catch (err) {
       console.error(err);

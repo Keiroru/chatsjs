@@ -1,11 +1,19 @@
 const express = require("express");
 const mysql = require("mysql2");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const { body, validationResult } = require("express-validator");
+const { encrypt } = require('./app/stuff/crypt');
+const { promisify } = require("util");
 
 const app = express();
-app.use(cors());
+const corsOptions = {
+  origin: "http://localhost:3000",
+  credentials: true,
+};
+app.use(cors(corsOptions));
 app.use(express.json());
+app.use(cookieParser());
 
 // Configure your database connection
 const db = mysql.createConnection({
@@ -113,7 +121,7 @@ app.post(
     body("username").notEmpty().withMessage("Username is required"),
     body("password").notEmpty().withMessage("Password is required"),
   ],
-  (req, res) => {
+  async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -122,16 +130,26 @@ app.post(
     const { username, password } = req.body;
     const loginQuery = "SELECT * FROM Users WHERE userName = ? AND password = ?";
 
-    db.query(loginQuery, [username, password], (err, results) => {
-      if (err) {
-        console.error("Login error:", err);
-        return res.status(500).json({ error: "Database error" });
-      }
+    const queryAsync = promisify(db.query).bind(db);
+
+    try {
+      const results = await queryAsync(loginQuery, [username, password]);
       if (results.length === 0) {
         return res.status(401).json({ error: "Incorrect Username or Password!" });
       }
+      const expiresIn = 60 * 60 * 24 * 7;
+      const session = await encrypt({ username, password, expiresIn });
+
+      res.cookie("session", session, {
+        httpOnly: true,
+        maxAge: expiresIn * 1000,
+        path: "/",
+      });
       res.status(200).json({ message: "Login successful" });
-    });
+    } catch (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: "Internal server error" });
+    }
   }
 );
 
