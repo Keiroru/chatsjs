@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
 import mysql from "mysql2/promise";
+import LogoutButton from "./logout";
 
 export default async function Chat() {
     const cookieStore = await cookies();
@@ -51,7 +52,7 @@ export default async function Chat() {
                     <p>Created at: {new Date(userData.createdAt).toLocaleString()}</p>
                 </div>
             )}
-            <button>Logout</button>
+            <LogoutButton />
         </div>
     );
 }

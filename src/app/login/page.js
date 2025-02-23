@@ -1,11 +1,13 @@
 'use client';
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import LoginOrRegister from "../Components/LoginOrRegister";
 import "../Components/this.css";
 
 function Login() {
   const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,10 +28,8 @@ function Login() {
         setError(data.error);
         return;
       }
-
-      console.log("Login successful");
+      router.push("/chat");
     } catch (err) {
-      console.error(err);
       setError("Something went wrong, please try again later");
     }
   };
