@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -30,7 +30,7 @@ function Login() {
       }
       router.push("/chat");
     } catch (err) {
-      setError("Something went wrong, please try again later");
+      setError("bocs nincs szero");
     }
   };
 
@@ -45,7 +45,12 @@ function Login() {
         </div>
         <div className="inputContainer">
           <i className="fa fa-lock"></i>
-          <input type="password" name="password" placeholder="Password" required />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+          />
         </div>
         <button type="submit">Login</button>
       </form>
