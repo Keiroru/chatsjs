@@ -11,7 +11,7 @@ export default async function Chat() {
 
   if (token) {
     try {
-      const secret = new TextEncoder().encode(process.env.JWT_SECRET || "igen");
+      const secret = new TextEncoder().encode(process.env.JWT_SECRET);
       const { payload } = await jwtVerify(token, secret);
       userName = payload.username || userName;
 

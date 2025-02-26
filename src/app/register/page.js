@@ -1,10 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import LoginOrRegister from "../Components/LoginOrRegister";
 import "../Components/this.css";
 
 function Register() {
+  const router = useRouter()
+
   const [formData, setFormData] = useState({
     userName: "",
     displayName: "",
@@ -50,7 +53,7 @@ function Register() {
 
         setErrors(result.errors || [{ msg: "Registration failed" }]);
       } else {
-        console.log(result);
+        router.push("/login");
         setErrors([]);
       }
     } catch (error) {

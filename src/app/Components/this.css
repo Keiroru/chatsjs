@@ -1,4 +1,15 @@
 :root {
+    --rich-black: #121212;
+    --charcoal: #1e1e1e;
+    --gunmetal: #2d2d2d;
+    --dark-slate: #383838;
+    --medium-slate: #484848;
+    --silver: #9e9e9e;
+    --lavender: #b388ff;
+    --light-lavender: #e9ddff;
+    --off-white: #f5f5f5;
+    --error-red: #cf6679;
+
     --form-width: 300px;
     --form-height: 350px;
 }
@@ -10,10 +21,10 @@
     justify-content: center;
     align-items: center;
     background: radial-gradient(circle at center,
-            #1d2127 0%,
-            #2e3139 40%,
-            #3c4a52 80%,
-            #526175 100%);
+            var(--rich-black) 0%,
+            var(--charcoal) 40%,
+            var(--gunmetal) 80%,
+            var(--dark-slate) 100%);
 }
 
 .form {
@@ -21,19 +32,21 @@
     height: fit-content;
     width: var(--form-width);
     padding: 20px;
-    color: #e0e6ed;
-    background-image: linear-gradient(300deg, #2e3139 25%, #3c4a52 99%);
+    color: var(--off-white);
+    background: var(--charcoal);
     border-radius: 15px;
-    box-shadow: #1d2127 0px 0px 10px;
-    transition: box-shadow 0.5s;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
 }
 
 .form:hover {
-    box-shadow: #1d2127 0px 0px 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .form h1 {
     text-align: center;
+    margin-bottom: 25px;
+    font-weight: 500;
 }
 
 form {
@@ -45,52 +58,53 @@ form {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: calc(var(--form-width) + 200px);
-    min-height: calc(var(--form-height) + 225px);
+    width: calc(var(--form-width) + 250px);
+    min-height: calc(var(--form-height) + 275px);
     padding: 20px;
-    border-radius: 55px 155px 55px 155px;
-    background-image: linear-gradient(300deg, #1d2127 35%, #2e3846 95%);
-    box-shadow: #1d2127 0px 0px 10px;
-    transition: box-shadow 0.5s;
+    border-radius: 55px 155px;
+    background: linear-gradient(135deg, var(--rich-black) 0%, var(--charcoal) 100%);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    transition: box-shadow 0.3s ease;
 }
 
 .background:hover {
-    box-shadow: #1d2127 0px 0px 20px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.3);
 }
 
 .inputContainer {
-    width: 95%;
-    height: 35px;
+    width: 100%;
+    height: 40px;
     display: flex;
     align-items: center;
-    padding: 5px;
+    padding: 10px 10px;
     border-radius: 10px;
-    border: 1px solid #8faac0;
-    margin: auto;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    transition: border-color 0.5s, height 0.5s, width 0.5s;
+    border: 1px solid var(--gunmetal);
+    background-color: rgba(255, 255, 255, 0.05);
+    margin: 5px 0;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
     font-family: "Montserrat", sans-serif;
     box-sizing: border-box;
-    box-shadow: #1d2127;
 }
 
 .inputContainer i {
-    margin-right: 5px;
-    margin-left: 5px;
-    color: #e0e6ed;
+    margin-right: 10px;
+    color: var(--silver);
+    font-size: 16px;
+    transition: color 0.2s ease;
 }
 
 .inputContainer:hover {
-    border-color: #e0e6ed;
-    height: 40px;
-    width: 100%;
+    border-color: var(--silver);
+    background-color: rgba(255, 255, 255, 0.07);
 }
 
 .inputContainer:focus-within {
-    border: 2px solid #1f2a36;
-    height: 40px;
-    width: 100%;
+    border: 1px solid var(--lavender);
+    box-shadow: 0 0 0 5px rgba(179, 136, 255, 0.15);
+}
+
+.inputContainer:focus-within i {
+    color: var(--lavender);
 }
 
 .inputContainer input {
@@ -105,58 +119,86 @@ form {
 form button {
     height: 40px;
     width: 50%;
-    margin: auto;
-    margin-top: 10px;
-    background-color: #3c4a52;
-    box-shadow: inset 0 0 10px #1d2127;
+    margin: 20px auto 5px auto;
+    background-color: var(--lavender);
+    box-shadow: 0 2px 10px rgba(179, 136, 255, 0.3);
     border: none;
-    border-radius: 10px;
-    color: #e0e6ed;
+    border-radius: 8px;
+    color: var(--rich-black);
     font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 2px;
     cursor: pointer;
-    transition: transform 0.5s, margin-top 0.5s;
+    transition: all 0.2s ease;
 }
 
 form button:hover {
-    transform: scale(1.2);
-    margin-top: 15px;
+    background-color: var(--light-lavender);
+    box-shadow: 0 4px 12px rgba(179, 136, 255, 0.4);
+    transform: translateY(-1px);
+}
+
+form button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 5px rgba(179, 136, 255, 0.2);
 }
 
 .form p {
     text-align: center;
     font-family: "Montserrat", sans-serif;
     font-size: 14px;
-    color: #e0e6ed;
+    color: var(--silver);
     margin-top: 20px;
 }
 
 .form p a {
-    color: #e0e6ed;
+    color: var(--lavender);
     text-decoration: none;
-    font-weight: bold;
-    transition: color 0.5s;
-    text-decoration: underline;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    position: relative;
+    padding-bottom: 2px;
+}
+
+.form p a:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 1px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--light-lavender);
+    transform-origin: bottom right;
+    transition: transform 0.2s ease;
 }
 
 .form p a:hover {
-    color: #8faac0;
-    text-decoration: underline;
+    color: var(--light-lavender);
+}
+
+.form p a:hover:after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
 }
 
 input {
-    color: #e0e6ed;
+    color: var(--off-white);
 }
 
 .errorMessage {
     margin: 0 !important;
-    padding-bottom: 5px;
-    color: red !important;
+    padding: 0px 0 5px 0;
+    color: var(--error-red) !important;
+    font-size: 13px;
 }
 
 input:-webkit-autofill,
 textarea:-webkit-autofill,
 select:-webkit-autofill {
-    -webkit-text-fill-color: #e0e6ed !important;
+    -webkit-text-fill-color: var(--off-white) !important;
+    -webkit-box-shadow: 0 0 0px 1000px var(--charcoal) inset;
     transition: background-color 500000s;
 }
 
