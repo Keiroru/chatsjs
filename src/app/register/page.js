@@ -89,7 +89,7 @@ function Register() {
       <LoginOrRegister>
         <h1>Sign Up</h1>
         <form onSubmit={handleRegister}>
-          <div className="inputContainer">
+          <div className="input-container">
             <i className="fa fa-user"></i>
             <input
               type="text"
@@ -104,7 +104,7 @@ function Register() {
           {errorMap.userName && (
             <p className="errorMessage">{errorMap.userName}</p>
           )}
-          <div className="inputContainer">
+          <div className="input-container">
             <i className="fa fa-id-card"></i>
             <input
               type="text"
@@ -118,7 +118,7 @@ function Register() {
           {errorMap.displayName && (
             <p className="errorMessage">{errorMap.displayName}</p>
           )}
-          <div className="inputContainer">
+          <div className="input-container">
             <i className="fa fa-envelope"></i>
             <input
               type="email"
@@ -134,7 +134,7 @@ function Register() {
           {errorMap.email && (
             <p className="errorMessage">{errorMap.email}</p>
           )}
-          <div className="inputContainer">
+          <div className="input-container">
             <i className="fa fa-lock"></i>
             <input
               type="password"
@@ -150,7 +150,7 @@ function Register() {
           {errorMap.password && (
             <p className="errorMessage">{errorMap.password}</p>
           )}
-          <div className="inputContainer">
+          <div className="input-container">
             <i className="fa fa-lock"></i>
             <input
               type="password"

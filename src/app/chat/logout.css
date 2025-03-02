@@ -1,0 +1,49 @@
+.logout-button {
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.logout-button:hover {
+    color: var(--coral-red);
+}
+
+.logout-button:active {
+    transform: scale(0.95);
+}
+
+.logout-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.logout-button::after {
+    content: "Logout";
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+}
+
+.logout-button:hover::after {
+    opacity: 1;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.logout-button .fa-spinner {
+    animation: spin 1s linear infinite;
+}

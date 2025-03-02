@@ -2,6 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSignOutAlt, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import "./logout.css";
 
 export default function LogoutButton() {
     const router = useRouter();
@@ -19,8 +22,18 @@ export default function LogoutButton() {
     };
 
     return (
-        <button onClick={handleLogout} disabled={loading}>
-            {loading ? "Logging out..." : "Logout"}
+        <button
+            onClick={handleLogout}
+            disabled={loading}
+            className="icon-button logout-button"
+            aria-label={loading ? "Logging out..." : "Logout"}
+            title="Logout"
+        >
+            {loading ? (
+                <FontAwesomeIcon icon={faSpinner} spin />
+            ) : (
+                <FontAwesomeIcon icon={faSignOutAlt} />
+            )}
         </button>
     );
 }

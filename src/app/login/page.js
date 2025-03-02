@@ -39,11 +39,11 @@ function Login() {
       <h1>Login</h1>
       {error && <p className="errorMessage">{error}</p>}
       <form onSubmit={handleSubmit}>
-        <div className="inputContainer">
+        <div className="input-container">
           <i className="fa fa-user"></i>
           <input type="text" name="username" placeholder="Username" required />
         </div>
-        <div className="inputContainer">
+        <div className="input-container">
           <i className="fa fa-lock"></i>
           <input
             type="password"
