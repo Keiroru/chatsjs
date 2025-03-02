@@ -12,6 +12,7 @@ export default function ChatClient({ userData }) {
   const [activeChat, setActiveChat] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobile, setIsMobile] = useState(false);
+  const [activeTab, setActiveTab] = useState('people');
   const chatContainerRef = useRef(null);
 
   const contacts = useMemo(() => [
@@ -105,8 +106,18 @@ export default function ChatClient({ userData }) {
         </div>
 
         <div className="tab-buttons">
-          <button className="tab-button active">People</button>
-          <button className="tab-button">Groups</button>
+          <button
+            className={`tab-button ${activeTab === 'people' ? 'active' : ''}`}
+            onClick={() => setActiveTab('people')}
+          >
+            People
+          </button>
+          <button
+            className={`tab-button ${activeTab === 'groups' ? 'active' : ''}`}
+            onClick={() => setActiveTab('groups')}
+          >
+            Groups
+          </button>
         </div>
 
         <div className="contacts-list">
