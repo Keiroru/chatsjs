@@ -3,10 +3,9 @@ const mysql = require("mysql2");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const { body, validationResult } = require("express-validator");
-const { encrypt } = require('./app/stuff/crypt');
 const { promisify } = require("util");
-const path = require("path");
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+const { encrypt } = require("./src/app/stuff/crypt");
+require('dotenv').config();
 
 const app = express();
 const corsOptions = {
