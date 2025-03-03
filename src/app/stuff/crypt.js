@@ -1,7 +1,10 @@
-import jwt from "jsonwebtoken";
+const jwt = require("jsonwebtoken");
 
 const JWT_SECRET = "igen";
 
-export async function encrypt(payload) {
+const encrypt = async(payload) => {
     return jwt.sign(payload, JWT_SECRET, { expiresIn: payload.expiresIn });
+    console.log("awsed")
 }
+
+module.exports = { encrypt };
