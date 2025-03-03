@@ -6,7 +6,7 @@ import LoginOrRegister from "../Components/LoginOrRegister";
 import "../Components/this.css";
 
 function Register() {
-  const router = useRouter()
+  const router = useRouter();
 
   const [formData, setFormData] = useState({
     userName: "",
@@ -50,7 +50,6 @@ function Register() {
       const result = await response.json();
 
       if (!response.ok) {
-
         setErrors(result.errors || [{ msg: "Registration failed" }]);
       } else {
         router.push("/login");
@@ -129,11 +128,8 @@ function Register() {
               onChange={handleChange}
               required
             />
-
           </div>
-          {errorMap.email && (
-            <p className="errorMessage">{errorMap.email}</p>
-          )}
+          {errorMap.email && <p className="errorMessage">{errorMap.email}</p>}
           <div className="input-container">
             <i className="fa fa-lock"></i>
             <input
@@ -145,7 +141,6 @@ function Register() {
               onChange={handleChange}
               required
             />
-
           </div>
           {errorMap.password && (
             <p className="errorMessage">{errorMap.password}</p>
@@ -161,16 +156,13 @@ function Register() {
               onChange={handleChange}
               required
             />
-
           </div>
           {errorMap.confirmPassword && (
-            <p className="errorMessage">
-              {errorMap.confirmPassword}
-            </p>
+            <p className="errorMessage">{errorMap.confirmPassword}</p>
           )}
           <button type="submit">Register</button>
         </form>
-        <p>
+        <p className="link">
           Already have an account? <a href="/login">Login Here</a>
         </p>
       </LoginOrRegister>

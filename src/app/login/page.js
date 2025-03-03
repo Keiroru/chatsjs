@@ -52,9 +52,12 @@ function Login() {
             required
           />
         </div>
+        <p className="forgot-password">
+          <a href="">Forgot Password?</a>
+        </p>
         <button type="submit">Login</button>
       </form>
-      <p>
+      <p className="link">
         dont have an account? <a href="/register">Register Here</a>
       </p>
     </LoginOrRegister>
