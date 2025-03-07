@@ -81,7 +81,7 @@ export default function ChatClient({ userData }) {
               alt=""
               className="avatar"
             />
-            <h2 className="username">{userData?.displayName || "User"}</h2>
+            <h2 className="username">{userData?.displayName}</h2>
           </div>
 
           <div className="controls">

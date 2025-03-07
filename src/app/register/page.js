@@ -33,7 +33,6 @@ function Register() {
     }
 
     const data = {
-      userId: 11111,
       displayName: formData.displayName,
       email: formData.email,
       password: formData.password,

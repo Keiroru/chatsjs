@@ -60,7 +60,7 @@ app.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const {  userId, displayName, email, password } = req.body;
+    const { displayName, email, password } = req.body;
 
     const checkQuery = `
       SELECT * FROM Users 
@@ -85,10 +85,10 @@ app.post(
 
       // In production, hash the password here
       const query = `
-        INSERT INTO Users (userId, displayName, email, password, status)
+        INSERT INTO Users ( displayName, email, password, status)
         VALUES (?, ?, ?, ?, 'active')
       `;
-      db.query(query, [userId, displayName, email, password], (err, results) => {
+      db.query(query, [displayName, email, password], (err, results) => {
         if (err) {
           console.error("Registration error:", err);
           return res.status(500).json({ error: "Database error" });
@@ -112,17 +112,18 @@ app.post(
     }
 
     const { email, password } = req.body;
-    const loginQuery = "SELECT * FROM Users WHERE email = ? AND password = ?";
+    const loginQuery = "SELECT userId, email, password FROM users WHERE email = ? AND password = ?";
 
     const queryAsync = promisify(db.query).bind(db);
 
     try {
-      const results = await queryAsync(loginQuery, [email, password]);
+      const results = await queryAsync(loginQuery, [ email, password]);
       if (results.length === 0) {
         return res.status(401).json({ error: "Incorrect Email or Password!" });
       }
+      const { userId } = results[0];
       const expiresIn = 60 * 60 * 24 * 7;
-      const session = await encrypt({ email, password, expiresIn });
+      const session = await encrypt({ userId, expiresIn });
 
       res.cookie("session", session, {
         httpOnly: true,

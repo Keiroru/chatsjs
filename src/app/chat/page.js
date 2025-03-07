@@ -7,13 +7,13 @@ export default async function Chat() {
   const cookieStore = await cookies();
   const token = cookieStore.get("session")?.value;
   let userData = null;
-  let userName = "Guest";
+  let userId;
 
   if (token) {
     try {
       const secret = new TextEncoder().encode(process.env.JWT_SECRET);
       const { payload } = await jwtVerify(token, secret);
-      userName = payload.username || userName;
+      userId = payload.userId || "Bug";
 
       const connection = await mysql.createConnection({
         host: process.env.DB_HOST || "localhost",
@@ -23,8 +23,8 @@ export default async function Chat() {
       });
 
       const [rows] = await connection.execute(
-        "SELECT * FROM Users WHERE userName = ? LIMIT 1",
-        [userName]
+        "SELECT * FROM Users WHERE userId = ? LIMIT 1",
+        [userId]
       );
       if (rows.length > 0) {
         userData = rows[0];
