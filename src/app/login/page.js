@@ -13,7 +13,7 @@ function Login() {
     e.preventDefault();
     setError("");
     const formData = new FormData(e.target);
-    const username = formData.get("username");
+    const email = formData.get("email");
     const password = formData.get("password");
 
     try {
@@ -21,7 +21,7 @@ function Login() {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ email, password }),
       });
       if (!res.ok) {
         const data = await res.json();
@@ -41,7 +41,7 @@ function Login() {
       <form onSubmit={handleSubmit}>
         <div className="input-container">
           <i className="fa fa-user"></i>
-          <input type="text" name="username" placeholder="Username" required />
+          <input type="email" name="email" placeholder="email" required />
         </div>
         <div className="input-container">
           <i className="fa fa-lock"></i>

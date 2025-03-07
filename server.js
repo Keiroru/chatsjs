@@ -37,22 +37,11 @@ db.connect((err) => {
 app.post(
   "/register",
   [
-    body("userName")
-      .notEmpty()
-      .withMessage("Username is required")
-      .isLength({ min: 4 })
-      .withMessage("Username must be at least 4 characters long"),
     body("displayName")
       .notEmpty()
       .withMessage("Display name is required")
       .isLength({ min: 4 })
-      .withMessage("Display name must be at least 4 characters long")
-      .custom((value, { req }) => {
-        if (value === req.body.userName) {
-          throw new Error("Display name cannot be the same as username");
-        }
-        return true;
-      }),
+      .withMessage("Display name must be at least 4 characters long"),
     body("email").isEmail().withMessage("A valid email is required"),
     body("password")
       .isLength({ min: 8 })
@@ -71,13 +60,13 @@ app.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { userName, displayName, email, password } = req.body;
+    const {  userId, displayName, email, password } = req.body;
 
     const checkQuery = `
       SELECT * FROM Users 
-      WHERE userName = ? OR displayName = ? OR email = ?
+      WHERE email = ?
     `;
-    db.query(checkQuery, [userName, displayName, email], (err, results) => {
+    db.query(checkQuery, [email], (err, results) => {
       if (err) {
         console.error("Error checking for duplicates:", err);
         return res.status(500).json({ error: "Database error" });
@@ -85,12 +74,6 @@ app.post(
 
       let duplicateErrors = [];
       results.forEach((user) => {
-        if (user.userName === userName) {
-          duplicateErrors.push({ msg: "Username already exists", path: "userName" });
-        }
-        if (user.displayName === displayName) {
-          duplicateErrors.push({ msg: "Display name already exists", path: "displayName" });
-        }
         if (user.email === email) {
           duplicateErrors.push({ msg: "Email already exists", path: "email" });
         }
@@ -102,10 +85,10 @@ app.post(
 
       // In production, hash the password here
       const query = `
-        INSERT INTO Users (userName, displayName, email, password, status)
+        INSERT INTO Users (userId, displayName, email, password, status)
         VALUES (?, ?, ?, ?, 'active')
       `;
-      db.query(query, [userName, displayName, email, password], (err, results) => {
+      db.query(query, [userId, displayName, email, password], (err, results) => {
         if (err) {
           console.error("Registration error:", err);
           return res.status(500).json({ error: "Database error" });
@@ -119,7 +102,7 @@ app.post(
 app.post(
   "/login",
   [
-    body("username").notEmpty().withMessage("Username is required"),
+    body("email").notEmpty().withMessage("Email is required"),
     body("password").notEmpty().withMessage("Password is required"),
   ],
   async (req, res) => {
@@ -128,18 +111,18 @@ app.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { username, password } = req.body;
-    const loginQuery = "SELECT * FROM Users WHERE userName = ? AND password = ?";
+    const { email, password } = req.body;
+    const loginQuery = "SELECT * FROM Users WHERE email = ? AND password = ?";
 
     const queryAsync = promisify(db.query).bind(db);
 
     try {
-      const results = await queryAsync(loginQuery, [username, password]);
+      const results = await queryAsync(loginQuery, [email, password]);
       if (results.length === 0) {
-        return res.status(401).json({ error: "Incorrect Username or Password!" });
+        return res.status(401).json({ error: "Incorrect Email or Password!" });
       }
       const expiresIn = 60 * 60 * 24 * 7;
-      const session = await encrypt({ username, password, expiresIn });
+      const session = await encrypt({ email, password, expiresIn });
 
       res.cookie("session", session, {
         httpOnly: true,

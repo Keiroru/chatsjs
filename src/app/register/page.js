@@ -9,7 +9,6 @@ function Register() {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
-    userName: "",
     displayName: "",
     email: "",
     password: "",
@@ -34,7 +33,7 @@ function Register() {
     }
 
     const data = {
-      userName: formData.userName,
+      userId: 11111,
       displayName: formData.displayName,
       email: formData.email,
       password: formData.password,
@@ -88,21 +87,6 @@ function Register() {
       <LoginOrRegister>
         <h1>Sign Up</h1>
         <form onSubmit={handleRegister}>
-          <div className="input-container">
-            <i className="fa fa-user"></i>
-            <input
-              type="text"
-              id="userName"
-              placeholder="Username"
-              autoComplete="username"
-              value={formData.userName}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          {errorMap.userName && (
-            <p className="errorMessage">{errorMap.userName}</p>
-          )}
           <div className="input-container">
             <i className="fa fa-id-card"></i>
             <input
