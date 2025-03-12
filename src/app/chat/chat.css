@@ -576,7 +576,7 @@ body {
 
 }
 
-@media (min-width: 768px) and (max-width: 1000px) {
+@media (min-width: 576px) and (max-width: 992px) {
 
     .chat-container.right-open .chat-main {
         display: none;
@@ -594,7 +594,7 @@ body {
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 576px) {
     .chat-container {
         grid-template-columns: 1fr;
         grid-template-areas: "main";

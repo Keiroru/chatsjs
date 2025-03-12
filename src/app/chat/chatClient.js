@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useRef, useEffect, useMemo } from "react";
+import Image from "next/image"; // Add this import
 import "./chat.css";
 import LogoutButton from "./logout";
+import ContactsList from "./contacts";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faSearch, faCog, faPaperPlane, faTimes, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
@@ -13,18 +15,6 @@ export default function ChatClient({ userData }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobile, setIsMobile] = useState(false);
   const [activeTab, setActiveTab] = useState('people');
-  const chatContainerRef = useRef(null);
-
-  const contacts = useMemo(() => [
-    { id: 1, name: "cica", lastMessage: "snort it!", time: "14:39", avatar: "https://placehold.co/50x50", online: true },
-    { id: 2, name: "help me", lastMessage: "propably would", time: "13:15", avatar: "https://placehold.co/50x50", online: false },
-  ], []);
-
-  const messages = useMemo(() => [
-    { id: 1, sender: "other", text: "Cia cica", time: "14:35", avatar: "https://placehold.co/50x50" },
-    { id: 2, sender: "other", text: "<3?", time: "14:36", avatar: "https://placehold.co/50x50" },
-    { id: 3, sender: "me", text: "nope", time: "14:38", avatar: userData?.avatar || "https://placehold.co/50x50" },
-  ], [userData?.avatar]);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -42,11 +32,6 @@ export default function ChatClient({ userData }) {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-    }
-  }, [messages]);
 
   const handleContactClick = (contact) => {
     setActiveChat(contact);
@@ -76,9 +61,11 @@ export default function ChatClient({ userData }) {
                 <FontAwesomeIcon icon={faArrowLeft} />
               </button>
             )}
-            <img
+            <Image
               src={userData?.avatar || "https://placehold.co/50x50"}
-              alt=""
+              alt="User avatar"
+              width={40}
+              height={40}
               className="avatar"
             />
             <h2 className="username">{userData?.displayName}</h2>
@@ -92,51 +79,12 @@ export default function ChatClient({ userData }) {
           </div>
         </header>
 
-        <div className="search-container">
-          <div className="search-input">
-            <input
-              type="text"
-              placeholder="Search"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              aria-label="Search contacts"
-            />
-            <FontAwesomeIcon icon={faSearch} className="search-icon" />
-          </div>
-        </div>
+        <ContactsList
+          userId={userData?.userId}
+          onContactSelect={handleContactClick}
+          activeChat={activeChat}
+        />
 
-        <div className="tab-buttons">
-          <button
-            className={`tab-button ${activeTab === 'people' ? 'active' : ''}`}
-            onClick={() => setActiveTab('people')}
-          >
-            People
-          </button>
-          <button
-            className={`tab-button ${activeTab === 'groups' ? 'active' : ''}`}
-            onClick={() => setActiveTab('groups')}
-          >
-            Groups
-          </button>
-        </div>
-
-        <div className="contacts-list">
-          {contacts.map(contact => (
-            <button
-              key={contact.id}
-              className={`contact-item ${activeChat?.id === contact.id ? 'active' : ''}`}
-              onClick={() => handleContactClick(contact)}
-            >
-              <img src={contact.avatar} alt="" className="avatar" />
-              <div className="contact-info">
-                <h3 className="contact-name">{contact.name}</h3>
-                <p className="last-message">{contact.lastMessage}</p>
-              </div>
-              <span className="time">{contact.time}</span>
-              <span className={`status-indicator ${contact.online ? 'online' : 'offline'}`}></span>
-            </button>
-          ))}
-        </div>
       </aside>
 
       <main className={`chat-main ${!leftPanelOpen || !isMobile ? 'visible' : ''}`}>
@@ -155,35 +103,21 @@ export default function ChatClient({ userData }) {
             onClick={() => setRightPanelOpen(!rightPanelOpen)}
             aria-label="Toggle contact info"
           >
-            <img
+            <Image
               src={activeChat?.avatar || "https://placehold.co/50x50"}
-              alt=""
+              alt="Contact avatar"
+              width={40}
+              height={40}
               className="avatar"
             />
-            <h1>{activeChat?.name || "Select a contact"}</h1>
+            <h1>{activeChat?.displayName || "Select a contact"}</h1>
           </button>
         </header>
 
-        <div className="messages-container" ref={chatContainerRef}>
-          {activeChat ? (
-            messages.map(message => (
-              <div
-                key={message.id}
-                className={`message ${message.sender === 'me' ? 'message-sent' : 'message-received'}`}
-              >
-                {message.sender !== 'me' && <img src={message.avatar} alt="" className="avatar" />}
-                <div className="message-content">
-                  <p className="message-text">{message.text}</p>
-                  <span className="message-time">{message.time}</span>
-                </div>
-                {message.sender === 'me' && <img src={message.avatar} alt="" className="avatar" />}
-              </div>
-            ))
-          ) : (
-            <div className="no-chat-selected">
-              <p>select someone bruh</p>
-            </div>
-          )}
+        <div className="messages-container">
+          <div className="no-chat-selected">
+            <p>select someone bruh</p>
+          </div>
         </div>
 
         <div className="message-input-container">
@@ -213,12 +147,14 @@ export default function ChatClient({ userData }) {
         </header>
 
         <div className="contact-profile">
-          <img
+          <Image
             src={activeChat?.avatar || "https://placehold.co/100x100"}
-            alt=""
+            alt="Contact profile"
+            width={100}
+            height={100}
             className="profile-avatar"
           />
-          <h2 className="profile-name">{activeChat?.name || "Select a contact"}</h2>
+          <h2 className="profile-name">{activeChat?.displayName || "Select a contact"}</h2>
           <span className={`status-badge ${activeChat?.online ? 'online' : 'offline'}`}>
             {activeChat?.online ? 'Online' : 'Offline'}
           </span>
@@ -238,12 +174,12 @@ export default function ChatClient({ userData }) {
         <div className="shared-media">
           <h3 className="shared-media-title">Shared stuff</h3>
           <div className="shared-media-content">
-            <img src="https://placehold.co/100x100" alt="" className="shared-img" />
-            <img src="https://placehold.co/100x100" alt="" className="shared-img" />
-            <img src="https://placehold.co/100x100" alt="" className="shared-img" />
-            <img src="https://placehold.co/100x100" alt="" className="shared-img" />
-            <img src="https://placehold.co/100x100" alt="" className="shared-img" />
-            <img src="https://placehold.co/100x100" alt="" className="shared-img" />
+            <Image src="https://placehold.co/100x100" alt="Shared media" width={100} height={100} className="shared-img" />
+            <Image src="https://placehold.co/100x100" alt="Shared media" width={100} height={100} className="shared-img" />
+            <Image src="https://placehold.co/100x100" alt="Shared media" width={100} height={100} className="shared-img" />
+            <Image src="https://placehold.co/100x100" alt="Shared media" width={100} height={100} className="shared-img" />
+            <Image src="https://placehold.co/100x100" alt="Shared media" width={100} height={100} className="shared-img" />
+            <Image src="https://placehold.co/100x100" alt="Shared media" width={100} height={100} className="shared-img" />
           </div>
         </div>
       </aside>

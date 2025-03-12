@@ -85,8 +85,8 @@ app.post(
 
       // In production, hash the password here
       const query = `
-        INSERT INTO Users ( displayName, email, password, status)
-        VALUES (?, ?, ?, ?, 'active')
+        INSERT INTO Users (displayName, email, password, status)
+        VALUES (?, ?, ?, 'active')
       `;
       db.query(query, [displayName, email, password], (err, results) => {
         if (err) {
@@ -117,7 +117,7 @@ app.post(
     const queryAsync = promisify(db.query).bind(db);
 
     try {
-      const results = await queryAsync(loginQuery, [ email, password]);
+      const results = await queryAsync(loginQuery, [email, password]);
       if (results.length === 0) {
         return res.status(401).json({ error: "Incorrect Email or Password!" });
       }
