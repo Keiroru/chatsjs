@@ -51,9 +51,9 @@ export default function FriendRequests({ userData }) {
     <>
       {friendRequests.length > 0 && <div>Pending friend requests</div>}
       {friendRequests.map((friendRequest) => (
-        <div key={friendRequest.id}>
+        <div key={friendRequest.requestId}>
           <h3>{friendRequest.displayName}</h3>
-          <button onClick={() => handleAccept(friendRequest.id)}>
+          <button onClick={() => handleAccept(friendRequest.requestId)}>
             Accept friend request
           </button>
           <button>Reject friend request</button>

@@ -17,6 +17,7 @@ export async function GET(request) {
       SELECT * FROM FriendRequests
       JOIN Users ON FriendRequests.senderUserId = Users.userId
       WHERE FriendRequests.receiverUserId = ?
+      AND FriendRequests.status = 'pending'
     `;
 
     const [result] = await connection.execute(query, [receiverUserId]);

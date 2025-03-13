@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2025. Már 13. 11:20
+-- Létrehozás ideje: 2025. Már 13. 18:52
 -- Kiszolgáló verziója: 10.4.32-MariaDB
--- PHP verzió: 8.2.0
+-- PHP verzió: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,6 +28,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `friendrequests` (
+  `requestId` int(11) NOT NULL,
   `senderUserId` int(11) NOT NULL,
   `receiverUserId` int(11) NOT NULL,
   `sentAt` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -38,8 +39,10 @@ CREATE TABLE `friendrequests` (
 -- A tábla adatainak kiíratása `friendrequests`
 --
 
-INSERT INTO `friendrequests` (`senderUserId`, `receiverUserId`, `sentAt`, `status`) VALUES
-(1, 9, '2025-03-13 10:17:17', 'pending');
+INSERT INTO `friendrequests` (`requestId`, `senderUserId`, `receiverUserId`, `sentAt`, `status`) VALUES
+(4, 2, 1, '2025-03-13 17:41:42', 'accepted'),
+(5, 3, 1, '2025-03-13 17:41:42', 'accepted'),
+(6, 11, 1, '2025-03-13 17:41:52', 'accepted');
 
 -- --------------------------------------------------------
 
@@ -58,12 +61,12 @@ CREATE TABLE `friends` (
 --
 
 INSERT INTO `friends` (`userId`, `friendUserId`, `friendedAt`) VALUES
-(1, 2, '2025-03-12 20:13:12'),
-(1, 3, '2025-03-12 20:13:12'),
-(1, 4, '2025-03-12 20:40:34'),
-(1, 5, '2025-03-12 20:40:34'),
-(1, 6, '2025-03-12 20:40:45'),
-(1, 7, '2025-03-12 20:40:45');
+(1, 2, '2025-03-13 17:42:04'),
+(1, 3, '2025-03-13 17:42:06'),
+(1, 11, '2025-03-13 17:42:07'),
+(2, 1, '2025-03-13 17:42:04'),
+(3, 1, '2025-03-13 17:42:06'),
+(11, 1, '2025-03-13 17:42:07');
 
 -- --------------------------------------------------------
 
@@ -111,6 +114,7 @@ INSERT INTO `users` (`userId`, `displayName`, `email`, `telephone`, `password`, 
 -- A tábla indexei `friendrequests`
 --
 ALTER TABLE `friendrequests`
+  ADD PRIMARY KEY (`requestId`),
   ADD UNIQUE KEY `senderUserId` (`senderUserId`,`receiverUserId`),
   ADD KEY `receiverUserId` (`receiverUserId`);
 
@@ -132,6 +136,12 @@ ALTER TABLE `users`
 --
 -- A kiírt táblák AUTO_INCREMENT értéke
 --
+
+--
+-- AUTO_INCREMENT a táblához `friendrequests`
+--
+ALTER TABLE `friendrequests`
+  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT a táblához `users`
