@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useRef, useEffect, useMemo } from "react";
-import Image from "next/image"; // Add this import
+import Image from "next/image";
 import "./chat.css";
 import LogoutButton from "./logout";
 import ContactsList from "./contacts";
 import AddFriendButton from "./addFriend";
+import FriendRequests from "./friendRequests";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft,
@@ -94,6 +95,8 @@ export default function ChatClient({ userData }) {
         </header>
 
         <AddFriendButton userId={userData?.userId} />
+
+        <FriendRequests userData={userData} />
 
         <ContactsList
           userId={userData?.userId}
