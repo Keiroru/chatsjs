@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2025. Már 12. 22:13
+-- Létrehozás ideje: 2025. Már 13. 11:20
 -- Kiszolgáló verziója: 10.4.32-MariaDB
--- PHP verzió: 8.2.12
+-- PHP verzió: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -34,6 +34,13 @@ CREATE TABLE `friendrequests` (
   `status` enum('pending','accepted','declined') DEFAULT 'pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- A tábla adatainak kiíratása `friendrequests`
+--
+
+INSERT INTO `friendrequests` (`senderUserId`, `receiverUserId`, `sentAt`, `status`) VALUES
+(1, 9, '2025-03-13 10:17:17', 'pending');
+
 -- --------------------------------------------------------
 
 --
@@ -56,13 +63,7 @@ INSERT INTO `friends` (`userId`, `friendUserId`, `friendedAt`) VALUES
 (1, 4, '2025-03-12 20:40:34'),
 (1, 5, '2025-03-12 20:40:34'),
 (1, 6, '2025-03-12 20:40:45'),
-(1, 7, '2025-03-12 20:40:45'),
-(1, 8, '2025-03-12 20:41:19'),
-(1, 9, '2025-03-12 20:41:19'),
-(1, 10, '2025-03-12 20:41:31'),
-(1, 11, '2025-03-12 20:41:31'),
-(1, 12, '2025-03-12 20:41:41'),
-(1, 13, '2025-03-12 20:41:41');
+(1, 7, '2025-03-12 20:40:45');
 
 -- --------------------------------------------------------
 
@@ -78,28 +79,29 @@ CREATE TABLE `users` (
   `password` varchar(255) DEFAULT NULL COMMENT 'store hash',
   `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
   `updatedAt` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `status` tinyint(1) DEFAULT NULL COMMENT 'online true || offline false',
-  `profilePicPath` varchar(255) DEFAULT NULL
+  `status` enum('online','offline','away','') DEFAULT NULL COMMENT 'online true || offline false',
+  `profilePicPath` varchar(255) DEFAULT NULL,
+  `bio` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- A tábla adatainak kiíratása `users`
 --
 
-INSERT INTO `users` (`userId`, `displayName`, `email`, `telephone`, `password`, `createdAt`, `updatedAt`, `status`, `profilePicPath`) VALUES
-(1, 'cica', 'vnoel05@gmail.com', NULL, 'asdasdasdA1', '2025-03-07 16:54:09', '2025-03-07 16:54:09', 0, NULL),
-(2, 'valaki', 'izomhegy55@gmail.com', NULL, 'asdasdasdA1', '2025-03-07 17:01:36', '2025-03-07 17:01:36', 0, NULL),
-(3, 'lula', 'bammeg@asd.com', NULL, 'asdasdasdA1', '2025-03-10 16:19:43', '2025-03-10 16:19:43', 0, NULL),
-(4, 'Alice Johnson', 'alice.johnson@example.com', '1234567890', 'password123', '2025-03-11 11:00:00', '2025-03-11 11:00:00', 1, '/images/alice.jpg'),
-(5, 'Bob Smith', 'bob.smith@example.com', '1234567891', 'password123', '2025-03-11 11:10:00', '2025-03-11 11:10:00', 1, '/images/bob.jpg'),
-(6, 'Charlie Brown', 'charlie.brown@example.com', '1234567892', 'password123', '2025-03-11 11:20:00', '2025-03-11 11:20:00', 0, '/images/charlie.jpg'),
-(7, 'Diana Prince', 'diana.prince@example.com', '1234567893', 'password123', '2025-03-11 11:30:00', '2025-03-11 11:30:00', 1, '/images/diana.jpg'),
-(8, 'Ethan Hunt', 'ethan.hunt@example.com', '1234567894', 'password123', '2025-03-11 11:40:00', '2025-03-11 11:40:00', 0, '/images/ethan.jpg'),
-(9, 'Fiona Gallagher', 'fiona.gallagher@example.com', '1234567895', 'password123', '2025-03-11 11:50:00', '2025-03-11 11:50:00', 1, '/images/fiona.jpg'),
-(10, 'George Clooney', 'george.clooney@example.com', '1234567896', 'password123', '2025-03-11 12:00:00', '2025-03-11 12:00:00', 0, '/images/george.jpg'),
-(11, 'Hannah Montana', 'hannah.montana@example.com', '1234567897', 'password123', '2025-03-11 12:10:00', '2025-03-11 12:10:00', 1, '/images/hannah.jpg'),
-(12, 'Ian McKellen', 'ian.mckellen@example.com', '1234567898', 'password123', '2025-03-11 12:20:00', '2025-03-11 12:20:00', 0, '/images/ian.jpg'),
-(13, 'Jessica Alba', 'jessica.alba@example.com', '1234567899', 'password123', '2025-03-11 12:30:00', '2025-03-11 12:30:00', 1, '/images/jessica.jpg');
+INSERT INTO `users` (`userId`, `displayName`, `email`, `telephone`, `password`, `createdAt`, `updatedAt`, `status`, `profilePicPath`, `bio`) VALUES
+(1, 'cica', 'vnoel05@gmail.com', NULL, 'asdasdasdA1', '2025-03-07 16:54:09', '2025-03-07 16:54:09', '', NULL, ''),
+(2, 'valaki', 'izomhegy55@gmail.com', NULL, 'asdasdasdA1', '2025-03-07 17:01:36', '2025-03-13 09:12:34', '', NULL, 'szep cica vagyok'),
+(3, 'lula', 'bammeg@asd.com', NULL, 'asdasdasdA1', '2025-03-10 16:19:43', '2025-03-13 09:12:47', '', NULL, 'teccel baby gurl'),
+(4, 'Alice Johnson', 'alice.johnson@example.com', '1234567890', 'password123', '2025-03-11 11:00:00', '2025-03-13 09:21:57', 'online', '/images/alice.jpg', 'Thank you for downloading this script. Yes, this is the entire Bee Movie script written on Notability. I don\'t know why\r\nyou would want this, but I guess it\'s funny. You may make any changes you want,'),
+(5, 'Bob Smith', 'bob.smith@example.com', '1234567891', 'password123', '2025-03-11 11:10:00', '2025-03-11 11:10:00', 'online', '/images/bob.jpg', ''),
+(6, 'Charlie Brown', 'charlie.brown@example.com', '1234567892', 'password123', '2025-03-11 11:20:00', '2025-03-11 11:20:00', '', '/images/charlie.jpg', ''),
+(7, 'Diana Prince', 'diana.prince@example.com', '1234567893', 'password123', '2025-03-11 11:30:00', '2025-03-11 11:30:00', 'online', '/images/diana.jpg', ''),
+(8, 'Ethan Hunt', 'ethan.hunt@example.com', '1234567894', 'password123', '2025-03-11 11:40:00', '2025-03-11 11:40:00', '', '/images/ethan.jpg', ''),
+(9, 'Fiona Gallagher', 'fiona.gallagher@example.com', '1234567895', 'password123', '2025-03-11 11:50:00', '2025-03-11 11:50:00', 'online', '/images/fiona.jpg', ''),
+(10, 'George Clooney', 'george.clooney@example.com', '1234567896', 'password123', '2025-03-11 12:00:00', '2025-03-11 12:00:00', '', '/images/george.jpg', ''),
+(11, 'Hannah Montana', 'hannah.montana@example.com', '1234567897', 'password123', '2025-03-11 12:10:00', '2025-03-11 12:10:00', 'online', '/images/hannah.jpg', ''),
+(12, 'Ian McKellen', 'ian.mckellen@example.com', '1234567898', 'password123', '2025-03-11 12:20:00', '2025-03-11 12:20:00', '', '/images/ian.jpg', ''),
+(13, 'Jessica Alba', 'jessica.alba@example.com', '1234567899', 'password123', '2025-03-11 12:30:00', '2025-03-11 12:30:00', 'online', '/images/jessica.jpg', '');
 
 --
 -- Indexek a kiírt táblákhoz
