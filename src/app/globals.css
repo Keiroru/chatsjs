@@ -1,31 +1,29 @@
 :root {
-  --rich-black: #121212;
-  --charcoal: #1e1e1e;
-  --gunmetal: #2a2a2a;
-  --dark-slate: #383838;
-  --medium-slate: #555555;
-  --smoke: #888888;
-  --off-white: #f8f8f8;
-  --silver: #bbbbbb;
-  --lavender: #9a66ff;
+  --rich-black: #2e2e2e;
+  --charcoal: #3a3a3a;
+  --gunmetal: #464646;
+  --dark-slate: #525252;
+  --medium-slate: #6e6e6e;
+  --smoke: #9a9a9a;
+  --off-white: #e0e0e0;
+  --silver: #cccccc;
+  --lavender: #b388ff;
   --light-lavender: #d9c2ff;
-  --deep-lavender: #7a4ecc;
-  --deep-indigo: #3a2a4d;
-  --slate-blue: #2d2d38;
-  --forest-green: #4caf50;
-  --stone-gray: #9e9e9e;
-  --coral-red: #ff4d6a;
-  --shadow-black: #333333;
-  --lavender-mist: rgba(154, 102, 255, 0.1);
-  --shadow-effect: 0 5px 15px rgba(0, 0, 0, 0.3);
-
+  --deep-lavender: #9a66ff;
+  --deep-indigo: #5a4a6d;
+  --slate-blue: #4d4d58;
+  --forest-green: #6fbf73;
+  --stone-gray: #bfbfbf;
+  --coral-red: #ff6d8a;
+  --shadow-black: #555555;
+  --lavender-mist: rgba(179, 136, 255, 0.1);
+  --shadow-effect: 0 5px 15px rgba(0, 0, 0, 0.2);
 
   --lavender-gradient: linear-gradient(135deg, #9a66ff, #7a4ecc);
   --dark-gradient: linear-gradient(135deg, #121212, #1a1a1a);
 
   --form-width: 300px;
   --form-height: 350px;
-
 }
 
 body {

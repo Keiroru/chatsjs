@@ -2,38 +2,38 @@
  * 1. BASIC RESET & TYPOGRAPHY
  *******************************/
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: var(--off-white);
-    background-color: var(--rich-black);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--off-white);
+  background-color: var(--rich-black);
 }
 
 /*******************************
  * 2. LAYOUT CONTAINERS
  *******************************/
 .chat-container {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    grid-template-areas: "left-sidebar main right-sidebar";
-    height: 100vh;
-    overflow: hidden;
-    background-color: var(--rich-black);
-    transition: all 0.3s ease;
-    box-shadow: var(--shadow-effect);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas: "left-sidebar main right-sidebar";
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--rich-black);
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-effect);
 }
 
 /* Main content area */
 .chat-main {
-    grid-area: main;
-    display: flex;
-    flex-direction: column;
-    background-color: var(--rich-black);
-    background-image: var(--dark-gradient);
+  grid-area: main;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--rich-black);
+  background-image: var(--dark-gradient);
 }
 
 /*******************************
@@ -41,70 +41,69 @@ body {
  *******************************/
 /* Common sidebar styles */
 .sidebar {
-    display: flex;
-    flex-direction: column;
-    background-color: var(--charcoal);
-    transition: all 0.3s ease;
-    overflow: hidden;
-    background-image:
-        linear-gradient(var(--charcoal), var(--charcoal)),
-        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    background-blend-mode: normal;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--charcoal);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  background-image: linear-gradient(var(--charcoal), var(--charcoal)),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-blend-mode: normal;
 }
 
 /* Left sidebar (contacts) */
 .left-sidebar {
-    grid-area: left-sidebar;
-    border-right: 1px solid var(--shadow-black);
-    width: 300px;
+  grid-area: left-sidebar;
+  border-right: 1px solid var(--shadow-black);
+  width: 300px;
 }
 
 .left-sidebar.closed {
-    width: 60px;
+  width: 60px;
 }
 
 /* Right sidebar (contact info) */
 .right-sidebar {
-    grid-area: right-sidebar;
-    width: 0;
-    border-left: 1px solid var(--shadow-black);
-    transition: width 0.3s ease;
-    overflow: hidden;
+  grid-area: right-sidebar;
+  width: 0;
+  border-left: 1px solid var(--shadow-black);
+  transition: width 0.3s ease;
+  overflow: hidden;
 }
 
 .right-sidebar .sidebar-header {
-    height: 81px;
+  height: 81px;
 }
 
 .right-sidebar.open {
-    width: 500px;
+  width: 500px;
 }
 
 /* Sidebar headers */
 .sidebar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    border-bottom: 1px solid var(--shadow-black);
-    background-image: linear-gradient(to right, var(--charcoal), var(--gunmetal));
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid var(--shadow-black);
+  background-image: linear-gradient(to right, var(--charcoal), var(--gunmetal));
 }
 
 .user-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .username {
-    font-size: 16px;
-    font-weight: 500;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .controls {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 /*******************************
@@ -112,522 +111,522 @@ body {
  *******************************/
 /* Avatar styles */
 .avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .profile-avatar {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 10px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
 }
 
 /* Button styles */
 .icon-button {
-    background: none;
-    border: none;
-    color: var(--silver);
-    font-size: 16px;
-    cursor: pointer;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    margin-right: 10px;
+  background: none;
+  border: none;
+  color: var(--silver);
+  font-size: 16px;
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  margin-right: 10px;
 }
 
 .icon-button:hover {
-    background-color: var(--lavender-mist);
-    color: var(--off-white);
-    transform: translateY(-1px);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background-color: var(--lavender-mist);
+  color: var(--off-white);
+  transform: translateY(-1px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 /*******************************
  * 5. SEARCH FUNCTIONALITY
  *******************************/
 .search-container {
-    padding: 15px;
-    border-bottom: 1px solid var(--shadow-black);
+  padding: 15px;
+  border-bottom: 1px solid var(--shadow-black);
 }
 
 .search-input {
-    position: relative;
-    width: 100%;
+  position: relative;
+  width: 100%;
 }
 
 .search-input input {
-    width: 100%;
-    padding: 10px 15px 10px 40px;
-    border-radius: 20px;
-    border: none;
-    background-color: var(--gunmetal);
-    color: var(--off-white);
-    font-size: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  padding: 10px 15px 10px 40px;
+  border-radius: 20px;
+  border: none;
+  background-color: var(--gunmetal);
+  color: var(--off-white);
+  font-size: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .search-input input:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px var(--light-lavender);
-    border-color: var(--lavender);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--light-lavender);
+  border-color: var(--lavender);
 }
 
 .search-icon {
-    position: absolute;
-    left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--medium-slate);
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--medium-slate);
 }
 
 /*******************************
  * 6. NAVIGATION TABS
  *******************************/
 .tab-buttons {
-    display: flex;
-    border-bottom: 1px solid var(--shadow-black);
+  display: flex;
+  border-bottom: 1px solid var(--shadow-black);
 }
 
 .tab-button {
-    flex: 1;
-    background: none;
-    border: none;
-    color: var(--silver);
-    padding: 15px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.2s;
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--silver);
+  padding: 15px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
 }
 
 .tab-button:hover {
-    color: var(--off-white);
+  color: var(--off-white);
 }
 
 .tab-button.active {
-    color: var(--lavender);
-    border-bottom: 2px solid;
-    border-image: var(--lavender-gradient) 1;
+  color: var(--lavender);
+  border-bottom: 2px solid;
+  border-image: var(--lavender-gradient) 1;
 }
 
 /*******************************
  * 7. CONTACTS LIST
  *******************************/
 .contacts-list {
-    flex: 1;
-    overflow-y: auto;
+  flex: 1;
+  overflow-y: auto;
 }
 
 .contact-item {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    grid-template-areas:
-        "avatar name time"
-        "avatar message status";
-    align-items: center;
-    gap: 10px;
-    padding: 15px;
-    border-bottom: 1px solid var(--shadow-black);
-    background: none;
-    border-left: none;
-    border-right: none;
-    border-top: none;
-    text-align: left;
-    cursor: pointer;
-    transition: all 0.2s;
-    width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas:
+    "avatar name time"
+    "avatar message status";
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  border-bottom: 1px solid var(--shadow-black);
+  background: none;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
 }
 
 .contact-item:hover {
-    background-color: var(--lavender-mist);
+  background-color: var(--lavender-mist);
 }
 
 .contact-item.active {
-    background-color: rgba(138, 92, 245, 0.1);
-    position: relative;
+  background-color: rgba(138, 92, 245, 0.1);
+  position: relative;
 }
 
 .contact-item.active::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background-image: var(--lavender-gradient);
-    border-radius: 0 3px 3px 0;
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-image: var(--lavender-gradient);
+  border-radius: 0 3px 3px 0;
 }
 
 .contact-item .avatar {
-    grid-area: avatar;
-    width: 50px;
-    height: 50px;
+  grid-area: avatar;
+  width: 50px;
+  height: 50px;
 }
 
 .contact-info {
-    grid-area: message;
-    overflow: hidden;
+  grid-area: message;
+  overflow: hidden;
 }
 
 .contact-name {
-    color: var(--off-white);
-    font-size: 14px;
-    font-weight: 500;
-    margin-bottom: 5px;
+  color: var(--off-white);
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 5px;
 }
 
 .last-message {
-    color: var(--silver);
-    font-size: 13px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  color: var(--silver);
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .time {
-    grid-area: time;
-    color: var(--medium-slate);
-    font-size: 12px;
+  grid-area: time;
+  color: var(--medium-slate);
+  font-size: 12px;
 }
 
 /*******************************
  * 8. STATUS INDICATORS
  *******************************/
 .status-indicator {
-    grid-area: status;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    margin-left: auto;
+  grid-area: status;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-left: auto;
 }
 
 .status-indicator.online {
-    background-color: var(--forest-green);
-    box-shadow: 0 0 0 2px var(--charcoal), 0 0 3px 2px rgba(74, 222, 128, 0.2);
+  background-color: var(--forest-green);
+  box-shadow: 0 0 0 2px var(--charcoal), 0 0 3px 2px rgba(74, 222, 128, 0.2);
 }
 
 .status-indicator.offline {
-    background-color: var(--stone-gray);
+  background-color: var(--stone-gray);
 }
 
 .status-text {
-    font-size: 13px;
-    margin-left: auto;
+  font-size: 13px;
+  margin-left: auto;
 }
 
 .status-text.online {
-    color: var(--forest-green);
+  color: var(--forest-green);
 }
 
 .status-badge {
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 12px;
-    background-color: rgba(76, 175, 80, 0.1);
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  background-color: rgba(76, 175, 80, 0.1);
 }
 
 .status-badge.online {
-    color: var(--forest-green);
+  color: var(--forest-green);
 }
 
 /*******************************
  * 9. CHAT HEADER
  *******************************/
 .chat-header {
-    padding: 10px 20px;
-    border-bottom: 1px solid var(--shadow-black);
-    display: flex;
-    align-items: center;
-    background-color: var(--charcoal);
-    border-bottom: 1px solid;
-    border-image: linear-gradient(to right,
-            transparent,
-            var(--shadow-black),
-            var(--shadow-black),
-            transparent) 1;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--shadow-black);
+  display: flex;
+  align-items: center;
+  background-color: var(--charcoal);
+  border-bottom: 1px solid;
+  border-image: linear-gradient(
+      to right,
+      transparent,
+      var(--shadow-black),
+      var(--shadow-black),
+      transparent
+    )
+    1;
 }
 
 .contact-info-button {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    background: none;
-    border: none;
-    color: var(--off-white);
-    cursor: pointer;
-    padding: 10px 0;
-    width: 100%;
-    text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: none;
+  border: none;
+  color: var(--off-white);
+  cursor: pointer;
+  padding: 10px 0;
+  width: 100%;
+  text-align: left;
 }
 
 .contact-info-button h1 {
-    font-size: 18px;
-    font-weight: 500;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 /*******************************
  * 10. MESSAGES SECTION
  *******************************/
 .messages-container {
-    flex: 1;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    overflow-y: auto;
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  overflow-y: auto;
 }
 
 .message {
-    display: flex;
-    gap: 10px;
-    max-width: 70%;
+  display: flex;
+  gap: 10px;
+  max-width: 70%;
 }
 
 .message-received {
-    align-self: flex-start;
+  align-self: flex-start;
 }
 
 .message-sent {
-    align-self: flex-end;
-    flex-direction: row-reverse;
+  align-self: flex-end;
+  flex-direction: row-reverse;
 }
 
 .message-content {
-    padding: 12px 16px;
-    border-radius: 18px;
-    position: relative;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  padding: 12px 16px;
+  border-radius: 18px;
+  position: relative;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .message-received .message-content {
-    background-color: var(--slate-blue);
-    border-bottom-left-radius: 4px;
-    background-image: linear-gradient(135deg, var(--slate-blue), #36364a);
+  background-color: var(--slate-blue);
+  border-bottom-left-radius: 4px;
+  background-image: linear-gradient(135deg, var(--slate-blue), #36364a);
 }
 
 .message-sent .message-content {
-    background-color: var(--deep-indigo);
-    border-bottom-right-radius: 4px;
-    background-image: linear-gradient(135deg, var(--deep-indigo), #4d3968);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  background-color: var(--deep-indigo);
+  border-bottom-right-radius: 4px;
+  background-image: linear-gradient(135deg, var(--deep-indigo), #4d3968);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .message-text {
-    margin-bottom: 6px;
-    font-size: 15px;
-    line-height: 1.4;
+  margin-bottom: 6px;
+  font-size: 15px;
+  line-height: 1.4;
 }
 
 .message-time {
-    display: block;
-    font-size: 11px;
-    text-align: right;
-    color: var(--silver);
+  display: block;
+  font-size: 11px;
+  text-align: right;
+  color: var(--silver);
 }
 
 .no-chat-selected {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    color: var(--silver);
-    font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--silver);
+  font-size: 16px;
 }
 
 /*******************************
  * 11. MESSAGE INPUT AREA
  *******************************/
 .message-input-container {
-    display: flex;
-    align-items: center;
-    padding: 15px 20px;
-    background-color: var(--charcoal);
-    gap: 10px;
-    border-top: 1px solid;
-    border-image: linear-gradient(to right,
-            transparent,
-            var(--shadow-black),
-            var(--shadow-black),
-            transparent) 1;
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: var(--charcoal);
+  gap: 10px;
+  border-top: 1px solid;
+  border-image: linear-gradient(
+      to right,
+      transparent,
+      var(--shadow-black),
+      var(--shadow-black),
+      transparent
+    )
+    1;
 }
 
 .message-input {
-    flex: 1;
-    padding: 12px 15px;
-    border-radius: 20px;
-    border: none;
-    background-color: var(--gunmetal);
-    color: var(--off-white);
-    font-size: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+  flex: 1;
+  padding: 12px 15px;
+  border-radius: 20px;
+  border: none;
+  background-color: var(--gunmetal);
+  color: var(--off-white);
+  font-size: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .message-input:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px var(--light-lavender);
-    border-color: var(--lavender);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--light-lavender);
+  border-color: var(--lavender);
 }
 
 .send-button {
-    background-color: var(--lavender);
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    background-image: var(--lavender-gradient);
-    box-shadow: 0 2px 8px rgba(138, 92, 245, 0.3);
+  background-color: var(--lavender);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  background-image: var(--lavender-gradient);
+  box-shadow: 0 2px 8px rgba(138, 92, 245, 0.3);
 }
 
 .send-button:hover {
-    background-color: var(--deep-lavender);
-    transform: scale(1.05);
+  background-color: var(--deep-lavender);
+  transform: scale(1.05);
 }
 
 /*******************************
  * 12. CONTACT PROFILE
  *******************************/
 .contact-profile {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    border-bottom: 1px solid var(--shadow-black);
-    height: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--shadow-black);
+  height: 250px;
 }
 
 .profile-name {
-    font-size: 18px;
-    font-weight: 500;
-    margin: 5px 0;
+  font-size: 18px;
+  font-weight: 500;
+  margin: 5px 0;
 }
 
 .profile-details {
-    padding: 15px 20px;
-    border-bottom: 1px solid var(--shadow-black);
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--shadow-black);
 }
 
 .profile-section {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 .profile-section-title {
-    font-size: 14px;
-    color: var(--silver);
-    margin-bottom: 5px;
-    font-weight: normal;
+  font-size: 14px;
+  color: var(--silver);
+  margin-bottom: 5px;
+  font-weight: normal;
 }
 
 .profile-section-content {
-    font-size: 15px;
-    line-height: 1.5;
+  font-size: 15px;
+  line-height: 1.5;
 }
 
 /*******************************
  * 13. SHARED MEDIA GALLERY
  *******************************/
 .shared-media {
-    padding: 15px 20px;
+  padding: 15px 20px;
 }
 
 .shared-media-title {
-    font-size: 14px;
-    color: var(--silver);
-    margin-bottom: 15px;
-    font-weight: normal;
+  font-size: 14px;
+  color: var(--silver);
+  margin-bottom: 15px;
+  font-weight: normal;
 }
 
 .shared-media-content {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
 }
 
 .shared-img {
-    width: 100%;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 5px;
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 5px;
 }
 
 /*******************************
  * 14. RESPONSIVE DESIGN
  *******************************/
 @media (max-width: 1200px) {
-
-    .right-sidebar.open {
-        width: 400px;
-    }
-
+  .right-sidebar.open {
+    width: 400px;
+  }
 }
 
 @media (min-width: 576px) and (max-width: 992px) {
+  .chat-container.right-open .chat-main {
+    display: none;
+  }
 
-    .chat-container.right-open .chat-main {
-        display: none;
-    }
-
-    .right-sidebar.open {
-        position: absolute;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        width: calc(100% - 300px) !important;
-        z-index: 10;
-    }
-
+  .right-sidebar.open {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: calc(100% - 300px) !important;
+    z-index: 10;
+  }
 }
 
-
 @media (max-width: 576px) {
-    .chat-container {
-        grid-template-columns: 1fr;
-        grid-template-areas: "main";
-    }
+  .chat-container {
+    grid-template-columns: 1fr;
+    grid-template-areas: "main";
+  }
 
-    .left-sidebar {
-        position: fixed;
-        height: 100%;
-        width: 100%;
-        left: 0;
-        z-index: 10;
-        transform: none;
-    }
+  .left-sidebar {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    z-index: 10;
+    transform: none;
+  }
 
-    .left-sidebar.closed {
-        display: none;
-    }
+  .left-sidebar.closed {
+    display: none;
+  }
 
-    .chat-main {
-        grid-area: main;
-        height: 100vh;
-    }
+  .chat-main {
+    grid-area: main;
+    height: 100vh;
+  }
 
-    .right-sidebar {
-        position: fixed;
-        right: 0;
-        height: 100%;
-        width: 100% !important;
-        z-index: 20;
-        transform: translateX(100%);
-    }
+  .right-sidebar {
+    position: fixed;
+    right: 0;
+    height: 100%;
+    width: 100% !important;
+    z-index: 20;
+    transform: translateX(100%);
+  }
 
-    .right-sidebar.open {
-        transform: translateX(0);
-    }
+  .right-sidebar.open {
+    transform: translateX(0);
+  }
 }
