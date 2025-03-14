@@ -6,14 +6,6 @@ export async function POST(request) {
     const body = await request.json();
     const requestId = Number(body.requestId);
 
-    // Validate input
-    if (isNaN(requestId) || requestId <= 0) {
-      return NextResponse.json(
-        { error: "Invalid request ID" },
-        { status: 400 }
-      );
-    }
-
     const connection = await mysql.createConnection({
       host: process.env.DB_HOST || "localhost",
       user: process.env.DB_USER || "root",
@@ -21,12 +13,15 @@ export async function POST(request) {
       database: process.env.DB_NAME || "chatdb",
     });
 
-
     await connection.beginTransaction();
 
     try {
       const [requests] = await connection.execute(
-        `SELECT senderUserId, receiverUserId FROM FriendRequests WHERE requestId = ?`,
+        `SELECT FriendRequests.senderUserId, FriendRequests.receiverUserId,
+                Users.userId, Users.displayName, Users.createdAt, Users.status, Users.bio
+         FROM FriendRequests
+         JOIN Users ON FriendRequests.senderUserId = Users.userId
+         WHERE requestId = ?`,
         [requestId]
       );
 
@@ -63,12 +58,11 @@ export async function POST(request) {
         {
           message: "Friend request accepted and friendship established",
           senderUserId,
-          receiverUserId
+          receiverUserId,
         },
         { status: 200 }
       );
     } catch (transactionError) {
-
       await connection.rollback();
       throw transactionError;
     }

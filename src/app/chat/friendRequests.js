@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server";
 import { useEffect, useState } from "react";
 
 export default function FriendRequests({ userData }) {
@@ -27,19 +28,31 @@ export default function FriendRequests({ userData }) {
 
   const handleAccept = async (requestId) => {
     try {
-      const response = await fetch("/api/acceptFriendRequest", {
+      await fetch("/api/acceptFriendRequest", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ requestId }),
       });
-      if (!response.ok) throw new Error("Failed to accept friend request");
-      setFriendRequests(
-        friendRequests.filter((request) => request.id !== requestId)
-      );
+      window.location.reload();
     } catch (error) {
       console.error("Error accepting friend request:", error);
+    }
+  };
+
+  const handleReject = async (requestId) => {
+    try {
+      await fetch("/api/rejectFriendRequest", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ requestId }),
+      });
+      window.location.reload();
+    } catch (error) {
+      console.error("Error rejecting friend request:", error);
     }
   };
 
@@ -56,7 +69,9 @@ export default function FriendRequests({ userData }) {
           <button onClick={() => handleAccept(friendRequest.requestId)}>
             Accept friend request
           </button>
-          <button>Reject friend request</button>
+          <button onClick={() => handleReject(friendRequest.requestId)}>
+            Reject friend request
+          </button>
         </div>
       ))}
     </>

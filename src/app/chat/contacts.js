@@ -57,7 +57,9 @@ export default function ContactsList({ userId, onContactSelect, activeChat }) {
             onChange={handleSearch}
             aria-label="Search contacts"
           />
-          <FontAwesomeIcon icon={faSearch} className="search-icon" />
+          {isLoading ? null : (
+            <FontAwesomeIcon icon={faSearch} className="search-icon" />
+          )}
         </div>
       </div>
 
@@ -83,8 +85,9 @@ export default function ContactsList({ userId, onContactSelect, activeChat }) {
           filteredContacts.map((contact) => (
             <button
               key={contact.userId}
-              className={`contact-item ${activeChat?.id === contact.userId ? "active" : ""
-                }`}
+              className={`contact-item ${
+                activeChat?.id === contact.userId ? "active" : ""
+              }`}
               onClick={() => onContactSelect(contact)}
             >
               <Image
@@ -100,8 +103,9 @@ export default function ContactsList({ userId, onContactSelect, activeChat }) {
               </div>
               <span className="time">{contact.lastMessageTime}</span>
               <span
-                className={`status-indicator ${contact.status ? "online" : "offline"
-                  }`}
+                className={`status-indicator ${
+                  contact.status ? "online" : "offline"
+                }`}
               ></span>
             </button>
           ))
