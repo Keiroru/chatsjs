@@ -17,7 +17,7 @@ export async function POST(request) {
 
     try {
       const [requests] = await connection.execute(
-        `SELECT FriendRequests.senderUserId, FriendRequests.receiverUserId,
+        `SELECT FriendRequests.senderUserId, FriendRequests.receiverUserId, FriendRequests.requestId,
                 Users.userId, Users.displayName, Users.createdAt, Users.status, Users.bio
          FROM FriendRequests
          JOIN Users ON FriendRequests.senderUserId = Users.userId
@@ -59,6 +59,7 @@ export async function POST(request) {
           message: "Friend request accepted and friendship established",
           senderUserId,
           receiverUserId,
+          requests,
         },
         { status: 200 }
       );

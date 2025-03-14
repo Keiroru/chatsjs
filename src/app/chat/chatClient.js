@@ -25,9 +25,9 @@ export default function ChatClient({ userData }) {
 
   const formattedDate = activeChat?.createdAt
     ? new Date(activeChat.createdAt)
-      .toISOString()
-      .split("T")[0]
-      .replace(/-/g, ".")
+        .toISOString()
+        .split("T")[0]
+        .replace(/-/g, ".")
     : "No contact selected";
 
   useEffect(() => {
@@ -88,6 +88,7 @@ export default function ChatClient({ userData }) {
 
           <div className="controls">
             <button className="icon-button" aria-label="Settings">
+              {}
               <FontAwesomeIcon icon={faCog} />
             </button>
             <LogoutButton />
@@ -184,8 +185,9 @@ export default function ChatClient({ userData }) {
             {activeChat?.displayName || "Select a contact"}
           </h2>
           <span
-            className={`status-badge ${activeChat?.status ? "online" : "offline"
-              }`}
+            className={`status-badge ${
+              activeChat?.status ? "online" : "offline"
+            }`}
           >
             {activeChat?.status ? "Online" : "Offline"}
           </span>

@@ -1,9 +1,8 @@
-import { NextResponse } from "next/server";
 import { useEffect, useState } from "react";
+import "./chat.css";
 
 export default function FriendRequests({ userData }) {
   const [friendRequests, setFriendRequests] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchFriendRequests() {
@@ -16,8 +15,6 @@ export default function FriendRequests({ userData }) {
         setFriendRequests(data);
       } catch (error) {
         console.error("Error fetching friend requests:", error);
-      } finally {
-        setIsLoading(false);
       }
     }
 
@@ -56,24 +53,30 @@ export default function FriendRequests({ userData }) {
     }
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
-    <>
-      {friendRequests.length > 0 && <div>Pending friend requests</div>}
+    <div className="friend-requests-container">
+      {friendRequests.length > 0 && (
+        <div className="friend-requests-header">Pending Friend Requests</div>
+      )}
       {friendRequests.map((friendRequest) => (
-        <div key={friendRequest.requestId}>
-          <h3>{friendRequest.displayName}</h3>
-          <button onClick={() => handleAccept(friendRequest.requestId)}>
-            Accept friend request
-          </button>
-          <button onClick={() => handleReject(friendRequest.requestId)}>
-            Reject friend request
-          </button>
+        <div key={friendRequest.requestId} className="friend-request-card">
+          <h3 className="friend-request-name">{friendRequest.displayName}</h3>
+          <div className="friend-request-buttons">
+            <button
+              className="friend-request-accept"
+              onClick={() => handleAccept(friendRequest.requestId)}
+            >
+              Accept
+            </button>
+            <button
+              className="friend-request-reject"
+              onClick={() => handleReject(friendRequest.requestId)}
+            >
+              Reject
+            </button>
+          </div>
         </div>
       ))}
-    </>
+    </div>
   );
 }
