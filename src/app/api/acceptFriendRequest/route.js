@@ -56,9 +56,6 @@ export async function POST(request) {
 
       return NextResponse.json(
         {
-          message: "Friend request accepted and friendship established",
-          senderUserId,
-          receiverUserId,
           requests,
         },
         { status: 200 }

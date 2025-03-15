@@ -22,12 +22,13 @@ export default function ChatClient({ userData }) {
   const [leftPanelOpen, setLeftPanelOpen] = useState(true);
   const [activeChat, setActiveChat] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [refresh, setRefresh] = useState(0);
 
   const formattedDate = activeChat?.createdAt
     ? new Date(activeChat.createdAt)
-        .toISOString()
-        .split("T")[0]
-        .replace(/-/g, ".")
+      .toISOString()
+      .split("T")[0]
+      .replace(/-/g, ".")
     : "No contact selected";
 
   useEffect(() => {
@@ -60,6 +61,10 @@ export default function ChatClient({ userData }) {
     }
   };
 
+  const handleFriendRequestAccept = (newContact) => {
+    setRefresh((prev) => prev + 1);
+  };
+
   return (
     <div className={`chat-container ${isMobile ? "mobile" : ""}`}>
       <aside
@@ -88,7 +93,7 @@ export default function ChatClient({ userData }) {
 
           <div className="controls">
             <button className="icon-button" aria-label="Settings">
-              {}
+              { }
               <FontAwesomeIcon icon={faCog} />
             </button>
             <LogoutButton />
@@ -97,12 +102,16 @@ export default function ChatClient({ userData }) {
 
         <AddFriendButton userId={userData?.userId} />
 
-        <FriendRequests userData={userData} />
+        <FriendRequests
+          userData={userData}
+          onFriendRequestAccept={handleFriendRequestAccept}
+        />
 
         <ContactsList
           userId={userData?.userId}
           onContactSelect={handleContactClick}
           activeChat={activeChat}
+          refreshTrigger={refresh}
         />
       </aside>
 
@@ -185,9 +194,8 @@ export default function ChatClient({ userData }) {
             {activeChat?.displayName || "Select a contact"}
           </h2>
           <span
-            className={`status-badge ${
-              activeChat?.status ? "online" : "offline"
-            }`}
+            className={`status-badge ${activeChat?.status ? "online" : "offline"
+              }`}
           >
             {activeChat?.status ? "Online" : "Offline"}
           </span>

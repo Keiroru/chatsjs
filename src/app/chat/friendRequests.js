@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./chat.css";
 
-export default function FriendRequests({ userData }) {
+export default function FriendRequests({ userData, onFriendRequestAccept }) {
   const [friendRequests, setFriendRequests] = useState([]);
 
   useEffect(() => {
@@ -25,14 +25,28 @@ export default function FriendRequests({ userData }) {
 
   const handleAccept = async (requestId) => {
     try {
-      await fetch("/api/acceptFriendRequest", {
+      const response = await fetch("/api/acceptFriendRequest", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ requestId }),
       });
-      window.location.reload();
+      const repsonseData = await response.json();
+      console.log(repsonseData);
+
+      const newContact = {
+        userId: repsonseData.userId,
+        displayName: repsonseData.displayName,
+        createdAt: repsonseData.createdAt,
+        status: repsonseData.status,
+        bio: repsonseData.bio,
+      }
+
+      if (onFriendRequestAccept) {
+        onFriendRequestAccept(newContact);
+      }
+      setFriendRequests(friendRequests.filter((request) => request.requestId !== requestId));
     } catch (error) {
       console.error("Error accepting friend request:", error);
     }
@@ -47,7 +61,7 @@ export default function FriendRequests({ userData }) {
         },
         body: JSON.stringify({ requestId }),
       });
-      window.location.reload();
+      setFriendRequests(friendRequests.filter((request) => request.requestId !== requestId));
     } catch (error) {
       console.error("Error rejecting friend request:", error);
     }
