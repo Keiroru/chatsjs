@@ -23,7 +23,8 @@ export async function GET(request) {
             Users.displayName, 
             Users.createdAt,
             Users.status, 
-            Users.bio
+            Users.bio,
+            Users.profilePicPath
         FROM 
             Users
         JOIN 

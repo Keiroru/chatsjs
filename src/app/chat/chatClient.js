@@ -6,6 +6,7 @@ import "./chat.css";
 import LogoutButton from "./logout";
 import ContactsList from "./contacts";
 import AddFriendButton from "./addFriend";
+import Settings from "../Components/settings/settings";
 import FriendRequests from "./friendRequests";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -23,6 +24,7 @@ export default function ChatClient({ userData }) {
   const [activeChat, setActiveChat] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const [refresh, setRefresh] = useState(0);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const formattedDate = activeChat?.createdAt
     ? new Date(activeChat.createdAt)
@@ -65,6 +67,14 @@ export default function ChatClient({ userData }) {
     setRefresh((prev) => prev + 1);
   };
 
+  const toggleSettings = () => {
+    setSettingsOpen(prev => !prev);
+
+    if (!settingsOpen) {
+      setRightPanelOpen(false);
+    }
+  };
+
   return (
     <div className={`chat-container ${isMobile ? "mobile" : ""}`}>
       <aside
@@ -82,17 +92,17 @@ export default function ChatClient({ userData }) {
               </button>
             )}
             <Image
-              src={userData?.avatar || "https://placehold.co/50x50"}
+              src={userData?.profilePicPath || "https://placehold.co/50x50"}
               alt="User avatar"
-              width={40}
-              height={40}
+              width={50}
+              height={50}
               className="avatar"
             />
             <h2 className="username">{userData?.displayName}</h2>
           </div>
 
           <div className="controls">
-            <button className="icon-button" aria-label="Settings">
+            <button className="icon-button" aria-label="Settings" onClick={toggleSettings}>
               { }
               <FontAwesomeIcon icon={faCog} />
             </button>
@@ -118,7 +128,7 @@ export default function ChatClient({ userData }) {
       <main
         className={`chat-main ${!leftPanelOpen || !isMobile ? "visible" : ""}`}
       >
-        <header className="chat-header">
+        {settingsOpen ? (<Settings userData={userData} />) : (<><header className="chat-header">
           {isMobile && (
             <button
               className="icon-button back-button"
@@ -134,7 +144,7 @@ export default function ChatClient({ userData }) {
             aria-label="Toggle contact info"
           >
             <Image
-              src={activeChat?.avatar || "https://placehold.co/50x50"}
+              src={activeChat?.profilePicPath || "https://placehold.co/50x50"}
               alt="Contact avatar"
               width={40}
               height={40}
@@ -144,28 +154,28 @@ export default function ChatClient({ userData }) {
           </button>
         </header>
 
-        <div className="messages-container">
-          <div className="no-chat-selected">
-            <p>select someone bruh</p>
+          <div className="messages-container">
+            <div className="no-chat-selected">
+              <p>select someone bruh</p>
+            </div>
           </div>
-        </div>
 
-        <div className="message-input-container">
-          <input
-            type="text"
-            placeholder="Type a message"
-            className="message-input"
-            aria-label="Type a message"
-            disabled={!activeChat}
-          />
-          <button
-            className="send-button"
-            aria-label="Send message"
-            disabled={!activeChat}
-          >
-            <FontAwesomeIcon icon={faPaperPlane} />
-          </button>
-        </div>
+          <div className="message-input-container">
+            <input
+              type="text"
+              placeholder="Type a message"
+              className="message-input"
+              aria-label="Type a message"
+              disabled={!activeChat}
+            />
+            <button
+              className="send-button"
+              aria-label="Send message"
+              disabled={!activeChat}
+            >
+              <FontAwesomeIcon icon={faPaperPlane} />
+            </button>
+          </div></>)}
       </main>
 
       <aside
@@ -184,7 +194,7 @@ export default function ChatClient({ userData }) {
 
         <div className="contact-profile">
           <Image
-            src={activeChat?.avatar || "https://placehold.co/100x100"}
+            src={activeChat?.profilePicPath || "https://placehold.co/100x100"}
             alt="Contact profile"
             width={100}
             height={100}

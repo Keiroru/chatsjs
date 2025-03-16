@@ -90,7 +90,7 @@ export default function ContactsList({ userId, onContactSelect, activeChat, refr
               onClick={() => onContactSelect(contact)}
             >
               <Image
-                src={contact.avatar || "https://placehold.co/50x50"}
+                src={contact?.profilePicPath || "https://placehold.co/50x50"}
                 alt="Contact avatar"
                 width={40}
                 height={40}

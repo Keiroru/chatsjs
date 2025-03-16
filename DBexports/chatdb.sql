@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2025. Már 13. 18:52
+-- Létrehozás ideje: 2025. Már 16. 20:32
 -- Kiszolgáló verziója: 10.4.32-MariaDB
 -- PHP verzió: 8.2.12
 
@@ -40,9 +40,8 @@ CREATE TABLE `friendrequests` (
 --
 
 INSERT INTO `friendrequests` (`requestId`, `senderUserId`, `receiverUserId`, `sentAt`, `status`) VALUES
-(4, 2, 1, '2025-03-13 17:41:42', 'accepted'),
-(5, 3, 1, '2025-03-13 17:41:42', 'accepted'),
-(6, 11, 1, '2025-03-13 17:41:52', 'accepted');
+(17, 2, 1, '2025-03-16 19:28:14', 'accepted'),
+(18, 3, 1, '2025-03-16 19:28:14', 'accepted');
 
 -- --------------------------------------------------------
 
@@ -61,12 +60,10 @@ CREATE TABLE `friends` (
 --
 
 INSERT INTO `friends` (`userId`, `friendUserId`, `friendedAt`) VALUES
-(1, 2, '2025-03-13 17:42:04'),
-(1, 3, '2025-03-13 17:42:06'),
-(1, 11, '2025-03-13 17:42:07'),
-(2, 1, '2025-03-13 17:42:04'),
-(3, 1, '2025-03-13 17:42:06'),
-(11, 1, '2025-03-13 17:42:07');
+(1, 2, '2025-03-16 19:28:18'),
+(1, 3, '2025-03-16 19:28:19'),
+(2, 1, '2025-03-16 19:28:18'),
+(3, 1, '2025-03-16 19:28:19');
 
 -- --------------------------------------------------------
 
@@ -92,19 +89,19 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`userId`, `displayName`, `email`, `telephone`, `password`, `createdAt`, `updatedAt`, `status`, `profilePicPath`, `bio`) VALUES
-(1, 'cica', 'vnoel05@gmail.com', NULL, 'asdasdasdA1', '2025-03-07 16:54:09', '2025-03-07 16:54:09', '', NULL, ''),
-(2, 'valaki', 'izomhegy55@gmail.com', NULL, 'asdasdasdA1', '2025-03-07 17:01:36', '2025-03-13 09:12:34', '', NULL, 'szep cica vagyok'),
-(3, 'lula', 'bammeg@asd.com', NULL, 'asdasdasdA1', '2025-03-10 16:19:43', '2025-03-13 09:12:47', '', NULL, 'teccel baby gurl'),
-(4, 'Alice Johnson', 'alice.johnson@example.com', '1234567890', 'password123', '2025-03-11 11:00:00', '2025-03-13 09:21:57', 'online', '/images/alice.jpg', 'Thank you for downloading this script. Yes, this is the entire Bee Movie script written on Notability. I don\'t know why\r\nyou would want this, but I guess it\'s funny. You may make any changes you want,'),
-(5, 'Bob Smith', 'bob.smith@example.com', '1234567891', 'password123', '2025-03-11 11:10:00', '2025-03-11 11:10:00', 'online', '/images/bob.jpg', ''),
-(6, 'Charlie Brown', 'charlie.brown@example.com', '1234567892', 'password123', '2025-03-11 11:20:00', '2025-03-11 11:20:00', '', '/images/charlie.jpg', ''),
-(7, 'Diana Prince', 'diana.prince@example.com', '1234567893', 'password123', '2025-03-11 11:30:00', '2025-03-11 11:30:00', 'online', '/images/diana.jpg', ''),
-(8, 'Ethan Hunt', 'ethan.hunt@example.com', '1234567894', 'password123', '2025-03-11 11:40:00', '2025-03-11 11:40:00', '', '/images/ethan.jpg', ''),
-(9, 'Fiona Gallagher', 'fiona.gallagher@example.com', '1234567895', 'password123', '2025-03-11 11:50:00', '2025-03-11 11:50:00', 'online', '/images/fiona.jpg', ''),
-(10, 'George Clooney', 'george.clooney@example.com', '1234567896', 'password123', '2025-03-11 12:00:00', '2025-03-11 12:00:00', '', '/images/george.jpg', ''),
-(11, 'Hannah Montana', 'hannah.montana@example.com', '1234567897', 'password123', '2025-03-11 12:10:00', '2025-03-11 12:10:00', 'online', '/images/hannah.jpg', ''),
-(12, 'Ian McKellen', 'ian.mckellen@example.com', '1234567898', 'password123', '2025-03-11 12:20:00', '2025-03-11 12:20:00', '', '/images/ian.jpg', ''),
-(13, 'Jessica Alba', 'jessica.alba@example.com', '1234567899', 'password123', '2025-03-11 12:30:00', '2025-03-11 12:30:00', 'online', '/images/jessica.jpg', '');
+(1, 'cirmi cicus', 'vnoel05@gmail.com', NULL, 'asd', '2025-03-07 16:54:09', '2025-03-16 18:52:08', '', 'https://i.ibb.co/BKv4Yrq8/class-of-09-nicole-3.jpg', 'legszebb cica\r\n'),
+(2, 'valaki meno', 'izomhegy55@gmail.com', NULL, 'asdasdasdA1', '2025-03-07 17:01:36', '2025-03-16 19:31:43', 'online', 'https://i.ibb.co/nq79qzNx/Jecka-3.jpg', 'szep cica vagyok'),
+(3, 'lula', 'bammeg@asd.com', NULL, 'asdasdasdA1', '2025-03-10 16:19:43', '2025-03-16 17:54:23', '', 'https://i.ibb.co/dsstLbKK/Synthwave-Goth-Girl.jpg', 'teccel baby gurl'),
+(4, 'Alice Johnson', 'alice.johnson@example.com', '1234567890', 'password123', '2025-03-11 11:00:00', '2025-03-16 13:28:59', 'online', NULL, 'Thank you for downloading this script. Yes, this is the entire Bee Movie script written on Notability. I don\'t know why\r\nyou would want this, but I guess it\'s funny. You may make any changes you want,'),
+(5, 'Bob Smith', 'bob.smith@example.com', '1234567891', 'password123', '2025-03-11 11:10:00', '2025-03-16 13:29:54', 'online', NULL, ''),
+(6, 'Charlie Brown', 'charlie.brown@example.com', '1234567892', 'password123', '2025-03-11 11:20:00', '2025-03-16 13:29:54', '', NULL, ''),
+(7, 'Diana Prince', 'diana.prince@example.com', '1234567893', 'password123', '2025-03-11 11:30:00', '2025-03-16 13:29:54', 'online', NULL, ''),
+(8, 'Ethan Hunt', 'ethan.hunt@example.com', '1234567894', 'password123', '2025-03-11 11:40:00', '2025-03-16 13:29:54', '', NULL, ''),
+(9, 'Fiona Gallagher', 'fiona.gallagher@example.com', '1234567895', 'password123', '2025-03-11 11:50:00', '2025-03-16 13:29:54', 'online', NULL, ''),
+(10, 'George Clooney', 'george.clooney@example.com', '1234567896', 'password123', '2025-03-11 12:00:00', '2025-03-16 13:29:54', '', NULL, ''),
+(11, 'Hannah Montana', 'hannah.montana@example.com', '1234567897', 'password123', '2025-03-11 12:10:00', '2025-03-16 13:29:54', 'online', NULL, ''),
+(12, 'Ian McKellen', 'ian.mckellen@example.com', '1234567898', 'password123', '2025-03-11 12:20:00', '2025-03-16 13:29:54', '', NULL, ''),
+(13, 'Jessica Alba', 'jessica.alba@example.com', '1234567899', 'password123', '2025-03-11 12:30:00', '2025-03-16 13:29:13', 'online', NULL, '');
 
 --
 -- Indexek a kiírt táblákhoz
@@ -141,7 +138,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT a táblához `friendrequests`
 --
 ALTER TABLE `friendrequests`
-  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT a táblához `users`
