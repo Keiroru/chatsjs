@@ -84,10 +84,9 @@ function Register() {
   return (
     <>
       <LoginOrRegister>
-        <h1>Sign Up</h1>
-        <form onSubmit={handleRegister}>
-          <div className="input-container">
-            <i className="fa fa-id-card"></i>
+        <div className="box">
+          <h1>Sign Up</h1>
+          <form onSubmit={handleRegister}>
             <input
               type="text"
               id="displayName"
@@ -96,12 +95,9 @@ function Register() {
               onChange={handleChange}
               required
             />
-          </div>
-          {errorMap.displayName && (
-            <p className="errorMessage">{errorMap.displayName}</p>
-          )}
-          <div className="input-container">
-            <i className="fa fa-envelope"></i>
+            {errorMap.displayName && (
+              <p className="errorMessage">{errorMap.displayName}</p>
+            )}
             <input
               type="email"
               id="email"
@@ -111,10 +107,7 @@ function Register() {
               onChange={handleChange}
               required
             />
-          </div>
-          {errorMap.email && <p className="errorMessage">{errorMap.email}</p>}
-          <div className="input-container">
-            <i className="fa fa-lock"></i>
+            {errorMap.email && <p className="errorMessage">{errorMap.email}</p>}
             <input
               type="password"
               id="password"
@@ -124,12 +117,9 @@ function Register() {
               onChange={handleChange}
               required
             />
-          </div>
-          {errorMap.password && (
-            <p className="errorMessage">{errorMap.password}</p>
-          )}
-          <div className="input-container">
-            <i className="fa fa-lock"></i>
+            {errorMap.password && (
+              <p className="errorMessage">{errorMap.password}</p>
+            )}
             <input
               type="password"
               id="confirmPassword"
@@ -139,15 +129,15 @@ function Register() {
               onChange={handleChange}
               required
             />
-          </div>
-          {errorMap.confirmPassword && (
-            <p className="errorMessage">{errorMap.confirmPassword}</p>
-          )}
-          <button type="submit">Register</button>
-        </form>
-        <p className="link">
-          Already have an account? <a href="/login">Login Here</a>
-        </p>
+            {errorMap.confirmPassword && (
+              <p className="errorMessage">{errorMap.confirmPassword}</p>
+            )}
+            <input type="submit" value="Sign Up" />
+          </form>
+          <p className="link">
+            Already have an account? <a href="/login">Login Here</a>
+          </p>
+        </div>
       </LoginOrRegister>
     </>
   );

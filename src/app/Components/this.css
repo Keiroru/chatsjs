@@ -1,13 +1,3 @@
-:root{
-  --box_border: #272462;
-  --input: #67288e;
-  --input_hover: #c23ae4;
-  --button: #67288e;
-  --button_hover: #67288e;
-  --link: #2196b1;
-  --link_hover: #28bddf;
-}
-
 body{
   margin: 0;
   padding: 0;
@@ -15,83 +5,75 @@ body{
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
   height: 100vh;
-  margin: 0;
-}
-.wave-holder {
-  position: relative;
-  width: 100%;
-  height: 100vh;
+  background-color: var(--dark_black);
   overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
-.wave {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--input);
-  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
-  transition: 0.5s;
-}
-.wave span {
-  content: "";
-  position: absolute;
-  width: 325vh;
-  height: 325vh;
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, -75%);
-  background: #000;
-}
-.content {
-  position: relative;
-  z-index: 1;
-  font-size: 4em;
-  letter-spacing: 2px;
-  color: #fff;
-}
-.wave span:nth-child(1) {
-  border-radius: 45%;
-  background: rgba(20, 20, 20, 1);
-  animation: animate 5s linear infinite;
 }
 
-.wave span:nth-child(2) {
-  border-radius: 40%;
-  background: rgba(20, 20, 20, 0.5);
-  animation: animate 10s linear infinite;
+.bg-box{
+  top: 60vh;
+  position: absolute;
+  border-radius: 10px;
+  width: 120px;
+  height: 100vh;
+  border: 3px solid var(--dark_purple);
+  transform: rotate(45deg);
+  left: 0;
 }
-.wave span:nth-child(3) {
-  border-radius: 42.5%;
-  background: rgba(20, 20, 20, 0.5);
-  animation: animate 15s linear infinite;
+
+.egy{
+  left: 250px;
 }
-@keyframes animate {
-  0% {
-    transform: translate(-50%, -75%) rotate(0deg);
-  }
-  100% {
-    transform: translate(-50%, -75%) rotate(360deg);
-  }
+
+.ketto{
+  left: 500px;
+}
+
+.harom{
+  left: 750px;
+}
+
+.nulla{
+  left: -250px
+}
+
+.down{
+  position: absolute;
+  left: 60%;
+  top: 0;
+  transform: translateX(-900px);
+  animation-name: down;
+  animation-duration: 1.5s;
+}
+
+.up{
+  position: absolute;
+  top: -100vh;
+  animation-name: up;
+  animation-duration: 1.5s;
+  left: 60%;
+}
+
+@keyframes up {
+  from {top: -120vh; left: 70%;}
+  to {top: -100vh; left: 60%;}
+}
+
+@keyframes down {
+  from {top: 20vh; left: 50%;}
+  to {top: 0; left: 60%;}
 }
 
 .box{
   position: absolute;
   text-align: center;
   border-radius: 10px;
-  width: 400px;
+  width: 450px;
   padding: 20px 40px 40px 40px;
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
-  border: 2px solid var(--box_border);
+  border: 2px solid var(--dark_blue);
   backdrop-filter: blur(6px);
 }
 
@@ -107,9 +89,9 @@ input[type = "text"], input[type = "password"], input[type = "email"]{
   display: block;
   margin: 20px auto;
   text-align: center;
-  border: 2px solid var(--input);
+  border: 2px solid var(--dark_purple);
   padding: 14px 10px;
-  width: 250px;
+  width: 300px;
   outline: none;
   color: rgb(255, 255, 255);
   border-radius: 24px;
@@ -118,16 +100,17 @@ input[type = "text"], input[type = "password"], input[type = "email"]{
 }
 
 input[type = "text"]:focus, input[type = "password"]:focus, input[type = "email"]:focus{
-  width: 330px;
-  border-color: var(--input_hover);
+  width: 360px;
+  border-color: var(--light_purple);
 }
 
 .box input[type = "submit"]{
   background: none;
   display: block;
   margin: 20px auto;
+  margin-top: 35px;
   text-align: center;
-  border: 2px solid var(--button);
+  border: 2px solid var(--dark_purple);
   padding: 14px 40px;
   outline: none;
   color: rgb(255, 255, 255);
@@ -138,23 +121,23 @@ input[type = "text"]:focus, input[type = "password"]:focus, input[type = "email"
 }
 
 .box input[type = "submit"]:hover{
-  background: var(--button_hover);
+  background: var(--dark_purple);
 }
 
 .required{
-  font-size: 12px;
+  font-size: 17px;
   padding: 0;
   color: #fff
 }
 
-.register{
+.link{
   padding-top: 10px;
   color: #fff;
   font-size: 17px;
 }
 
 a {
-  color: var(--link);
+  color: var(--dark_cyan);
   text-decoration: none;
   font-weight: 700;
   transition: all 0.2s ease;
@@ -171,13 +154,13 @@ a:after {
   height: 2px;
   bottom: 0;
   left: 0;
-  background-color: var(--link_hover);
+  background-color: var(--light_cyan);
   transform-origin: bottom right;
   transition: transform 0.2s ease;
 }
 
 a:hover {
-  color: var(--link_hover);
+  color: var(--light_cyan);
 }
 
 a:hover:after {
@@ -186,5 +169,6 @@ a:hover:after {
 }
 
 .errorMessage{
-  color: red;
+  color: var(--error_red);
+  font-weight: 700;
 }

@@ -119,7 +119,7 @@ app.post(
     try {
       const results = await queryAsync(loginQuery, [email, password]);
       if (results.length === 0) {
-        return res.status(401).json({ error: "Incorrect Email or Password!" });
+        return res.status(401).json({ error: "Incorrect Email, Phone Number or Password!" });
       }
       const { userId } = results[0];
       const expiresIn = 60 * 60 * 24 * 7;

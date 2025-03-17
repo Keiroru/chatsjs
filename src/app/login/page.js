@@ -30,19 +30,12 @@ function Login() {
       }
       router.push("/chat");
     } catch (err) {
-      setError("bocs nincs szero");
+      setError("Server is unavailable");
     }
   };
 
   return (
     <LoginOrRegister>
-      <div className="wave-holder">
-        <div className="wave">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </div>
       <div className="box">
         <form onSubmit={handleSubmit}>
           <h1>Login</h1>
@@ -65,7 +58,7 @@ function Login() {
           <input type="submit" value="Login" />
         </form>
 
-        <p className="register">
+        <p className="link">
           Don't have an account yet? <a href="/register">Sign up here</a>
         </p>
       </div>

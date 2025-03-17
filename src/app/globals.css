@@ -1,4 +1,12 @@
 :root {
+  --dark_black: #111111;
+  --dark_blue: #272462;
+  --dark_purple: #67288e;
+  --light_purple: #c23ae4;
+  --dark_cyan: #2196b1;
+  --light_cyan: #28bddf;
+  --error_red: #d2042d;
+
   --rich-black: #2e2e2e;
   --charcoal: #3a3a3a;
   --gunmetal: #464646;
