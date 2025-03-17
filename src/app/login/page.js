@@ -36,30 +36,39 @@ function Login() {
 
   return (
     <LoginOrRegister>
-      <h1>Login</h1>
-      {error && <p className="errorMessage">{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div className="input-container">
-          <i className="fa fa-user"></i>
-          <input type="email" name="email" placeholder="email" required />
+      <div className="wave-holder">
+        <div className="wave">
+          <span></span>
+          <span></span>
+          <span></span>
         </div>
-        <div className="input-container">
-          <i className="fa fa-lock"></i>
+      </div>
+      <div className="box">
+        <form onSubmit={handleSubmit}>
+          <h1>Login</h1>
+          {error && <p className="errorMessage">{error}</p>}
+          <input
+            type="text"
+            name="email"
+            placeholder="Email or Phone Number"
+            required
+          />
           <input
             type="password"
             name="password"
             placeholder="Password"
             required
           />
-        </div>
-        <p className="forgot-password">
-          <a href="">Forgot Password?</a>
+          <p className="forgot-password">
+            <a href="/recoverPass">Forgot your password?</a>
+          </p>
+          <input type="submit" value="Login" />
+        </form>
+
+        <p className="register">
+          Don't have an account yet? <a href="/register">Sign up here</a>
         </p>
-        <button type="submit">Login</button>
-      </form>
-      <p className="link">
-        dont have an account? <a href="/register">Register Here</a>
-      </p>
+      </div>
     </LoginOrRegister>
   );
 }
