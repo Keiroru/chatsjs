@@ -13,6 +13,7 @@ function Register() {
     email: "",
     password: "",
     confirmPassword: "",
+    telephone: "",
   });
   const [errors, setErrors] = useState([]);
 
@@ -36,6 +37,7 @@ function Register() {
       displayName: formData.displayName,
       email: formData.email,
       password: formData.password,
+      telephone: formData.telephone,
     };
 
     try {
@@ -108,6 +110,14 @@ function Register() {
               required
             />
             {errorMap.email && <p className="errorMessage">{errorMap.email}</p>}
+            <input
+              type="text"
+              id="telephone"
+              placeholder="Phone Number"
+              autoComplete="tel"
+              value={formData.telephone}
+              onChange={handleChange}
+            />
             <input
               type="password"
               id="password"

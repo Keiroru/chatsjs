@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const { body, validationResult } = require("express-validator");
 const { promisify } = require("util");
 const { encrypt } = require("./src/app/stuff/crypt");
+const { parse } = require("path");
 require('dotenv').config();
 
 const app = express();
@@ -60,7 +61,7 @@ app.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { displayName, email, password } = req.body;
+    const { displayName, email, telephone, password } = req.body;
 
     const checkQuery = `
       SELECT * FROM Users 
@@ -85,10 +86,10 @@ app.post(
 
       // In production, hash the password here
       const query = `
-        INSERT INTO Users (displayName, email, password, status)
-        VALUES (?, ?, ?, 'active')
+        INSERT INTO Users (displayName, email, telephone, password, status)
+        VALUES (?, ?, ?, ?, 'active')
       `;
-      db.query(query, [displayName, email, password], (err, results) => {
+      db.query(query, [displayName, email, telephone, password], (err, results) => {
         if (err) {
           console.error("Registration error:", err);
           return res.status(500).json({ error: "Database error" });
@@ -102,7 +103,7 @@ app.post(
 app.post(
   "/login",
   [
-    body("email").notEmpty().withMessage("Email is required"),
+    body("email").notEmpty().withMessage("Email is required, or phone number is required"),
     body("password").notEmpty().withMessage("Password is required"),
   ],
   async (req, res) => {
@@ -112,27 +113,36 @@ app.post(
     }
 
     const { email, password } = req.body;
-    const loginQuery = "SELECT userId, email, password FROM users WHERE email = ? AND password = ?";
 
+    const expiresIn = 60 * 60 * 24 * 7;
     const queryAsync = promisify(db.query).bind(db);
 
+    const isPhone = /^\d+$/.test(email);
+
     try {
-      const results = await queryAsync(loginQuery, [email, password]);
+      const query = isPhone
+        ? "SELECT userId FROM users WHERE telephone = ? AND password = ?"
+        : "SELECT userId FROM users WHERE email = ? AND password = ?";
+
+      const results = await queryAsync(query, [email, password]);
+
       if (results.length === 0) {
         return res.status(401).json({ error: "Incorrect Email, Phone Number or Password!" });
       }
+
       const { userId } = results[0];
-      const expiresIn = 60 * 60 * 24 * 7;
-      const session = await encrypt({ userId, expiresIn });
+      const session = await encrypt({ userId, expiresIn: expiresIn });
 
       res.cookie("session", session, {
         httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
         maxAge: expiresIn * 1000,
         path: "/",
       });
+
       res.status(200).json({ message: "Login successful" });
     } catch (err) {
-      console.error("Error:", err);
+      console.error("Login error:", err);
       res.status(500).json({ error: "Internal server error" });
     }
   }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import "./chat.css";
 import LogoutButton from "./logout";
@@ -50,6 +50,10 @@ export default function ChatClient({ userData }) {
   }, []);
 
   const handleContactClick = (contact) => {
+    if (settingsOpen) {
+      setSettingsOpen(false);
+    }
+
     setActiveChat(contact);
 
     if (isMobile) {
@@ -81,7 +85,7 @@ export default function ChatClient({ userData }) {
         className={`sidebar left-sidebar ${leftPanelOpen ? "open" : "closed"}`}
       >
         <header className="sidebar-header">
-          <div className="user-info">
+          <div className="user-info" onClick={toggleSettings}>
             {!leftPanelOpen && (
               <button
                 className="icon-button"
