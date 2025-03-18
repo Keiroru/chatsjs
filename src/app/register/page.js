@@ -92,7 +92,7 @@ function Register() {
             <input
               type="text"
               id="displayName"
-              placeholder="Display Name"
+              placeholder="Display Name*"
               value={formData.displayName}
               onChange={handleChange}
               required
@@ -103,7 +103,7 @@ function Register() {
             <input
               type="email"
               id="email"
-              placeholder="Email"
+              placeholder="Email*"
               autoComplete="email"
               value={formData.email}
               onChange={handleChange}
@@ -121,7 +121,7 @@ function Register() {
             <input
               type="password"
               id="password"
-              placeholder="Password"
+              placeholder="Password*"
               autoComplete="new-password"
               value={formData.password}
               onChange={handleChange}
@@ -133,7 +133,7 @@ function Register() {
             <input
               type="password"
               id="confirmPassword"
-              placeholder="Confirm Password"
+              placeholder="Confirm Password*"
               autoComplete="new-password"
               value={formData.confirmPassword}
               onChange={handleChange}
@@ -142,6 +142,9 @@ function Register() {
             {errorMap.confirmPassword && (
               <p className="errorMessage">{errorMap.confirmPassword}</p>
             )}
+            <p className="required">
+              * fields are required
+            </p>
             <input type="submit" value="Sign Up" />
           </form>
           <p className="link">
