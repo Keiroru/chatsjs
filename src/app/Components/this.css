@@ -1,4 +1,4 @@
-body{
+body {
   margin: 0;
   padding: 0;
   font-family: "Funnel Sans", sans-serif;
@@ -10,7 +10,7 @@ body{
   overflow: hidden;
 }
 
-.bg-box{
+.bg-box {
   top: 60vh;
   position: absolute;
   border-radius: 10px;
@@ -21,23 +21,23 @@ body{
   left: 0;
 }
 
-.egy{
+.egy {
   left: 250px;
 }
 
-.ketto{
+.ketto {
   left: 500px;
 }
 
-.harom{
+.harom {
   left: 750px;
 }
 
-.nulla{
-  left: -250px
+.nulla {
+  left: -250px;
 }
 
-.down{
+.down {
   position: absolute;
   left: 60%;
   top: 0;
@@ -46,7 +46,7 @@ body{
   animation-duration: 1.5s;
 }
 
-.up{
+.up {
   position: absolute;
   top: -100vh;
   animation-name: up;
@@ -55,16 +55,28 @@ body{
 }
 
 @keyframes up {
-  from {top: -120vh; left: 70%;}
-  to {top: -100vh; left: 60%;}
+  from {
+    top: -120vh;
+    left: 70%;
+  }
+  to {
+    top: -100vh;
+    left: 60%;
+  }
 }
 
 @keyframes down {
-  from {top: 20vh; left: 50%;}
-  to {top: 0; left: 60%;}
+  from {
+    top: 20vh;
+    left: 50%;
+  }
+  to {
+    top: 0;
+    left: 60%;
+  }
 }
 
-.box{
+.box {
   position: absolute;
   text-align: center;
   border-radius: 10px;
@@ -72,19 +84,21 @@ body{
   padding: 20px 40px 40px 40px;
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
   border: 2px solid var(--dark_blue);
   backdrop-filter: blur(6px);
 }
 
-.box h1{
+.box h1 {
   color: rgb(255, 255, 255);
   text-transform: uppercase;
   font-weight: 500;
   padding: 0 0 30px 0;
 }
 
-input[type = "text"], input[type = "password"], input[type = "email"]{
+input[type="text"],
+input[type="password"],
+input[type="email"] {
   background: none;
   display: block;
   margin: 20px auto;
@@ -99,12 +113,14 @@ input[type = "text"], input[type = "password"], input[type = "email"]{
   font-size: 17px;
 }
 
-input[type = "text"]:focus, input[type = "password"]:focus, input[type = "email"]:focus{
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus {
   width: 360px;
   border-color: var(--light_purple);
 }
 
-.box input[type = "submit"]{
+.box input[type="submit"] {
   background: none;
   display: block;
   margin: 20px auto;
@@ -120,17 +136,17 @@ input[type = "text"]:focus, input[type = "password"]:focus, input[type = "email"
   font-size: 17px;
 }
 
-.box input[type = "submit"]:hover{
+.box input[type="submit"]:hover {
   background: var(--dark_purple);
 }
 
-.required{
+.required {
   font-size: 14px;
   padding: 0;
-  color: #fff
+  color: #fff;
 }
 
-.link{
+.link {
   padding-top: 10px;
   color: #fff;
   font-size: 17px;
@@ -168,7 +184,7 @@ a:hover:after {
   transform-origin: bottom left;
 }
 
-.errorMessage{
+.errorMessage {
   color: var(--error_red);
   font-weight: 700;
 }

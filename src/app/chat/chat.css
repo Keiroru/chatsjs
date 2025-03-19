@@ -71,10 +71,6 @@ body {
   overflow: hidden;
 }
 
-.right-sidebar .sidebar-header {
-  height: 80px;
-}
-
 .right-sidebar.open {
   width: 500px;
 }
@@ -85,6 +81,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 15px;
+  height: 80px;
   border-bottom: 1px solid var(--shadow-black);
   background-image: linear-gradient(to right, var(--charcoal), var(--gunmetal));
 }
@@ -339,16 +336,20 @@ body {
  *******************************/
 .chat-header {
   padding: 10px 20px;
+  height: 80px;
   border-bottom: 1px solid var(--shadow-black);
   display: flex;
   align-items: center;
   background-color: var(--charcoal);
   border-bottom: 1px solid;
-  border-image: linear-gradient(to right,
+  border-image: linear-gradient(
+      to right,
       transparent,
       var(--shadow-black),
       var(--shadow-black),
-      transparent) 1;
+      transparent
+    )
+    1;
 }
 
 .contact-info-button {
@@ -448,11 +449,14 @@ body {
   background-color: var(--charcoal);
   gap: 10px;
   border-top: 1px solid;
-  border-image: linear-gradient(to right,
+  border-image: linear-gradient(
+      to right,
       transparent,
       var(--shadow-black),
       var(--shadow-black),
-      transparent) 1;
+      transparent
+    )
+    1;
 }
 
 .message-input {
