@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import "./logout.css";
+import styles from "@/app/styles/logout.module.css";
 
 export default function LogoutButton() {
     const router = useRouter();
@@ -12,7 +12,7 @@ export default function LogoutButton() {
 
     const handleLogout = async () => {
         setLoading(true);
-        const res = await fetch("/api/logout", { method: "POST" });
+        const res = await fetch("/api/auth/logout", { method: "POST" });
         if (res.ok) {
             router.push("/");
         } else {
@@ -25,7 +25,7 @@ export default function LogoutButton() {
         <button
             onClick={handleLogout}
             disabled={loading}
-            className="icon-button logout-button"
+            className={styles['icon-button', 'logout-button']}
             aria-label={loading ? "Logging out..." : "Logout"}
             title="Logout"
         >

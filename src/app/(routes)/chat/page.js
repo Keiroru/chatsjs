@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
 import mysql from "mysql2/promise";
-import ChatClient from "./chatClient";
+import ChatClient from "../../components/chat/chatClient";
 
 export default async function Chat() {
   const cookieStore = await cookies();

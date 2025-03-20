@@ -1,16 +1,6 @@
-/*******************************
- * 1. BASIC RESET & TYPOGRAPHY
- *******************************/
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+.chat-layout {
   color: var(--off-white);
-  background-color: var(--rich-black);
+  font-family: "Poppins", sans-serif;
 }
 
 /*******************************
@@ -81,7 +71,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 15px;
-  height: 80px;
+  height: 100px;
   border-bottom: 1px solid var(--shadow-black);
   background-image: linear-gradient(to right, var(--charcoal), var(--gunmetal));
 }
@@ -336,20 +326,17 @@ body {
  *******************************/
 .chat-header {
   padding: 10px 20px;
-  height: 80px;
+  height: 100px;
   border-bottom: 1px solid var(--shadow-black);
   display: flex;
   align-items: center;
   background-color: var(--charcoal);
   border-bottom: 1px solid;
-  border-image: linear-gradient(
-      to right,
+  border-image: linear-gradient(to right,
       transparent,
       var(--shadow-black),
       var(--shadow-black),
-      transparent
-    )
-    1;
+      transparent) 1;
 }
 
 .contact-info-button {
@@ -449,14 +436,11 @@ body {
   background-color: var(--charcoal);
   gap: 10px;
   border-top: 1px solid;
-  border-image: linear-gradient(
-      to right,
+  border-image: linear-gradient(to right,
       transparent,
       var(--shadow-black),
       var(--shadow-black),
-      transparent
-    )
-    1;
+      transparent) 1;
 }
 
 .message-input {

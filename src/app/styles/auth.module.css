@@ -1,4 +1,4 @@
-body {
+.authWrapper {
   margin: 0;
   padding: 0;
   font-family: "Funnel Sans", sans-serif;
@@ -6,8 +6,19 @@ body {
   font-weight: 400;
   font-style: normal;
   height: 100vh;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
   background-color: var(--dark_black);
   overflow: hidden;
+  z-index: 10;
+}
+
+.background {
+  width: 100%;
+  height: 100%;
+  position: relative;
 }
 
 .bg-box {
@@ -59,6 +70,7 @@ body {
     top: -120vh;
     left: 70%;
   }
+
   to {
     top: -100vh;
     left: 60%;
@@ -70,6 +82,7 @@ body {
     top: 20vh;
     left: 50%;
   }
+
   to {
     top: 0;
     left: 60%;
@@ -77,15 +90,13 @@ body {
 }
 
 .box {
-  position: absolute;
+  position: relative;
   text-align: center;
   border-radius: 10px;
   width: 450px;
   padding: 20px 40px 40px 40px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   border: 2px solid var(--dark_blue);
+  background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(6px);
 }
 
@@ -96,9 +107,7 @@ body {
   padding: 0 0 30px 0;
 }
 
-input[type="text"],
-input[type="password"],
-input[type="email"] {
+.input {
   background: none;
   display: block;
   margin: 20px auto;
@@ -113,14 +122,12 @@ input[type="email"] {
   font-size: 17px;
 }
 
-input[type="text"]:focus,
-input[type="password"]:focus,
-input[type="email"]:focus {
+.input:focus {
   width: 360px;
   border-color: var(--light_purple);
 }
 
-.box input[type="submit"] {
+.submitButton {
   background: none;
   display: block;
   margin: 20px auto;
@@ -136,7 +143,7 @@ input[type="email"]:focus {
   font-size: 17px;
 }
 
-.box input[type="submit"]:hover {
+.submitButton:hover {
   background: var(--dark_purple);
 }
 
@@ -152,7 +159,7 @@ input[type="email"]:focus {
   font-size: 17px;
 }
 
-a {
+.authLink {
   color: var(--dark_cyan);
   text-decoration: none;
   font-weight: 700;
@@ -162,7 +169,7 @@ a {
   font-size: 17px;
 }
 
-a:after {
+.authLink:after {
   content: "";
   position: absolute;
   width: 100%;
@@ -175,11 +182,11 @@ a:after {
   transition: transform 0.2s ease;
 }
 
-a:hover {
+.authLink:hover {
   color: var(--light_cyan);
 }
 
-a:hover:after {
+.authLink:hover:after {
   transform: scaleX(1);
   transform-origin: bottom left;
 }
@@ -187,4 +194,29 @@ a:hover:after {
 .errorMessage {
   color: var(--error_red);
   font-weight: 700;
+}
+
+.form {
+  position: relative;
+  z-index: 15;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 600px) {
+  .box {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .input {
+    width: 80%;
+  }
+
+  .input:focus {
+    width: 85%;
+  }
 }
