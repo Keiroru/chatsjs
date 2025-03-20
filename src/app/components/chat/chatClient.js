@@ -6,6 +6,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "@/app/styles/chat.module.css";
 import Logout from "@/app/components/logout/logout";
 import Friends from "@/app/components/friendList/friends";
+import Settings from "@/app/components/settings/settings";
+import AddFriend from "@/app/components/addFriend/addFriend";
+import FriendRequests from "@/app/components/friendRequest/friendRequests";
 import {
   faArrowLeft,
   faPaperPlane,
@@ -20,7 +23,6 @@ export default function ChatClient({ userData }) {
   const [isMobile, setIsMobile] = useState(false);
   const [refresh, setRefresh] = useState(0);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [conversations, setConversations] = useState([]);
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState("");
   const messagesEndRef = useRef(null);
@@ -66,32 +68,6 @@ export default function ChatClient({ userData }) {
     }
   };
 
-  // Simple Settings component
-  const Settings = () => (
-    <div className={styles['settings-container']}>
-      <h2>Settings</h2>
-      <div className={styles['user-profile']}>
-        <Image
-          src={userData?.profilePicPath || "https://placehold.co/100x100"}
-          alt="User profile"
-          width={100}
-          height={100}
-          className={styles['profile-image']}
-        />
-        <h3>{userData?.displayName}</h3>
-      </div>
-      <button
-        className={styles['logout-button']}
-        onClick={() => {
-          document.cookie = "session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-          window.location.href = "/login";
-        }}
-      >
-        Logout
-      </button>
-    </div>
-  );
-
   return (
     <div className={`${styles['chat-container']} ${isMobile ? styles['mobile'] : ''}`}>
       <aside
@@ -127,6 +103,9 @@ export default function ChatClient({ userData }) {
           </div>
         </header>
 
+        <AddFriend userId={userData.userId} />
+        <FriendRequests userData={userData} onFriendRequestAccept={handleFriendRequestAccept} />
+
         <Friends
           userData={userData}
           activeChat={activeChat}
@@ -139,7 +118,9 @@ export default function ChatClient({ userData }) {
         className={`${styles['chat-main']} ${!leftPanelOpen || !isMobile ? styles['visible'] : ''}`}
       >
         {settingsOpen ? (
-          <Settings />
+          <Settings
+            userData={userData}
+          />
         ) : (
           <>
             <header className={styles['chat-header']}>

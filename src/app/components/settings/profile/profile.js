@@ -20,20 +20,16 @@ export default function Profile({ userData }) {
     const fileInputRef = useRef(null);
     const formRef = useRef(null);
 
-    // Just preview the file locally without uploading
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (!file) return;
 
-        // Store the file to upload later
         setSelectedFile(file);
 
-        // Create a local URL for preview only
         const previewUrl = URL.createObjectURL(file);
         setLocalPreviewUrl(previewUrl);
     };
 
-    // Trigger file input click when the button is clicked
     const handleUploadButtonClick = () => {
         fileInputRef.current?.click();
     };
@@ -52,17 +48,14 @@ export default function Profile({ userData }) {
         setUploadError("");
 
         try {
-            // If there's a new file selected, upload it first
             let imageUrl = profileForm.profilePicture;
 
             if (selectedFile) {
                 setUploadProgress(10);
 
-                // Create FormData to upload the image
                 const formData = new FormData();
                 formData.append("image", selectedFile);
 
-                // Upload to ImgBB using their API
                 setUploadProgress(30);
                 const response = await fetch(`https://api.imgbb.com/1/upload?key=f739728c1d1aad2703d94f56d8af260b`, {
                     method: "POST",
@@ -73,7 +66,6 @@ export default function Profile({ userData }) {
                 const data = await response.json();
 
                 if (data.success) {
-                    // Get the uploaded image URL
                     imageUrl = data.data.display_url || data.data.url;
                     console.log("Image uploaded successfully:", imageUrl);
                 } else {
@@ -81,14 +73,12 @@ export default function Profile({ userData }) {
                 }
             }
 
-            // Update the profile with the new details
             const formData = new FormData();
             formData.append("userId", userData?.userId || "");
             formData.append("displayName", profileForm.displayName);
             formData.append("bio", profileForm.bio);
-            formData.append("profilePicture", imageUrl); // Use the new image URL if uploaded
+            formData.append("profilePicture", imageUrl);
 
-            // Send data to the server
             setUploadProgress(85);
             const response = await fetch("/api/modifyProfile", {
                 method: "POST",
@@ -99,23 +89,19 @@ export default function Profile({ userData }) {
                 throw new Error("Failed to update profile");
             }
 
-            // Update the form state with the new image URL
             setProfileForm(prev => ({
                 ...prev,
                 profilePicture: imageUrl
             }));
 
-            // Clean up
             setSelectedFile(null);
             setUploadProgress(100);
 
-            // If we created a local object URL, revoke it to avoid memory leaks
             if (localPreviewUrl) {
                 URL.revokeObjectURL(localPreviewUrl);
             }
             setLocalPreviewUrl(null);
 
-            // Handle successful response
             const result = await response.json();
             window.location.reload();
             alert("Profile updated successfully!");
@@ -145,7 +131,6 @@ export default function Profile({ userData }) {
                         />
                     </div>
 
-                    {/* Hidden file input */}
                     <input
                         type="file"
                         ref={fileInputRef}
@@ -154,7 +139,6 @@ export default function Profile({ userData }) {
                         style={{ display: 'none' }}
                     />
 
-                    {/* Visible upload button */}
                     <button
                         type="button"
                         className={style.uploadButton}

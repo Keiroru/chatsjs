@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import style from "./settings.module.css";
-import Profile from "./profile/profile";
-import Account from "./myAccount/myAccount";
+import style from "@/app/styles/settings.module.css";
+import Profile from "@/app/components/settings/profile/profile";
+import Account from "@/app/components/settings/myAccount/myAccount";
 
 export default function Settings({ userData }) {
   const [selectedOption, setSelectedOption] = useState("profile");

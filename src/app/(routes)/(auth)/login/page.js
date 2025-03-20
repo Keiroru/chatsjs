@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import styles from '@/app/styles/auth.module.css';
 
 export default function Login() {
-  // Define state variables
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -13,7 +12,6 @@ export default function Login() {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -22,7 +20,6 @@ export default function Login() {
     });
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -43,9 +40,7 @@ export default function Login() {
         return;
       }
 
-      // Successful login
-      router.push("/chat"); // or wherever you want to redirect after login
-
+      router.push("/chat");
     } catch (err) {
       setError("An error occurred. Please try again.");
       console.error("Login error:", err);
