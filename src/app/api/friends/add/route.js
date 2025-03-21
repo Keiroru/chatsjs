@@ -5,16 +5,15 @@ export async function POST(request) {
   try {
     const { senderUserId, receiverUserId } = await request.json();
 
-    if (!senderUserId || !receiverUserId) {
+    console.log(
+      "senderUserId:",
+      senderUserId,
+      "receiverUserId:",
+      receiverUserId
+    );
+    if (senderUserId == receiverUserId) {
       return NextResponse.json(
-        { error: "senderUserId and receiverUserId are required" },
-        { status: 400 }
-      );
-    }
-
-    if (senderUserId === receiverUserId) {
-      return NextResponse.json(
-        { error: "Cannot send friend request to yourself" },
+        { error: "You cannot send a friend request to yourself" },
         { status: 400 }
       );
     }
@@ -31,7 +30,7 @@ export async function POST(request) {
     if (existing.length > 0) {
       await connection.end();
       return NextResponse.json(
-        { error: "Friend request already exists or you're already friends" },
+        { error: "Friend request already exists!" },
         { status: 400 }
       );
     }
@@ -46,7 +45,7 @@ export async function POST(request) {
 
     return NextResponse.json({
       success: true,
-      message: "Friend request sent"
+      message: "Friend request sent",
     });
   } catch (error) {
     console.error("Database error:", error);

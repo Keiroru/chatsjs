@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "@/app/styles/friendRequests.module.css";
 import Image from "next/image";
 
-export default function FriendRequests({ userData, onFriendRequestAccept }) {
+export default function FriendRequests({ userData }) {
   const [friendRequests, setFriendRequests] = useState([]);
 
   useEffect(() => {
@@ -36,18 +36,9 @@ export default function FriendRequests({ userData, onFriendRequestAccept }) {
       const repsonseData = await response.json();
       console.log(repsonseData);
 
-      const newContact = {
-        userId: repsonseData.userId,
-        displayName: repsonseData.displayName,
-        createdAt: repsonseData.createdAt,
-        status: repsonseData.status,
-        bio: repsonseData.bio,
-      }
-
-      if (onFriendRequestAccept) {
-        onFriendRequestAccept(newContact);
-      }
-      setFriendRequests(friendRequests.filter((request) => request.requestId !== requestId));
+      setFriendRequests(
+        friendRequests.filter((request) => request.requestId !== requestId)
+      );
     } catch (error) {
       console.error("Error accepting friend request:", error);
     }
@@ -62,7 +53,9 @@ export default function FriendRequests({ userData, onFriendRequestAccept }) {
         },
         body: JSON.stringify({ requestId }),
       });
-      setFriendRequests(friendRequests.filter((request) => request.requestId !== requestId));
+      setFriendRequests(
+        friendRequests.filter((request) => request.requestId !== requestId)
+      );
     } catch (error) {
       console.error("Error rejecting friend request:", error);
     }
@@ -71,9 +64,7 @@ export default function FriendRequests({ userData, onFriendRequestAccept }) {
   return (
     <div className={styles.container}>
       {friendRequests.length > 0 && (
-        <div className={styles.header}>
-          Pending Friend Requests
-        </div>
+        <div className={styles.header}>Pending Friend Requests</div>
       )}
 
       {friendRequests.length === 0 && (
@@ -91,9 +82,7 @@ export default function FriendRequests({ userData, onFriendRequestAccept }) {
               className={styles.avatar}
             />
             <div>
-              <h3 className={styles.name}>
-                {request.displayName}
-              </h3>
+              <h3 className={styles.name}>{request.displayName}</h3>
               <div className={styles.timestamp}>
                 {new Date(request.sentAt).toLocaleDateString()}
               </div>

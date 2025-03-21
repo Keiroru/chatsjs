@@ -22,7 +22,9 @@ export default function Friends({ userData, activeChat, onContactSelect }) {
       }
 
       try {
-        const response = await fetch(`/api/friends/list?userId=${userData.userId}`);
+        const response = await fetch(
+          `/api/friends/list?userId=${userData.userId}`
+        );
         if (!response.ok) throw new Error("Failed to fetch friends");
         const data = await response.json();
         setFriends(data);
@@ -54,56 +56,63 @@ export default function Friends({ userData, activeChat, onContactSelect }) {
   };
 
   const handleFriendClick = (friend) => {
-    if (typeof onContactSelect === 'function') {
+    if (onContactSelect) {
       onContactSelect(friend);
-    } else {
-      console.error("onContactSelect is not a function");
     }
   };
 
   return (
     <>
-      <div className={styles['search-container']}>
-        <div className={styles['search-input']}>
+      <div className={styles["search-container"]}>
+        <div className={styles["search-input"]}>
           <input
             type="text"
             placeholder="Search Friends"
             value={searchQuery}
             onChange={handleSearch}
             aria-label="Search friends"
-            className={styles['search-field']}
+            className={styles["search-field"]}
           />
           {isLoading ? null : (
-            <FontAwesomeIcon icon={faSearch} className={styles['search-icon']} />
+            <FontAwesomeIcon
+              icon={faSearch}
+              className={styles["search-icon"]}
+            />
           )}
         </div>
       </div>
 
-      <div className={styles['tab-buttons']}>
+      <div className={styles["tab-buttons"]}>
         <button
-          className={`${styles['tab-button']} ${activeTab === "people" ? styles['active'] : ""}`}
+          className={`${styles["tab-button"]} ${
+            activeTab === "people" ? styles["active"] : ""
+          }`}
           onClick={() => setActiveTab("people")}
         >
           Friends
         </button>
         <button
-          className={`${styles['tab-button']} ${activeTab === "groups" ? styles['active'] : ""}`}
+          className={`${styles["tab-button"]} ${
+            activeTab === "groups" ? styles["active"] : ""
+          }`}
           onClick={() => setActiveTab("groups")}
         >
           Groups
         </button>
       </div>
 
-      <div className={styles['friends-list']}>
+      <div className={styles["friends-list"]}>
         {isLoading ? (
-          <div className={styles['loading-spinner']}>Loading friends...</div>
+          <div className={styles["loading-spinner"]}>Loading friends...</div>
         ) : error ? (
-          <div className={styles['error-message']}>Error: {error}</div>
+          <div className={styles["error-message"]}>Error: {error}</div>
         ) : filteredFriends.length > 0 ? (
           filteredFriends.map((friend) => (
             <button
               key={friend.userId}
-              className={`${styles['friend-item']} ${activeChat?.userId === friend.userId ? styles['active'] : ""}`}
+              className={`${styles["friend-item"]} ${
+                activeChat?.userId === friend.userId ? styles["active"] : ""
+              }`}
               onClick={() => handleFriendClick(friend)}
             >
               <Image
@@ -111,18 +120,24 @@ export default function Friends({ userData, activeChat, onContactSelect }) {
                 alt="Friend avatar"
                 width={40}
                 height={40}
-                className={styles['avatar']}
+                className={styles["avatar"]}
               />
-              <div className={styles['friend-info']}>
-                <h3 className={styles['friend-name']}>{friend.displayName}</h3>
-                <p className={styles['last-message']}>{friend.lastMessage || "Click to start chatting"}</p>
+              <div className={styles["friend-info"]}>
+                <h3 className={styles["friend-name"]}>{friend.displayName}</h3>
+                <p className={styles["last-message"]}>
+                  {friend.lastMessage || "Click to start chatting"}
+                </p>
               </div>
-              <span className={styles['time']}>{friend.lastMessageTime}</span>
-              <span className={`${styles['status-indicator']} ${friend.status ? styles['online'] : styles['offline']}`}></span>
+              <span className={styles["time"]}>{friend.lastMessageTime}</span>
+              <span
+                className={`${styles["status-indicator"]} ${
+                  friend.status ? styles["online"] : styles["offline"]
+                }`}
+              ></span>
             </button>
           ))
         ) : (
-          <div className={styles['no-friends']}>No friends found</div>
+          <div className={styles["no-friends"]}>No friends found</div>
         )}
       </div>
     </>

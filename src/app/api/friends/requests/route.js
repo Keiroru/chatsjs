@@ -2,20 +2,13 @@ import { NextResponse } from "next/server";
 import { getConnection } from "@/lib/db";
 
 export async function GET(request) {
-    const { searchParams } = new URL(request.url);
-    const receiverUserId = searchParams.get("receiverUserId");
+  const { searchParams } = new URL(request.url);
+  const receiverUserId = searchParams.get("receiverUserId");
 
-    if (!receiverUserId) {
-        return NextResponse.json(
-            { error: "receiverUserId is required" },
-            { status: 400 }
-        );
-    }
+  try {
+    const connection = await getConnection();
 
-    try {
-        const connection = await getConnection();
-
-        const query = `
+    const query = `
       SELECT 
         FriendRequests.requestId,
         FriendRequests.senderUserId,
@@ -31,18 +24,18 @@ export async function GET(request) {
       AND FriendRequests.status = 'pending'
     `;
 
-        const [result] = await connection.execute(query, [receiverUserId]);
-        await connection.end();
+    const [result] = await connection.execute(query, [receiverUserId]);
+    await connection.end();
 
-        return NextResponse.json(result);
-    } catch (error) {
-        console.error("Database error:", error);
-        return NextResponse.json(
-            {
-                error: "Failed to fetch friend requests",
-                details: error.message,
-            },
-            { status: 500 }
-        );
-    }
+    return NextResponse.json(result);
+  } catch (error) {
+    console.error("Database error:", error);
+    return NextResponse.json(
+      {
+        error: "Failed to fetch friend requests",
+        details: error.message,
+      },
+      { status: 500 }
+    );
+  }
 }

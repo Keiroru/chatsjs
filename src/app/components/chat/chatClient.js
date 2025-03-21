@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
@@ -21,7 +21,6 @@ export default function ChatClient({ userData }) {
   const [leftPanelOpen, setLeftPanelOpen] = useState(true);
   const [activeChat, setActiveChat] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
-  const [refresh, setRefresh] = useState(0);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState("");
@@ -29,9 +28,9 @@ export default function ChatClient({ userData }) {
 
   const formattedDate = activeChat?.createdAt
     ? new Date(activeChat.createdAt)
-      .toISOString()
-      .split("T")[0]
-      .replace(/-/g, ".")
+        .toISOString()
+        .split("T")[0]
+        .replace(/-/g, ".")
     : "No contact selected";
 
   useEffect(() => {
@@ -56,12 +55,8 @@ export default function ChatClient({ userData }) {
     }
   };
 
-  const handleFriendRequestAccept = (newContact) => {
-    setRefresh((prev) => prev + 1);
-  };
-
   const toggleSettings = () => {
-    setSettingsOpen(prev => !prev);
+    setSettingsOpen((prev) => !prev);
 
     if (!settingsOpen) {
       setRightPanelOpen(false);
@@ -69,15 +64,21 @@ export default function ChatClient({ userData }) {
   };
 
   return (
-    <div className={`${styles['chat-container']} ${isMobile ? styles['mobile'] : ''}`}>
+    <div
+      className={`${styles["chat-container"]} ${
+        isMobile ? styles["mobile"] : ""
+      }`}
+    >
       <aside
-        className={`${styles['sidebar']} ${styles['left-sidebar']} ${leftPanelOpen ? styles['open'] : styles['closed']}`}
+        className={`${styles["sidebar"]} ${styles["left-sidebar"]} ${
+          leftPanelOpen ? styles["open"] : styles["closed"]
+        }`}
       >
-        <header className={styles['sidebar-header']}>
-          <div className={styles['user-info']} onClick={toggleSettings}>
+        <header className={styles["sidebar-header"]}>
+          <div className={styles["user-info"]} onClick={toggleSettings}>
             {!leftPanelOpen && (
               <button
-                className={styles['icon-button']}
+                className={styles["icon-button"]}
                 onClick={() => setLeftPanelOpen(true)}
                 aria-label="Open contacts panel"
               >
@@ -89,44 +90,47 @@ export default function ChatClient({ userData }) {
               alt="User avatar"
               width={50}
               height={50}
-              className={styles['avatar']}
+              className={styles["avatar"]}
             />
-            <h2 className={styles['username']}>{userData?.displayName}</h2>
+            <h2 className={styles["username"]}>{userData?.displayName}</h2>
           </div>
 
-          <div className={styles['controls']}>
+          <div className={styles["controls"]}>
             <Logout />
 
-            <button className={styles['icon-button']} aria-label="Settings" onClick={toggleSettings}>
+            <button
+              className={styles["icon-button"]}
+              aria-label="Settings"
+              onClick={toggleSettings}
+            >
               <FontAwesomeIcon icon={faCog} />
             </button>
           </div>
         </header>
 
         <AddFriend userId={userData.userId} />
-        <FriendRequests userData={userData} onFriendRequestAccept={handleFriendRequestAccept} />
+        <FriendRequests userData={userData} />
 
         <Friends
           userData={userData}
           activeChat={activeChat}
           onContactSelect={setActiveChat}
         />
-
       </aside>
 
       <main
-        className={`${styles['chat-main']} ${!leftPanelOpen || !isMobile ? styles['visible'] : ''}`}
+        className={`${styles["chat-main"]} ${
+          !leftPanelOpen || !isMobile ? styles["visible"] : ""
+        }`}
       >
         {settingsOpen ? (
-          <Settings
-            userData={userData}
-          />
+          <Settings userData={userData} />
         ) : (
           <>
-            <header className={styles['chat-header']}>
+            <header className={styles["chat-header"]}>
               {isMobile && (
                 <button
-                  className={`${styles['icon-button']} ${styles['back-button']}`}
+                  className={`${styles["icon-button"]} ${styles["back-button"]}`}
                   onClick={handleBackToContacts}
                   aria-label="Back to contacts"
                 >
@@ -134,49 +138,60 @@ export default function ChatClient({ userData }) {
                 </button>
               )}
               <button
-                className={styles['contact-info-button']}
+                className={styles["contact-info-button"]}
                 onClick={() => setRightPanelOpen(!rightPanelOpen)}
                 aria-label="Toggle contact info"
               >
                 <Image
-                  src={activeChat?.profilePicPath || "https://placehold.co/50x50"}
+                  src={
+                    activeChat?.profilePicPath || "https://placehold.co/50x50"
+                  }
                   alt="Contact avatar"
                   width={40}
                   height={40}
-                  className={styles['avatar']}
+                  className={styles["avatar"]}
                 />
                 <h1>{activeChat?.displayName || "Select a contact"}</h1>
               </button>
             </header>
 
-            <div className={styles['messages-container']}>
+            <div className={styles["messages-container"]}>
               {!activeChat ? (
-                <div className={styles['no-chat-selected']}>
+                <div className={styles["no-chat-selected"]}>
                   <p>Select a contact to start chatting</p>
                 </div>
               ) : messages.length === 0 ? (
-                <div className={styles['no-messages']}>
+                <div className={styles["no-messages"]}>
                   <p>No messages yet!</p>
                 </div>
               ) : (
                 messages.map((message) => (
                   <div
                     key={message.messageId}
-                    className={`${styles['message']} ${message.senderId === userData?.userId ? styles['sent'] : styles['received']}`}
+                    className={`${styles["message"]} ${
+                      message.senderId === userData?.userId
+                        ? styles["sent"]
+                        : styles["received"]
+                    }`}
                   >
                     {message.senderId !== userData?.userId && (
                       <Image
-                        src={message.profilePicPath || "https://placehold.co/30x30"}
+                        src={
+                          message.profilePicPath || "https://placehold.co/30x30"
+                        }
                         alt="Sender"
                         width={30}
                         height={30}
-                        className={styles['message-avatar']}
+                        className={styles["message-avatar"]}
                       />
                     )}
-                    <div className={styles['message-content']}>
+                    <div className={styles["message-content"]}>
                       <p>{message.content}</p>
-                      <span className={styles['message-time']}>
-                        {new Date(message.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      <span className={styles["message-time"]}>
+                        {new Date(message.createdAt).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
                       </span>
                     </div>
                   </div>
@@ -185,17 +200,17 @@ export default function ChatClient({ userData }) {
               <div ref={messagesEndRef} />
             </div>
 
-            <div className={styles['message-input-container']}>
+            <div className={styles["message-input-container"]}>
               <textarea
                 placeholder="Type a message"
-                className={styles['message-input']}
+                className={styles["message-input"]}
                 aria-label="Type a message"
                 value={messageInput}
                 onChange={(e) => setMessageInput(e.target.value)}
                 disabled={!activeChat}
               />
               <button
-                className={styles['send-button']}
+                className={styles["send-button"]}
                 aria-label="Send message"
                 onClick={() => {
                   if (messageInput.trim() && activeChat) {
@@ -214,11 +229,13 @@ export default function ChatClient({ userData }) {
       </main>
 
       <aside
-        className={`${styles['sidebar']} ${styles['right-sidebar']} ${rightPanelOpen ? styles['open'] : ''}`}
+        className={`${styles["sidebar"]} ${styles["right-sidebar"]} ${
+          rightPanelOpen ? styles["open"] : ""
+        }`}
       >
-        <header className={styles['sidebar-header']}>
+        <header className={styles["sidebar-header"]}>
           <button
-            className={`${styles['close-button']} ${styles['icon-button']}`}
+            className={`${styles["close-button"]} ${styles["icon-button"]}`}
             onClick={() => setRightPanelOpen(false)}
             aria-label="Close contact info"
           >
@@ -227,32 +244,36 @@ export default function ChatClient({ userData }) {
           <h2>Contact Info</h2>
         </header>
 
-        <div className={styles['contact-profile']}>
+        <div className={styles["contact-profile"]}>
           <Image
             src={activeChat?.profilePicPath || "https://placehold.co/100x100"}
             alt="Contact profile"
             width={100}
             height={100}
-            className={styles['profile-avatar']}
+            className={styles["profile-avatar"]}
           />
-          <h2 className={styles['profile-name']}>
+          <h2 className={styles["profile-name"]}>
             {activeChat?.displayName || "Select a contact"}
           </h2>
           <span
-            className={`${styles['status-badge']} ${activeChat?.status ? styles['online'] : styles['offline']}`}
+            className={`${styles["status-badge"]} ${
+              activeChat?.status ? styles["online"] : styles["offline"]
+            }`}
           >
             {activeChat?.status ? "Online" : "Offline"}
           </span>
         </div>
 
-        <div className={styles['profile-details']}>
-          <section className={styles['profile-section']}>
-            <h3 className={styles['profile-section-title']}>Bio</h3>
-            <p className={styles['profile-section-content']}>{activeChat?.bio || "No bio available"}</p>
+        <div className={styles["profile-details"]}>
+          <section className={styles["profile-section"]}>
+            <h3 className={styles["profile-section-title"]}>Bio</h3>
+            <p className={styles["profile-section-content"]}>
+              {activeChat?.bio || "No bio available"}
+            </p>
           </section>
-          <section className={styles['profile-section']}>
-            <h3 className={styles['profile-section-title']}>Created at</h3>
-            <p className={styles['profile-section-content']}>{formattedDate}</p>
+          <section className={styles["profile-section"]}>
+            <h3 className={styles["profile-section-title"]}>Created at</h3>
+            <p className={styles["profile-section-content"]}>{formattedDate}</p>
           </section>
         </div>
       </aside>
