@@ -19,6 +19,7 @@ const db = mysql.createConnection({
   user: "root",
   password: "",
   database: "chatdb",
+  charset: 'utf8mb4'
 });
 
 // Connect to the database
