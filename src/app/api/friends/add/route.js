@@ -21,7 +21,7 @@ export async function POST(request) {
     const connection = await getConnection();
 
     const [existing] = await connection.execute(
-      `SELECT * FROM FriendRequests 
+      `SELECT * FROM FriendRequest
        WHERE (senderUserId = ? AND receiverUserId = ?)
        OR (senderUserId = ? AND receiverUserId = ?)`,
       [senderUserId, receiverUserId, receiverUserId, senderUserId]
@@ -36,7 +36,7 @@ export async function POST(request) {
     }
 
     const query = `
-      INSERT INTO FriendRequests (senderUserId, receiverUserId)
+      INSERT INTO FriendRequest (senderUserId, receiverUserId)
       VALUES (?, ?)
     `;
 

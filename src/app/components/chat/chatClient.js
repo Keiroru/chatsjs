@@ -9,6 +9,7 @@ import Friends from "@/app/components/friendList/friends";
 import Settings from "@/app/components/settings/settings";
 import AddFriend from "@/app/components/addFriend/addFriend";
 import FriendRequests from "@/app/components/friendRequest/friendRequests";
+import Messages from "@/app/components/messages/messages";
 import {
   faArrowLeft,
   faPaperPlane,
@@ -22,9 +23,7 @@ export default function ChatClient({ userData }) {
   const [activeChat, setActiveChat] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState("");
-  const messagesEndRef = useRef(null);
 
   const formattedDate = activeChat?.createdAt
     ? new Date(activeChat.createdAt)
@@ -156,48 +155,7 @@ export default function ChatClient({ userData }) {
             </header>
 
             <div className={styles["messages-container"]}>
-              {!activeChat ? (
-                <div className={styles["no-chat-selected"]}>
-                  <p>Select a contact to start chatting</p>
-                </div>
-              ) : messages.length === 0 ? (
-                <div className={styles["no-messages"]}>
-                  <p>No messages yet!</p>
-                </div>
-              ) : (
-                messages.map((message) => (
-                  <div
-                    key={message.messageId}
-                    className={`${styles["message"]} ${
-                      message.senderId === userData?.userId
-                        ? styles["sent"]
-                        : styles["received"]
-                    }`}
-                  >
-                    {message.senderId !== userData?.userId && (
-                      <Image
-                        src={
-                          message.profilePicPath || "https://placehold.co/30x30"
-                        }
-                        alt="Sender"
-                        width={30}
-                        height={30}
-                        className={styles["message-avatar"]}
-                      />
-                    )}
-                    <div className={styles["message-content"]}>
-                      <p>{message.content}</p>
-                      <span className={styles["message-time"]}>
-                        {new Date(message.createdAt).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </span>
-                    </div>
-                  </div>
-                ))
-              )}
-              <div ref={messagesEndRef} />
+              <Messages userData={userData} />
             </div>
 
             <div className={styles["message-input-container"]}>

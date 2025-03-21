@@ -2,7 +2,7 @@ const express = require("express");
 const mysql = require("mysql2");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-require('dotenv').config();
+require("dotenv").config();
 
 const app = express();
 const corsOptions = {
@@ -19,7 +19,7 @@ const db = mysql.createConnection({
   user: "root",
   password: "",
   database: "chatdb",
-  charset: 'utf8mb4'
+  charset: "utf8mb4",
 });
 
 // Connect to the database
@@ -30,7 +30,6 @@ db.connect((err) => {
   }
   console.log("Connected to database");
 });
-
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
