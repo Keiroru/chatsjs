@@ -22,7 +22,7 @@ export async function GET(request) {
             Users.userId, 
             Users.displayName, 
             Users.createdAt,
-            Users.status, 
+            Users.isOnline, 
             Users.bio,
             Users.profilePicPath
         FROM 

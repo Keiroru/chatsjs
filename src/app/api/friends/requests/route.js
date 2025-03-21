@@ -10,18 +10,18 @@ export async function GET(request) {
 
     const query = `
       SELECT 
-        FriendRequests.requestId,
-        FriendRequests.senderUserId,
-        FriendRequests.receiverUserId,
-        FriendRequests.status,
-        FriendRequests.sentAt,
+        friendrequest.requestId,
+        friendrequest.senderUserId,
+        friendrequest.receiverUserId,
+        friendrequest.isTimedOut,
+        friendrequest.sentAt,
         Users.displayName,
         Users.email,
         Users.profilePicPath
-      FROM FriendRequests
-      JOIN Users ON FriendRequests.senderUserId = Users.userId
-      WHERE FriendRequests.receiverUserId = ?
-      AND FriendRequests.status = 'pending'
+      FROM friendrequest
+      JOIN Users ON friendrequest.senderUserId = Users.userId
+      WHERE friendrequest.receiverUserId = ?
+      AND friendrequest.status = 'pending'
     `;
 
     const [result] = await connection.execute(query, [receiverUserId]);

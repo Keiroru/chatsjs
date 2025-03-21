@@ -17,10 +17,10 @@ export async function POST(request) {
 
     try {
       const [requests] = await connection.execute(
-        `SELECT FriendRequests.senderUserId, FriendRequests.receiverUserId, FriendRequests.requestId,
-                Users.userId, Users.displayName, Users.createdAt, Users.status, Users.bio
-         FROM FriendRequests
-         JOIN Users ON FriendRequests.senderUserId = Users.userId
+        `SELECT FriendRequest.senderUserId, FriendRequest.receiverUserId, FriendRequest.requestId,
+                Users.userId, Users.displayName, Users.createdAt, Users.isOnline, Users.bio
+         FROM FriendRequest
+         JOIN Users ON FriendRequest.senderUserId = Users.userId
          WHERE requestId = ?`,
         [requestId]
       );
@@ -37,7 +37,7 @@ export async function POST(request) {
       const { senderUserId, receiverUserId } = requests[0];
 
       await connection.execute(
-        `UPDATE FriendRequests SET status = 'accepted' WHERE requestId = ?`,
+        `UPDATE FriendRequest SET status = 'accepted' WHERE requestId = ?`,
         [requestId]
       );
 
