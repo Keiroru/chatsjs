@@ -6,5 +6,6 @@ export async function getConnection() {
         user: process.env.DB_USER || "root",
         password: process.env.DB_PASS || "",
         database: process.env.DB_NAME || "chatdb",
+        charset: process.env.DB_CHARSET || 'utf8mb4'
     });
 }

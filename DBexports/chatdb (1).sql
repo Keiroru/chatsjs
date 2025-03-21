@@ -71,7 +71,7 @@ CREATE TABLE `conversationusers` (
   `userId` int(11) NOT NULL,
   `conversationId` int(11) NOT NULL,
   `isAdmin` tinyint(1) NOT NULL DEFAULT 0,
-  `joinedAt` date DEFAULT NULL
+  `joinedAt` date NOT NULL DEFAULT curdate()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -90,16 +90,6 @@ CREATE TABLE `friendrequest` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- A tábla adatainak kiíratása `friendrequest`
---
-
-INSERT INTO `friendrequest` (`requestId`, `senderUserId`, `receiverUserId`, `sentAt`, `isTimedOut`, `status`) VALUES
-(1, 2, 1, '0000-00-00', 0, 'accepted'),
-(2, 3, 1, '0000-00-00', 0, 'accepted');
-
--- --------------------------------------------------------
-
---
 -- Tábla szerkezet ehhez a táblához `friends`
 --
 
@@ -109,18 +99,6 @@ CREATE TABLE `friends` (
   `friendUserId` int(11) NOT NULL,
   `friendedAt` date NOT NULL DEFAULT curdate()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- A tábla adatainak kiíratása `friends`
---
-
-INSERT INTO `friends` (`friendsId`, `userId`, `friendUserId`, `friendedAt`) VALUES
-(1, 1, 2, '2025-03-21'),
-(2, 2, 1, '2025-03-21'),
-(3, 1, 3, '2025-03-21'),
-(4, 3, 1, '2025-03-21');
-
--- --------------------------------------------------------
 
 --
 -- Tábla szerkezet ehhez a táblához `logins`
@@ -184,7 +162,7 @@ INSERT INTO `themes` (`themeId`, `themeName`) VALUES
 CREATE TABLE `users` (
   `userId` int(11) NOT NULL,
   `displayName` varchar(20) NOT NULL,
-  `displayId` int(11) NOT NULL,
+  `displayId` int(4) NOT NULL,
   `email` varchar(255) NOT NULL,
   `telephone` varchar(255) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
@@ -193,30 +171,9 @@ CREATE TABLE `users` (
   `isOnline` tinyint(1) DEFAULT 0,
   `profilePicPath` varchar(255) DEFAULT NULL,
   `isSiteAdmin` tinyint(1) DEFAULT 0,
-  `currentThemeId` int(11) DEFAULT 0,
+  `currentThemeId` int(11) DEFAULT 1,
   `bio` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- A tábla adatainak kiíratása `users`
---
-
-INSERT INTO `users` (`userId`, `displayName`, `displayId`, `email`, `telephone`, `password`, `createdAt`, `updatedAt`, `isOnline`, `profilePicPath`, `isSiteAdmin`, `currentThemeId`, `bio`) VALUES
-(1, 'cirmi cica', 34928, 'vnoel05@gmail.com', '123-456-7890', 'asd', '2025-03-20', '2025-03-20', 0, 'https://i.ibb.co/BKv4Yrq8/class-of-09-nicole-3.jpg', 0, 1, 'loves cat grills'),
-(2, 'Jane Smith', 84759, 'janesmith@example.com', '987-654-3210', 'hashedpassword2', '2025-03-20', '2025-03-20', 0, 'https://i.ibb.co/nq79qzNx/Jecka-3.jpg', 0, 1, 'Tech enthusiast and nature lover.'),
-(3, 'Samuel Lee', 12347, 'samuellee@example.com', '555-123-4567', 'hashedpassword3', '2025-03-20', '2025-03-20', 0, 'https://i.ibb.co/dsstLbKK/Synthwave-Goth-Girl.jpg', 0, 1, 'Software developer. Passionate about AI and robotics.'),
-(4, 'Emily Taylor', 65231, 'emilytaylor@example.com', '333-444-5555', 'hashedpassword4', '2025-03-20', '2025-03-20', 0, NULL, 0, 1, 'Designer with a love for art and technology.'),
-(5, 'Michael Brown', 97012, 'mikebrown@example.com', '666-777-8888', 'hashedpassword5', '2025-03-20', '2025-03-20', 0, NULL, 0, 1, 'Photographer and adventurer.'),
-(6, 'Olivia White', 22156, 'oliviawhite@example.com', '222-333-4444', 'hashedpassword6', '2025-03-20', '2025-03-20', 0, NULL, 0, 1, 'Marketing strategist and foodie.'),
-(7, 'David Clark', 78691, 'davidclark@example.com', '444-555-6666', 'hashedpassword7', '2025-03-20', '2025-03-20', 0, NULL, 0, 1, 'Travel enthusiast and sports fan.'),
-(8, 'Sophia Harris', 23980, 'sophiaharris@example.com', '111-222-3333', 'hashedpassword8', '2025-03-20', '2025-03-20', 0, NULL, 0, 1, 'Writer, dreamer, and coffee lover.'),
-(9, 'James King', 51372, 'jamesking@example.com', '777-888-9999', 'hashedpassword9', '2025-03-20', '2025-03-20', 0, NULL, 0, 1, 'Lifelong learner and technology advocate.'),
-(10, 'Isabella Scott', 94321, 'isabellascott@example.com', '555-666-7777', 'hashedpassword10', '2025-03-20', '2025-03-20', 0, NULL, 0, 1, 'Marketing guru and bookworm.');
-
---
--- Indexek a kiírt táblákhoz
---
-
 --
 -- A tábla indexei `attachment`
 --

@@ -96,8 +96,7 @@
   width: 450px;
   padding: 20px 40px 40px 40px;
   border: 2px solid var(--dark_blue);
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(7px);
 }
 
 .box h1 {
@@ -131,7 +130,6 @@
   background: none;
   display: block;
   margin: 20px auto;
-  margin-top: 35px;
   text-align: center;
   border: 2px solid var(--dark_purple);
   padding: 14px 40px;
