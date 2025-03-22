@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "@/app/styles/friendRequests.module.css";
 import Image from "next/image";
 
-export default function FriendRequests({ userData }) {
+export default function FriendRequests({ userData, onRequestAccept }) {
   const [friendRequests, setFriendRequests] = useState([]);
 
   useEffect(() => {
@@ -39,6 +39,7 @@ export default function FriendRequests({ userData }) {
       setFriendRequests(
         friendRequests.filter((request) => request.requestId !== requestId)
       );
+      onRequestAccept();
     } catch (error) {
       console.error("Error accepting friend request:", error);
     }

@@ -435,12 +435,7 @@
   padding: 15px 20px;
   background-color: var(--charcoal);
   gap: 10px;
-  border-top: 1px solid;
-  border-image: linear-gradient(to right,
-      transparent,
-      var(--shadow-black),
-      var(--shadow-black),
-      transparent) 1;
+  overflow: hidden;
 }
 
 .message-input {

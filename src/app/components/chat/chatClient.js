@@ -23,18 +23,18 @@ export default function ChatClient({ userData }) {
   const [activeChat, setActiveChat] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [messageInput, setMessageInput] = useState("");
+  const [refresh, setRefresh] = useState(0);
 
   const formattedDate = activeChat?.createdAt
     ? new Date(activeChat.createdAt)
-        .toISOString()
-        .split("T")[0]
-        .replace(/-/g, ".")
+      .toISOString()
+      .split("T")[0]
+      .replace(/-/g, ".")
     : "No contact selected";
 
   useEffect(() => {
     const checkMobile = () => {
-      const mobileView = window.innerWidth <= 768;
+      const mobileView = window.innerWidth <= 576;
       setIsMobile(mobileView);
 
       if (mobileView) {
@@ -54,6 +54,10 @@ export default function ChatClient({ userData }) {
     }
   };
 
+  const toggleRightPanel = () => {
+    setRightPanelOpen(!rightPanelOpen);
+  };
+
   const toggleSettings = () => {
     setSettingsOpen((prev) => !prev);
 
@@ -62,16 +66,28 @@ export default function ChatClient({ userData }) {
     }
   };
 
+  const handleFriendClick = (friend) => {
+    setActiveChat(friend);
+    if (settingsOpen) {
+      setSettingsOpen(false);
+    }
+    if (isMobile) {
+      setLeftPanelOpen(false);
+    }
+  };
+
+  const refreshFriendsList = () => {
+    setRefresh((prev) => prev + 1);
+  };
+
   return (
     <div
-      className={`${styles["chat-container"]} ${
-        isMobile ? styles["mobile"] : ""
-      }`}
+      className={`${styles["chat-container"]} ${isMobile ? styles["mobile"] : ""
+        }`}
     >
       <aside
-        className={`${styles["sidebar"]} ${styles["left-sidebar"]} ${
-          leftPanelOpen ? styles["open"] : styles["closed"]
-        }`}
+        className={`${styles["sidebar"]} ${styles["left-sidebar"]} ${leftPanelOpen ? styles["open"] : styles["closed"]
+          }`}
       >
         <header className={styles["sidebar-header"]}>
           <div className={styles["user-info"]} onClick={toggleSettings}>
@@ -108,88 +124,30 @@ export default function ChatClient({ userData }) {
         </header>
 
         <AddFriend userId={userData.userId} />
-        <FriendRequests userData={userData} />
+        <FriendRequests
+          userData={userData}
+          onRequestAccept={refreshFriendsList}
+        />
 
         <Friends
-          userData={userData}
+          userData={{ ...userData, refreshTrigger: refresh }}
           activeChat={activeChat}
-          onContactSelect={setActiveChat}
+          onFriendSelect={handleFriendClick}
         />
       </aside>
 
-      <main
-        className={`${styles["chat-main"]} ${
-          !leftPanelOpen || !isMobile ? styles["visible"] : ""
-        }`}
-      >
-        {settingsOpen ? (
-          <Settings userData={userData} />
-        ) : (
-          <>
-            <header className={styles["chat-header"]}>
-              {isMobile && (
-                <button
-                  className={`${styles["icon-button"]} ${styles["back-button"]}`}
-                  onClick={handleBackToContacts}
-                  aria-label="Back to contacts"
-                >
-                  <FontAwesomeIcon icon={faArrowLeft} />
-                </button>
-              )}
-              <button
-                className={styles["contact-info-button"]}
-                onClick={() => setRightPanelOpen(!rightPanelOpen)}
-                aria-label="Toggle contact info"
-              >
-                <Image
-                  src={
-                    activeChat?.profilePicPath || "https://placehold.co/50x50"
-                  }
-                  alt="Contact avatar"
-                  width={40}
-                  height={40}
-                  className={styles["avatar"]}
-                />
-                <h1>{activeChat?.displayName || "Select a contact"}</h1>
-              </button>
-            </header>
-
-            <div className={styles["messages-container"]}>
-              <Messages userData={userData} />
-            </div>
-
-            <div className={styles["message-input-container"]}>
-              <textarea
-                placeholder="Type a message"
-                className={styles["message-input"]}
-                aria-label="Type a message"
-                value={messageInput}
-                onChange={(e) => setMessageInput(e.target.value)}
-                disabled={!activeChat}
-              />
-              <button
-                className={styles["send-button"]}
-                aria-label="Send message"
-                onClick={() => {
-                  if (messageInput.trim() && activeChat) {
-                    // Placeholder for sending message
-                    console.log("Sending:", messageInput);
-                    setMessageInput("");
-                  }
-                }}
-                disabled={!activeChat || !messageInput.trim()}
-              >
-                <FontAwesomeIcon icon={faPaperPlane} />
-              </button>
-            </div>
-          </>
-        )}
-      </main>
+      <Messages
+        userData={userData}
+        isMobile={isMobile}
+        activeChat={activeChat}
+        onBackToContacts={handleBackToContacts}
+        onToggleRightPanel={toggleRightPanel}
+        rightPanelOpen={rightPanelOpen}
+      />
 
       <aside
-        className={`${styles["sidebar"]} ${styles["right-sidebar"]} ${
-          rightPanelOpen ? styles["open"] : ""
-        }`}
+        className={`${styles["sidebar"]} ${styles["right-sidebar"]} ${rightPanelOpen ? styles["open"] : ""
+          }`}
       >
         <header className={styles["sidebar-header"]}>
           <button
@@ -214,11 +172,10 @@ export default function ChatClient({ userData }) {
             {activeChat?.displayName || "Select a contact"}
           </h2>
           <span
-            className={`${styles["status-badge"]} ${
-              activeChat?.status ? styles["online"] : styles["offline"]
-            }`}
+            className={`${styles["status-badge"]} ${activeChat?.isOnline ? styles["online"] : styles["offline"]
+              }`}
           >
-            {activeChat?.status ? "Online" : "Offline"}
+            {activeChat?.isOnline ? "Online" : "Offline"}
           </span>
         </div>
 
