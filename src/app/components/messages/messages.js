@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import Settings from "@/app/components/settings/settings";
-import styles from "@/app/styles/chat.module.css";
+import styles from "@/app/styles/messages.module.css";
 import {
   faArrowLeft,
   faPaperPlane,
@@ -20,13 +19,9 @@ export default function Messages({
   const [loading, setLoading] = useState(false);
   const [conversationId, setConversationId] = useState(null);
 
-  useEffect(() => {
-    if (activeChat && userData) {
-      fetchConversationId();
-    }
-  }, [activeChat, userData]);
 
-  const fetchConversationId = async () => {
+  // Conversation ID is fetched here
+  const fetchConversationId = useCallback(async () => {
     if (!activeChat?.userId || !userData?.userId) return;
 
     try {
@@ -52,7 +47,45 @@ export default function Messages({
     catch (error) {
       console.error("Error fetching conversationId:", error);
     }
-  };
+  }, [activeChat, userData]);
+
+  // Messages are fetched here
+  const fetchMessages = useCallback(async () => {
+    if (!conversationId) return;
+
+    try {
+      const response = await fetch(`/api/messages/getMessages?conversationId=${conversationId}`);
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch messages: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setMessages(data);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
+  }, [conversationId]);
+
+  // Fetch messages when conversationId changes
+  useEffect(() => {
+    if (conversationId) {
+      fetchMessages();
+    }
+  }, [conversationId, fetchMessages]);
+
+  // Fetch conversationId when activeChat changes
+  useEffect(() => {
+    if (conversationId) {
+      fetchMessages();
+    }
+  }, [conversationId, fetchMessages]);
+
+  useEffect(() => {
+    if (activeChat && userData) {
+      fetchConversationId();
+    }
+  }, [activeChat, userData, fetchConversationId]);
 
   const handleSendMessage = async () => {
     if (!messageInput.trim() || !conversationId) return;
@@ -88,86 +121,80 @@ export default function Messages({
   };
 
   return (
-    <main
-      className={`${styles["chat-main"]} ${!isMobile ? styles["visible"] : ""}`}
-    >
-      <>
-        <header className={styles["chat-header"]}>
-          {isMobile && (
-            <button
-              className={`${styles["icon-button"]} ${styles["back-button"]}`}
-              onClick={onBackToContacts}
-              aria-label="Back to contacts"
-            >
-              <FontAwesomeIcon icon={faArrowLeft} />
-            </button>
-          )}
+    <main className={styles["chat-main"]}>
+      <header className={styles["chat-header"]}>
+        {isMobile && (
           <button
-            className={styles["contact-info-button"]}
-            onClick={onToggleRightPanel}
-            aria-label="Toggle contact info"
+            className={`${styles["icon-button"]} ${styles["back-button"]}`}
+            onClick={onBackToContacts}
+            aria-label="Back to contacts"
           >
-            <Image
-              src={
-                activeChat?.profilePicPath || "https://placehold.co/50x50"
-              }
-              alt="Contact avatar"
-              width={40}
-              height={40}
-              className={styles["avatar"]}
-            />
-            <h1>{activeChat?.displayName || "Select a contact"}</h1>
+            <FontAwesomeIcon icon={faArrowLeft} />
           </button>
-        </header>
+        )}
+        <button
+          className={styles["contact-info-button"]}
+          onClick={onToggleRightPanel}
+          aria-label="Toggle contact info"
+        >
+          <Image
+            src={activeChat?.profilePicPath || "https://placehold.co/50x50"}
+            alt="Contact avatar"
+            width={40}
+            height={40}
+            className={styles.avatar}
+          />
+          <h1>{activeChat?.displayName || "Select a contact"}</h1>
+        </button>
+      </header>
 
-        <div className={styles["messages-container"]}>
-          {messages.length > 0 ? (
-            messages.map(message => (
-              <div
-                key={message.messageId}
-                className={`${styles.message} ${message.senderUserId === userData.userId
+      <div className={styles["messages-container"]}>
+        {messages.length > 0 ? (
+          messages.map(message => (
+            <div
+              key={message.messageId}
+              className={`${styles.message} ${message.senderUserId === userData.userId
                   ? styles.outgoing
                   : styles.incoming
-                  }`}
-              >
-                <div className={styles.messageContent}>
-                  {message.messageText}
-                </div>
-                <div className={styles.messageTime}>
-                  {new Date(message.sentAt).toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit'
-                  })}
-                </div>
+                }`}
+            >
+              <div className={styles.messageContent}>
+                {message.messageText}
               </div>
-            ))
-          ) : (
-            <div className={styles.emptyChat}>
-              {activeChat ? "No messages yet!" : "Select someone to start chatting"}
+              <div className={styles.messageTime}>
+                {new Date(message.sentAt).toLocaleTimeString([], {
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}
+              </div>
             </div>
-          )}
-        </div>
+          ))
+        ) : (
+          <div className={styles.emptyChat}>
+            {activeChat ? "No messages yet!" : "Select someone to start chatting"}
+          </div>
+        )}
+      </div>
 
-        <div className={styles["message-input-container"]}>
-          <input
-            placeholder="Type a message"
-            className={styles["message-input"]}
-            aria-label="Type a message"
-            value={messageInput}
-            onChange={(e) => setMessageInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && messageInput.trim() && handleSendMessage()}
-            disabled={!activeChat || loading}
-          />
-          <button
-            className={styles["send-button"]}
-            aria-label="Send message"
-            disabled={!activeChat || !messageInput.trim() || loading}
-            onClick={handleSendMessage}
-          >
-            <FontAwesomeIcon icon={faPaperPlane} />
-          </button>
-        </div>
-      </>
+      <div className={styles["message-input-container"]}>
+        <input
+          placeholder="Type a message"
+          className={styles["message-input"]}
+          aria-label="Type a message"
+          value={messageInput}
+          onChange={(e) => setMessageInput(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && messageInput.trim() && handleSendMessage()}
+          disabled={!activeChat || loading}
+        />
+        <button
+          className={styles["send-button"]}
+          aria-label="Send message"
+          disabled={!activeChat || !messageInput.trim() || loading}
+          onClick={handleSendMessage}
+        >
+          <FontAwesomeIcon icon={faPaperPlane} />
+        </button>
+      </div>
     </main>
   );
 }
