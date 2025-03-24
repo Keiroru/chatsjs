@@ -1,175 +1,123 @@
 /* Main message container */
 .chat-main {
-    display: flex;
-    flex-direction: column;
-    background-color: var(--rich-black);
-    background-image: var(--dark-gradient);
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--rich-black);
+  background-image: var(--dark-gradient);
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 }
 
 /* Header section */
 .chat-header {
-    padding: 10px 20px;
-    height: 100px;
-    border-bottom: 1px solid var(--shadow-black);
-    display: flex;
-    align-items: center;
-    background-color: var(--charcoal);
+  padding: 10px 20px;
+  height: 100px;
+  border-bottom: 1px solid var(--shadow-black);
+  display: flex;
+  align-items: center;
+  background-color: var(--charcoal);
 }
 
 .contact-info-button {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    background: none;
-    border: none;
-    color: var(--off-white);
-    cursor: pointer;
-    padding: 10px 0;
-    width: 100%;
-    text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: none;
+  border: none;
+  color: var(--off-white);
+  cursor: pointer;
+  padding: 10px 0;
+  width: 100%;
+  text-align: left;
 }
 
 .contact-info-button h1 {
-    font-size: 18px;
-    font-weight: 500;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 /* Avatar & Button styles */
 .avatar {
-    border-radius: 50%;
-    object-fit: cover;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .icon-button {
-    background: none;
-    border: none;
-    color: var(--silver);
-    font-size: 16px;
-    cursor: pointer;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    margin-right: 10px;
+  background: none;
+  border: none;
+  color: var(--silver);
+  font-size: 16px;
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  margin-right: 10px;
 }
 
 /* Messages container */
 .messages-container {
-    flex: 1;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    overflow-y: auto;
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  overflow-y: auto;
 }
 
 .message {
-    display: flex;
-    flex-direction: column;
-    max-width: 70%;
-    position: relative;
+  display: flex;
+  flex-direction: column;
+  max-width: 70%;
+  position: relative;
 }
 
 .incoming {
-    align-self: flex-start;
+  align-self: flex-start;
 }
 
 .outgoing {
-    align-self: flex-end;
+  align-self: flex-end;
 }
 
 .messageContent {
-    padding: 12px 16px;
-    border-radius: 18px;
-    position: relative;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    color: var(--off-white);
-    font-size: 15px;
-    line-height: 1.4;
-    margin-bottom: 6px;
+  padding: 12px 16px;
+  border-radius: 18px;
+  position: relative;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  color: var(--off-white);
+  font-size: 15px;
+  line-height: 1.4;
+  margin-bottom: 6px;
 }
 
 .incoming .messageContent {
-    background-color: var(--dark_blue);
-    border-bottom-left-radius: 4px;
+  background-color: var(--dark_blue);
+  border-bottom-left-radius: 4px;
 }
 
 .outgoing .messageContent {
-    background-color: var(--dark_purple);
-    border-bottom-right-radius: 4px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  background-color: var(--dark_purple);
+  border-bottom-right-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .messageTime {
-    display: block;
-    font-size: 11px;
-    text-align: right;
-    color: var(--silver);
+  display: block;
+  font-size: 11px;
+  text-align: right;
+  color: var(--silver);
 }
 
 .emptyChat {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    color: var(--silver);
-    font-size: 16px;
-}
-
-/* Message input area */
-.message-input-container {
-    display: flex;
-    align-items: center;
-    padding: 15px 20px;
-    background-color: var(--charcoal);
-    gap: 10px;
-    overflow: hidden;
-}
-
-.message-input {
-    flex: 1;
-    padding: 12px 15px;
-    border-radius: 20px;
-    border: none;
-    background-color: var(--gunmetal);
-    color: var(--off-white);
-    font-size: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.message-input:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px var(--light-lavender);
-    border-color: var(--lavender);
-}
-
-.send-button {
-    background-color: var(--lavender);
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgb(255, 255, 255);
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.send-button:hover {
-    background-color: var(--deep-lavender);
-    transform: scale(1.05);
-}
-
-.send-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--silver);
+  font-size: 16px;
 }

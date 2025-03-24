@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "@/app/styles/chat.module.css";
 import Logout from "@/app/components/logout/logout";
 import Friends from "@/app/components/friendList/friends";
-import Settings from "@/app/components/settings/settings";
 import AddFriend from "@/app/components/addFriend/addFriend";
 import FriendRequests from "@/app/components/friendRequest/friendRequests";
 import Messages from "@/app/components/messages/messages";
@@ -24,12 +23,13 @@ export default function ChatClient({ userData }) {
   const [isMobile, setIsMobile] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [refresh, setRefresh] = useState(0);
+  const [messages, setMessages] = useState([]);
 
   const formattedDate = activeChat?.createdAt
     ? new Date(activeChat.createdAt)
-      .toISOString()
-      .split("T")[0]
-      .replace(/-/g, ".")
+        .toISOString()
+        .split("T")[0]
+        .replace(/-/g, ".")
     : "No contact selected";
 
   useEffect(() => {
@@ -82,12 +82,14 @@ export default function ChatClient({ userData }) {
 
   return (
     <div
-      className={`${styles["chat-container"]} ${isMobile ? styles["mobile"] : ""
-        }`}
+      className={`${styles["chat-container"]} ${
+        isMobile ? styles["mobile"] : ""
+      }`}
     >
       <aside
-        className={`${styles["sidebar"]} ${styles["left-sidebar"]} ${leftPanelOpen ? styles["open"] : styles["closed"]
-          }`}
+        className={`${styles["sidebar"]} ${styles["left-sidebar"]} ${
+          leftPanelOpen ? styles["open"] : styles["closed"]
+        }`}
       >
         <header className={styles["sidebar-header"]}>
           <div className={styles["user-info"]} onClick={toggleSettings}>
@@ -143,11 +145,15 @@ export default function ChatClient({ userData }) {
         onBackToContacts={handleBackToContacts}
         onToggleRightPanel={toggleRightPanel}
         rightPanelOpen={rightPanelOpen}
+        settingsOpen={settingsOpen}
+        messages={messages}
+        setMessages={setMessages}
       />
 
       <aside
-        className={`${styles["sidebar"]} ${styles["right-sidebar"]} ${rightPanelOpen ? styles["open"] : ""
-          }`}
+        className={`${styles["sidebar"]} ${styles["right-sidebar"]} ${
+          rightPanelOpen ? styles["open"] : ""
+        }`}
       >
         <header className={styles["sidebar-header"]}>
           <button
@@ -172,8 +178,9 @@ export default function ChatClient({ userData }) {
             {activeChat?.displayName || "Select a contact"}
           </h2>
           <span
-            className={`${styles["status-badge"]} ${activeChat?.isOnline ? styles["online"] : styles["offline"]
-              }`}
+            className={`${styles["status-badge"]} ${
+              activeChat?.isOnline ? styles["online"] : styles["offline"]
+            }`}
           >
             {activeChat?.isOnline ? "Online" : "Offline"}
           </span>
