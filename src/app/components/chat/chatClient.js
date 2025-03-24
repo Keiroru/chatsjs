@@ -36,10 +36,6 @@ export default function ChatClient({ userData }) {
     const checkMobile = () => {
       const mobileView = window.innerWidth <= 576;
       setIsMobile(mobileView);
-
-      if (mobileView) {
-        setLeftPanelOpen(true);
-      }
     };
 
     checkMobile();
@@ -63,6 +59,10 @@ export default function ChatClient({ userData }) {
 
     if (!settingsOpen) {
       setRightPanelOpen(false);
+    }
+
+    if (isMobile) {
+      setLeftPanelOpen(false);
     }
   };
 

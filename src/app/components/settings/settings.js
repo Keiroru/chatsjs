@@ -4,13 +4,24 @@ import { useState } from "react";
 import style from "@/app/styles/settings.module.css";
 import Profile from "@/app/components/settings/profile/profile";
 import Account from "@/app/components/settings/myAccount/myAccount";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
-export default function Settings({ userData }) {
+export default function Settings({ userData, isMobile, onBackToContacts }) {
   const [selectedOption, setSelectedOption] = useState("profile");
 
   return (
     <div className={style.settingsContainer}>
       <aside className={style.settingsSidebar}>
+        {isMobile && (
+          <button
+            className={`${style["icon-button"]} ${style["back-button"]}`}
+            onClick={onBackToContacts}
+            aria-label="Back to contacts"
+          >
+            <FontAwesomeIcon icon={faArrowLeft} />
+          </button>
+        )}
         <h2>Settings</h2>
         <div className={style.settingsNav}>
           <h4>User Settings</h4>

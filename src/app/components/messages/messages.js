@@ -90,7 +90,11 @@ export default function Messages({
   return (
     <>
       {settingsOpen ? (
-        <Settings userData={userData} />
+        <Settings
+          userData={userData}
+          isMobile={isMobile}
+          onBackToContacts={onBackToContacts}
+        />
       ) : (
         <main className={styles["chat-main"]}>
           <header className={styles["chat-header"]}>
