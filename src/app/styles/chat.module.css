@@ -101,14 +101,6 @@
   border-radius: 50%;
 }
 
-.profile-avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 10px;
-}
-
 /* Button styles */
 .icon-button {
   background: none;
@@ -322,42 +314,6 @@
 }
 
 /*******************************
- * 9. CHAT HEADER
- *******************************/
-.chat-header {
-  padding: 10px 20px;
-  height: 100px;
-  border-bottom: 1px solid var(--shadow-black);
-  display: flex;
-  align-items: center;
-  background-color: var(--charcoal);
-  border-bottom: 1px solid;
-  border-image: linear-gradient(to right,
-      transparent,
-      var(--shadow-black),
-      var(--shadow-black),
-      transparent) 1;
-}
-
-.contact-info-button {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  background: none;
-  border: none;
-  color: var(--off-white);
-  cursor: pointer;
-  padding: 10px 0;
-  width: 100%;
-  text-align: left;
-}
-
-.contact-info-button h1 {
-  font-size: 18px;
-  font-weight: 500;
-}
-
-/*******************************
  * 10. MESSAGES SECTION
  *******************************/
 .messages-container {
@@ -480,19 +436,29 @@
 /*******************************
  * 12. CONTACT PROFILE
  *******************************/
+.contact-profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
 .contact-profile {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-bottom: 1px solid var(--shadow-black);
-  height: 250px;
+  margin: 5px;
+  border-radius: 50%;
 }
 
 .profile-name {
-  font-size: 18px;
+  font-size: 25px;
   font-weight: 500;
-  margin: 5px 0;
+  margin: 0;
+  margin-bottom: 2px;
 }
 
 .profile-details {
@@ -514,6 +480,11 @@
 .profile-section-content {
   font-size: 15px;
   line-height: 1.5;
+}
+
+.profileId {
+  color: var(--medium-slate);
+  margin-bottom: 5px;
 }
 
 /*******************************
@@ -603,9 +574,15 @@
 /*******************************
  * 14. RESPONSIVE DESIGN
  *******************************/
-@media (max-width: 1200px) {
+@media (max-width: 1400px) {
   .right-sidebar.open {
     width: 400px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .right-sidebar.open {
+    width: 350px;
   }
 }
 

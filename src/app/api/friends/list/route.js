@@ -19,12 +19,14 @@ export async function GET(request) {
 
     const query = `
         SELECT 
-            Users.userId, 
-            Users.displayName, 
-            Users.createdAt,
-            Users.isOnline, 
+            Users.userId as friendId,
+            Users.displayName,
+            Users.displayId,
+            Users.profilePicPath,
             Users.bio,
-            Users.profilePicPath
+            Users.isOnline,
+            Users.createdAt,
+            Friends.userId as currentUserId
         FROM 
             Users
         JOIN 

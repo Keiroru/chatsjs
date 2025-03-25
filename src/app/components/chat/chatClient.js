@@ -11,7 +11,6 @@ import FriendRequests from "@/app/components/friendRequest/friendRequests";
 import Messages from "@/app/components/messages/messages";
 import {
   faArrowLeft,
-  faPaperPlane,
   faTimes,
   faCog,
 } from "@fortawesome/free-solid-svg-icons";
@@ -27,9 +26,9 @@ export default function ChatClient({ userData }) {
 
   const formattedDate = activeChat?.createdAt
     ? new Date(activeChat.createdAt)
-        .toISOString()
-        .split("T")[0]
-        .replace(/-/g, ".")
+      .toISOString()
+      .split("T")[0]
+      .replace(/-/g, ".")
     : "No contact selected";
 
   useEffect(() => {
@@ -82,14 +81,12 @@ export default function ChatClient({ userData }) {
 
   return (
     <div
-      className={`${styles["chat-container"]} ${
-        isMobile ? styles["mobile"] : ""
-      }`}
+      className={`${styles["chat-container"]} ${isMobile ? styles["mobile"] : ""
+        }`}
     >
       <aside
-        className={`${styles["sidebar"]} ${styles["left-sidebar"]} ${
-          leftPanelOpen ? styles["open"] : styles["closed"]
-        }`}
+        className={`${styles["sidebar"]} ${styles["left-sidebar"]} ${leftPanelOpen ? styles["open"] : styles["closed"]
+          }`}
       >
         <header className={styles["sidebar-header"]}>
           <div className={styles["user-info"]} onClick={toggleSettings}>
@@ -113,7 +110,9 @@ export default function ChatClient({ userData }) {
           </div>
 
           <div className={styles["controls"]}>
-            <Logout />
+            <Logout
+              userId={userData.userId}
+            />
 
             <button
               className={styles["icon-button"]}
@@ -151,9 +150,8 @@ export default function ChatClient({ userData }) {
       />
 
       <aside
-        className={`${styles["sidebar"]} ${styles["right-sidebar"]} ${
-          rightPanelOpen ? styles["open"] : ""
-        }`}
+        className={`${styles["sidebar"]} ${styles["right-sidebar"]} ${rightPanelOpen ? styles["open"] : ""
+          }`}
       >
         <header className={styles["sidebar-header"]}>
           <button
@@ -166,21 +164,21 @@ export default function ChatClient({ userData }) {
           <h2>Contact Info</h2>
         </header>
 
-        <div className={styles["contact-profile"]}>
+        <div className={styles["contact-profile-container"]}>
           <Image
             src={activeChat?.profilePicPath || "https://placehold.co/100x100"}
             alt="Contact profile"
-            width={100}
-            height={100}
-            className={styles["profile-avatar"]}
+            width={125}
+            height={125}
+            className={styles["contact-profile"]}
           />
           <h2 className={styles["profile-name"]}>
             {activeChat?.displayName || "Select a contact"}
           </h2>
+          <span className={styles.profileId}>#{activeChat?.displayId}</span>
           <span
-            className={`${styles["status-badge"]} ${
-              activeChat?.isOnline ? styles["online"] : styles["offline"]
-            }`}
+            className={`${styles["status-badge"]} ${activeChat?.isOnline ? styles["online"] : styles["offline"]
+              }`}
           >
             {activeChat?.isOnline ? "Online" : "Offline"}
           </span>

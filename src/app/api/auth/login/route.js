@@ -7,7 +7,6 @@ export async function POST(request) {
     try {
         const { email, password } = await request.json();
 
-        // Validation
         if (!email) {
             return NextResponse.json(
                 { errors: [{ msg: "Email or phone number is required", path: "email" }] },
@@ -25,7 +24,6 @@ export async function POST(request) {
         const isPhone = /^\d+$/.test(email);
         const connection = await getConnection();
 
-        // Query to select the user based on email or phone
         const query = isPhone
             ? "SELECT userId, password FROM users WHERE telephone = ?"
             : "SELECT userId, password FROM users WHERE email = ?";
@@ -51,7 +49,7 @@ export async function POST(request) {
             );
         }
 
-        const expiresIn = 60 * 60 * 24 * 7; // 7 days in seconds
+        const expiresIn = 60 * 60 * 24 * 7;
         const session = await createToken({ userId, expiresIn });
 
         const response = NextResponse.json(
@@ -59,14 +57,20 @@ export async function POST(request) {
             { status: 200 }
         );
 
-        // Set the session cookie
         response.cookies.set("session", session, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",  // Secure cookie in production
+            secure: process.env.NODE_ENV === "production",
             maxAge: expiresIn,
             path: "/",
         });
 
+        if (response.ok) {
+            const querry = "UPDATE users SET isOnline = 1 WHERE userId = ?";
+            const connection = await getConnection();
+
+            await connection.execute(querry, [userId]);
+            await connection.end();
+        }
         return response;
     } catch (error) {
         console.error("Login error:", error);

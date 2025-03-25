@@ -6,13 +6,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import styles from "@/app/styles/logout.module.css";
 
-export default function LogoutButton() {
+export default function LogoutButton(userId) {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
 
     const handleLogout = async () => {
         setLoading(true);
-        const res = await fetch("/api/auth/logout", { method: "POST" });
+        const res = await fetch(`/api/auth/logout?userId=${userId.userId}`, { method: "POST" });
         if (res.ok) {
             router.push("/");
         } else {

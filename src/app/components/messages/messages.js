@@ -5,6 +5,7 @@ import Settings from "@/app/components/settings/settings";
 import Input from "@/app/components/messages/input/input";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useSocket } from "@/lib/socket";
 
 export default function Messages({
   userData,
@@ -18,6 +19,26 @@ export default function Messages({
 }) {
   const [conversationId, setConversationId] = useState(null);
   const messageEnd = useRef(null);
+  const socket = useSocket();
+
+  //Socket stuff
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on("receive_message", (newMessage) => {
+      if (newMessage.conversationId === conversationId) {
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
+
+        if (messageEnd.current) {
+          messageEnd.current.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    });
+
+    return () => {
+      socket.off("receive_message");
+    };
+  }, [socket, conversationId, setMessages]);
 
   // Conversation ID is fetched here
   const fetchConversationId = useCallback(async () => {
@@ -74,13 +95,6 @@ export default function Messages({
     }
   }, [conversationId, fetchMessages]);
 
-  // Fetch conversationId when activeChat changes
-  useEffect(() => {
-    if (conversationId) {
-      fetchMessages();
-    }
-  }, [conversationId, fetchMessages]);
-
   useEffect(() => {
     if (activeChat && userData) {
       fetchConversationId();
@@ -115,8 +129,8 @@ export default function Messages({
               <Image
                 src={activeChat?.profilePicPath || "https://placehold.co/50x50"}
                 alt="Contact avatar"
-                width={40}
-                height={40}
+                width={60}
+                height={60}
                 className={styles.avatar}
               />
               <h1>{activeChat?.displayName || "Select a contact"}</h1>
@@ -128,16 +142,15 @@ export default function Messages({
               messages.map((message) => (
                 <div
                   key={message.messageId}
-                  className={`${styles.message} ${
-                    message.senderUserId === userData.userId
-                      ? styles.outgoing
-                      : styles.incoming
-                  }`}
+                  className={`${styles.message} ${message.senderUserId === userData.userId
+                    ? styles.outgoing
+                    : styles.incoming
+                    }`}
                 >
                   <div className={styles.messageContent}>
                     {message.messageText}
                   </div>
-                  <div className={styles.messageTime}>
+                  <div className={message.senderUserId === userData.userId ? styles.messageTime : styles.messageTimeLeft}>
                     {new Date(message.sentAt).toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit",
@@ -152,13 +165,14 @@ export default function Messages({
                   : "Select someone to start chatting"}
               </div>
             )}
+            <div ref={messageEnd}>
+            </div>
           </div>
 
           <Input
             activeChat={activeChat}
             userData={userData}
             conversationId={conversationId}
-            setMessages={setMessages}
           />
         </main>
       )}

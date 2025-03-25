@@ -1,21 +1,33 @@
 import styles from "@/app/styles/input.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-import { useState, useRef } from "react";
+import { useState } from "react";
+import { useSocket } from "@/lib/socket";
 
 export default function Input({
   activeChat,
   userData,
   conversationId,
-  setMessages,
 }) {
   const [messageInput, setMessageInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const socket = useSocket();
 
   const handleSendMessage = async () => {
     setLoading(true);
 
     try {
+      const messageData = {
+        conversationId: conversationId,
+        senderUserId: userData.userId,
+        messageText: messageInput.trim(),
+        senderName: userData.displayName,
+        senderProfilePic: userData.profilePicPath,
+        sentAt: new Date().toISOString(),
+      };
+
+      socket.emit("send_message", messageData);
+
       const response = await fetch("/api/messages/postMessages", {
         method: "POST",
         headers: {
@@ -24,23 +36,19 @@ export default function Input({
         body: JSON.stringify({
           conversationId: conversationId,
           senderUserId: userData.userId,
-          messageText: messageInput,
+          messageText: messageInput.trim(),
         }),
       });
 
-      const data = await response.json();
-
       if (response.ok) {
-        setMessages((prevMessages) => [...prevMessages, data.data]);
         setMessageInput("");
       } else {
-        console.error("Failed to send message:", data.error);
+        console.error("Failed to send message via API");
       }
     } catch (error) {
       console.error("Error sending message:", error);
     } finally {
       setLoading(false);
-      document.getElementById("message-input").focus();
     }
   };
 
