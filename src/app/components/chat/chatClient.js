@@ -75,6 +75,8 @@ export default function ChatClient({ userData }) {
     }
   };
 
+
+
   const refreshFriendsList = () => {
     setRefresh((prev) => prev + 1);
   };

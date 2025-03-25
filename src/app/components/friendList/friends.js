@@ -107,7 +107,7 @@ export default function Friends({ userData, activeChat, onFriendSelect }) {
           filteredFriends.map((friend) => (
             <button
               key={friend.friendId}
-              className={`${styles["friend-item"]} ${activeChat?.userId === friend.userId ? styles["active"] : ""
+              className={`${styles["friend-item"]} ${activeChat?.friendId === friend.friendId ? styles["active"] : ""
                 }`}
               onClick={() => handleFriendClick(friend)}
             >

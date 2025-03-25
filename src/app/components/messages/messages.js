@@ -21,6 +21,7 @@ export default function Messages({
   const messageEnd = useRef(null);
   const socket = useSocket();
 
+
   //Socket stuff
   useEffect(() => {
     if (!socket) return;
@@ -40,9 +41,9 @@ export default function Messages({
     };
   }, [socket, conversationId, setMessages]);
 
+
   // Conversation ID is fetched here
   const fetchConversationId = useCallback(async () => {
-    if (!activeChat?.userId || !userData?.userId) return;
 
     try {
       const response = await fetch("/api/messages/conversationID", {
@@ -52,7 +53,7 @@ export default function Messages({
         },
         body: JSON.stringify({
           userId1: userData.userId,
-          userId2: activeChat.userId,
+          userId2: activeChat.friendId,
         }),
       });
 

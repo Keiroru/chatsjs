@@ -13,7 +13,7 @@ export function SocketProvider({ children }) {
     const [socket, setSocket] = useState(null);
 
     useEffect(() => {
-        const socketInstance = io("http://localhost:3001", {
+        const socketInstance = io("http://192.168.50.230:3001", {
             withCredentials: true,
         });
 
