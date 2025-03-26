@@ -23,8 +23,14 @@
     width: 100%;
 }
 
+.searchFields{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
 
-.input {
+.inputName {
     flex: 1;
     padding: 10px 14px;
     border: 1px solid #ddd;
@@ -33,6 +39,21 @@
     background-color: var(--rich-black);
     color: #fff;
     transition: border-color 0.2s;
+    width: 70%;
+    text-align: center;
+}
+
+.inputId {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: var(--rich-black);
+    color: #fff;
+    transition: border-color 0.2s;
+    width: 25%;
+    text-align: center;
 }
 
 .input:focus {

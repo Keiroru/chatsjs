@@ -4,12 +4,13 @@ import { useState } from "react";
 import styles from "@/app/styles/addFriend.module.css";
 
 export default function AddFriend({ userId }) {
-  const [receiverUserId, setUserId] = useState("");
+  const [receiverUserName, setUsername] = useState(""); // Input field for username
+  const [receiverDisplayId, setReceiverDisplayId] = useState(""); // Receiver's userId
   const [status, setStatus] = useState({ type: null, message: "" });
   const [isLoading, setIsLoading] = useState(false);
 
   const handleAddFriend = async () => {
-    if (!receiverUserId.trim()) return;
+    if (!receiverDisplayId.trim() || !receiverUserName.trim()) return;
 
     setIsLoading(true);
     setStatus({ type: null, message: "" });
@@ -22,7 +23,8 @@ export default function AddFriend({ userId }) {
         },
         body: JSON.stringify({
           senderUserId: userId,
-          receiverUserId: receiverUserId,
+          receiverUserName: receiverUserName,
+          receiverDisplayId: receiverDisplayId,
         }),
       });
 
@@ -30,7 +32,8 @@ export default function AddFriend({ userId }) {
 
       if (response.ok) {
         setStatus({ type: "success", message: "Friend request sent successfully!" });
-        setUserId("");
+        setUsername("");
+        setReceiverDisplayId("");
       } else {
         setStatus({ type: "error", message: data.error || "Failed to send friend request" });
       }
@@ -46,18 +49,29 @@ export default function AddFriend({ userId }) {
     <div className={styles.container}>
       <h2 className={styles.header}>Add a friend</h2>
       <div className={styles.searchContainer}>
-        <input
-          type="text"
-          placeholder="Enter user ID..."
-          aria-label="User ID"
-          value={receiverUserId}
-          onChange={(e) => setUserId(e.target.value)}
-          className={`${styles.input} ${status.type === "error" ? styles.inputError : ""}`}
-        />
+        <div className="searchFields">
+          <input
+            type="text"
+            placeholder="Enter user ID..."
+            aria-label="User ID"
+            value={receiverUserName}
+            onChange={(e) => setUsername(e.target.value)}
+            className={`${styles.inputName} ${status.type === "error" ? styles.inputError : ""}`}
+            />
+            <span>#</span>
+          <input
+            type="number"
+            placeholder="Enter user ID..."
+            aria-label="User ID"
+            value={receiverDisplayId}
+            onChange={(e) => setReceiverDisplayId(e.target.value)}
+            className={`${styles.inputId} ${status.type === "error" ? styles.inputError : ""}`}
+            />
+          </div>
         <button
           onClick={handleAddFriend}
           className={styles.button}
-          disabled={isLoading || !receiverUserId.trim()}
+          disabled={isLoading || !receiverDisplayId.trim() || !receiverUserName.trim()}
         >
           {isLoading ? "Sending..." : "Add friend"}
         </button>

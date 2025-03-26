@@ -3,9 +3,24 @@ import { getConnection } from "@/lib/db";
 
 export async function POST(request) {
   try {
-    const { senderUserId, receiverUserId } = await request.json();
+    const { senderUserId, receiverUserName, receiverDisplayId } = await request.json();
 
     const connection = await getConnection();
+
+    const [receiverUser] = await connection.execute(
+      `SELECT userId FROM users
+       WHERE displayName = ? AND displayId = ?`,
+      [receiverUserName, receiverDisplayId]
+    );
+
+    const receiverUserId = receiverUser[0].userId
+    
+    if (senderUserId == receiverUserId) {
+      return NextResponse.json(
+        { error: "You cannot send a friend request to yourself" },
+        { status: 400 }
+      );
+    }
 
     const [existing] = await connection.execute(
       `SELECT * FROM FriendRequest
