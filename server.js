@@ -26,17 +26,38 @@ const io = new Server(server, {
   },
 });
 
+const connectedUsers = {};
 io.on("connection", (socket) => {
   console.log("New client connected:", socket.id);
 
-  socket.on("send_message", (data) => {
-    io.emit("receive_message", {
-      ...data,
-      messageId: Date.now(),
+  socket.on("user_status", ({ userId, status }) => {
+    connectedUsers[userId] = { socketId: socket.id, status: status };
+
+    io.emit("friend_status_change", {
+      userId,
+      status,
+      isOnline: status === "online"
     });
   });
 
   socket.on("disconnect", () => {
+    const userEntry = Object.entries(connectedUsers).find(
+      ([, data]) => data.socketId === socket.id
+    );
+
+    if (userEntry) {
+      const [disconnectedUserId] = userEntry;
+      console.log(`User ${disconnectedUserId} disconnected`);
+
+      delete connectedUsers[disconnectedUserId];
+
+      io.emit("friend_status_change", {
+        userId: disconnectedUserId,
+        status: "offline",
+        isOnline: false
+      });
+    }
+
     console.log("Client disconnected:", socket.id);
   });
 });

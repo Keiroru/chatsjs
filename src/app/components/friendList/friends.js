@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import styles from "@/app/styles/friends.module.css";
+import { useSocket } from "@/lib/socket";
 
 export default function Friends({ userData, activeChat, onFriendSelect }) {
   const [friends, setFriends] = useState([]);
@@ -13,6 +14,51 @@ export default function Friends({ userData, activeChat, onFriendSelect }) {
   const [activeTab, setActiveTab] = useState("people");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const socket = useSocket();
+
+  useEffect(() => {
+    if (!socket || !userData?.userId) return;
+
+    socket.emit("user_status", {
+      userId: userData.userId,
+      status: "online"
+    });
+
+    const handleBeforeUnload = () => {
+      socket.emit("user_status", {
+        userId: userData.userId,
+        status: "offline"
+      });
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    socket.on("friend_status_change", ({ userId, status }) => {
+      console.log("Friend status change:", userId, status);
+      setFriends((oldFriends) =>
+        oldFriends.map((f) =>
+          f.friendId === userId
+            ? {
+              ...f,
+              status,
+              isOnline: status === "online"
+            }
+            : f
+        )
+      );
+    });
+
+    return () => {
+      if (socket && userData?.userId) {
+        socket.emit("user_status", {
+          userId: userData.userId,
+          status: "offline"
+        });
+      }
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      socket.off("friend_status_change");
+    };
+  }, [socket, userData?.userId]);
 
   useEffect(() => {
     async function fetchFriends() {
@@ -126,7 +172,7 @@ export default function Friends({ userData, activeChat, onFriendSelect }) {
               </div>
               <span className={styles["time"]}>{friend.lastMessageTime}</span>
               <span
-                className={`${styles["status-indicator"]} ${friend.status ? styles["online"] : styles["offline"]
+                className={`${styles["status-indicator"]} ${friend.isOnline ? styles["online"] : styles["offline"]
                   }`}
               ></span>
             </button>
