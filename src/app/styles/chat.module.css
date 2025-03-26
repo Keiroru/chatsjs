@@ -276,31 +276,6 @@
 /*******************************
  * 8. STATUS INDICATORS
  *******************************/
-.status-indicator {
-  grid-area: status;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  margin-left: auto;
-}
-
-.status-indicator.online {
-  background-color: var(--forest-green);
-  box-shadow: 0 0 0 2px var(--charcoal), 0 0 3px 2px rgba(74, 222, 128, 0.2);
-}
-
-.status-indicator.offline {
-  background-color: var(--stone-gray);
-}
-
-.status-text {
-  font-size: 13px;
-  margin-left: auto;
-}
-
-.status-text.online {
-  color: var(--forest-green);
-}
 
 .status-badge {
   padding: 4px 8px;
