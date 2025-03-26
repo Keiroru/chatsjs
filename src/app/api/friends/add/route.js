@@ -5,19 +5,6 @@ export async function POST(request) {
   try {
     const { senderUserId, receiverUserId } = await request.json();
 
-    console.log(
-      "senderUserId:",
-      senderUserId,
-      "receiverUserId:",
-      receiverUserId
-    );
-    if (senderUserId == receiverUserId) {
-      return NextResponse.json(
-        { error: "You cannot send a friend request to yourself" },
-        { status: 400 }
-      );
-    }
-
     const connection = await getConnection();
 
     const [existing] = await connection.execute(

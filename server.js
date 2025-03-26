@@ -6,26 +6,25 @@ const http = require("http");
 const { Server } = require("socket.io");
 require("dotenv").config();
 
-
 const app = express();
 const server = http.createServer(app);
 
-
-app.use(cors({
-  origin: "http://192.168.50.230:3000",
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 
 const io = new Server(server, {
   cors: {
-    origin: "http://192.168.50.230:3000",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"],
     credentials: true,
   },
 });
-
 
 io.on("connection", (socket) => {
   console.log("New client connected:", socket.id);
@@ -42,7 +41,6 @@ io.on("connection", (socket) => {
   });
 });
 
-
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -51,7 +49,6 @@ const db = mysql.createConnection({
   charset: "utf8mb4",
 });
 
-
 db.connect((err) => {
   if (err) {
     console.error("Database connection failed:", err.stack);
@@ -59,7 +56,6 @@ db.connect((err) => {
   }
   console.log("Connected to database");
 });
-
 
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {

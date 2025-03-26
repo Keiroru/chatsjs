@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import styles from '@/app/styles/auth.module.css';
+import styles from "@/app/styles/auth.module.css";
 
 export default function Login() {
   const [formData, setFormData] = useState({
     email: "",
-    password: ""
+    password: "",
   });
   const [error, setError] = useState("");
   const router = useRouter();
@@ -16,7 +16,7 @@ export default function Login() {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
 
@@ -28,9 +28,9 @@ export default function Login() {
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
 
       const data = await response.json();
@@ -68,14 +68,13 @@ export default function Login() {
           value={formData.password}
           onChange={handleChange}
         />
-        <input
-          type="submit"
-          value="Login"
-          className={styles.submitButton}
-        />
+        <input type="submit" value="Login" className={styles.submitButton} />
       </form>
       <div className={styles.link}>
-        Need an account? <a href="/register" className={styles.authLink}>Register</a>
+        Need an account?{" "}
+        <a href="/register" className={styles.authLink}>
+          Register
+        </a>
       </div>
     </div>
   );

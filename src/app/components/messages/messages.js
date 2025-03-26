@@ -21,7 +21,6 @@ export default function Messages({
   const messageEnd = useRef(null);
   const socket = useSocket();
 
-
   //Socket stuff
   useEffect(() => {
     if (!socket) return;
@@ -41,10 +40,8 @@ export default function Messages({
     };
   }, [socket, conversationId, setMessages]);
 
-
   // Conversation ID is fetched here
   const fetchConversationId = useCallback(async () => {
-
     try {
       const response = await fetch("/api/messages/conversationID", {
         method: "POST",
@@ -143,15 +140,22 @@ export default function Messages({
               messages.map((message) => (
                 <div
                   key={message.messageId}
-                  className={`${styles.message} ${message.senderUserId === userData.userId
-                    ? styles.outgoing
-                    : styles.incoming
-                    }`}
+                  className={`${styles.message} ${
+                    message.senderUserId === userData.userId
+                      ? styles.outgoing
+                      : styles.incoming
+                  }`}
                 >
                   <div className={styles.messageContent}>
                     {message.messageText}
                   </div>
-                  <div className={message.senderUserId === userData.userId ? styles.messageTime : styles.messageTimeLeft}>
+                  <div
+                    className={
+                      message.senderUserId === userData.userId
+                        ? styles.messageTime
+                        : styles.messageTimeLeft
+                    }
+                  >
                     {new Date(message.sentAt).toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit",
@@ -166,8 +170,7 @@ export default function Messages({
                   : "Select someone to start chatting"}
               </div>
             )}
-            <div ref={messageEnd}>
-            </div>
+            <div ref={messageEnd}></div>
           </div>
 
           <Input
