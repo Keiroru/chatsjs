@@ -13,10 +13,10 @@
 .chat-header {
   padding: 10px 20px;
   height: 100px;
-  border-bottom: 1px solid var(--shadow-black);
+  border-bottom: 1px solid var(--dark_blue);
   display: flex;
   align-items: center;
-  background-color: var(--charcoal);
+  background-color: var(--dark_black);
 }
 
 .contact-info-button {
@@ -25,11 +25,16 @@
   gap: 15px;
   background: none;
   border: none;
+  border-radius: 10px;
   color: var(--off-white);
   cursor: pointer;
-  padding: 10px 0;
-  width: 100%;
+  padding: 10px;
   text-align: left;
+  transition: all 0.2s;
+}
+
+.contact-info-button:hover{
+  background: var(--light_black);
 }
 
 .contact-info-button h1 {

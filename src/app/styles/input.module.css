@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   padding: 15px 20px;
-  background-color: var(--charcoal);
+  background-color: var(--dark_black);
   gap: 10px;
   height: 100px;
   overflow: hidden;

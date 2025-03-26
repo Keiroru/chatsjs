@@ -9,11 +9,9 @@ export default function Home() {
       </Link>
       <Link href="/register">
         <button>Go To Register</button>
-        <button>asd</button>
       </Link>
       <Link href="/call">
         <button>call</button>
-        <button>asd</button>
       </Link>
     </div>
   );

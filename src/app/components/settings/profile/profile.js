@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
-import style from "./profile.module.css";
+import style from "@/app/styles/profile.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera, faSave } from "@fortawesome/free-solid-svg-icons";
 
