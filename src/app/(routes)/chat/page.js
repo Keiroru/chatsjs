@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
 import mysql from "mysql2/promise";
 import ChatClient from "../../components/chat/chatClient";
+import { SocialProvider } from "@/lib/provider";
 
 export default async function Chat() {
   const cookieStore = await cookies();
@@ -34,5 +35,9 @@ export default async function Chat() {
       console.error("JWT verification or DB query failed", err);
     }
   }
-  return <ChatClient userData={userData} />;
+  return (
+    <SocialProvider userData={userData}>
+      <ChatClient userData={userData} />;
+    </SocialProvider>
+  )
 }

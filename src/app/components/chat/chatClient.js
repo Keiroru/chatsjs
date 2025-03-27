@@ -23,17 +23,48 @@ export default function ChatClient({ userData }) {
   const [refresh, setRefresh] = useState(0);
   const [friends, setFriends] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(false);
   const socket = useSocket();
 
   const formattedDate = activeChat?.createdAt
     ? new Date(activeChat.createdAt)
-        .toISOString()
-        .split("T")[0]
-        .replace(/-/g, ".")
+      .toISOString()
+      .split("T")[0]
+      .replace(/-/g, ".")
     : "No contact selected";
+
+  const handleUnload = async () => {
+    const res = await fetch(`/api/auth/unload?userId=${userData.userId}`, { method: "POST" });
+    if (res.ok) {
+      console.log("Unload successful");
+    } else {
+      console.error("Unload failed");
+    }
+  };
+
+  const handleLoad = async () => {
+    if (!userData?.userId) return;
+
+    try {
+      const res = await fetch(`/api/auth/load?userId=${userData.userId}`, {
+        method: "POST"
+      });
+      if (res.ok) {
+        console.log("Load successful");
+      } else {
+        console.error("Load failed");
+      }
+    } catch (error) {
+      console.error("Error during load:", error);
+    }
+  };
 
   useEffect(() => {
     if (!socket || !userData?.userId) return;
+
+    handleLoad();
+
+    console.log("Setting up socket listeners");
 
     socket.emit("user_status", {
       userId: userData.userId,
@@ -41,28 +72,42 @@ export default function ChatClient({ userData }) {
     });
 
     const handleBeforeUnload = () => {
+      handleUnload();
       socket.emit("user_status", {
         userId: userData.userId,
         status: "offline",
       });
     };
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    socket.on("friend_status_change", ({ userId, status }) => {
+    const handleFriendStatusChange = ({ userId, status }) => {
       console.log("Friend status change:", userId, status);
+
       setFriends((oldFriends) =>
         oldFriends.map((f) =>
           f.friendId === userId
             ? {
-                ...f,
-                status,
-                isOnline: status === "online",
-              }
+              ...f,
+              status,
+              isOnline: status === "online",
+            }
             : f
         )
       );
-    });
+
+      setActiveChat(prevChat => {
+        if (prevChat && prevChat.friendId === userId) {
+          return {
+            ...prevChat,
+            isOnline: status === "online",
+            status
+          };
+        }
+        return prevChat;
+      });
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    socket.on("friend_status_change", handleFriendStatusChange);
 
     return () => {
       if (socket && userData?.userId) {
@@ -72,7 +117,7 @@ export default function ChatClient({ userData }) {
         });
       }
       window.removeEventListener("beforeunload", handleBeforeUnload);
-      socket.off("friend_status_change");
+      socket.off("friend_status_change", handleFriendStatusChange);
     };
   }, [socket, userData?.userId]);
 
@@ -95,7 +140,7 @@ export default function ChatClient({ userData }) {
   };
 
   const toggleRightPanel = () => {
-    setRightPanelOpen(!rightPanelOpen);
+    setRightPanelOpen((prev) => !prev);
   };
 
   const toggleSettings = () => {
@@ -111,7 +156,12 @@ export default function ChatClient({ userData }) {
   };
 
   const handleFriendClick = (friend) => {
-    setActiveChat(friend);
+    setActiveChat({
+      ...friend,
+      isOnline: friend.isOnline || false,
+      status: friend.status || "offline"
+    });
+
     if (settingsOpen) {
       setSettingsOpen(false);
     }
@@ -126,14 +176,11 @@ export default function ChatClient({ userData }) {
 
   return (
     <div
-      className={`${styles["chat-container"]} ${
-        isMobile ? styles["mobile"] : ""
-      }`}
+      className={`${styles["chat-container"]} ${isMobile ? styles["mobile"] : ""} ${rightPanelOpen ? styles["right-open"] : ""}`}
     >
       <aside
-        className={`${styles["sidebar"]} ${styles["left-sidebar"]} ${
-          leftPanelOpen ? styles["open"] : styles["closed"]
-        }`}
+        className={`${styles["sidebar"]} ${styles["left-sidebar"]} ${leftPanelOpen ? styles["open"] : styles["closed"]
+          }`}
       >
         <header className={styles["sidebar-header"]}>
           <div className={styles["user-info"]}>
@@ -181,11 +228,11 @@ export default function ChatClient({ userData }) {
           <AddFriend userId={userData.userId} />
           {friendRequests.length > 0 && (
             <FriendRequests
-            userData={userData}
-            onRequestAccept={refreshFriendsList}
-            friendRequests={friendRequests}
-            setFriendRequests={setFriendRequests}
-          />
+              userData={userData}
+              onRequestAccept={refreshFriendsList}
+              friendRequests={friendRequests}
+              setFriendRequests={setFriendRequests}
+            />
           )}
         </div>
       </aside>
@@ -204,9 +251,8 @@ export default function ChatClient({ userData }) {
       />
 
       <aside
-        className={`${styles["sidebar"]} ${styles["right-sidebar"]} ${
-          rightPanelOpen ? styles["open"] : ""
-        }`}
+        className={`${styles["sidebar"]} ${styles["right-sidebar"]} ${rightPanelOpen ? styles["open"] : ""
+          }`}
       >
         <header className={styles["sidebar-header"]}>
           <button
@@ -232,9 +278,8 @@ export default function ChatClient({ userData }) {
           </h2>
           <span className={styles.profileId}>#{activeChat?.displayId}</span>
           <span
-            className={`${styles["status-badge"]} ${
-              activeChat?.isOnline ? styles["online"] : styles["offline"]
-            }`}
+            className={`${styles["status-badge"]} ${activeChat?.isOnline ? styles["online"] : styles["offline"]
+              }`}
           >
             {activeChat?.isOnline ? "Online" : "Offline"}
           </span>
@@ -248,7 +293,7 @@ export default function ChatClient({ userData }) {
             </p>
           </section>
           <section className={styles["profile-section"]}>
-            <h3 className={styles["profile-section-title"]}>Created at</h3>
+            <h3 className={styles["profile-section-title"]}>Member Since</h3>
             <p className={styles["profile-section-content"]}>{formattedDate}</p>
           </section>
         </div>

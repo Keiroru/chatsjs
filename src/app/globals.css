@@ -42,6 +42,24 @@ body {
   padding: 0;
   box-sizing: border-box;
   font-family: "Funnel Sans", sans-serif;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#__next,
+main {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.social-provider-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+  overflow: auto;
 }
 
 *,

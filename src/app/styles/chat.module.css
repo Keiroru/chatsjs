@@ -3,7 +3,11 @@
   display: grid;
   grid-template-columns: auto 1fr auto;
   grid-template-areas: "left-sidebar main right-sidebar";
-  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
   background-color: var(--rich-black);
   transition: all 0.3s ease;
@@ -196,7 +200,7 @@
   background-color: rgba(128, 128, 128, 0.2);
 }
 
-.friendControll{
+.friendControll {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -221,13 +225,38 @@
     display: none;
   }
 
-  .right-sidebar.open {
+  .right-sidebar {
     position: absolute;
     right: 0;
     top: 0;
     bottom: 0;
+    width: 0;
+    z-index: 11111;
+    transition: width 0.3s ease;
+  }
+
+  .right-sidebar.open {
     width: calc(100% - 300px) !important;
-    z-index: 10;
+  }
+
+  .chat-container.left-closed .right-sidebar.open {
+    width: calc(100% - 60px) !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .right-sidebar {
+    position: fixed;
+    right: 0;
+    height: 100%;
+    width: 100% !important;
+    z-index: 20;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+  }
+
+  .right-sidebar.open {
+    transform: translateX(0);
   }
 }
 

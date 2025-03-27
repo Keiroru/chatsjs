@@ -5,65 +5,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import styles from "@/app/styles/friends.module.css";
-import { useSocket } from "@/lib/socket";
+import { useStatus } from "@/lib/provider";
 
 export default function Friends({
   userData,
   activeChat,
   onFriendSelect,
-  friends,
-  setFriends,
 }) {
+  const { friends, setFriends } = useStatus();
   const [filteredFriends, setFilteredFriends] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("people");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const socket = useSocket();
-
-  useEffect(() => {
-    if (!socket || !userData?.userId) return;
-
-    socket.emit("user_status", {
-      userId: userData.userId,
-      status: "online",
-    });
-
-    const handleBeforeUnload = () => {
-      socket.emit("user_status", {
-        userId: userData.userId,
-        status: "offline",
-      });
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    socket.on("friend_status_change", ({ userId, status }) => {
-      console.log("Friend status change:", userId, status);
-      setFriends((oldFriends) =>
-        oldFriends.map((f) =>
-          f.friendId === userId
-            ? {
-                ...f,
-                status,
-                isOnline: status === "online",
-              }
-            : f
-        )
-      );
-    });
-
-    return () => {
-      if (socket && userData?.userId) {
-        socket.emit("user_status", {
-          userId: userData.userId,
-          status: "offline",
-        });
-      }
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-      socket.off("friend_status_change");
-    };
-  }, [socket, userData?.userId]);
 
   useEffect(() => {
     async function fetchFriends() {
@@ -89,7 +43,7 @@ export default function Friends({
     }
 
     fetchFriends();
-  }, [userData?.userId, userData?.refreshTrigger]);
+  }, [userData?.userId, userData?.refreshTrigger, setFriends]);
 
   useEffect(() => {
     if (searchQuery.trim() === "") {
@@ -133,9 +87,8 @@ export default function Friends({
 
       <div className={styles["tab-buttons"]}>
         <button
-          className={`${styles["tab-button"]} ${
-            activeTab === "people" ? styles["active"] : ""
-          }`}
+          className={`${styles["tab-button"]} ${activeTab === "people" ? styles["active"] : ""
+            }`}
           onClick={() => setActiveTab("people")}
         >
           People
@@ -148,9 +101,8 @@ export default function Friends({
           Friends
         </button>
         <button
-          className={`${styles["tab-button"]} ${
-            activeTab === "groups" ? styles["active"] : ""
-          }`}
+          className={`${styles["tab-button"]} ${activeTab === "groups" ? styles["active"] : ""
+            }`}
           onClick={() => setActiveTab("groups")}
         >
           Groups
@@ -166,9 +118,8 @@ export default function Friends({
           filteredFriends.map((friend) => (
             <button
               key={friend.friendId}
-              className={`${styles["friend-item"]} ${
-                activeChat?.friendId === friend.friendId ? styles["active"] : ""
-              }`}
+              className={`${styles["friend-item"]} ${activeChat?.friendId === friend.friendId ? styles["active"] : ""
+                }`}
               onClick={() => handleFriendClick(friend)}
             >
               <Image
@@ -186,9 +137,8 @@ export default function Friends({
               </div>
               <span className={styles["time"]}>{friend.lastMessageTime}</span>
               <span
-                className={`${styles["status-indicator"]} ${
-                  friend.isOnline ? styles["online"] : styles["offline"]
-                }`}
+                className={`${styles["status-indicator"]} ${friend.isOnline ? styles["online"] : styles["offline"]
+                  }`}
               ></span>
             </button>
           ))
