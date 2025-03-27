@@ -29,10 +29,6 @@ export default function Messages({
     socket.on("receive_message", (newMessage) => {
       if (newMessage.conversationId === conversationId) {
         setMessages((prevMessages) => [...prevMessages, newMessage]);
-
-        if (messageEnd.current) {
-          messageEnd.current.scrollIntoView({ behavior: "smooth" });
-        }
       }
     });
 
@@ -40,6 +36,12 @@ export default function Messages({
       socket.off("receive_message");
     };
   }, [socket, conversationId, setMessages]);
+
+  useEffect(() => {
+    if (messageEnd.current) {
+      messageEnd.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   // Conversation ID is fetched here
   const fetchConversationId = useCallback(async () => {

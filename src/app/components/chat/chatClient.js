@@ -226,10 +226,10 @@ export default function ChatClient({ userData }) {
           <span className={styles.profileId}>#{activeChat?.displayId}</span>
           <span
             className={`${styles["status-badge"]} ${
-              friends.isOnline ? styles["online"] : styles["offline"]
+              activeChat?.isOnline ? styles["online"] : styles["offline"]
             }`}
           >
-            {friends.isOnline ? "Online" : "Offline"}
+            {activeChat?.isOnline ? "Online" : "Offline"}
           </span>
         </div>
 

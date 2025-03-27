@@ -33,7 +33,7 @@
   transition: all 0.2s;
 }
 
-.contact-info-button:hover{
+.contact-info-button:hover {
   background: var(--light_black);
 }
 
@@ -98,6 +98,7 @@
   font-size: 17px;
   line-height: 1.4;
   margin-bottom: 6px;
+  overflow-wrap: break-word;
 }
 
 .incoming .messageContent {
