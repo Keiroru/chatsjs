@@ -20,7 +20,7 @@
   position: relative;
 }
 
-.bg-box {
+.bgBox {
   top: 60vh;
   position: absolute;
   border-radius: 10px;
@@ -31,19 +31,19 @@
   left: 0;
 }
 
-.egy {
+.firstBox {
   left: 250px;
 }
 
-.ketto {
+.secondBox {
   left: 500px;
 }
 
-.harom {
+.thirdBox {
   left: 750px;
 }
 
-.nulla {
+.zeroBox {
   left: -250px;
 }
 
@@ -215,5 +215,24 @@
 
   .input:focus {
     width: 85%;
+  }
+}
+
+@media (max-height: 700px) {
+  .box {
+    padding: 0;
+  }
+
+  .box h1 {
+    padding: 0;
+  }
+
+  .submitButton {
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+
+  .link {
+    padding-top: 0;
   }
 }

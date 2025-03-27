@@ -118,6 +118,7 @@ function Register() {
           onChange={handleChange}
           className={styles.input}
         />
+        {errorMap.telephone && <p className={styles.errorMessage}>{errorMap.telephone}</p>}
         <input
           type="password"
           id="password"

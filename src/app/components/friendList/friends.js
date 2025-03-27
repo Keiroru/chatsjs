@@ -138,6 +138,13 @@ export default function Friends({
           }`}
           onClick={() => setActiveTab("people")}
         >
+          People
+        </button>
+        <button
+          className={`${styles["tab-button"]} ${activeTab === "groups" ? styles["active"] : ""
+            }`}
+          onClick={() => setActiveTab("friends")}
+        >
           Friends
         </button>
         <button

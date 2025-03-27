@@ -21,18 +21,19 @@
     flex-direction: column;
     gap: 12px;
     width: 100%;
+
 }
 
 .searchFields{
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: row;
     width: 100%;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .inputName {
-    flex: 1;
     padding: 10px 14px;
     border: 1px solid #ddd;
     border-radius: 6px;
@@ -40,12 +41,11 @@
     background-color: var(--rich-black);
     color: #fff;
     transition: border-color 0.2s;
-    width: 70%;
+    width: 70% !important; 
     text-align: center;
 }
 
 .inputId {
-    flex: 1;
     padding: 10px 14px;
     border: 1px solid #ddd;
     border-radius: 6px;

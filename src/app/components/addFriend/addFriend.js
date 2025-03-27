@@ -49,20 +49,22 @@ export default function AddFriend({ userId }) {
     <div className={styles.container}>
       <h2 className={styles.header}>Add a friend</h2>
       <div className={styles.searchContainer}>
-        <div className="searchFields">
+        <div className={styles.searchFields}>
           <input
             type="text"
-            placeholder="Enter user ID..."
-            aria-label="User ID"
+            maxLength="20"
+            placeholder="User's name"
+            aria-label="User name"
             value={receiverUserName}
             onChange={(e) => setUsername(e.target.value)}
             className={`${styles.inputName} ${status.type === "error" ? styles.inputError : ""}`}
             />
             <span>#</span>
           <input
-            type="number"
-            placeholder="Enter user ID..."
-            aria-label="User ID"
+            type="text"
+            maxLength="4"
+            placeholder="ID"
+            aria-label="ID"
             value={receiverDisplayId}
             onChange={(e) => setReceiverDisplayId(e.target.value)}
             className={`${styles.inputId} ${status.type === "error" ? styles.inputError : ""}`}

@@ -7,16 +7,16 @@ export default function AuthLayout({ children }) {
         <div className={styles.authWrapper}>
             <div className={styles.background}>
                 <div className={styles.down}>
-                    <div className={styles["bg-box"]}></div>
-                    <div className={`${styles["bg-box"]} ${styles.egy}`}></div>
-                    <div className={`${styles["bg-box"]} ${styles.ketto}`}></div>
-                    <div className={`${styles["bg-box"]} ${styles.harom}`}></div>
+                    <div className={styles.bgBox}></div>
+                    <div className={`${styles.bgBox} ${styles.firstBox}`}></div>
+                    <div className={`${styles.bgBox} ${styles.secondBox}`}></div>
+                    <div className={`${styles.bgBox} ${styles.thirdBox}`}></div>
                 </div>
                 <div className={styles.up}>
-                    <div className={`${styles["bg-box"]} ${styles.nulla}`}></div>
-                    <div className={styles["bg-box"]}></div>
-                    <div className={`${styles["bg-box"]} ${styles.egy}`}></div>
-                    <div className={`${styles["bg-box"]} ${styles.ketto}`}></div>
+                    <div className={`${styles.bgBox} ${styles.zeroBox}`}></div>
+                    <div className={styles.bgBox}></div>
+                    <div className={`${styles.bgBox} ${styles.firstBox}`}></div>
+                    <div className={`${styles.bgBox} ${styles.secondBox}`}></div>
                 </div>
                 <div className={styles.form}>
                     {children}

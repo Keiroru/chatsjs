@@ -10,7 +10,7 @@ export async function POST(request) {
         // Validation
         const errors = [];
         
-        const trimmedDisplayName = displayName.trim();
+        const trimmedDisplayName = decodeURIComponent(displayName.trim());
         let hasConsecutiveSpaces = /\s{2,}/.test(trimmedDisplayName);
         if (hasConsecutiveSpaces) {
             errors.push({
@@ -43,7 +43,7 @@ export async function POST(request) {
             !/[A-Z]/.test(password) ||
             !/[0-9]/.test(password)) {
             errors.push({
-                msg: "Password must be at least 8 characters long and contain lowercase, uppercase, and numbers",
+                msg: "Password must be at least 8 characters long and must contain lowercase, uppercase, and number",
                 path: "password"
             });
         }
@@ -64,6 +64,20 @@ export async function POST(request) {
             await connection.end();
             return NextResponse.json(
                 { errors: [{ msg: "Email already exists", path: "email" }] },
+                { status: 400 }
+            );
+        }
+
+        // Check for existing phone number
+        const [existingPhoneUser] = await connection.execute(
+            "SELECT * FROM Users WHERE telephone = ?",
+            [telephone]
+        );
+
+        if (existingPhoneUser.length > 0) {
+            await connection.end();
+            return NextResponse.json(
+                { errors: [{ msg: "Phone number already in use", path: "telephone" }] },
                 { status: 400 }
             );
         }
