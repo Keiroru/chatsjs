@@ -13,8 +13,10 @@ import { faArrowLeft, faTimes, faCog } from "@fortawesome/free-solid-svg-icons";
 import { useSocket } from "@/lib/socket";
 
 export default function ChatClient({ userData }) {
+  const [friendRequests, setFriendRequests] = useState([]);
   const [rightPanelOpen, setRightPanelOpen] = useState(false);
   const [leftPanelOpen, setLeftPanelOpen] = useState(true);
+  const [addFriendPanelOpen, setaddFriendPanelOpen] = useState(false);
   const [activeChat, setActiveChat] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -134,7 +136,7 @@ export default function ChatClient({ userData }) {
         }`}
       >
         <header className={styles["sidebar-header"]}>
-          <div className={styles["user-info"]} onClick={toggleSettings}>
+          <div className={styles["user-info"]}>
             {!leftPanelOpen && (
               <button
                 className={styles["icon-button"]}
@@ -167,12 +169,6 @@ export default function ChatClient({ userData }) {
           </div>
         </header>
 
-        <AddFriend userId={userData.userId} />
-        <FriendRequests
-          userData={userData}
-          onRequestAccept={refreshFriendsList}
-        />
-
         <Friends
           userData={{ ...userData, refreshTrigger: refresh }}
           activeChat={activeChat}
@@ -181,6 +177,17 @@ export default function ChatClient({ userData }) {
           friends={friends}
           setFriends={setFriends}
         />
+        <div className={styles.friendControll}>
+          <AddFriend userId={userData.userId} />
+          {friendRequests.length > 0 && (
+            <FriendRequests
+            userData={userData}
+            onRequestAccept={refreshFriendsList}
+            friendRequests={friendRequests}
+            setFriendRequests={setFriendRequests}
+          />
+          )}
+        </div>
       </aside>
 
       <Messages

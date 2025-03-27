@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import styles from "@/app/styles/friendRequests.module.css";
 import Image from "next/image";
 
-export default function FriendRequests({ userData, onRequestAccept }) {
-  const [friendRequests, setFriendRequests] = useState([]);
+export default function FriendRequests({ userData, onRequestAccept, friendRequests, setFriendRequests }) {
+
 
   useEffect(() => {
     async function fetchFriendRequests() {
@@ -65,7 +65,7 @@ export default function FriendRequests({ userData, onRequestAccept }) {
   return (
     <div className={styles.container}>
       {friendRequests.length > 0 && (
-        <div className={styles.header}>Pending Friend Requests</div>
+       <button></button>
       )}
 
       {friendRequests.length === 0 && (

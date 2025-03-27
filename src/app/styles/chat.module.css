@@ -196,6 +196,14 @@
   background-color: rgba(128, 128, 128, 0.2);
 }
 
+.friendControll{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+}
+
 @media (max-width: 1400px) {
   .right-sidebar.open {
     width: 400px;

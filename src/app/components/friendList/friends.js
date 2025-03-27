@@ -116,10 +116,10 @@ export default function Friends({
         <div className={styles["search-input"]}>
           <input
             type="text"
-            placeholder="Search Friends"
+            placeholder="Search someone"
             value={searchQuery}
             onChange={handleSearch}
-            aria-label="Search friends"
+            aria-label="Search someone"
             className={styles["search-field"]}
           />
           {isLoading ? null : (
