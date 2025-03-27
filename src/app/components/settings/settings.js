@@ -7,7 +7,12 @@ import Account from "@/app/components/settings/myAccount/myAccount";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
-export default function Settings({ userData, isMobile, onBackToContacts }) {
+export default function Settings({
+  userData,
+  isMobile,
+  onBackToContacts,
+  toggleSettings,
+}) {
   const [selectedOption, setSelectedOption] = useState("profile");
 
   return (
@@ -16,7 +21,7 @@ export default function Settings({ userData, isMobile, onBackToContacts }) {
         {isMobile && (
           <button
             className={`${style["icon-button"]} ${style["back-button"]}`}
-            onClick={onBackToContacts}
+            onClick={toggleSettings}
             aria-label="Back to contacts"
           >
             <FontAwesomeIcon icon={faArrowLeft} />

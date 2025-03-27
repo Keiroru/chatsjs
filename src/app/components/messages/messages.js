@@ -16,6 +16,7 @@ export default function Messages({
   settingsOpen,
   messages,
   setMessages,
+  toggleSettings,
 }) {
   const [conversationId, setConversationId] = useState(null);
   const messageEnd = useRef(null);
@@ -106,6 +107,7 @@ export default function Messages({
           userData={userData}
           isMobile={isMobile}
           onBackToContacts={onBackToContacts}
+          toggleSettings={toggleSettings}
         />
       ) : (
         <main className={styles["chat-main"]}>

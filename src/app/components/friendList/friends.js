@@ -7,8 +7,13 @@ import Image from "next/image";
 import styles from "@/app/styles/friends.module.css";
 import { useSocket } from "@/lib/socket";
 
-export default function Friends({ userData, activeChat, onFriendSelect }) {
-  const [friends, setFriends] = useState([]);
+export default function Friends({
+  userData,
+  activeChat,
+  onFriendSelect,
+  friends,
+  setFriends,
+}) {
   const [filteredFriends, setFilteredFriends] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("people");
@@ -21,13 +26,13 @@ export default function Friends({ userData, activeChat, onFriendSelect }) {
 
     socket.emit("user_status", {
       userId: userData.userId,
-      status: "online"
+      status: "online",
     });
 
     const handleBeforeUnload = () => {
       socket.emit("user_status", {
         userId: userData.userId,
-        status: "offline"
+        status: "offline",
       });
     };
 
@@ -39,10 +44,10 @@ export default function Friends({ userData, activeChat, onFriendSelect }) {
         oldFriends.map((f) =>
           f.friendId === userId
             ? {
-              ...f,
-              status,
-              isOnline: status === "online"
-            }
+                ...f,
+                status,
+                isOnline: status === "online",
+              }
             : f
         )
       );
@@ -52,7 +57,7 @@ export default function Friends({ userData, activeChat, onFriendSelect }) {
       if (socket && userData?.userId) {
         socket.emit("user_status", {
           userId: userData.userId,
-          status: "offline"
+          status: "offline",
         });
       }
       window.removeEventListener("beforeunload", handleBeforeUnload);
@@ -103,8 +108,7 @@ export default function Friends({ userData, activeChat, onFriendSelect }) {
 
   const handleFriendClick = (friend) => {
     onFriendSelect(friend);
-  }
-
+  };
 
   return (
     <>
@@ -129,15 +133,17 @@ export default function Friends({ userData, activeChat, onFriendSelect }) {
 
       <div className={styles["tab-buttons"]}>
         <button
-          className={`${styles["tab-button"]} ${activeTab === "people" ? styles["active"] : ""
-            }`}
+          className={`${styles["tab-button"]} ${
+            activeTab === "people" ? styles["active"] : ""
+          }`}
           onClick={() => setActiveTab("people")}
         >
           Friends
         </button>
         <button
-          className={`${styles["tab-button"]} ${activeTab === "groups" ? styles["active"] : ""
-            }`}
+          className={`${styles["tab-button"]} ${
+            activeTab === "groups" ? styles["active"] : ""
+          }`}
           onClick={() => setActiveTab("groups")}
         >
           Groups
@@ -153,8 +159,9 @@ export default function Friends({ userData, activeChat, onFriendSelect }) {
           filteredFriends.map((friend) => (
             <button
               key={friend.friendId}
-              className={`${styles["friend-item"]} ${activeChat?.friendId === friend.friendId ? styles["active"] : ""
-                }`}
+              className={`${styles["friend-item"]} ${
+                activeChat?.friendId === friend.friendId ? styles["active"] : ""
+              }`}
               onClick={() => handleFriendClick(friend)}
             >
               <Image
@@ -172,8 +179,9 @@ export default function Friends({ userData, activeChat, onFriendSelect }) {
               </div>
               <span className={styles["time"]}>{friend.lastMessageTime}</span>
               <span
-                className={`${styles["status-indicator"]} ${friend.isOnline ? styles["online"] : styles["offline"]
-                  }`}
+                className={`${styles["status-indicator"]} ${
+                  friend.isOnline ? styles["online"] : styles["offline"]
+                }`}
               ></span>
             </button>
           ))

@@ -10,6 +10,7 @@ import AddFriend from "@/app/components/addFriend/addFriend";
 import FriendRequests from "@/app/components/friendRequest/friendRequests";
 import Messages from "@/app/components/messages/messages";
 import { faArrowLeft, faTimes, faCog } from "@fortawesome/free-solid-svg-icons";
+import { useSocket } from "@/lib/socket";
 
 export default function ChatClient({ userData }) {
   const [rightPanelOpen, setRightPanelOpen] = useState(false);
@@ -18,7 +19,9 @@ export default function ChatClient({ userData }) {
   const [isMobile, setIsMobile] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [refresh, setRefresh] = useState(0);
+  const [friends, setFriends] = useState([]);
   const [messages, setMessages] = useState([]);
+  const socket = useSocket();
 
   const formattedDate = activeChat?.createdAt
     ? new Date(activeChat.createdAt)
@@ -26,6 +29,50 @@ export default function ChatClient({ userData }) {
         .split("T")[0]
         .replace(/-/g, ".")
     : "No contact selected";
+
+  useEffect(() => {
+    if (!socket || !userData?.userId) return;
+
+    socket.emit("user_status", {
+      userId: userData.userId,
+      status: "online",
+    });
+
+    const handleBeforeUnload = () => {
+      socket.emit("user_status", {
+        userId: userData.userId,
+        status: "offline",
+      });
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    socket.on("friend_status_change", ({ userId, status }) => {
+      console.log("Friend status change:", userId, status);
+      setFriends((oldFriends) =>
+        oldFriends.map((f) =>
+          f.friendId === userId
+            ? {
+                ...f,
+                status,
+                isOnline: status === "online",
+              }
+            : f
+        )
+      );
+    });
+
+    return () => {
+      if (socket && userData?.userId) {
+        socket.emit("user_status", {
+          userId: userData.userId,
+          status: "offline",
+        });
+      }
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      socket.off("friend_status_change");
+    };
+  }, [socket, userData?.userId]);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -57,7 +104,7 @@ export default function ChatClient({ userData }) {
     }
 
     if (isMobile) {
-      setLeftPanelOpen(false);
+      setLeftPanelOpen((prev) => !prev);
     }
   };
 
@@ -130,6 +177,9 @@ export default function ChatClient({ userData }) {
           userData={{ ...userData, refreshTrigger: refresh }}
           activeChat={activeChat}
           onFriendSelect={handleFriendClick}
+          messages={messages}
+          friends={friends}
+          setFriends={setFriends}
         />
       </aside>
 
@@ -139,6 +189,7 @@ export default function ChatClient({ userData }) {
         activeChat={activeChat}
         onBackToContacts={handleBackToContacts}
         onToggleRightPanel={toggleRightPanel}
+        toggleSettings={toggleSettings}
         rightPanelOpen={rightPanelOpen}
         settingsOpen={settingsOpen}
         messages={messages}
@@ -175,10 +226,10 @@ export default function ChatClient({ userData }) {
           <span className={styles.profileId}>#{activeChat?.displayId}</span>
           <span
             className={`${styles["status-badge"]} ${
-              activeChat?.isOnline ? styles["online"] : styles["offline"]
+              friends.isOnline ? styles["online"] : styles["offline"]
             }`}
           >
-            {activeChat?.isOnline ? "Online" : "Offline"}
+            {friends.isOnline ? "Online" : "Offline"}
           </span>
         </div>
 
