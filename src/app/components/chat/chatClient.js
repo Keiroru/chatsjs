@@ -13,13 +13,13 @@ import { faArrowLeft, faTimes, faCog } from "@fortawesome/free-solid-svg-icons";
 import { useSocket } from "@/lib/socket";
 
 export default function ChatClient({ userData }) {
-  const [friendRequests, setFriendRequests] = useState([]);
   const [rightPanelOpen, setRightPanelOpen] = useState(false);
   const [leftPanelOpen, setLeftPanelOpen] = useState(true);
-  const [addFriendPanelOpen, setaddFriendPanelOpen] = useState(false);
   const [activeChat, setActiveChat] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [addFriendTabOpen, setAddFriendTabOpen] = useState(false);
+  const [acceptRequestTabOpen, setAcceptRequestTabOpen] = useState(false);
   const [refresh, setRefresh] = useState(0);
   const [friends, setFriends] = useState([]);
   const [messages, setMessages] = useState([]);
@@ -173,6 +173,14 @@ export default function ChatClient({ userData }) {
   const refreshFriendsList = () => {
     setRefresh((prev) => prev + 1);
   };
+  
+  const handleAcceptRequestTabOpen = () => {
+    setAcceptRequestTabOpen((prev) => !prev);
+  };
+  
+  const handleAddFriendTabOpen = () => {
+    setAddFriendTabOpen((prev) => !prev);
+  };
 
   return (
     <div
@@ -225,14 +233,18 @@ export default function ChatClient({ userData }) {
           setFriends={setFriends}
         />
         <div className={styles.friendControll}>
-          <AddFriend userId={userData.userId} />
-          {friendRequests.length > 0 && (
+          {!acceptRequestTabOpen && (
+            <AddFriend 
+            userId={userData.userId}
+            addFriendTabOpen = {addFriendTabOpen}
+            setAddFriendTabOpen = {handleAddFriendTabOpen}/>
+          )}
+          {!addFriendTabOpen &&  (
             <FriendRequests
-              userData={userData}
-              onRequestAccept={refreshFriendsList}
-              friendRequests={friendRequests}
-              setFriendRequests={setFriendRequests}
-            />
+            userData={userData}
+            onRequestAccept={refreshFriendsList}
+            acceptRequestTabOpen={acceptRequestTabOpen}
+            setAcceptRequestTabOpen={handleAcceptRequestTabOpen}/>
           )}
         </div>
       </aside>

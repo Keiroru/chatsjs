@@ -3,12 +3,11 @@
 import { useState } from "react";
 import styles from "@/app/styles/addFriend.module.css";
 
-export default function AddFriend({ userId }) {
+export default function AddFriend({ userId, addFriendTabOpen, setAddFriendTabOpen }) {
   const [receiverUserName, setUsername] = useState(""); // Input field for username
   const [receiverDisplayId, setReceiverDisplayId] = useState(""); // Receiver's userId
   const [status, setStatus] = useState({ type: null, message: "" });
   const [isLoading, setIsLoading] = useState(false);
-  const [addFriendTabOpen, setAddFriendTabOpen] = useState(false);
 
   const handleAddFriend = async () => {
     if (!receiverDisplayId.trim() || !receiverUserName.trim()) return;
@@ -46,18 +45,15 @@ export default function AddFriend({ userId }) {
     }
   };
 
-  const openAddFriendPanel = () =>{
-    setAddFriendTabOpen((prev) => !prev)
-  }
-
   return (
     <div className={styles.container}>
       { !addFriendTabOpen ? 
-      (<button onClick={openAddFriendPanel} className={styles.button}>Add friend</button>) 
+      (<button onClick={setAddFriendTabOpen} className={styles.button}>Add a new friend</button>) 
       : 
-      ( <div className={styles.container}>
+      ( <div>
           <div className={styles.searchContainer}>
           <div className={styles.searchFields}>
+          <button onClick={setAddFriendTabOpen} className={styles.button}>close</button>
             <input
               type="text"
               maxLength="20"
@@ -83,7 +79,7 @@ export default function AddFriend({ userId }) {
             className={styles.button}
             disabled={isLoading || !receiverDisplayId.trim() || !receiverUserName.trim()}
           >
-            {isLoading ? "Sending..." : "Add friend"}
+            {isLoading ? "Sending..." : "Send request"}
           </button>
         </div>
 

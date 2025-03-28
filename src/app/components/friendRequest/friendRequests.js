@@ -2,8 +2,11 @@ import { useEffect, useState } from "react";
 import styles from "@/app/styles/friendRequests.module.css";
 import Image from "next/image";
 
-export default function FriendRequests({ userData, onRequestAccept, friendRequests, setFriendRequests }) {
+export default function FriendRequests({ 
+  userData, onRequestAccept, acceptRequestTabOpen, setAcceptRequestTabOpen
+ }) {
 
+  const [friendRequests, setFriendRequests] = useState([]);
 
   useEffect(() => {
     async function fetchFriendRequests() {
@@ -21,6 +24,8 @@ export default function FriendRequests({ userData, onRequestAccept, friendReques
 
     if (userData.userId) {
       fetchFriendRequests();
+      const interval = setInterval(fetchFriendRequests, 5000); 
+      return () => clearInterval(interval);
     }
   }, [userData.userId]);
 
@@ -63,49 +68,59 @@ export default function FriendRequests({ userData, onRequestAccept, friendReques
   };
 
   return (
-    <div className={styles.container}>
-      {friendRequests.length > 0 && (
-       <button></button>
-      )}
-
-      {friendRequests.length === 0 && (
-        <div className={styles.empty}>No pending friend requests</div>
-      )}
-
-      {friendRequests.map((request) => (
-        <div key={request.requestId} className={styles.card}>
-          <div className={styles.userInfo}>
-            <Image
-              src={request.profilePicPath || "https://placehold.co/40x40"}
-              alt="Profile"
-              width={40}
-              height={40}
-              className={styles.avatar}
-            />
-            <div>
-              <h3 className={styles.name}>{request.displayName}</h3>
-              <div className={styles.timestamp}>
-                {new Date(request.sentAt).toLocaleDateString()}
+    <div className={friendRequests.length > 0 ? styles.container : ""}>
+      {friendRequests.length > 0 && !acceptRequestTabOpen && (
+       <button 
+       onClick={setAcceptRequestTabOpen} 
+       className={styles.button}>
+        New request
+      </button>)}
+      {acceptRequestTabOpen && (
+        <div>{friendRequests.map((request) => (
+          <div key={request.requestId} className={styles.card}>
+            <button 
+       onClick={setAcceptRequestTabOpen} 
+       className={styles.button}>
+        close
+      </button>
+            <div className={styles.userInfo}>
+              <Image
+                src={request.profilePicPath || "https://placehold.co/40x40"}
+                alt="Profile"
+                width={40}
+                height={40}
+                className={styles.avatar}
+              />
+              <div>
+                <h3 className={styles.name}>{request.displayName}</h3>
+                <div className={styles.timestamp}>
+                  {new Date(request.sentAt).toLocaleDateString()}
+                </div>
               </div>
             </div>
+  
+            <div className={styles.actions}>
+              <button
+                className={styles.acceptButton}
+                onClick={() => {
+                  handleAccept(request.requestId);
+                  setAcceptRequestTabOpen(); 
+                }}
+              >
+                Accept
+              </button>
+              <button
+                className={styles.rejectButton}
+                onClick={() => {
+                  handleReject(request.requestId);
+                  setAcceptRequestTabOpen();
+                }}
+              >
+                Reject
+              </button>
+            </div>
           </div>
-
-          <div className={styles.actions}>
-            <button
-              className={styles.acceptButton}
-              onClick={() => handleAccept(request.requestId)}
-            >
-              Accept
-            </button>
-            <button
-              className={styles.rejectButton}
-              onClick={() => handleReject(request.requestId)}
-            >
-              Reject
-            </button>
-          </div>
-        </div>
-      ))}
+        ))}</div>)}
     </div>
   );
 }

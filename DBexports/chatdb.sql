@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2025. Már 20. 11:23
+-- Létrehozás ideje: 2025. Már 21. 12:24
 -- Kiszolgáló verziója: 10.4.32-MariaDB
--- PHP verzió: 8.2.12
+-- PHP verzió: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -71,7 +71,7 @@ CREATE TABLE `conversationusers` (
   `userId` int(11) NOT NULL,
   `conversationId` int(11) NOT NULL,
   `isAdmin` tinyint(1) NOT NULL DEFAULT 0,
-  `joinedAt` date DEFAULT NULL
+  `joinedAt` date NOT NULL DEFAULT curdate()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -83,12 +83,11 @@ CREATE TABLE `conversationusers` (
 CREATE TABLE `friendrequest` (
   `requestId` int(11) NOT NULL,
   `senderUserId` int(11) NOT NULL,
-  `requestFriendUserId` int(11) NOT NULL,
+  `receiverUserId` int(11) NOT NULL,
   `sentAt` date NOT NULL DEFAULT curdate(),
-  `isTimedOut` tinyint(1) NOT NULL DEFAULT 0
+  `isTimedOut` tinyint(1) NOT NULL DEFAULT 0,
+  `status` enum('pending','accepted','rejected') NOT NULL DEFAULT 'pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
 
 --
 -- Tábla szerkezet ehhez a táblához `friends`
@@ -100,8 +99,6 @@ CREATE TABLE `friends` (
   `friendUserId` int(11) NOT NULL,
   `friendedAt` date NOT NULL DEFAULT curdate()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
 
 --
 -- Tábla szerkezet ehhez a táblához `logins`
@@ -127,7 +124,7 @@ CREATE TABLE `logins` (
 
 CREATE TABLE `messages` (
   `messageId` int(11) NOT NULL,
-  `conversationId` int(11) NOT NULL,
+  `conversationId` int(11) DEFAULT NULL,
   `senderUserId` int(11) NOT NULL,
   `sentAt` timestamp NOT NULL DEFAULT current_timestamp(),
   `state` enum('sent','delivered','seen') NOT NULL DEFAULT 'sent',
@@ -165,39 +162,19 @@ INSERT INTO `themes` (`themeId`, `themeName`) VALUES
 CREATE TABLE `users` (
   `userId` int(11) NOT NULL,
   `displayName` varchar(20) NOT NULL,
-  `displayId` int(11) NOT NULL,
+  `displayId` char(4) NOT NULL,
   `email` varchar(255) NOT NULL,
   `telephone` varchar(255) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `createdAt` date NOT NULL DEFAULT curdate(),
   `updatedAt` date NOT NULL DEFAULT curdate(),
   `isOnline` tinyint(1) DEFAULT 0,
+  `isLookingForFriends` tinyint(1) DEFAULT 0,
   `profilePicPath` varchar(255) DEFAULT NULL,
   `isSiteAdmin` tinyint(1) DEFAULT 0,
-  `currentThemeId` int(11) DEFAULT 0,
+  `currentThemeId` int(11) DEFAULT 1,
   `bio` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- A tábla adatainak kiíratása `users`
---
-
-INSERT INTO `users` (`userId`, `displayName`, `displayId`, `email`, `telephone`, `password`, `createdAt`, `updatedAt`, `isOnline`, `profilePicPath`, `isSiteAdmin`, `currentThemeId`, `bio`) VALUES
-(1, 'John Doe', 34928, 'johndoe@example.com', '123-456-7890', 'hashedpassword1', '2025-03-20', '2025-03-20', 0, 'https://i.ibb.co/BKv4Yrq8/class-of-09-nicole-3.jpg', 0, 1, 'Just a regular guy who loves coding.'),
-(2, 'Jane Smith', 84759, 'janesmith@example.com', '987-654-3210', 'hashedpassword2', '2025-03-20', '2025-03-20', 0, 'https://i.ibb.co/nq79qzNx/Jecka-3.jpg', 0, 1, 'Tech enthusiast and nature lover.'),
-(3, 'Samuel Lee', 12347, 'samuellee@example.com', '555-123-4567', 'hashedpassword3', '2025-03-20', '2025-03-20', 0, 'https://i.ibb.co/dsstLbKK/Synthwave-Goth-Girl.jpg', 0, 1, 'Software developer. Passionate about AI and robotics.'),
-(4, 'Emily Taylor', 65231, 'emilytaylor@example.com', '333-444-5555', 'hashedpassword4', '2025-03-20', '2025-03-20', 0, NULL, 0, 1, 'Designer with a love for art and technology.'),
-(5, 'Michael Brown', 97012, 'mikebrown@example.com', '666-777-8888', 'hashedpassword5', '2025-03-20', '2025-03-20', 0, NULL, 0, 1, 'Photographer and adventurer.'),
-(6, 'Olivia White', 22156, 'oliviawhite@example.com', '222-333-4444', 'hashedpassword6', '2025-03-20', '2025-03-20', 0, NULL, 0, 1, 'Marketing strategist and foodie.'),
-(7, 'David Clark', 78691, 'davidclark@example.com', '444-555-6666', 'hashedpassword7', '2025-03-20', '2025-03-20', 0, NULL, 0, 1, 'Travel enthusiast and sports fan.'),
-(8, 'Sophia Harris', 23980, 'sophiaharris@example.com', '111-222-3333', 'hashedpassword8', '2025-03-20', '2025-03-20', 0, NULL, 0, 1, 'Writer, dreamer, and coffee lover.'),
-(9, 'James King', 51372, 'jamesking@example.com', '777-888-9999', 'hashedpassword9', '2025-03-20', '2025-03-20', 0, NULL, 0, 1, 'Lifelong learner and technology advocate.'),
-(10, 'Isabella Scott', 94321, 'isabellascott@example.com', '555-666-7777', 'hashedpassword10', '2025-03-20', '2025-03-20', 0, NULL, 0, 1, 'Marketing guru and bookworm.');
-
---
--- Indexek a kiírt táblákhoz
---
-
 --
 -- A tábla indexei `attachment`
 --
@@ -232,7 +209,7 @@ ALTER TABLE `conversationusers`
 ALTER TABLE `friendrequest`
   ADD PRIMARY KEY (`requestId`),
   ADD KEY `FK_FriendRequest_Users_Sender` (`senderUserId`),
-  ADD KEY `FK_FriendRequest_Users_Receiver` (`requestFriendUserId`);
+  ADD KEY `FK_FriendRequest_Users_Receiver` (`receiverUserId`);
 
 --
 -- A tábla indexei `friends`
@@ -306,13 +283,13 @@ ALTER TABLE `conversationusers`
 -- AUTO_INCREMENT a táblához `friendrequest`
 --
 ALTER TABLE `friendrequest`
-  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT a táblához `friends`
 --
 ALTER TABLE `friends`
-  MODIFY `friendsId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `friendsId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT a táblához `logins`
@@ -324,7 +301,7 @@ ALTER TABLE `logins`
 -- AUTO_INCREMENT a táblához `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `messageId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `messageId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT a táblához `themes`
@@ -360,7 +337,7 @@ ALTER TABLE `conversationusers`
 -- Megkötések a táblához `friendrequest`
 --
 ALTER TABLE `friendrequest`
-  ADD CONSTRAINT `FK_FriendRequest_Users_Receiver` FOREIGN KEY (`requestFriendUserId`) REFERENCES `users` (`userId`),
+  ADD CONSTRAINT `FK_FriendRequest_Users_Receiver` FOREIGN KEY (`receiverUserId`) REFERENCES `users` (`userId`),
   ADD CONSTRAINT `FK_FriendRequest_Users_Sender` FOREIGN KEY (`senderUserId`) REFERENCES `users` (`userId`);
 
 --

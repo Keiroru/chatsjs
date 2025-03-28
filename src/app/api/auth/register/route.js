@@ -129,7 +129,7 @@ export async function POST(request) {
             let setArray = new Set(existingIds);
 
             for (let i = 0; i < 10000; i++) {
-                array.push(i);
+                array.push(String(i).padStart(4, '0'));
             }
 
             let filteredArray = array.filter(num => !setArray.has(num));
