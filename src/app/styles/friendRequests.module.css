@@ -35,6 +35,20 @@
     padding: 6px 12px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     transition: all 0.2s ease;
+    width: 100%;
+}
+
+.cardLessWidth{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    background-color: var(--rich-black);
+    margin-top: 6px;
+    border-radius: 8px;
+    padding: 6px 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
     width: 98%;
 }
 

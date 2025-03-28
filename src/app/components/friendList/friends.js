@@ -16,7 +16,7 @@ export default function Friends({
 }) {
   const [filteredFriends, setFilteredFriends] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState("people");
+  const [activeTab, setActiveTab] = useState("friends");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -67,45 +67,45 @@ export default function Friends({
 
   return (
     <>
-      <div className={styles["search-container"]}>
-        <div className={styles["search-input"]}>
+      <div className={styles.searchContainer}>
+        <div className={styles.searchInput}>
           <input
             type="text"
             placeholder="Search someone"
             value={searchQuery}
             onChange={handleSearch}
             aria-label="Search someone"
-            className={styles["search-field"]}
+            className={styles.searchField}
           />
           {isLoading ? null : (
             <FontAwesomeIcon
               icon={faSearch}
-              className={styles["search-icon"]}
+              className={styles.searchIcon}
             />
           )}
         </div>
       </div>
 
-      <div className={styles["tab-buttons"]}>
+      <div className={styles.tabButtons}>
         <button
-          className={`${styles["tab-button"]} ${
-            activeTab === "people" ? styles["active"] : ""
+          className={`${styles.tabButton} ${
+            activeTab === "people" ? styles.active : ""
           }`}
           onClick={() => setActiveTab("people")}
         >
           People
         </button>
         <button
-          className={`${styles["tab-button"]} ${
-            activeTab === "groups" ? styles["active"] : ""
+          className={`${styles.tabButton} ${
+            activeTab === "friends" ? styles.active : ""
           }`}
           onClick={() => setActiveTab("friends")}
         >
           Friends
         </button>
         <button
-          className={`${styles["tab-button"]} ${
-            activeTab === "groups" ? styles["active"] : ""
+          className={`${styles.tabButton} ${
+            activeTab === "groups" ? styles.active : ""
           }`}
           onClick={() => setActiveTab("groups")}
         >
@@ -113,17 +113,17 @@ export default function Friends({
         </button>
       </div>
 
-      <div className={styles["friends-list"]}>
+      <div className={styles.friendsList}>
         {isLoading ? (
-          <div className={styles["loading-spinner"]}>Loading friends...</div>
+          <div className={styles.loadingSpinner}>Loading friends...</div>
         ) : error ? (
-          <div className={styles["error-message"]}>Error: {error}</div>
+          <div className={styles.errorMessage}>Error: {error}</div>
         ) : filteredFriends.length > 0 ? (
           filteredFriends.map((friend) => (
             <button
               key={friend.friendId}
-              className={`${styles["friend-item"]} ${
-                activeChat?.friendId === friend.friendId ? styles["active"] : ""
+              className={`${styles.friendItem} ${
+                activeChat?.friendId === friend.friendId ? styles.active : ""
               }`}
               onClick={() => handleFriendClick(friend)}
             >
@@ -132,24 +132,24 @@ export default function Friends({
                 alt="Friend avatar"
                 width={40}
                 height={40}
-                className={styles["avatar"]}
+                className={styles.avatar}
               />
-              <div className={styles["friend-info"]}>
-                <h3 className={styles["friend-name"]}>{friend.displayName}</h3>
-                <p className={styles["last-message"]}>
+              <div className={styles.friendInfo}>
+                <h3 className={styles.friendName}>{friend.displayName}</h3>
+                <p className={styles.lastMessage}>
                   {friend.lastMessage || "Click to start chatting"}
                 </p>
               </div>
-              <span className={styles["time"]}>{friend.lastMessageTime}</span>
+              <span className={styles.time}>{friend.lastMessageTime}</span>
               <span
-                className={`${styles["status-indicator"]} ${
-                  friend.isOnline ? styles["online"] : styles["offline"]
+                className={`${styles.statusIndicator} ${
+                  friend.isOnline ? styles.online : styles.offline
                 }`}
               ></span>
             </button>
           ))
         ) : (
-          <div className={styles["no-friends"]}>No friends found</div>
+          <div className={styles.noFriends}>No friends found</div>
         )}
       </div>
     </>

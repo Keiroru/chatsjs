@@ -83,7 +83,12 @@ export default function FriendRequests({
           </button>
           <div className={styles.cardsHolder}>
             {friendRequests.map((request) => (
-              <div key={request.requestId} className={styles.card}>
+              <div
+                key={request.requestId}
+                className={`${
+                  friendRequests.length > 2 ? styles.cardLessWidth : styles.card
+                }`}
+              >
                 <div className={styles.userInfo}>
                   <Image
                     src={request.profilePicPath || "https://placehold.co/40x40"}
@@ -106,7 +111,9 @@ export default function FriendRequests({
                     className={styles.acceptButton}
                     onClick={() => {
                       handleAccept(request.requestId);
-                      setAcceptRequestTabOpen();
+                      if (friendRequests.length === 1) {
+                        setAcceptRequestTabOpen();
+                      }
                     }}
                   >
                     Accept
@@ -115,7 +122,9 @@ export default function FriendRequests({
                     className={styles.rejectButton}
                     onClick={() => {
                       handleReject(request.requestId);
-                      setAcceptRequestTabOpen();
+                      if (friendRequests.length === 1) {
+                        setAcceptRequestTabOpen();
+                      }
                     }}
                   >
                     Reject
