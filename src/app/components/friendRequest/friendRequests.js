@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import styles from "@/app/styles/friendRequests.module.css";
 import Image from "next/image";
 
-export default function FriendRequests({ 
-  userData, onRequestAccept, acceptRequestTabOpen, setAcceptRequestTabOpen
- }) {
-
+export default function FriendRequests({
+  userData,
+  onRequestAccept,
+  acceptRequestTabOpen,
+  setAcceptRequestTabOpen,
+}) {
   const [friendRequests, setFriendRequests] = useState([]);
 
   useEffect(() => {
@@ -24,7 +26,7 @@ export default function FriendRequests({
 
     if (userData.userId) {
       fetchFriendRequests();
-      const interval = setInterval(fetchFriendRequests, 5000); 
+      const interval = setInterval(fetchFriendRequests, 5000);
       return () => clearInterval(interval);
     }
   }, [userData.userId]);
@@ -70,57 +72,60 @@ export default function FriendRequests({
   return (
     <div className={friendRequests.length > 0 ? styles.container : ""}>
       {friendRequests.length > 0 && !acceptRequestTabOpen && (
-       <button 
-       onClick={setAcceptRequestTabOpen} 
-       className={styles.button}>
-        New request
-      </button>)}
+        <button onClick={setAcceptRequestTabOpen} className={styles.button}>
+          New request
+        </button>
+      )}
       {acceptRequestTabOpen && (
-        <div>{friendRequests.map((request) => (
-          <div key={request.requestId} className={styles.card}>
-            <button 
-       onClick={setAcceptRequestTabOpen} 
-       className={styles.button}>
-        close
-      </button>
-            <div className={styles.userInfo}>
-              <Image
-                src={request.profilePicPath || "https://placehold.co/40x40"}
-                alt="Profile"
-                width={40}
-                height={40}
-                className={styles.avatar}
-              />
-              <div>
-                <h3 className={styles.name}>{request.displayName}</h3>
-                <div className={styles.timestamp}>
-                  {new Date(request.sentAt).toLocaleDateString()}
+        <div>
+          <button onClick={setAcceptRequestTabOpen} className={styles.button}>
+            close
+          </button>
+          <div className={styles.cardsHolder}>
+            {friendRequests.map((request) => (
+              <div key={request.requestId} className={styles.card}>
+                <div className={styles.userInfo}>
+                  <Image
+                    src={request.profilePicPath || "https://placehold.co/40x40"}
+                    alt="Profile"
+                    width={40}
+                    height={40}
+                    className={styles.avatar}
+                  />
+                  <div>
+                    <h3 className={styles.name}>{request.displayName}</h3>
+                    <p className={styles.id}>#{request.displayId}</p>
+                    <div className={styles.timestamp}>
+                      {new Date(request.sentAt).toLocaleDateString()}
+                    </div>
+                  </div>
+                </div>
+
+                <div className={styles.actions}>
+                  <button
+                    className={styles.acceptButton}
+                    onClick={() => {
+                      handleAccept(request.requestId);
+                      setAcceptRequestTabOpen();
+                    }}
+                  >
+                    Accept
+                  </button>
+                  <button
+                    className={styles.rejectButton}
+                    onClick={() => {
+                      handleReject(request.requestId);
+                      setAcceptRequestTabOpen();
+                    }}
+                  >
+                    Reject
+                  </button>
                 </div>
               </div>
-            </div>
-  
-            <div className={styles.actions}>
-              <button
-                className={styles.acceptButton}
-                onClick={() => {
-                  handleAccept(request.requestId);
-                  setAcceptRequestTabOpen(); 
-                }}
-              >
-                Accept
-              </button>
-              <button
-                className={styles.rejectButton}
-                onClick={() => {
-                  handleReject(request.requestId);
-                  setAcceptRequestTabOpen();
-                }}
-              >
-                Reject
-              </button>
-            </div>
+            ))}
           </div>
-        ))}</div>)}
+        </div>
+      )}
     </div>
   );
 }

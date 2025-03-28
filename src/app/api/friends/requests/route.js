@@ -16,6 +16,7 @@ export async function GET(request) {
         friendrequest.isTimedOut,
         friendrequest.sentAt,
         Users.displayName,
+        Users.displayId,
         Users.email,
         Users.profilePicPath
       FROM friendrequest
