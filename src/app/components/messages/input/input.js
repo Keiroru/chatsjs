@@ -1,16 +1,13 @@
 import styles from "@/app/styles/input.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useSocket } from "@/lib/socket";
 
-export default function Input({
-  activeChat,
-  userData,
-  conversationId,
-}) {
+export default function Input({ activeChat, userData, conversationId }) {
   const [messageInput, setMessageInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const inputRef = useRef(null);
   const socket = useSocket();
 
   const handleSendMessage = async () => {
@@ -42,6 +39,7 @@ export default function Input({
 
       if (response.ok) {
         setMessageInput("");
+        inputRef.current?.focus();
       } else {
         console.error("Failed to send message via API");
       }
@@ -55,6 +53,7 @@ export default function Input({
   return (
     <div className={styles["message-input-container"]}>
       <input
+        ref={inputRef}
         placeholder="Type a message"
         className={styles["message-input"]}
         aria-label="Type a message"
@@ -67,7 +66,6 @@ export default function Input({
           e.target.focus()
         }
         disabled={!activeChat || loading}
-        autoFocus
         id="message-input"
       />
       <button

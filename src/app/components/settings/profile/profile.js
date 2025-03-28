@@ -167,7 +167,7 @@ export default function Profile({ userData }) {
             </div>
           )}
         </div>
-
+        <span>A te userid #{userData.displayId}</span>
         <div className={style.formField}>
           <label htmlFor="displayName" className={style.fieldLabel}>
             Display Name

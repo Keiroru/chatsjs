@@ -48,18 +48,6 @@ body {
 
 #__next,
 main {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.social-provider-container {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  height: 100%;
-  overflow: auto;
 }
 
 *,
@@ -69,13 +57,13 @@ main {
 }
 
 /* Chrome, Safari, Edge, Opera */
-input[type=number]::-webkit-outer-spin-button,
-input[type=number]::-webkit-inner-spin-button {
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
 /* Firefox */
-input[type=number] {
+input[type="number"] {
   appearance: textfield;
 }

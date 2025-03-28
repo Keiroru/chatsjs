@@ -5,14 +5,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import styles from "@/app/styles/friends.module.css";
-import { useStatus } from "@/lib/provider";
+import { useStatus } from "@/lib/socket";
 
 export default function Friends({
   userData,
   activeChat,
   onFriendSelect,
+  friends,
+  setFriends,
 }) {
-  const { friends, setFriends } = useStatus();
   const [filteredFriends, setFilteredFriends] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("people");
@@ -87,22 +88,25 @@ export default function Friends({
 
       <div className={styles["tab-buttons"]}>
         <button
-          className={`${styles["tab-button"]} ${activeTab === "people" ? styles["active"] : ""
-            }`}
+          className={`${styles["tab-button"]} ${
+            activeTab === "people" ? styles["active"] : ""
+          }`}
           onClick={() => setActiveTab("people")}
         >
           People
         </button>
         <button
-          className={`${styles["tab-button"]} ${activeTab === "groups" ? styles["active"] : ""
-            }`}
+          className={`${styles["tab-button"]} ${
+            activeTab === "groups" ? styles["active"] : ""
+          }`}
           onClick={() => setActiveTab("friends")}
         >
           Friends
         </button>
         <button
-          className={`${styles["tab-button"]} ${activeTab === "groups" ? styles["active"] : ""
-            }`}
+          className={`${styles["tab-button"]} ${
+            activeTab === "groups" ? styles["active"] : ""
+          }`}
           onClick={() => setActiveTab("groups")}
         >
           Groups
@@ -118,8 +122,9 @@ export default function Friends({
           filteredFriends.map((friend) => (
             <button
               key={friend.friendId}
-              className={`${styles["friend-item"]} ${activeChat?.friendId === friend.friendId ? styles["active"] : ""
-                }`}
+              className={`${styles["friend-item"]} ${
+                activeChat?.friendId === friend.friendId ? styles["active"] : ""
+              }`}
               onClick={() => handleFriendClick(friend)}
             >
               <Image
@@ -137,8 +142,9 @@ export default function Friends({
               </div>
               <span className={styles["time"]}>{friend.lastMessageTime}</span>
               <span
-                className={`${styles["status-indicator"]} ${friend.isOnline ? styles["online"] : styles["offline"]
-                  }`}
+                className={`${styles["status-indicator"]} ${
+                  friend.isOnline ? styles["online"] : styles["offline"]
+                }`}
               ></span>
             </button>
           ))

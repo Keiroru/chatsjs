@@ -28,13 +28,15 @@ export default function ChatClient({ userData }) {
 
   const formattedDate = activeChat?.createdAt
     ? new Date(activeChat.createdAt)
-      .toISOString()
-      .split("T")[0]
-      .replace(/-/g, ".")
+        .toISOString()
+        .split("T")[0]
+        .replace(/-/g, ".")
     : "No contact selected";
 
   const handleUnload = async () => {
-    const res = await fetch(`/api/auth/unload?userId=${userData.userId}`, { method: "POST" });
+    const res = await fetch(`/api/auth/unload?userId=${userData.userId}`, {
+      method: "POST",
+    });
     if (res.ok) {
       console.log("Unload successful");
     } else {
@@ -47,7 +49,7 @@ export default function ChatClient({ userData }) {
 
     try {
       const res = await fetch(`/api/auth/load?userId=${userData.userId}`, {
-        method: "POST"
+        method: "POST",
       });
       if (res.ok) {
         console.log("Load successful");
@@ -86,20 +88,20 @@ export default function ChatClient({ userData }) {
         oldFriends.map((f) =>
           f.friendId === userId
             ? {
-              ...f,
-              status,
-              isOnline: status === "online",
-            }
+                ...f,
+                status,
+                isOnline: status === "online",
+              }
             : f
         )
       );
 
-      setActiveChat(prevChat => {
+      setActiveChat((prevChat) => {
         if (prevChat && prevChat.friendId === userId) {
           return {
             ...prevChat,
             isOnline: status === "online",
-            status
+            status,
           };
         }
         return prevChat;
@@ -159,7 +161,7 @@ export default function ChatClient({ userData }) {
     setActiveChat({
       ...friend,
       isOnline: friend.isOnline || false,
-      status: friend.status || "offline"
+      status: friend.status || "offline",
     });
 
     if (settingsOpen) {
@@ -173,22 +175,25 @@ export default function ChatClient({ userData }) {
   const refreshFriendsList = () => {
     setRefresh((prev) => prev + 1);
   };
-  
+
   const handleAcceptRequestTabOpen = () => {
     setAcceptRequestTabOpen((prev) => !prev);
   };
-  
+
   const handleAddFriendTabOpen = () => {
     setAddFriendTabOpen((prev) => !prev);
   };
 
   return (
     <div
-      className={`${styles["chat-container"]} ${isMobile ? styles["mobile"] : ""} ${rightPanelOpen ? styles["right-open"] : ""}`}
+      className={`${styles["chat-container"]} ${
+        isMobile ? styles["mobile"] : ""
+      } ${rightPanelOpen ? styles["right-open"] : ""}`}
     >
       <aside
-        className={`${styles["sidebar"]} ${styles["left-sidebar"]} ${leftPanelOpen ? styles["open"] : styles["closed"]
-          }`}
+        className={`${styles["sidebar"]} ${styles["left-sidebar"]} ${
+          leftPanelOpen ? styles["open"] : styles["closed"]
+        }`}
       >
         <header className={styles["sidebar-header"]}>
           <div className={styles["user-info"]}>
@@ -234,17 +239,19 @@ export default function ChatClient({ userData }) {
         />
         <div className={styles.friendControll}>
           {!acceptRequestTabOpen && (
-            <AddFriend 
-            userId={userData.userId}
-            addFriendTabOpen = {addFriendTabOpen}
-            setAddFriendTabOpen = {handleAddFriendTabOpen}/>
+            <AddFriend
+              userId={userData.userId}
+              addFriendTabOpen={addFriendTabOpen}
+              setAddFriendTabOpen={handleAddFriendTabOpen}
+            />
           )}
-          {!addFriendTabOpen &&  (
+          {!addFriendTabOpen && (
             <FriendRequests
-            userData={userData}
-            onRequestAccept={refreshFriendsList}
-            acceptRequestTabOpen={acceptRequestTabOpen}
-            setAcceptRequestTabOpen={handleAcceptRequestTabOpen}/>
+              userData={userData}
+              onRequestAccept={refreshFriendsList}
+              acceptRequestTabOpen={acceptRequestTabOpen}
+              setAcceptRequestTabOpen={handleAcceptRequestTabOpen}
+            />
           )}
         </div>
       </aside>
@@ -263,8 +270,9 @@ export default function ChatClient({ userData }) {
       />
 
       <aside
-        className={`${styles["sidebar"]} ${styles["right-sidebar"]} ${rightPanelOpen ? styles["open"] : ""
-          }`}
+        className={`${styles["sidebar"]} ${styles["right-sidebar"]} ${
+          rightPanelOpen ? styles["open"] : ""
+        }`}
       >
         <header className={styles["sidebar-header"]}>
           <button
@@ -290,8 +298,9 @@ export default function ChatClient({ userData }) {
           </h2>
           <span className={styles.profileId}>#{activeChat?.displayId}</span>
           <span
-            className={`${styles["status-badge"]} ${activeChat?.isOnline ? styles["online"] : styles["offline"]
-              }`}
+            className={`${styles["status-badge"]} ${
+              activeChat?.isOnline ? styles["online"] : styles["offline"]
+            }`}
           >
             {activeChat?.isOnline ? "Online" : "Offline"}
           </span>

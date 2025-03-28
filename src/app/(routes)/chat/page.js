@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
 import mysql from "mysql2/promise";
 import ChatClient from "../../components/chat/chatClient";
-import { SocialProvider } from "@/lib/provider";
+import { SocialProvider } from "@/lib/socket";
 
 export default async function Chat() {
   const cookieStore = await cookies();
@@ -36,8 +36,8 @@ export default async function Chat() {
     }
   }
   return (
-    <SocialProvider userData={userData}>
-      <ChatClient userData={userData} />;
+    <SocialProvider>
+      <ChatClient userData={userData} />
     </SocialProvider>
-  )
+  );
 }

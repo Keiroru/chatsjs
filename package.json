@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "dev:full": "concurrently \"next dev\" \"node server.js\""
+    "dev:full": "concurrently \"next dev\" \"node server.js\"",
+    "start:full": "concurrently \"next start\" \"node server.js\""
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
