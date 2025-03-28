@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const userId = searchParams.get("userId");
+  const tab = searchParams.get("tab");
 
   if (!userId) {
     return NextResponse.json({ error: "User ID is required" }, { status: 400 });
@@ -17,25 +18,63 @@ export async function GET(request) {
       database: process.env.DB_NAME || "chatdb",
     });
 
-    const query = `
+    let query = "";
+    if (tab === "people") {
+      query = `
         SELECT 
-            Users.userId as friendId,
-            Users.displayName,
-            Users.displayId,
-            Users.profilePicPath,
-            Users.bio,
-            Users.isOnline,
-            Users.createdAt,
-            Friends.userId as currentUserId
+          Users.userId,
+          Users.displayName,
+          Users.displayId,
+          Users.profilePicPath,
+          Users.bio,
+          Users.isOnline,
+          Users.createdAt
         FROM 
-            Users
-        JOIN 
-            Friends ON Friends.friendUserId = Users.userId 
+          Users
         WHERE 
-            Friends.userId = ?
+          Users.isLookingForFriends = 1
         ORDER BY 
-            Users.displayName
+          Users.displayName
       `;
+    } else if (tab === "groups") {
+      query = `
+        SELECT 
+          Users.userId,
+          Users.displayName,
+          Users.displayId,
+          Users.profilePicPath,
+          Users.bio,
+          Users.isOnline,
+          Users.createdAt,
+        FROM 
+          Users
+        WHERE 
+          
+        ORDER BY 
+          Users.displayName
+      `;
+    } else {
+      // Default friends
+      query = `
+        SELECT 
+          Users.userId as friendId,
+          Users.displayName,
+          Users.displayId,
+          Users.profilePicPath,
+          Users.bio,
+          Users.isOnline,
+          Users.createdAt,
+          Friends.userId as currentUserId
+        FROM 
+          Users
+        JOIN 
+          Friends ON Friends.friendUserId = Users.userId 
+        WHERE 
+          Friends.userId = ?
+        ORDER BY 
+          Users.displayName
+      `;
+    }
 
     const [rows] = await connection.execute(query, [userId]);
     await connection.end();

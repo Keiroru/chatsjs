@@ -29,7 +29,7 @@ export default function Friends({
 
       try {
         const response = await fetch(
-          `/api/friends/list?userId=${userData.userId}`
+          `/api/friends/list?userId=${userData.userId}&tab=${activeTab}`
         );
         if (!response.ok) throw new Error("Failed to fetch friends");
         const data = await response.json();
@@ -44,7 +44,7 @@ export default function Friends({
     }
 
     fetchFriends();
-  }, [userData?.userId, userData?.refreshTrigger, setFriends]);
+  }, [userData?.userId, userData?.refreshTrigger, setFriends, activeTab]);
 
   useEffect(() => {
     if (searchQuery.trim() === "") {
@@ -63,6 +63,11 @@ export default function Friends({
 
   const handleFriendClick = (friend) => {
     onFriendSelect(friend);
+  };
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    
   };
 
   return (
@@ -88,7 +93,7 @@ export default function Friends({
           className={`${styles.tabButton} ${
             activeTab === "people" ? styles.active : ""
           }`}
-          onClick={() => setActiveTab("people")}
+          onClick={() => handleTabChange("people")}
         >
           People
         </button>
@@ -96,7 +101,7 @@ export default function Friends({
           className={`${styles.tabButton} ${
             activeTab === "friends" ? styles.active : ""
           }`}
-          onClick={() => setActiveTab("friends")}
+          onClick={() => handleTabChange("friends")}
         >
           Friends
         </button>
@@ -104,7 +109,7 @@ export default function Friends({
           className={`${styles.tabButton} ${
             activeTab === "groups" ? styles.active : ""
           }`}
-          onClick={() => setActiveTab("groups")}
+          onClick={() => handleTabChange("groups")}
         >
           Groups
         </button>
