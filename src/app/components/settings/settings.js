@@ -13,20 +13,24 @@ export default function Settings({
   onBackToContacts,
   toggleSettings,
 }) {
-  const [selectedOption, setSelectedOption] = useState("profile");
+  const [selectedOption, setSelectedOption] = useState("");
 
   return (
     <div className={style.settingsContainer}>
-      <aside className={style.settingsSidebar}>
-        {isMobile && (
-          <button
-            className={`${style["icon-button"]} ${style["back-button"]}`}
-            onClick={toggleSettings}
-            aria-label="Back to contacts"
-          >
-            <FontAwesomeIcon icon={faArrowLeft} />
-          </button>
-        )}
+      {isMobile && (
+        <button
+          className={`${style["icon-button"]} ${style["back-button"]}`}
+          onClick={toggleSettings}
+          aria-label="Back to contacts"
+        >
+          <FontAwesomeIcon icon={faArrowLeft} />
+        </button>
+      )}
+      <aside
+        className={`${style["settingsSidebar"]} ${
+          isMobile && selectedOption ? style["closed"] : style["open"]
+        }`}
+      >
         <h2>Settings</h2>
         <div className={style.settingsNav}>
           <h4>User Settings</h4>
@@ -56,7 +60,11 @@ export default function Settings({
         </div>
       </aside>
 
-      <main className={style.settingsContent}>
+      <main
+        className={`${style["settingsContent"]} ${
+          isMobile && selectedOption ? style["open"] : style["closed"]
+        }`}
+      >
         {selectedOption === "profile" && (
           <div className={style.settingsPanel}>
             <Profile userData={userData} />

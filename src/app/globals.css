@@ -46,10 +46,6 @@ body {
   overflow: hidden;
 }
 
-#__next,
-main {
-}
-
 *,
 *::before,
 *::after {
@@ -75,11 +71,11 @@ input[type="number"] {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888; 
+  background: #888;
   border-radius: 4px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555; 
+  background: #555;
 }

@@ -78,10 +78,7 @@ export default function Friends({
             className={styles.searchField}
           />
           {isLoading ? null : (
-            <FontAwesomeIcon
-              icon={faSearch}
-              className={styles.searchIcon}
-            />
+            <FontAwesomeIcon icon={faSearch} className={styles.searchIcon} />
           )}
         </div>
       </div>
