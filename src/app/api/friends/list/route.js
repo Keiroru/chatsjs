@@ -22,7 +22,7 @@ export async function GET(request) {
     if (tab === "people") {
       query = `
         SELECT 
-          Users.userId,
+          Users.userId as friendId,
           Users.displayName,
           Users.displayId,
           Users.profilePicPath,
@@ -39,13 +39,13 @@ export async function GET(request) {
     } else if (tab === "groups") {
       query = `
         SELECT 
-          Users.userId,
+          Users.userId as friendId,
           Users.displayName,
           Users.displayId,
           Users.profilePicPath,
           Users.bio,
           Users.isOnline,
-          Users.createdAt,
+          Users.createdAt
         FROM 
           Users
         WHERE 

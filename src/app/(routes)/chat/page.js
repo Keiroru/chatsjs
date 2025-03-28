@@ -36,7 +36,7 @@ export default async function Chat() {
     }
   }
   return (
-    <SocialProvider>
+    <SocialProvider userData={userData}>
       <ChatClient userData={userData} />
     </SocialProvider>
   );

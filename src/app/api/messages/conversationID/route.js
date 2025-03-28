@@ -20,9 +20,17 @@ export async function POST(request) {
             );
 
             await connection.end();
-            return NextResponse.json({
-                conversationId: existingConversation[0].conversationId
-            });
+
+            if (existingConversation.length > 0) {
+                return NextResponse.json({
+                    conversationId: existingConversation[0].conversationId
+                });
+            }
+            else {
+                return NextResponse.json({
+                    conversationId: null,
+                });
+            }
 
         } catch (error) {
             console.error("Conversation error:", error);
