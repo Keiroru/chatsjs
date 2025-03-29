@@ -19,6 +19,7 @@
   font-size: 15px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   height: 50px;
+  width: 100%;
 }
 
 .message-input:focus {
@@ -50,4 +51,24 @@
   opacity: 0.5;
   cursor: not-allowed;
   transform: none;
+}
+
+.input-wrapper {
+  position: relative;
+  flex: 1;
+}
+
+.char-counter {
+  position: absolute;
+  right: 10px;
+  bottom: 50px;
+  font-size: 0.75rem;
+  color: #888;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 1px 4px;
+  border-radius: 4px;
+}
+
+.message-input-container {
+  padding-bottom: 20px;
 }

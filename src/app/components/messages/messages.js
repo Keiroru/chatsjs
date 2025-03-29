@@ -28,7 +28,11 @@ export default function Messages({
 
     socket.on("receive_message", (newMessage) => {
       if (newMessage.conversationId === conversationId) {
-        setMessages((prevMessages) => [...prevMessages, newMessage]);
+        const formattedMessage = {
+          ...newMessage,
+          sentAt: formatMessageTime(newMessage.sentAt),
+        };
+        setMessages((prevMessages) => [...prevMessages, formattedMessage]);
       }
     });
 
@@ -62,7 +66,7 @@ export default function Messages({
       if (response.ok && data.conversationId) {
         setConversationId(data.conversationId);
       } else {
-        console.error("Failed to get conversation ID:", data.error);
+        setConversationId(null);
       }
     } catch (error) {
       console.error("Error fetching conversationId:", error);
@@ -83,11 +87,50 @@ export default function Messages({
       }
 
       const data = await response.json();
-      setMessages(data);
+      setMessages((prevMessages) => [
+        ...data.map((message) => ({
+          ...message,
+          sentAt: formatMessageTime(message.sentAt),
+        })),
+      ])
+      console.log("Fetched messages:", data);
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
   }, [conversationId]);
+
+  const formatMessageTime = (timestamp) => {
+    const messageDate = new Date(timestamp);
+    const now = new Date();
+
+    if (messageDate.toDateString() === now.toDateString()) {
+      return messageDate.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      });
+    }
+
+    const yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - 1);
+    if (messageDate.toDateString() === yesterday.toDateString()) {
+      const time = messageDate.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      });
+      return `Yesterday ${time}`;
+    }
+
+    if (messageDate.getFullYear() === now.getFullYear()) {
+      return messageDate.toLocaleDateString([], {
+        month: 'short',
+        day: 'numeric',
+      });
+    }
+
+    return messageDate.getFullYear().toString();
+  };
 
   // Fetch messages when conversationId changes
   useEffect(() => {
@@ -140,15 +183,16 @@ export default function Messages({
           </header>
 
           <div className={styles["messages-container"]}>
-            {messages.length > 0 ? (
+            {conversationId === null ? (
+              <div className={styles.emptyChat}>You are not friends with this user</div>
+            ) : messages.length > 0 ? (
               messages.map((message) => (
                 <div
                   key={message.messageId}
-                  className={`${styles.message} ${
-                    message.senderUserId === userData.userId
-                      ? styles.outgoing
-                      : styles.incoming
-                  }`}
+                  className={`${styles.message} ${message.senderUserId === userData.userId
+                    ? styles.outgoing
+                    : styles.incoming
+                    }`}
                 >
                   <div className={styles.messageContent}>
                     {message.messageText}
@@ -160,10 +204,7 @@ export default function Messages({
                         : styles.messageTimeLeft
                     }
                   >
-                    {new Date(message.sentAt).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
+                    {message.sentAt}
                   </div>
                 </div>
               ))
@@ -174,6 +215,7 @@ export default function Messages({
                   : "Select someone to start chatting"}
               </div>
             )}
+
             <div ref={messageEnd}></div>
           </div>
 

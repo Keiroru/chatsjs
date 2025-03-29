@@ -169,11 +169,4 @@
         max-height: calc(100vh - 180px);
     }
 
-    .contactName {
-        font-size: 14px;
-    }
-
-    .lastMessage {
-        font-size: 12px;
-    }
 }

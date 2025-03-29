@@ -13,6 +13,12 @@ export default function Input({ activeChat, userData, conversationId }) {
   const handleSendMessage = async () => {
     setLoading(true);
 
+    if (messageInput.length > 20000) {
+      alert("Message too long. Please shorten it.Max 20,000 characters. Current Char count:" + messageInput.length);
+      setLoading(false);
+      return;
+    }
+
     try {
       const messageData = {
         conversationId: conversationId,

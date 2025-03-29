@@ -6,6 +6,12 @@ export async function POST(request) {
         const body = await request.json();
         const { conversationId, senderUserId, messageText } = body;
 
+        if (messageText.length > 20000) {
+            return NextResponse.json({
+                error: "Message too long",
+            }, { status: 400 });
+        }
+
         const connection = await getConnection();
 
         const query = `
