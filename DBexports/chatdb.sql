@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2025. Már 28. 15:08
+-- Létrehozás ideje: 2025. Már 29. 22:56
 -- Kiszolgáló verziója: 10.4.32-MariaDB
 -- PHP verzió: 8.2.12
 
@@ -60,6 +60,14 @@ CREATE TABLE `conversations` (
   `isGroupChat` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- A tábla adatainak kiíratása `conversations`
+--
+
+INSERT INTO `conversations` (`conversationId`, `conversationName`, `createdAt`, `isGroupChat`) VALUES
+(1, 'tester and cica', '2025-03-29', 0),
+(2, 'tester2 and cica', '2025-03-29', 0);
+
 -- --------------------------------------------------------
 
 --
@@ -73,6 +81,16 @@ CREATE TABLE `conversationusers` (
   `isAdmin` tinyint(1) NOT NULL DEFAULT 0,
   `joinedAt` date NOT NULL DEFAULT curdate()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- A tábla adatainak kiíratása `conversationusers`
+--
+
+INSERT INTO `conversationusers` (`conversationUserId`, `userId`, `conversationId`, `isAdmin`, `joinedAt`) VALUES
+(1, 43, 1, 0, '2025-03-29'),
+(2, 42, 1, 0, '2025-03-29'),
+(3, 44, 2, 0, '2025-03-29'),
+(4, 42, 2, 0, '2025-03-29');
 
 -- --------------------------------------------------------
 
@@ -89,6 +107,14 @@ CREATE TABLE `friendrequest` (
   `status` enum('pending','accepted','rejected') NOT NULL DEFAULT 'pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- A tábla adatainak kiíratása `friendrequest`
+--
+
+INSERT INTO `friendrequest` (`requestId`, `senderUserId`, `receiverUserId`, `sentAt`, `isTimedOut`, `status`) VALUES
+(1, 43, 42, '2025-03-29', 0, 'accepted'),
+(2, 44, 42, '2025-03-29', 0, 'accepted');
+
 -- --------------------------------------------------------
 
 --
@@ -101,6 +127,16 @@ CREATE TABLE `friends` (
   `friendUserId` int(11) NOT NULL,
   `friendedAt` date NOT NULL DEFAULT curdate()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- A tábla adatainak kiíratása `friends`
+--
+
+INSERT INTO `friends` (`friendsId`, `userId`, `friendUserId`, `friendedAt`) VALUES
+(1, 42, 43, '2025-03-29'),
+(2, 43, 42, '2025-03-29'),
+(3, 42, 44, '2025-03-29'),
+(4, 44, 42, '2025-03-29');
 
 -- --------------------------------------------------------
 
@@ -135,8 +171,62 @@ CREATE TABLE `messages` (
   `isDeleted` tinyint(1) NOT NULL DEFAULT 0,
   `isEdited` tinyint(1) NOT NULL DEFAULT 0,
   `messageText` text DEFAULT NULL,
-  `attachmentId` int(11) DEFAULT NULL
+  `attachmentId` int(11) DEFAULT NULL,
+  `replyTo` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- A tábla adatainak kiíratása `messages`
+--
+
+INSERT INTO `messages` (`messageId`, `conversationId`, `senderUserId`, `sentAt`, `state`, `isDeleted`, `isEdited`, `messageText`, `attachmentId`, `replyTo`) VALUES
+(1, 1, 43, '2025-03-29 16:16:29', 'sent', 0, 0, 'szia', NULL, NULL),
+(2, 1, 43, '2025-03-29 16:27:25', 'sent', 0, 0, 'szeretlek', NULL, NULL),
+(3, 1, 42, '2025-03-29 17:02:40', 'sent', 0, 0, 'ja en se', NULL, NULL),
+(4, 1, 43, '2025-03-29 17:22:44', 'sent', 0, 0, 'asd', NULL, NULL),
+(5, 1, 43, '2025-03-29 17:24:53', 'sent', 0, 0, 'asd', NULL, NULL),
+(6, 1, 43, '2025-03-29 17:36:54', 'sent', 0, 0, 'wp gg', NULL, NULL),
+(7, 1, 43, '2025-03-29 17:38:47', 'sent', 0, 0, 'lula', NULL, NULL),
+(8, 1, 43, '2025-03-29 17:39:27', 'sent', 0, 0, 'asd', NULL, NULL),
+(9, 1, 42, '2025-03-29 20:34:48', 'sent', 0, 0, 'asdasdasdasdas', NULL, NULL),
+(10, 1, 42, '2025-03-29 20:35:00', 'sent', 0, 0, 'de ha mmost jo akkor mi bajod de ha mmost jo akkor mi bajod', NULL, NULL),
+(11, 1, 42, '2025-03-29 20:43:29', 'sent', 0, 0, 'asd', NULL, NULL),
+(12, 1, 42, '2025-03-29 20:45:07', 'sent', 0, 0, 'asd', NULL, NULL),
+(13, 1, 42, '2025-03-29 20:46:28', 'sent', 0, 0, 'dsa', NULL, NULL),
+(14, 1, 42, '2025-03-29 20:46:38', 'sent', 0, 0, 'dik', NULL, NULL),
+(15, 1, 42, '2025-03-29 20:47:30', 'sent', 0, 0, 'asd', NULL, NULL),
+(16, 1, 42, '2025-03-29 20:48:42', 'sent', 0, 0, 'asd', NULL, NULL),
+(17, 1, 42, '2025-03-29 20:48:46', 'sent', 0, 0, 'dsa', NULL, NULL),
+(18, 1, 42, '2025-03-29 20:57:05', 'sent', 0, 0, 'asd', NULL, NULL),
+(19, 1, 42, '2025-03-29 21:00:51', 'sent', 0, 0, 'what', NULL, NULL),
+(20, 1, 42, '2025-03-29 21:01:04', 'sent', 0, 0, 'elmegy?', NULL, NULL),
+(21, 1, 42, '2025-03-29 21:01:34', 'sent', 0, 0, 'mostmar en is kinda', NULL, NULL),
+(22, 1, 42, '2025-03-29 21:08:07', 'sent', 0, 0, 'pedig so close volt', NULL, NULL),
+(23, 1, 42, '2025-03-29 21:10:41', 'sent', 0, 0, 'well gg', NULL, NULL),
+(24, 1, 42, '2025-03-29 21:11:34', 'sent', 0, 0, 'ceri', NULL, NULL),
+(25, 1, 43, '2025-03-29 21:17:55', 'sent', 0, 0, 'cig', NULL, NULL),
+(26, 1, 42, '2025-03-29 21:20:22', 'sent', 0, 0, 'test', NULL, 8),
+(27, 1, 42, '2025-03-29 21:25:30', 'sent', 0, 0, 'szar', NULL, 6),
+(28, 1, 42, '2025-03-29 21:25:55', 'sent', 0, 0, 'asd', NULL, 8),
+(29, 1, 42, '2025-03-29 21:26:10', 'sent', 0, 0, 'dsa', NULL, 8),
+(30, 1, 42, '2025-03-29 21:26:28', 'sent', 0, 0, 'dsa', NULL, 17),
+(31, 1, 42, '2025-03-29 21:27:13', 'sent', 0, 0, 'dsa', NULL, 25),
+(32, 1, 42, '2025-03-29 21:27:16', 'sent', 0, 0, 'asd', NULL, 2147483647),
+(33, 1, 42, '2025-03-29 21:27:27', 'sent', 0, 0, 'szia', NULL, 1),
+(34, 1, 42, '2025-03-29 21:34:59', 'sent', 0, 0, 'no', NULL, 25),
+(35, 1, 42, '2025-03-29 21:36:32', 'sent', 0, 0, 'asd', NULL, NULL),
+(36, 1, 42, '2025-03-29 21:36:34', 'sent', 0, 0, 'dsa', NULL, 25),
+(37, 1, 42, '2025-03-29 21:38:41', 'sent', 0, 0, 'dsa', NULL, 25),
+(38, 1, 42, '2025-03-29 21:39:56', 'sent', 0, 0, 'gggg', NULL, 6),
+(39, 1, 43, '2025-03-29 21:40:07', 'sent', 0, 0, 'GEGE', NULL, NULL),
+(40, 1, 43, '2025-03-29 21:40:15', 'sent', 0, 0, 'well said', NULL, 23),
+(41, 1, 43, '2025-03-29 21:40:24', 'sent', 0, 0, 'well said', NULL, 23),
+(42, 1, 42, '2025-03-29 21:45:35', 'sent', 0, 0, 'vaok', NULL, 25),
+(43, 1, 42, '2025-03-29 21:47:58', 'sent', 0, 0, 'meow', NULL, 2),
+(44, 1, 42, '2025-03-29 21:51:33', 'sent', 0, 0, 'huh', NULL, 39),
+(45, 1, 42, '2025-03-29 21:52:10', 'sent', 0, 0, 'no?', NULL, 39),
+(46, 1, 42, '2025-03-29 21:53:48', 'sent', 0, 0, 'vagy megis?', NULL, NULL),
+(47, 1, 42, '2025-03-29 21:56:00', 'sent', 0, 0, 'bruh?', NULL, 39);
 
 -- --------------------------------------------------------
 
@@ -225,7 +315,10 @@ INSERT INTO `users` (`userId`, `displayName`, `displayId`, `email`, `telephone`,
 (38, 'Dean', '8080', 'dean@email.com', NULL, '$2b$10$lt4LFk70cRyFYAcNe/476exEYJTJp6SIA76i1bJTtkrgpvqBq0rRG', '2025-03-28', '2025-03-28', 0, 1, NULL, 0, 1, NULL),
 (39, 'Hope', '9090', 'hope@email.com', '555-9090', '$2b$10$lt4LFk70cRyFYAcNe/476exEYJTJp6SIA76i1bJTtkrgpvqBq0rRG', '2025-03-28', '2025-03-28', 0, 0, NULL, 0, 1, NULL),
 (40, 'Max', '1212', 'max@email.com', NULL, '$2b$10$lt4LFk70cRyFYAcNe/476exEYJTJp6SIA76i1bJTtkrgpvqBq0rRG', '2025-03-28', '2025-03-28', 0, 1, NULL, 0, 1, NULL),
-(41, 'Ray', '1313', 'ray@email.com', '555-1313', '$2b$10$lt4LFk70cRyFYAcNe/476exEYJTJp6SIA76i1bJTtkrgpvqBq0rRG', '2025-03-28', '2025-03-28', 0, 0, NULL, 0, 1, NULL);
+(41, 'Ray', '1313', 'ray@email.com', '555-1313', '$2b$10$lt4LFk70cRyFYAcNe/476exEYJTJp6SIA76i1bJTtkrgpvqBq0rRG', '2025-03-28', '2025-03-28', 0, 0, NULL, 0, 1, NULL),
+(42, 'cica', '5210', 'vnoel05@gmail.com', NULL, '$2b$10$PT6efsZ3ArHbh7t6R4HyEu7tIsGz4z105ml3PLzY6oxpOmAMqPQru', '2025-03-29', '2025-03-29', 1, 1, 'https://i.ibb.co/rGTCytZb/class-of-09-nicole-3.jpg', 0, 1, 'end me pls '),
+(43, 'tester', '4709', 'asd@asd.com', NULL, '$2b$10$8JB/8AGGTX9i/TnxQ/lAweZmrLzPDUlFeZcP6bvq4hAO/nx6KIrmG', '2025-03-29', '2025-03-29', 1, 0, 'https://i.ibb.co/RGbwzcK7/Screenshot-2024-11-05-180618.png', 0, 1, 'eletkedv NULL'),
+(44, 'long ahh nameeeeeeee', '9279', 'dsa@dsa.com', NULL, '$2b$10$mT3CMsHn465B8L0n75Uiqu6WzaCbHoVgaaUqIIZ18VcZQ4I/V0uDC', '2025-03-29', '2025-03-29', 0, 0, NULL, 0, 1, NULL);
 
 --
 -- Indexek a kiírt táblákhoz
@@ -327,25 +420,25 @@ ALTER TABLE `blocked`
 -- AUTO_INCREMENT a táblához `conversations`
 --
 ALTER TABLE `conversations`
-  MODIFY `conversationId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `conversationId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT a táblához `conversationusers`
 --
 ALTER TABLE `conversationusers`
-  MODIFY `conversationUserId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `conversationUserId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT a táblához `friendrequest`
 --
 ALTER TABLE `friendrequest`
-  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT a táblához `friends`
 --
 ALTER TABLE `friends`
-  MODIFY `friendsId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `friendsId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT a táblához `logins`
@@ -357,7 +450,7 @@ ALTER TABLE `logins`
 -- AUTO_INCREMENT a táblához `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `messageId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `messageId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT a táblához `themes`
@@ -369,7 +462,7 @@ ALTER TABLE `themes`
 -- AUTO_INCREMENT a táblához `users`
 --
 ALTER TABLE `users`
-  MODIFY `userId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `userId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- Megkötések a kiírt táblákhoz

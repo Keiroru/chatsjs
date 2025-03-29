@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 export async function POST(request) {
     try {
         const body = await request.json();
-        const { conversationId, senderUserId, messageText } = body;
+        const { conversationId, senderUserId, messageText, replyTo } = body;
 
         if (messageText.length > 20000) {
             return NextResponse.json({
@@ -15,14 +15,15 @@ export async function POST(request) {
         const connection = await getConnection();
 
         const query = `
-      INSERT INTO messages (conversationId, senderUserId, messageText)
-      VALUES (?, ?, ?)
+      INSERT INTO messages (conversationId, senderUserId, messageText, replyTo)
+      VALUES (?, ?, ?, ?)
     `;
 
         const [result] = await connection.execute(query, [
             conversationId,
             senderUserId,
-            messageText.trim()
+            messageText.trim(),
+            replyTo,
         ]);
 
         const [messages] = await connection.execute(

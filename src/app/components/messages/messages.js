@@ -21,6 +21,14 @@ export default function Messages({
   const [conversationId, setConversationId] = useState(null);
   const messageEnd = useRef(null);
   const socket = useSocket();
+  const inputRef = useRef(null);
+  const [replyTo, setreplyTo] = useState(null);
+  const [contextMenu, setContextMenu] = useState({
+    visible: false,
+    x: 0,
+    y: 0,
+    message: null
+  });
 
   //Socket stuff
   useEffect(() => {
@@ -151,9 +159,13 @@ export default function Messages({
           userData={userData}
           isMobile={isMobile}
           toggleSettings={toggleSettings}
+          conversationId={conversationId}
+          ref={inputRef}
         />
       ) : (
-        <main className={styles["chat-main"]}>
+        <main
+          className={styles["chat-main"]}
+        >
           <header className={styles["chat-header"]}>
             {isMobile && (
               <button
@@ -174,38 +186,88 @@ export default function Messages({
                 alt="Contact avatar"
                 width={60}
                 height={60}
-                className={styles.avatar}
+                className={styles.profil}
               />
               <h1>{activeChat?.displayName || "Select a contact"}</h1>
             </button>
           </header>
 
-          <div className={styles["messages-container"]}>
+          <div
+            onContextMenu={(e) => {
+              e.preventDefault();
+            }}
+            onClick={() => setContextMenu({ ...contextMenu, visible: false })}
+            className={styles["messages-container"]}>
             {conversationId === null ? (
               <div className={styles.emptyChat}>You are not friends with this user</div>
             ) : messages.length > 0 ? (
-              messages.map((message) => (
-                <div
-                  key={message.messageId}
-                  className={`${styles.message} ${message.senderUserId === userData.userId
-                    ? styles.outgoing
-                    : styles.incoming
-                    }`}
-                >
-                  <div className={styles.messageContent}>
-                    {message.messageText}
-                  </div>
+              messages.map((message) => {
+                const originalMessage = message.replyTo
+                  ? messages.find(m => m.messageId === message.replyTo)
+                  : null;
+
+                return (
                   <div
-                    className={
-                      message.senderUserId === userData.userId
-                        ? styles.messageTime
-                        : styles.messageTimeLeft
-                    }
+                    id={`message-${message.messageId}`}
+                    key={message.messageId}
+                    className={`${styles.message} ${message.senderUserId === userData.userId
+                      ? styles.outgoing
+                      : styles.incoming
+                      }`}
                   >
-                    {message.sentAt}
+                    <Image
+                      src={
+                        message.senderUserId === userData.userId
+                          ? userData.profilePicPath || "https://placehold.co/50x50"
+                          : activeChat?.profilePicPath || "https://placehold.co/50x50"
+                      }
+                      width={40}
+                      height={40}
+                      alt="Sender avatar"
+                      className={styles.avatar}
+                    />
+
+                    <div className={styles.messageWrapper}>
+                      {originalMessage && (
+                        <div className={styles.replyReference}>
+                          <span className={styles.replyIcon}>↩️</span>
+                          <span className={styles.originalMessageText}>
+                            {originalMessage.messageText.length > 40
+                              ? originalMessage.messageText.substring(0, 37) + "..."
+                              : originalMessage.messageText}
+                          </span>
+                        </div>
+                      )}
+
+                      <div
+                        onContextMenu={(e) => {
+                          e.preventDefault();
+                          setContextMenu({
+                            visible: true,
+                            x: e.clientX,
+                            y: e.clientY,
+                            message: message,
+                          });
+                        }}
+                        onClick={() => setContextMenu({ ...contextMenu, visible: false })}
+                        className={styles.messageContent}
+                      >
+                        {message.messageText}
+                      </div>
+
+                      <div
+                        className={
+                          message.senderUserId === userData.userId
+                            ? styles.messageTime
+                            : styles.messageTimeLeft
+                        }
+                      >
+                        {message.sentAt}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             ) : (
               <div className={styles.emptyChat}>
                 {activeChat
@@ -221,7 +283,41 @@ export default function Messages({
             activeChat={activeChat}
             userData={userData}
             conversationId={conversationId}
+            ref={inputRef}
+            replyTo={replyTo}
+            setreplyTo={setreplyTo}
           />
+
+          {contextMenu.visible && (
+            <div
+              className={styles.menu}
+              style={{
+                position: 'fixed',
+                top: `${contextMenu.y}px`,
+                left: `${contextMenu.x}px`,
+              }}
+            >
+              <div
+                onClick={() => {
+                  setreplyTo(contextMenu.message);
+                  setContextMenu({ ...contextMenu, visible: false });
+                  inputRef.current.focus();
+                }}
+                className={styles.menuItem}>
+                Reply to: {contextMenu.message?.messageText.substring(0, 20)}...
+              </div>
+              <div
+                className={styles.menuItem}
+                onClick={() => {
+                  navigator.clipboard.writeText(contextMenu.message?.messageText || "");
+                  setContextMenu({ ...contextMenu, visible: false });
+                }}
+              >
+                Copy
+              </div>
+            </div>
+          )}
+
         </main>
       )}
     </>

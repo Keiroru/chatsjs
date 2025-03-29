@@ -11,7 +11,6 @@ import FriendRequests from "@/app/components/friendRequest/friendRequests";
 import Messages from "@/app/components/messages/messages";
 import { faArrowLeft, faTimes, faCog } from "@fortawesome/free-solid-svg-icons";
 import { useSocket } from "@/lib/socket";
-import { set } from "zod";
 
 export default function ChatClient({ userData }) {
   const [rightPanelOpen, setRightPanelOpen] = useState(false);
