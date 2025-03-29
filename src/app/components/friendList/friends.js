@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import styles from "@/app/styles/friends.module.css";
-import { useStatus } from "@/lib/socket";
 
 export default function Friends({
   userData,
@@ -13,6 +12,7 @@ export default function Friends({
   onFriendSelect,
   friends,
   setFriends,
+  messages,
 }) {
   const [filteredFriends, setFilteredFriends] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -21,9 +21,48 @@ export default function Friends({
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    async function fetchLastMessages() {
+      if (!userData?.userId) return;
+
+      try {
+        const response = await fetch(`/api/messages/lastMessages?userId=${userData.userId}`);
+        if (!response.ok) throw new Error("Failed to fetch last messages");
+
+        const lastMessages = await response.json();
+
+        if (friends.length > 0 && lastMessages.length > 0) {
+          const updatedFriends = friends.map(friend => {
+            const lastMsg = lastMessages.find(msg => msg.friendId === friend.friendId);
+
+            return {
+              ...friend,
+              lastMessage: lastMsg?.messageText
+                ? (lastMsg.messageText.length > 25
+                  ? lastMsg.messageText.substring(0, 22) + '...'
+                  : lastMsg.messageText)
+                : "No messages yet",
+            };
+          });
+
+          setFilteredFriends(updatedFriends);
+        }
+      } catch (error) {
+        console.error("Error fetching last messages:", error);
+      }
+    }
+
+    if (activeTab === "friends" && friends.length > 0) {
+      fetchLastMessages();
+    }
+  }, [userData?.userId, friends, activeTab]);
+
+  useEffect(() => {
+    let isActive = true;
+    let intervalId = null;
+
     async function fetchFriends() {
-      if (!userData?.userId) {
-        setIsLoading(false);
+      if (!userData?.userId || !isActive) {
+        if (isActive) setIsLoading(false);
         return;
       }
 
@@ -33,17 +72,33 @@ export default function Friends({
         );
         if (!response.ok) throw new Error("Failed to fetch friends");
         const data = await response.json();
-        setFriends(data);
-        setFilteredFriends(data);
+
+        if (isActive) {
+          setFriends(data);
+          setFilteredFriends(data);
+        }
       } catch (error) {
-        console.error("Error fetching friends:", error);
-        setError(error.message);
+        if (isActive) {
+          console.error("Error fetching friends:", error);
+          setError(error.message);
+        }
       } finally {
-        setIsLoading(false);
+        if (isActive) {
+          setIsLoading(false);
+        }
       }
     }
 
     fetchFriends();
+
+    intervalId = setInterval(fetchFriends, 5000);
+
+    return () => {
+      isActive = false;
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
   }, [userData?.userId, userData?.refreshTrigger, setFriends, activeTab]);
 
   useEffect(() => {
@@ -57,6 +112,38 @@ export default function Friends({
     }
   }, [searchQuery, friends]);
 
+  useEffect(() => {
+    if (!friends || !messages || activeTab !== "friends") return;
+
+    const friendsWithMessages = friends.map(friend => {
+      const friendMessages = messages.filter(msg =>
+        msg.senderUserId === friend.friendId ||
+        msg.receiverUserId === friend.friendId
+      );
+
+      friendMessages.sort((a, b) => new Date(b.sentAt) - new Date(a.sentAt));
+
+      const lastMsg = friendMessages[0];
+
+      return {
+        ...friend,
+        lastMessage: lastMsg?.messageText
+          ? (lastMsg.messageText.length > 25
+            ? lastMsg.messageText.substring(0, 22) + '...'
+            : lastMsg.messageText)
+          : "No messages",
+      };
+    });
+
+    if (searchQuery.trim() === "") {
+      setFilteredFriends(friendsWithMessages);
+    } else {
+      setFilteredFriends(friendsWithMessages.filter(friend =>
+        friend.displayName?.toLowerCase().includes(searchQuery.toLowerCase())
+      ));
+    }
+  }, [friends, messages, searchQuery, activeTab]);
+
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
   };
@@ -67,7 +154,7 @@ export default function Friends({
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
-    
+
   };
 
   return (
@@ -90,25 +177,22 @@ export default function Friends({
 
       <div className={styles.tabButtons}>
         <button
-          className={`${styles.tabButton} ${
-            activeTab === "people" ? styles.active : ""
-          }`}
+          className={`${styles.tabButton} ${activeTab === "people" ? styles.active : ""
+            }`}
           onClick={() => handleTabChange("people")}
         >
           People
         </button>
         <button
-          className={`${styles.tabButton} ${
-            activeTab === "friends" ? styles.active : ""
-          }`}
+          className={`${styles.tabButton} ${activeTab === "friends" ? styles.active : ""
+            }`}
           onClick={() => handleTabChange("friends")}
         >
           Friends
         </button>
         <button
-          className={`${styles.tabButton} ${
-            activeTab === "groups" ? styles.active : ""
-          }`}
+          className={`${styles.tabButton} ${activeTab === "groups" ? styles.active : ""
+            }`}
           onClick={() => handleTabChange("groups")}
         >
           Groups
@@ -124,9 +208,7 @@ export default function Friends({
           filteredFriends.map((friend) => (
             <button
               key={friend.friendId}
-              className={`${styles.friendItem} ${
-                activeChat?.friendId === friend.friendId ? styles.active : ""
-              }`}
+              className={`${styles.friendItem} ${activeChat?.friendId === friend.friendId ? styles.active : ""}`}
               onClick={() => handleFriendClick(friend)}
             >
               <Image
@@ -138,15 +220,17 @@ export default function Friends({
               />
               <div className={styles.friendInfo}>
                 <h3 className={styles.friendName}>{friend.displayName}</h3>
-                <p className={styles.lastMessage}>
-                  {friend.lastMessage || "Click to start chatting"}
-                </p>
+                <div className={styles.messageRow}>
+                  <p className={styles.lastMessage}>
+                    {friend.lastMessage || "No messages yet"}
+                  </p>
+                  {friend.lastMessageTime && (
+                    <span className={styles.messageTime}>{friend.lastMessageTime}</span>
+                  )}
+                </div>
               </div>
-              <span className={styles.time}>{friend.lastMessageTime}</span>
               <span
-                className={`${styles.statusIndicator} ${
-                  friend.isOnline ? styles.online : styles.offline
-                }`}
+                className={`${styles.statusIndicator} ${friend.isOnline ? styles.online : styles.offline}`}
               ></span>
             </button>
           ))

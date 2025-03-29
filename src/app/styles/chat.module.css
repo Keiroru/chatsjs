@@ -77,7 +77,6 @@
 .controls {
   display: flex;
   align-items: center;
-  gap: 10px;
 }
 
 /* Icon Button */
@@ -124,7 +123,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-top: 20px;
+  margin-top: 50px;
   margin-bottom: 20px;
 }
 
@@ -134,8 +133,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-bottom: 1px solid var(--dark_blue);
-  height: 250px;
+  border-radius: 25px;
+}
+
+.line {
+  width: 40%;
+  height: 1px;
+  border-color: var(--dark_blue);
 }
 
 /* Profile Name */

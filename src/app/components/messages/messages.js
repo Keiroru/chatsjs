@@ -93,7 +93,6 @@ export default function Messages({
           sentAt: formatMessageTime(message.sentAt),
         })),
       ])
-      console.log("Fetched messages:", data);
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
@@ -151,7 +150,6 @@ export default function Messages({
         <Settings
           userData={userData}
           isMobile={isMobile}
-          onBackToContacts={onBackToContacts}
           toggleSettings={toggleSettings}
         />
       ) : (

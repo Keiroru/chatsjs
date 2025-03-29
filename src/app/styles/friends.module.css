@@ -45,9 +45,7 @@
 }
 
 .tabButton.active {
-    color: var(--accent-color);
-    border-bottom: 2px solid var(--accent-color);
-    border: 2px solid red;
+    border-bottom: 3px solid var(--dark_blue);
 }
 
 .friendsList {
@@ -69,11 +67,12 @@
     position: relative;
     color: var(--off-white);
     border-bottom: 1px solid var(--shadow-black);
-    transition: background-color 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .friendItem.active {
-    border: 2px solid red;
+    border-left: 5px solid var(--dark_blue);
+    background-color: var(--charcoal);
 }
 
 .avatar {

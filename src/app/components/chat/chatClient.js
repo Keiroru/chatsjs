@@ -35,28 +35,18 @@ export default function ChatClient({ userData }) {
     : "No contact selected";
 
   const handleUnload = async () => {
-    const res = await fetch(`/api/auth/unload?userId=${userData.userId}`, {
+    await fetch(`/api/auth/unload?userId=${userData.userId}`, {
       method: "POST",
     });
-    if (res.ok) {
-      console.log("Unload successful");
-    } else {
-      console.error("Unload failed");
-    }
   };
 
   const handleLoad = async () => {
     if (!userData?.userId) return;
 
     try {
-      const res = await fetch(`/api/auth/load?userId=${userData.userId}`, {
+      await fetch(`/api/auth/load?userId=${userData.userId}`, {
         method: "POST",
       });
-      if (res.ok) {
-        console.log("Load successful");
-      } else {
-        console.error("Load failed");
-      }
     } catch (error) {
       console.error("Error during load:", error);
     }
@@ -66,8 +56,6 @@ export default function ChatClient({ userData }) {
     if (!socket || !userData?.userId) return;
 
     handleLoad();
-
-    console.log("Setting up socket listeners");
 
     socket.emit("user_status", {
       userId: userData.userId,
@@ -83,7 +71,6 @@ export default function ChatClient({ userData }) {
     };
 
     const handleFriendStatusChange = ({ userId, status }) => {
-      console.log("Friend status change:", userId, status);
 
       setFriends((oldFriends) =>
         oldFriends.map((f) =>
@@ -294,10 +281,11 @@ export default function ChatClient({ userData }) {
           <Image
             src={activeChat?.profilePicPath || "https://placehold.co/100x100"}
             alt="Contact profile"
-            width={125}
-            height={125}
+            width={150}
+            height={150}
             className={styles["contact-profile"]}
           />
+          <hr className={styles.line} />
           <h2 className={styles["profile-name"]}>
             {activeChat?.displayName || "Select a contact"}
           </h2>

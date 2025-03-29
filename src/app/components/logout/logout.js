@@ -25,7 +25,7 @@ export default function LogoutButton(userId) {
         <button
             onClick={handleLogout}
             disabled={loading}
-            className={styles['icon-button', 'logout-button']}
+            className={`${styles['icon-button']} ${styles['logout-button']}`}
             aria-label={loading ? "Logging out..." : "Logout"}
             title="Logout"
         >

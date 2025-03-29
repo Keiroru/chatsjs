@@ -33,6 +33,12 @@ export async function GET(request) {
           Users
         WHERE 
           Users.isLookingForFriends = 1
+          AND Users.userId != ?  -- Exclude the current user
+          AND NOT EXISTS (
+            SELECT 1 FROM Friends 
+            WHERE (Friends.userId = ? AND Friends.friendUserId = Users.userId)
+            OR (Friends.userId = Users.userId AND Friends.friendUserId = ?)
+          )
         ORDER BY 
           Users.displayName
       `;
@@ -76,7 +82,13 @@ export async function GET(request) {
       `;
     }
 
-    const [rows] = await connection.execute(query, [userId]);
+    let rows;
+    if (tab === "people") {
+      [rows] = await connection.execute(query, [userId, userId, userId]);
+    } else {
+      [rows] = await connection.execute(query, [userId]);
+    }
+
     await connection.end();
 
     const contacts = rows.map((contact) => ({

@@ -10,7 +10,6 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 export default function Settings({
   userData,
   isMobile,
-  onBackToContacts,
   toggleSettings,
 }) {
   const [selectedOption, setSelectedOption] = useState("");
@@ -27,9 +26,8 @@ export default function Settings({
         </button>
       )}
       <aside
-        className={`${style["settingsSidebar"]} ${
-          isMobile && selectedOption ? style["closed"] : style["open"]
-        }`}
+        className={`${style["settingsSidebar"]} ${isMobile && selectedOption ? style["closed"] : style["open"]
+          }`}
       >
         <h2>Settings</h2>
         <div className={style.settingsNav}>
@@ -61,9 +59,8 @@ export default function Settings({
       </aside>
 
       <main
-        className={`${style["settingsContent"]} ${
-          isMobile && selectedOption ? style["open"] : style["closed"]
-        }`}
+        className={`${style["settingsContent"]} ${isMobile && selectedOption ? style["open"] : style["closed"]
+          }`}
       >
         {selectedOption === "profile" && (
           <div className={style.settingsPanel}>

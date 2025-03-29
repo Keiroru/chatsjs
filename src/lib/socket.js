@@ -38,14 +38,9 @@ export function SocialProvider({ children, userData }) {
     if (!userData?.userId) return;
 
     try {
-      const res = await fetch(`/api/auth/unload?userId=${userData.userId}`, {
+      await fetch(`/api/auth/unload?userId=${userData.userId}`, {
         method: "POST",
       });
-      if (res.ok) {
-        console.log("Unload successful");
-      } else {
-        console.error("Unload failed");
-      }
     } catch (error) {
       console.error("Error during unload:", error);
     }
@@ -55,14 +50,9 @@ export function SocialProvider({ children, userData }) {
     if (!userData?.userId) return;
 
     try {
-      const res = await fetch(`/api/auth/load?userId=${userData.userId}`, {
+      await fetch(`/api/auth/load?userId=${userData.userId}`, {
         method: "POST",
       });
-      if (res.ok) {
-        console.log("Load successful");
-      } else {
-        console.error("Load failed");
-      }
     } catch (error) {
       console.error("Error during load:", error);
     }
@@ -70,8 +60,6 @@ export function SocialProvider({ children, userData }) {
 
   useEffect(() => {
     if (!socket || !userData?.userId) return;
-
-    console.log("Setting up socket listeners in StatusContext");
 
     handleLoad();
 
@@ -89,7 +77,6 @@ export function SocialProvider({ children, userData }) {
     };
 
     const handleFriendStatusChange = ({ userId, status }) => {
-      console.log("Friend status change:", userId, status);
       setFriends((oldFriends) =>
         oldFriends.map((f) =>
           f.friendId === userId
