@@ -34,6 +34,7 @@ export default function Messages({
   useEffect(() => {
     if (!socket) return;
 
+
     socket.on("receive_message", (newMessage) => {
       if (newMessage.conversationId === conversationId) {
         const formattedMessage = {
@@ -44,6 +45,7 @@ export default function Messages({
       }
     });
 
+    // Cleanup function
     return () => {
       socket.off("receive_message");
     };
@@ -54,7 +56,6 @@ export default function Messages({
       messageEnd.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
-
   // Conversation ID is fetched here
   const fetchConversationId = useCallback(async () => {
     try {
@@ -104,7 +105,7 @@ export default function Messages({
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
-  }, [conversationId]);
+  }, [conversationId, setMessages]);
 
   const formatMessageTime = (timestamp) => {
     const messageDate = new Date(timestamp);
@@ -151,6 +152,30 @@ export default function Messages({
       fetchConversationId();
     }
   }, [activeChat, userData, fetchConversationId]);
+
+  const deleteMessage = async (messageId) => {
+    try {
+      await fetch(`/api/messages/deleteMessage`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          messageId: messageId,
+        }),
+      });
+
+      setMessages(prevMessages =>
+        prevMessages.map(message =>
+          message.messageId === messageId
+            ? { ...message, isDeleted: 1 }
+            : message
+        )
+      );
+    } catch (error) {
+      console.error('Error deleting message:', error);
+    }
+  };
 
   return (
     <>
@@ -252,9 +277,9 @@ export default function Messages({
                           });
                         }}
                         onClick={() => setContextMenu({ ...contextMenu, visible: false })}
-                        className={styles.messageContent}
+                        className={`${styles.messageContent} ${message.isDeleted === 1 ? styles['deleted-message'] : ''}`}
                       >
-                        {message.messageText}
+                        {message.isDeleted === 1 ? "Deleted Message" : message.messageText}
                       </div>
 
                       <div
@@ -316,6 +341,15 @@ export default function Messages({
                 }}
               >
                 Copy
+              </div>
+              <div
+                className={styles.menuItem}
+                onClick={() => {
+                  deleteMessage(contextMenu.message?.messageId);
+                  setContextMenu({ ...contextMenu, visible: false });
+                }}
+              >
+                Delete
               </div>
             </div>
           )}

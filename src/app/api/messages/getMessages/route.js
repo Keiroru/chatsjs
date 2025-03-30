@@ -17,6 +17,7 @@ export async function GET(request) {
         messages.messageText, 
         messages.sentAt,
         messages.state,
+        messages.isDeleted,
         messages.isEdited,
         messages.replyTo,
         users.displayName AS senderName,
@@ -27,7 +28,6 @@ export async function GET(request) {
         users ON messages.senderUserId = users.userId
       WHERE 
         messages.conversationId = ? 
-        AND messages.isDeleted = 0
       ORDER BY 
         messages.sentAt ASC
     `;

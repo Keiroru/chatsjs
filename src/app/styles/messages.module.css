@@ -237,3 +237,9 @@
 .highlightedMessage {
   filter: brightness(1.5);
 }
+
+.deleted-message {
+  font-style: italic;
+  opacity: 0.7;
+  color: #888;
+}

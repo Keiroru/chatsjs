@@ -89,7 +89,6 @@ export default function Friends({
 
     if (activeTab === "friends" && userData?.userId) {
       messageInterval = setInterval(() => {
-        console.log("Polling for new messages...");
         fetchLastMessages();
       }, 3000);
     }
