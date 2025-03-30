@@ -198,7 +198,9 @@ export default function Messages({
             }}
             onClick={() => setContextMenu({ ...contextMenu, visible: false })}
             className={styles["messages-container"]}>
-            {conversationId === null ? (
+            {!activeChat ? (
+              <div className={styles.emptyChat}>Select someone to start chatting</div>
+            ) : conversationId === null ? (
               <div className={styles.emptyChat}>You are not friends with this user</div>
             ) : messages.length > 0 ? (
               messages.map((message) => {

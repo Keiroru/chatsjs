@@ -46,10 +46,18 @@
 /* Avatar & Button styles */
 .avatar {
   border-radius: 50%;
-  border: 2px solid var(--medium-slate, #f0f2f5);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease;
   min-width: 40px;
+  margin-bottom: 20px;
+}
+
+.borderOnline {
+  border: 2px solid var(--success, #38a169);
+}
+
+.borderOffline {
+  border: 2px solid var(--silver, #a0aec0);
 }
 
 .profil {
@@ -87,7 +95,6 @@
 .outgoing {
   align-self: flex-end;
   flex-direction: row-reverse;
-  align-items: center;
 }
 
 .messageWrapper {
@@ -121,9 +128,12 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.messageContent:hover {
-  transform: scale(1.01);
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+.incoming .messageContent:hover {
+  filter: brightness(1.2);
+}
+
+.outgoing .messageContent:hover {
+  filter: brightness(1.2);
 }
 
 .messageTime {
@@ -200,4 +210,30 @@
 .replyReference.missing {
   border-left-color: var(--silver, #a0aec0);
   background-color: rgba(100, 100, 100, 0.1);
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: var(--silver);
+  font-size: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  transition: all 0.2s ease;
+  background-color: var(--light_black);
+}
+
+.back-button:hover {
+  background-color: var(--dark_purple);
+  color: var(--off-white);
+  transform: scale(1.05);
+}
+
+.highlightedMessage {
+  filter: brightness(1.5);
 }

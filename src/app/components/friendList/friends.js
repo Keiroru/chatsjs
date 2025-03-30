@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import styles from "@/app/styles/friends.module.css";
+import { useSocket } from "@/lib/socket";
 
 export default function Friends({
   userData,
@@ -12,53 +13,17 @@ export default function Friends({
   onFriendSelect,
   friends,
   setFriends,
-  messages,
 }) {
   const [filteredFriends, setFilteredFriends] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("friends");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  useEffect(() => {
-    async function fetchLastMessages() {
-      if (!userData?.userId) return;
-
-      try {
-        const response = await fetch(`/api/messages/lastMessages?userId=${userData.userId}`);
-        if (!response.ok) throw new Error("Failed to fetch last messages");
-
-        const lastMessages = await response.json();
-
-        if (friends.length > 0 && lastMessages.length > 0) {
-          const updatedFriends = friends.map(friend => {
-            const lastMsg = lastMessages.find(msg => msg.friendId === friend.friendId);
-
-            return {
-              ...friend,
-              lastMessage: lastMsg?.messageText
-                ? (lastMsg.messageText.length > 25
-                  ? lastMsg.messageText.substring(0, 22) + '...'
-                  : lastMsg.messageText)
-                : "No messages yet",
-            };
-          });
-
-          setFilteredFriends(updatedFriends);
-        }
-      } catch (error) {
-        console.error("Error fetching last messages:", error);
-      }
-    }
-
-    if (activeTab === "friends" && friends.length > 0) {
-      fetchLastMessages();
-    }
-  }, [userData?.userId, friends, activeTab]);
+  const socket = useSocket();
 
   useEffect(() => {
     let isActive = true;
-    let intervalId = null;
+    let messageInterval = null;
 
     async function fetchFriends() {
       if (!userData?.userId || !isActive) {
@@ -89,14 +54,50 @@ export default function Friends({
       }
     }
 
-    fetchFriends();
+    async function fetchLastMessages() {
+      if (!userData?.userId || !isActive) return;
 
-    intervalId = setInterval(fetchFriends, 5000);
+      try {
+        const response = await fetch(`/api/messages/lastMessages?userId=${userData.userId}`);
+        if (!response.ok) throw new Error("Failed to fetch last messages");
+        const lastMessages = await response.json();
+
+        if (isActive && lastMessages.length > 0) {
+          setFriends(prevFriends => {
+            return prevFriends.map(friend => {
+              const lastMessage = lastMessages.find(msg => msg.friendId === friend.friendId);
+              return {
+                ...friend,
+                lastMessage: lastMessage?.messageText || "No messages yet",
+                lastMessageAt: lastMessage?.sentAt || null
+              };
+            });
+          });
+        }
+      } catch (error) {
+        if (isActive) {
+          console.error("Error fetching last messages:", error);
+        }
+      }
+    }
+
+    fetchFriends().then(() => {
+      if (activeTab === "friends") {
+        fetchLastMessages();
+      }
+    });
+
+    if (activeTab === "friends" && userData?.userId) {
+      messageInterval = setInterval(() => {
+        console.log("Polling for new messages...");
+        fetchLastMessages();
+      }, 3000);
+    }
 
     return () => {
       isActive = false;
-      if (intervalId) {
-        clearInterval(intervalId);
+      if (messageInterval) {
+        clearInterval(messageInterval);
       }
     };
   }, [userData?.userId, userData?.refreshTrigger, setFriends, activeTab]);
@@ -111,38 +112,6 @@ export default function Friends({
       setFilteredFriends(filtered);
     }
   }, [searchQuery, friends]);
-
-  useEffect(() => {
-    if (!friends || !messages || activeTab !== "friends") return;
-
-    const friendsWithMessages = friends.map(friend => {
-      const friendMessages = messages.filter(msg =>
-        msg.senderUserId === friend.friendId ||
-        msg.receiverUserId === friend.friendId
-      );
-
-      friendMessages.sort((a, b) => new Date(b.sentAt) - new Date(a.sentAt));
-
-      const lastMsg = friendMessages[0];
-
-      return {
-        ...friend,
-        lastMessage: lastMsg?.messageText
-          ? (lastMsg.messageText.length > 25
-            ? lastMsg.messageText.substring(0, 22) + '...'
-            : lastMsg.messageText)
-          : "No messages",
-      };
-    });
-
-    if (searchQuery.trim() === "") {
-      setFilteredFriends(friendsWithMessages);
-    } else {
-      setFilteredFriends(friendsWithMessages.filter(friend =>
-        friend.displayName?.toLowerCase().includes(searchQuery.toLowerCase())
-      ));
-    }
-  }, [friends, messages, searchQuery, activeTab]);
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
@@ -224,8 +193,14 @@ export default function Friends({
                   <p className={styles.lastMessage}>
                     {friend.lastMessage || "No messages yet"}
                   </p>
-                  {friend.lastMessageTime && (
-                    <span className={styles.messageTime}>{friend.lastMessageTime}</span>
+                  {friend.lastMessageAt && (
+                    <span className={styles.messageTime}>
+                      {new Date(friend.lastMessageAt).toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false,
+                      })}
+                    </span>
                   )}
                 </div>
               </div>

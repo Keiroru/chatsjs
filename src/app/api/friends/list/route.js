@@ -93,8 +93,6 @@ export async function GET(request) {
 
     const contacts = rows.map((contact) => ({
       ...contact,
-      lastMessage: "No messages",
-      lastMessageTime: null,
     }));
 
     return NextResponse.json(contacts);
