@@ -6,11 +6,13 @@ import Input from "@/app/components/messages/input/input";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSocket } from "@/lib/socket";
+import { set } from "zod";
 
 export default function Messages({
   userData,
   isMobile,
   activeChat,
+  isGroupChat,
   onBackToContacts,
   onToggleRightPanel,
   settingsOpen,
@@ -27,7 +29,10 @@ export default function Messages({
     if (!socket) return;
 
     socket.on("receive_message", (newMessage) => {
-      if (newMessage.conversationId === conversationId) {
+      if (
+        newMessage.conversationId === conversationId &&
+        conversationId !== null
+      ) {
         setMessages((prevMessages) => [...prevMessages, newMessage]);
       }
     });
@@ -46,14 +51,15 @@ export default function Messages({
   // Conversation ID is fetched here
   const fetchConversationId = useCallback(async () => {
     try {
-      const response = await fetch("/api/messages/conversationID", {
+      const response = await fetch("/api/messages/conversationGet", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           userId1: userData.userId,
-          userId2: activeChat.friendId,
+          userId2: isGroupChat ? activeChat.conversationId : activeChat.userId,
+          isGroupChat: isGroupChat,
         }),
       });
 
@@ -62,7 +68,24 @@ export default function Messages({
       if (response.ok && data.conversationId) {
         setConversationId(data.conversationId);
       } else {
-        console.error("Failed to get conversation ID:", data.error);
+        const response = await fetch("/api/messages/conversationCreate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId1: userData.userId,
+            userId2: isGroupChat
+              ? activeChat.conversationId
+              : activeChat.userId,
+            isGroupChat: isGroupChat,
+          }),
+        });
+        const data = await response.json();
+
+        if (response.ok) {
+          setConversationId(data.conversationId);
+        }
       }
     } catch (error) {
       console.error("Error fetching conversationId:", error);
@@ -71,27 +94,29 @@ export default function Messages({
 
   // Messages are fetched here
   const fetchMessages = useCallback(async () => {
-    if (!conversationId) return;
+    if (conversationId) {
+      try {
+        const response = await fetch(
+          `/api/messages/getMessages?conversationId=${conversationId}`
+        );
 
-    try {
-      const response = await fetch(
-        `/api/messages/getMessages?conversationId=${conversationId}`
-      );
+        if (!response.ok) {
+          throw new Error(`Failed to fetch messages: ${response.status}`);
+        }
 
-      if (!response.ok) {
-        throw new Error(`Failed to fetch messages: ${response.status}`);
+        const data = await response.json();
+        setMessages(data);
+      } catch (error) {
+        console.error("Error fetching messages:", error);
       }
-
-      const data = await response.json();
-      setMessages(data);
-    } catch (error) {
-      console.error("Error fetching messages:", error);
+    } else {
+      setMessages(null);
     }
   }, [conversationId]);
 
   // Fetch messages when conversationId changes
   useEffect(() => {
-    if (conversationId) {
+    if (activeChat) {
       fetchMessages();
     }
   }, [conversationId, fetchMessages]);
@@ -135,12 +160,16 @@ export default function Messages({
                 height={60}
                 className={styles.avatar}
               />
-              <h1>{activeChat?.displayName || "Select a contact"}</h1>
+              <h1>
+                {isGroupChat
+                  ? activeChat?.conversationName || "Select a contact"
+                  : activeChat?.displayName || "Select a contact"}
+              </h1>
             </button>
           </header>
 
           <div className={styles["messages-container"]}>
-            {messages.length > 0 ? (
+            {messages && messages.length > 0 ? (
               messages.map((message) => (
                 <div
                   key={message.messageId}

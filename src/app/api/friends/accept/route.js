@@ -36,25 +36,6 @@ export async function POST(request) {
 
       const { senderUserId, receiverUserId } = requests[0];
 
-      const [sender] = await connection.execute(
-        `SELECT displayName FROM Users WHERE userId = ?`,
-        [senderUserId]
-      );
-      const [receiver] = await connection.execute(
-        `SELECT displayName FROM Users WHERE userId = ?`,
-        [receiverUserId]
-      );
-
-
-      const senderName = sender[0].displayName;
-      const receiverName = receiver[0].displayName;
-      const conversationName = `${senderName} and ${receiverName}`;
-
-      await connection.execute(`INSERT INTO conversations (conversationName) VALUES (?)`, [conversationName]);
-
-      await connection.execute('INSERT INTO conversationusers (userId, conversationId) VALUES (?, (SELECT conversationId FROM conversations WHERE conversationName = ?))', [senderUserId, conversationName]);
-      await connection.execute('INSERT INTO conversationusers (userId, conversationId) VALUES (?, (SELECT conversationId FROM conversations WHERE conversationName = ?))', [receiverUserId, conversationName]);
-
       await connection.execute(
         `UPDATE FriendRequest SET status = 'accepted' WHERE requestId = ?`,
         [requestId]

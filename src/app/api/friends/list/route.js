@@ -32,32 +32,32 @@ export async function GET(request) {
         FROM 
           Users
         WHERE 
-          Users.isLookingForFriends = 1
+          Users.isLookingForFriends = true
+          AND Users.userId != ?
         ORDER BY 
           Users.displayName
       `;
     } else if (tab === "groups") {
       query = `
         SELECT 
-          Users.userId,
-          Users.displayName,
-          Users.displayId,
-          Users.profilePicPath,
-          Users.bio,
-          Users.isOnline,
-          Users.createdAt,
+          conversations.conversationId,
+          conversations.conversationName,
+          conversations.createdAt
         FROM 
-          Users
+          conversations
+        JOIN 
+          conversationusers ON conversationusers.conversationId = conversations.conversationId 
         WHERE 
-          
+          conversationusers.userId = ?
+          and conversations.isGroupChat = 1
         ORDER BY 
-          Users.displayName
+          conversations.conversationName
       `;
     } else {
       // Default friends
       query = `
         SELECT 
-          Users.userId as friendId,
+          Users.userId,
           Users.displayName,
           Users.displayId,
           Users.profilePicPath,

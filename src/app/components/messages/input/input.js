@@ -1,10 +1,14 @@
 import styles from "@/app/styles/input.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-import { useState, useRef } from "react";
+import { useState, useRef, act } from "react";
 import { useSocket } from "@/lib/socket";
 
-export default function Input({ activeChat, userData, conversationId }) {
+export default function Input({
+  activeChat,
+  userData,
+  conversationId,
+}) {
   const [messageInput, setMessageInput] = useState("");
   const [loading, setLoading] = useState(false);
   const inputRef = useRef(null);
@@ -37,12 +41,18 @@ export default function Input({ activeChat, userData, conversationId }) {
         }),
       });
 
-      if (response.ok) {
-        setMessageInput("");
-        inputRef.current?.focus();
-      } else {
-        console.error("Failed to send message via API");
+      if (!response.ok) {
+        console.error("Failed to send message via API:", response.statusText);
+        return;
       }
+
+      setMessageInput("");
+
+      setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
+      }, 0);
     } catch (error) {
       console.error("Error sending message:", error);
     } finally {
@@ -60,10 +70,7 @@ export default function Input({ activeChat, userData, conversationId }) {
         value={messageInput}
         onChange={(e) => setMessageInput(e.target.value)}
         onKeyDown={(e) =>
-          e.key === "Enter" &&
-          messageInput.trim() &&
-          handleSendMessage() &&
-          e.target.focus()
+          e.key === "Enter" && messageInput.trim() && handleSendMessage()
         }
         disabled={!activeChat || loading}
         id="message-input"

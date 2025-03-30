@@ -5,10 +5,11 @@ import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "@/app/styles/chat.module.css";
 import Logout from "@/app/components/logout/logout";
-import Friends from "@/app/components/friendList/friends";
+import PeopleList from "@/app/components/peopleList/peopleList";
 import AddFriend from "@/app/components/addFriend/addFriend";
 import FriendRequests from "@/app/components/friendRequest/friendRequests";
 import Messages from "@/app/components/messages/messages";
+import GroupChat from "@/app/components/createGroupChat/createGroupChat";
 import { faArrowLeft, faTimes, faCog } from "@fortawesome/free-solid-svg-icons";
 import { useSocket } from "@/lib/socket";
 
@@ -20,10 +21,13 @@ export default function ChatClient({ userData }) {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [addFriendTabOpen, setAddFriendTabOpen] = useState(false);
   const [acceptRequestTabOpen, setAcceptRequestTabOpen] = useState(false);
+  const [isGroupChat, setIsGroupChat] = useState(false);
   const [refresh, setRefresh] = useState(0);
   const [friends, setFriends] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [groupChatName, setGroupChatName] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("friends");
   const socket = useSocket();
 
   const formattedDate = activeChat?.createdAt
@@ -157,11 +161,11 @@ export default function ChatClient({ userData }) {
     }
   };
 
-  const handleFriendClick = (friend) => {
+  const handleChatClick = (chatId, getGroupChat) => {
     setActiveChat({
-      ...friend,
-      isOnline: friend.isOnline || false,
-      status: friend.status || "offline",
+      ...chatId,
+      isOnline: chatId.isOnline || false,
+      status: chatId.status || "offline",
     });
 
     if (settingsOpen) {
@@ -169,6 +173,11 @@ export default function ChatClient({ userData }) {
     }
     if (isMobile) {
       setLeftPanelOpen(false);
+    }
+    if (getGroupChat) {
+      setIsGroupChat(true);
+    } else {
+      setIsGroupChat(false);
     }
   };
 
@@ -182,6 +191,10 @@ export default function ChatClient({ userData }) {
 
   const handleAddFriendTabOpen = () => {
     setAddFriendTabOpen((prev) => !prev);
+  };
+
+  const handleSetGroupChatName = (name) => {
+    setGroupChatName(name);
   };
 
   return (
@@ -229,14 +242,19 @@ export default function ChatClient({ userData }) {
           </div>
         </header>
 
-        <Friends
+        <PeopleList
           userData={{ ...userData, refreshTrigger: refresh }}
           activeChat={activeChat}
-          onFriendSelect={handleFriendClick}
+          onChatSelect={handleChatClick}
           messages={messages}
           friends={friends}
           setFriends={setFriends}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
         />
+        
+        {activeTab === "groups" && <GroupChat userData={userData} />}
+
         <div className={styles.friendControll}>
           {!acceptRequestTabOpen && (
             <AddFriend
@@ -260,6 +278,7 @@ export default function ChatClient({ userData }) {
         userData={userData}
         isMobile={isMobile}
         activeChat={activeChat}
+        isGroupChat={isGroupChat}
         onBackToContacts={handleBackToContacts}
         onToggleRightPanel={toggleRightPanel}
         toggleSettings={toggleSettings}
@@ -267,6 +286,7 @@ export default function ChatClient({ userData }) {
         settingsOpen={settingsOpen}
         messages={messages}
         setMessages={setMessages}
+        groupChatName={groupChatName}
       />
 
       <aside
