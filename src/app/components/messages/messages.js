@@ -153,7 +153,9 @@ export default function Messages({
     }
   }, [activeChat, userData, fetchConversationId]);
 
-  const deleteMessage = async (messageId) => {
+  const deleteMessage = async (messageId, senderId) => {
+    if(senderId !== userData.userId) return;
+
     try {
       await fetch(`/api/messages/deleteMessage`, {
         method: 'POST',
@@ -170,7 +172,7 @@ export default function Messages({
           message.messageId === messageId
             ? { ...message, isDeleted: 1 }
             : message
-        )
+        ),
       );
     } catch (error) {
       console.error('Error deleting message:', error);
@@ -259,9 +261,11 @@ export default function Messages({
                         <div className={styles.replyReference}>
                           <span className={styles.replyIcon}>↩️</span>
                           <span className={styles.originalMessageText}>
-                            {originalMessage.messageText.length > 40
-                              ? originalMessage.messageText.substring(0, 37) + "..."
-                              : originalMessage.messageText}
+                          {originalMessage && originalMessage.isDeleted === 0 
+  ? originalMessage.messageText.length > 40
+    ? originalMessage.messageText.substring(0, 37) + "..."
+    : originalMessage.messageText
+  : "Deleted Message"}
                           </span>
                         </div>
                       )}
@@ -269,14 +273,18 @@ export default function Messages({
                       <div
                         onContextMenu={(e) => {
                           e.preventDefault();
+                          console.log("right click", message);
                           setContextMenu({
                             visible: true,
                             x: e.clientX,
                             y: e.clientY,
-                            message: message,
+                            message: message.isDeleted === 1 ? null : message,
+                            senderId: message.senderUserId,
                           });
                         }}
-                        onClick={() => setContextMenu({ ...contextMenu, visible: false })}
+                        onClick={() => {
+                          setContextMenu({ ...contextMenu, visible: false });
+                        }}
                         className={`${styles.messageContent} ${message.isDeleted === 1 ? styles['deleted-message'] : ''}`}
                       >
                         {message.isDeleted === 1 ? "Deleted Message" : message.messageText}
@@ -345,7 +353,7 @@ export default function Messages({
               <div
                 className={styles.menuItem}
                 onClick={() => {
-                  deleteMessage(contextMenu.message?.messageId);
+                  deleteMessage(contextMenu.message?.messageId, contextMenu.senderId);
                   setContextMenu({ ...contextMenu, visible: false });
                 }}
               >

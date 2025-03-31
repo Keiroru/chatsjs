@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import styles from "@/app/styles/friends.module.css";
-import { useSocket } from "@/lib/socket";
 
 export default function Friends({
   userData,
@@ -19,7 +18,6 @@ export default function Friends({
   const [activeTab, setActiveTab] = useState("friends");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const socket = useSocket();
 
   useEffect(() => {
     let isActive = true;

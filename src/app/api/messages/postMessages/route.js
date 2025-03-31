@@ -12,6 +12,8 @@ export async function POST(request) {
             }, { status: 400 });
         }
 
+        const valami = decodeURIComponent(messageText);
+
         const connection = await getConnection();
 
         const query = `
@@ -22,12 +24,12 @@ export async function POST(request) {
         const [result] = await connection.execute(query, [
             conversationId,
             senderUserId,
-            messageText.trim(),
+            valami.trim(),
             replyTo,
         ]);
 
         const [messages] = await connection.execute(
-            `SELECT * FROM messages WHERE messageId = LAST_INSERT_ID()`
+            `SELECT * FROM messages WHERE messageId = ?`,[result.insertId]
         );
 
         await connection.end();

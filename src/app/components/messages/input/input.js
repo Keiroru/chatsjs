@@ -33,18 +33,6 @@ const Input = forwardRef(
       }
 
       try {
-        const messageData = {
-          conversationId: conversationId,
-          senderUserId: userData.userId,
-          messageText: messageInput.trim(),
-          senderName: userData.displayName,
-          senderProfilePic: userData.profilePicPath,
-          sentAt: new Date().toISOString(),
-          replyTo: replyTo ? replyTo.messageId : null,
-        };
-
-        socket.emit("send_message", messageData);
-
         const response = await fetch("/api/messages/postMessages", {
           method: "POST",
           headers: {
@@ -57,10 +45,22 @@ const Input = forwardRef(
             replyTo: replyTo ? replyTo.messageId : null,
           }),
         });
-
+        var res = await response.json();
+        res = res.data.messageId;
+        const messageData = {
+          conversationId: conversationId,
+          messageId: res,
+          senderUserId: userData.userId,
+          messageText: messageInput.trim(),
+          senderName: userData.displayName,
+          senderProfilePic: userData.profilePicPath,
+          sentAt: new Date().toISOString(),
+          replyTo: replyTo ? replyTo.messageId : null,
+        };
         if (response.ok) {
           setMessageInput("");
           setreplyTo(null);
+          socket.emit("send_message", messageData);
           if (ref?.current) {
             ref.current.focus();
           }
