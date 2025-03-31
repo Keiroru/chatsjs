@@ -153,7 +153,7 @@ export default function PeopleList({
           ) : activeTab === "groups" ? (
             filteredPeople.map((group) => (
               <button
-                key={group.conversationId}
+                key={`${group.conversationId}-${group.userId}`}
                 className={`${styles.friendItem} ${
                   activeChat?.conversationId === group.conversationId
                     ? styles.active
@@ -163,7 +163,7 @@ export default function PeopleList({
               >
                 <Image
                   src={group?.profilePicPath || "https://placehold.co/50x50"}
-                  alt="Friend avatar"
+                  alt="Group avatar"
                   width={40}
                   height={40}
                   className={styles.avatar}

@@ -253,7 +253,7 @@ export default function ChatClient({ userData }) {
           setActiveTab={setActiveTab}
         />
         
-        {activeTab === "groups" && <GroupChat userData={userData} groupChatName={groupChatName} />}
+        {activeTab === "groups" && <GroupChat userData={userData} groupChatName={groupChatName} setGroupChatName={handleSetGroupChatName}/>}
 
         <div className={styles.friendControll}>
           {!acceptRequestTabOpen && (
