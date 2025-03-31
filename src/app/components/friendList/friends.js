@@ -56,18 +56,22 @@ export default function Friends({
       if (!userData?.userId || !isActive) return;
 
       try {
-        const response = await fetch(`/api/messages/lastMessages?userId=${userData.userId}`);
+        const response = await fetch(
+          `/api/messages/lastMessages?userId=${userData.userId}`
+        );
         if (!response.ok) throw new Error("Failed to fetch last messages");
         const lastMessages = await response.json();
 
         if (isActive && lastMessages.length > 0) {
-          setFriends(prevFriends => {
-            return prevFriends.map(friend => {
-              const lastMessage = lastMessages.find(msg => msg.friendId === friend.friendId);
+          setFriends((prevFriends) => {
+            return prevFriends.map((friend) => {
+              const lastMessage = lastMessages.find(
+                (msg) => msg.friendId === friend.friendId
+              );
               return {
                 ...friend,
                 lastMessage: lastMessage?.messageText || "No messages yet",
-                lastMessageAt: lastMessage?.sentAt || null
+                lastMessageAt: lastMessage?.sentAt || null,
               };
             });
           });
@@ -120,7 +124,6 @@ export default function Friends({
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
-
   };
 
   return (
@@ -143,22 +146,25 @@ export default function Friends({
 
       <div className={styles.tabButtons}>
         <button
-          className={`${styles.tabButton} ${activeTab === "people" ? styles.active : ""
-            }`}
+          className={`${styles.tabButton} ${
+            activeTab === "people" ? styles.active : ""
+          }`}
           onClick={() => handleTabChange("people")}
         >
           People
         </button>
         <button
-          className={`${styles.tabButton} ${activeTab === "friends" ? styles.active : ""
-            }`}
+          className={`${styles.tabButton} ${
+            activeTab === "friends" ? styles.active : ""
+          }`}
           onClick={() => handleTabChange("friends")}
         >
           Friends
         </button>
         <button
-          className={`${styles.tabButton} ${activeTab === "groups" ? styles.active : ""
-            }`}
+          className={`${styles.tabButton} ${
+            activeTab === "groups" ? styles.active : ""
+          }`}
           onClick={() => handleTabChange("groups")}
         >
           Groups
@@ -174,7 +180,9 @@ export default function Friends({
           filteredFriends.map((friend) => (
             <button
               key={friend.friendId}
-              className={`${styles.friendItem} ${activeChat?.friendId === friend.friendId ? styles.active : ""}`}
+              className={`${styles.friendItem} ${
+                activeChat?.friendId === friend.friendId ? styles.active : ""
+              }`}
               onClick={() => handleFriendClick(friend)}
             >
               <Image
@@ -193,8 +201,8 @@ export default function Friends({
                   {friend.lastMessageAt && (
                     <span className={styles.messageTime}>
                       {new Date(friend.lastMessageAt).toLocaleTimeString([], {
-                        hour: '2-digit',
-                        minute: '2-digit',
+                        hour: "2-digit",
+                        minute: "2-digit",
                         hour12: false,
                       })}
                     </span>
@@ -202,7 +210,9 @@ export default function Friends({
                 </div>
               </div>
               <span
-                className={`${styles.statusIndicator} ${friend.isOnline ? styles.online : styles.offline}`}
+                className={`${styles.statusIndicator} ${
+                  friend.isOnline ? styles.online : styles.offline
+                }`}
               ></span>
             </button>
           ))

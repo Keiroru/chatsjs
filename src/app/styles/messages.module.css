@@ -239,7 +239,7 @@
 }
 
 .deleted-message {
-  font-style: italic;
-  opacity: 0.7;
+  font-style: italic !important;
+  opacity: 0.7 !important;
   color: #888;
 }

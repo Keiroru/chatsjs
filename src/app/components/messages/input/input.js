@@ -5,10 +5,7 @@ import React, { forwardRef, useState, useEffect } from "react";
 import { useSocket } from "@/lib/socket";
 
 const Input = forwardRef(
-  (
-    { activeChat, userData, conversationId, replyTo, setreplyTo },
-    ref
-  ) => {
+  ({ activeChat, userData, conversationId, replyTo, setreplyTo }, ref) => {
     const [messageInput, setMessageInput] = useState("");
     const [loading, setLoading] = useState(false);
     const socket = useSocket();
@@ -26,7 +23,7 @@ const Input = forwardRef(
       if (messageInput.length > 20000) {
         alert(
           "Message too long. Please shorten it. Max 20,000 characters. Current char count: " +
-          messageInput.length
+            messageInput.length
         );
         setLoading(false);
         return;
@@ -56,6 +53,7 @@ const Input = forwardRef(
           senderProfilePic: userData.profilePicPath,
           sentAt: new Date().toISOString(),
           replyTo: replyTo ? replyTo.messageId : null,
+          isDeleted: 0,
         };
         if (response.ok) {
           setMessageInput("");
@@ -111,6 +109,7 @@ const Input = forwardRef(
               onChange={(e) => setMessageInput(e.target.value)}
               onKeyDown={handleKeyDown}
               disabled={!activeChat || loading}
+              autoComplete="off"
               id="message-input"
             />
             <button

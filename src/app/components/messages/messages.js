@@ -302,10 +302,26 @@ export default function Messages({
 
                     <div className={styles.messageWrapper}>
                       {originalMessage && (
-                        <div className={styles.replyReference}>
+                        <div
+                          className={styles.replyReference}
+                          onClick={() => {
+                            const scroll = document.getElementById(
+                              `message-${originalMessage.messageId}`
+                            );
+                            if (scroll) {
+                              scroll.scrollIntoView({ behavior: "smooth" });
+                            }
+                          }}
+                        >
                           <span className={styles.replyIcon}>↩️</span>
-                          <span className={styles.originalMessageText}>
-                            {originalMessage && originalMessage.isDeleted === 0
+                          <span
+                            className={`${
+                              originalMessage.isDeleted === 1
+                                ? styles["deleted-message"]
+                                : ""
+                            }`}
+                          >
+                            {originalMessage.isDeleted === 0
                               ? originalMessage.messageText.length > 40
                                 ? originalMessage.messageText.substring(0, 37) +
                                   "..."

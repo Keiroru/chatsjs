@@ -28,9 +28,9 @@ export default function ChatClient({ userData }) {
 
   const formattedDate = activeChat?.createdAt
     ? new Date(activeChat.createdAt)
-      .toISOString()
-      .split("T")[0]
-      .replace(/-/g, ".")
+        .toISOString()
+        .split("T")[0]
+        .replace(/-/g, ".")
     : "No contact selected";
 
   const handleUnload = async () => {
@@ -70,15 +70,14 @@ export default function ChatClient({ userData }) {
     };
 
     const handleFriendStatusChange = ({ userId, status }) => {
-
       setFriends((oldFriends) =>
         oldFriends.map((f) =>
           f.friendId === userId
             ? {
-              ...f,
-              status,
-              isOnline: status === "online",
-            }
+                ...f,
+                status,
+                isOnline: status === "online",
+              }
             : f
         )
       );
@@ -180,12 +179,14 @@ export default function ChatClient({ userData }) {
 
   return (
     <div
-      className={`${styles["chat-container"]} ${isMobile ? styles["mobile"] : ""
-        } ${rightPanelOpen ? styles["right-open"] : ""}`}
+      className={`${styles["chat-container"]} ${
+        isMobile ? styles["mobile"] : ""
+      } ${rightPanelOpen ? styles["right-open"] : ""}`}
     >
       <aside
-        className={`${styles["sidebar"]} ${styles["left-sidebar"]} ${leftPanelOpen ? styles["open"] : styles["closed"]
-          }`}
+        className={`${styles["sidebar"]} ${styles["left-sidebar"]} ${
+          leftPanelOpen ? styles["open"] : styles["closed"]
+        }`}
       >
         <header className={styles["sidebar-header"]}>
           <div className={styles["user-info"]}>
@@ -262,8 +263,9 @@ export default function ChatClient({ userData }) {
       />
 
       <aside
-        className={`${styles["sidebar"]} ${styles["right-sidebar"]} ${rightPanelOpen ? styles["open"] : ""
-          }`}
+        className={`${styles["sidebar"]} ${styles["right-sidebar"]} ${
+          rightPanelOpen ? styles["open"] : ""
+        }`}
       >
         <header className={styles["sidebar-header"]}>
           <button
@@ -290,8 +292,9 @@ export default function ChatClient({ userData }) {
           </h2>
           <span className={styles.profileId}>#{activeChat?.displayId}</span>
           <span
-            className={`${styles["status-badge"]} ${activeChat?.isOnline ? styles["online"] : styles["offline"]
-              }`}
+            className={`${styles["status-badge"]} ${
+              activeChat?.isOnline ? styles["online"] : styles["offline"]
+            }`}
           >
             {activeChat?.isOnline ? "Online" : "Offline"}
           </span>
