@@ -66,6 +66,7 @@ export default function PeopleList({
   };
 
   const handleTabChange = (tab) => {
+    setError(null);
     setActiveTab(tab);
   };
 

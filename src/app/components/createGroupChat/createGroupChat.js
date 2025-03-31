@@ -74,6 +74,12 @@ export default function CreateGroupChat({
         throw new Error("Failed to create group chat");
       }
       // const response = await res.json();
+
+      handleContinueTab();
+      handleNewTab();
+      setGroupChatName("");
+      setSelectedFriends([]);
+      setSearchQuery("");
     } catch (error) {
       console.error(error);
     }
