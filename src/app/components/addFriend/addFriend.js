@@ -8,15 +8,17 @@ export default function AddFriend({
   addFriendTabOpen,
   setAddFriendTabOpen,
 }) {
-  const [receiverUserName, setUsername] = useState(""); // Input field for username
-  const [receiverDisplayId, setReceiverDisplayId] = useState(""); // Receiver's userId
+  const [receiverUserName, setUsername] = useState("");
+  const [receiverDisplayId, setReceiverDisplayId] = useState("");
   const [status, setStatus] = useState({ type: null, message: "" });
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingTime, setLoadingTime] = useState(false);
 
   const handleAddFriend = async () => {
     if (!receiverDisplayId.trim() || !receiverUserName.trim()) return;
 
     setIsLoading(true);
+    setLoadingTime(true);
     setStatus({ type: null, message: "" });
 
     try {
@@ -41,11 +43,13 @@ export default function AddFriend({
         });
         setUsername("");
         setReceiverDisplayId("");
+        setTimeout(() => setStatus({ type: null, message: "" }), 5000);
       } else {
         setStatus({
           type: "error",
           message: data.error || "Failed to send friend request",
         });
+        setTimeout(() => setStatus({ type: null, message: "" }), 5000);
       }
     } catch (error) {
       console.error("Error adding friend:", error);
@@ -53,8 +57,13 @@ export default function AddFriend({
         type: "error",
         message: "An error occurred. Please try again.",
       });
+      setTimeout(() => setStatus({ type: null, message: "" }), 5000);
     } finally {
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+        setLoadingTime(false);
+        setStatus({ type: null, message: "" });
+      }, 5000);
     }
   };
 
@@ -76,6 +85,11 @@ export default function AddFriend({
                 }
               >
                 {status.message}
+                {isLoading && loadingTime && (
+              <div className={styles.loaderContainer}>
+                <div className={styles.loader}></div>
+              </div>
+            )}
               </div>
             )}
             <button onClick={setAddFriendTabOpen} className={styles.button}>

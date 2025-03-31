@@ -5,7 +5,6 @@ rendes szerveren való futtatás
 képek normális lekezelése
 end to end ecryption - ha lesz idő
 attachement upload
-Friend request sent successfully! üzenet tűnjön el
 reject friend request rework
 blocked people
 block user from using site
@@ -14,7 +13,6 @@ edit or delete messages
 forgot password
 better message loading
 new message notification
-reply to message
 better styling
 call function
 group chat view members and set admin
@@ -23,3 +21,8 @@ admin can add and delete users, make others admin, change name and [delete other
 better message error handling
 kis és nagybetű sensitive friend request
 message scroll in rework
+message break word fix
+shift enter
+
+
+NINCS GONDOLKOZÁS!!!

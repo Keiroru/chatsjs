@@ -52,7 +52,7 @@ export default function Input({
         if (inputRef.current) {
           inputRef.current.focus();
         }
-      }, 0);
+      },1);
     } catch (error) {
       console.error("Error sending message:", error);
     } finally {
