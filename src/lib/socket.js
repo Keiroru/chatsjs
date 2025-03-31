@@ -81,10 +81,10 @@ export function SocialProvider({ children, userData }) {
         oldFriends.map((f) =>
           f.friendId === userId
             ? {
-              ...f,
-              status,
-              isOnline: status === "online",
-            }
+                ...f,
+                status,
+                isOnline: status === "online",
+              }
             : f
         )
       );

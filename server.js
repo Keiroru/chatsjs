@@ -35,6 +35,10 @@ io.on("connection", (socket) => {
     io.emit("receive_message", data);
   });
 
+  socket.on("delete_message", (data) => {
+    io.emit("delete", data);
+  });
+
   socket.on("user_status", ({ userId, status }) => {
     connectedUsers[userId] = { socketId: socket.id, status: status };
 
