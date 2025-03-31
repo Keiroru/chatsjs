@@ -3,7 +3,7 @@ import { getConnection } from "@/lib/db";
 
 export async function POST(request) {
   try {
-    const { userId1, userId2, groupChatName } =
+    const { userId1, userId2, groupChatName, otherUsers } =
       await request.json();
     const connection = await getConnection();
 
@@ -14,10 +14,12 @@ export async function POST(request) {
           [groupChatName, 1]
         );
 
-        await connection.execute(
-          `INSERT INTO conversationUsers (userId, conversationId) VALUES (?, ?)`,
-          [userId1, result.insertId]
-        );
+        otherUsers.forEach((user, index) => {
+          connection.execute(
+            `INSERT INTO conversationUsers (userId, conversationId, isAdmin) VALUES (?, ?, ?)`,
+            [user, result.insertId, index === 0 ? 1 : 0]
+          );
+        });
 
         await connection.end();
         return NextResponse.json({

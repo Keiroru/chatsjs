@@ -9,7 +9,6 @@ reject friend request rework
 blocked people
 block user from using site
 message state (sent, delivered, seen)
-edit or delete messages
 forgot password
 better message loading
 new message notification

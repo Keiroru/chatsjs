@@ -2,8 +2,7 @@ import styles from "@/app/styles/groupChat.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
-import { useSocket } from "@/lib/socket";
-import Image from 'next/image';
+import Image from "next/image";
 
 export default function CreateGroupChat({
   userData,
@@ -13,6 +12,7 @@ export default function CreateGroupChat({
   const [newTabOpen, setNewTabOpen] = useState(false);
   const [continueTabOpen, setContinueTabOpen] = useState(false);
   const [friends, setFriends] = useState([]);
+  const [selectedFriends, setSelectedFriends] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredPeople, setFilteredPeople] = useState([]);
 
@@ -37,33 +37,47 @@ export default function CreateGroupChat({
     if (searchQuery.trim() === "") {
       setFilteredPeople(friends);
     } else {
-      const filtered = friends.filter((friend) =>
-        friend.displayName?.toLowerCase().includes(searchQuery.toLowerCase())
+      const filtered = friends.filter(
+        (friend) =>
+          friend.displayName
+            ?.toLowerCase()
+            .includes(searchQuery.toLowerCase()) ||
+          friend.displayId?.includes(searchQuery)
       );
       setFilteredPeople(filtered);
     }
   }, [searchQuery, friends]);
 
-  // const res = await fetch(`${baseUrl}/api/messages/conversationCreate`, {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({
-  //           userId1: senderUserId,
-  //           userId2: recieverUserId,
-  //           groupChatName,
-  //           isGroupChat,
-  //         }),
-  //       });
+  const createGroupChat = async () => {
+    var allUsers = [];
 
-  //       if (!res.ok) {
-  //         throw new Error("Failed to create conversation");
-  //       }
+    allUsers.push(userData.userId);
+    selectedFriends.forEach((friend) => {
+      allUsers.push(friend.userId);
+    });
 
-  //       response = await res.json();
+    try {
+      const res = await fetch(`/api/messages/conversationCreate`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId1: null,
+          userId2: null,
+          groupChatName,
+          otherUsers: allUsers,
+        }),
+      });
 
-  //     const finalConversationId = conversationId ?? response.conversationId;
+      if (!res.ok) {
+        throw new Error("Failed to create group chat");
+      }
+      // const response = await res.json();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleNewTab = () => {
     setNewTabOpen((prev) => !prev);
@@ -75,6 +89,16 @@ export default function CreateGroupChat({
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
+  };
+
+  const toggleFriendSelection = (friend) => {
+    setSelectedFriends((prevSelected) => {
+      if (prevSelected.some((f) => f.userId === friend.userId)) {
+        return prevSelected.filter((f) => f.userId !== friend.userId);
+      } else {
+        return [...prevSelected, friend];
+      }
+    });
   };
 
   return (
@@ -112,54 +136,64 @@ export default function CreateGroupChat({
       {continueTabOpen && (
         <div className={styles.createContainer}>
           <div className={styles.createContainerMenu}>
-            <p>Create new group chat as {groupChatName}</p>
-            <div className={styles.searchContainer}>
-        <div className={styles.searchInput}>
-          <input
-            type="text"
-            placeholder="Search someone"
-            value={searchQuery}
-            onChange={handleSearch}
-            aria-label="Search someone"
-            className={styles.searchField}
-          />
-          <FontAwesomeIcon icon={faSearch} className={styles.searchIcon} />
-        </div>
-      </div>
-            <div className={styles.friendsList}>
-            {friends.map((friend) => (
-              <button
-                key={friend.userId}
-                className={`${styles.friendItem} ${""
-                  // activeChat?.userId === friend.userId ? styles.active : ""
-                }`}
-                // onClick={handleselected}
-              >
-                <Image
-                  src={friend?.profilePicPath || "https://placehold.co/50x50"}
-                  alt="Friend avatar"
-                  width={40}
-                  height={40}
-                  className={styles.avatar}
-                />
-                  <div className={styles.friendInfo}>
-                  <h3 className={styles.friendName}>{friend.displayName}</h3>
-                  <p className={styles.displayId}>
-                    #{friend.displayId}
-                  </p>
+            <div className={styles.wrapper}>
+              <p>Create new group chat as {groupChatName}</p>
+              <div className={styles.searchContainer}>
+                <div className={styles.searchInput}>
+                  <input
+                    type="text"
+                    placeholder="Search someone"
+                    value={searchQuery}
+                    onChange={handleSearch}
+                    aria-label="Search someone"
+                    className={styles.searchField}
+                  />
+                  <FontAwesomeIcon
+                    icon={faSearch}
+                    className={styles.searchIcon}
+                  />
                 </div>
-                <span className={styles.time}>{friend.lastMessageTime}</span>
-                <span
-                  className={`${styles.statusIndicator} ${
-                    friend.isOnline ? styles.online : styles.offline
-                  }`}
-                ></span>
-              </button>
-            ))}
-            </div>
-            <div className={styles.buttonsHolder}>
-              <button onClick={handleContinueTab} className={styles.backButton}>Back</button>
-              <button className={styles.goButton}>Create</button>
+              </div>
+              <div className={styles.friendsList}>
+                {filteredPeople.map((friend) => (
+                  <button
+                    key={friend.userId}
+                    className={`${styles.friendItem} ${
+                      selectedFriends.some((f) => f.userId === friend.userId)
+                        ? styles.active
+                        : ""
+                    }`}
+                    onClick={() => toggleFriendSelection(friend)}
+                  >
+                    <Image
+                      src={
+                        friend?.profilePicPath || "https://placehold.co/50x50"
+                      }
+                      alt="Friend avatar"
+                      width={40}
+                      height={40}
+                      className={styles.avatar}
+                    />
+                    <div className={styles.friendInfo}>
+                      <h3 className={styles.friendName}>
+                        {friend.displayName}
+                      </h3>
+                      <p className={styles.displayId}>#{friend.displayId}</p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+              <div className={styles.buttonsHolder}>
+                <button
+                  onClick={handleContinueTab}
+                  className={styles.backButton}
+                >
+                  Back
+                </button>
+                <button onClick={createGroupChat} className={styles.goButton}>
+                  Create
+                </button>
+              </div>
             </div>
           </div>
         </div>
