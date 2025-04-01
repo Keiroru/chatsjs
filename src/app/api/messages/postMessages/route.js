@@ -12,7 +12,7 @@ export async function POST(request) {
             }, { status: 400 });
         }
 
-        const valami = decodeURIComponent(messageText);
+        const decodedMessage = decodeURIComponent(messageText);
 
         const connection = await getConnection();
 
@@ -24,7 +24,7 @@ export async function POST(request) {
         const [result] = await connection.execute(query, [
             conversationId,
             senderUserId,
-            valami.trim(),
+            decodedMessage.trim(),
             replyTo,
         ]);
 

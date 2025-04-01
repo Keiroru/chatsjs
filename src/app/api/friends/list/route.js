@@ -22,7 +22,7 @@ export async function GET(request) {
     if (tab === "people") {
       query = `
         SELECT 
-          Users.userId as friendId,
+          Users.userId,
           Users.displayName,
           Users.displayId,
           Users.profilePicPath,
@@ -45,25 +45,24 @@ export async function GET(request) {
     } else if (tab === "groups") {
       query = `
         SELECT 
-          Users.userId as friendId,
-          Users.displayName,
-          Users.displayId,
-          Users.profilePicPath,
-          Users.bio,
-          Users.isOnline,
-          Users.createdAt
+          conversations.conversationId,
+          conversations.conversationName,
+          conversations.createdAt
         FROM 
-          Users
+          conversations
+        JOIN 
+          conversationusers ON conversationusers.conversationId = conversations.conversationId 
         WHERE 
-          
+          conversationusers.userId = ?
+          and conversations.isGroupChat = 1
         ORDER BY 
-          Users.displayName
+          conversations.conversationName
       `;
     } else {
       // Default friends
       query = `
         SELECT 
-          Users.userId as friendId,
+          Users.userId,
           Users.displayName,
           Users.displayId,
           Users.profilePicPath,

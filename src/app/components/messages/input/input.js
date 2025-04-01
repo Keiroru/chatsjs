@@ -42,8 +42,10 @@ const Input = forwardRef(
             replyTo: replyTo ? replyTo.messageId : null,
           }),
         });
+
         var res = await response.json();
         res = res.data.messageId;
+
         const messageData = {
           conversationId: conversationId,
           messageId: res,
@@ -59,9 +61,11 @@ const Input = forwardRef(
           setMessageInput("");
           setreplyTo(null);
           socket.emit("send_message", messageData);
-          if (ref?.current) {
-            ref.current.focus();
-          }
+          setTimeout(() => {
+            if (ref.current) {
+              ref.current.focus();
+            }
+          }, 1);
         } else {
           console.error("Failed to send message via API");
         }

@@ -11,6 +11,7 @@ export default function Messages({
   userData,
   isMobile,
   activeChat,
+  isGroupChat,
   onBackToContacts,
   onToggleRightPanel,
   settingsOpen,
@@ -84,14 +85,15 @@ export default function Messages({
   // Conversation ID is fetched here
   const fetchConversationId = useCallback(async () => {
     try {
-      const response = await fetch("/api/messages/conversationID", {
+      const response = await fetch("/api/messages/conversationGet", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           userId1: userData.userId,
-          userId2: activeChat.friendId,
+          userId2: isGroupChat ? activeChat.conversationId : activeChat.userId,
+          isGroupChat: isGroupChat,
         }),
       });
 
@@ -100,7 +102,24 @@ export default function Messages({
       if (response.ok && data.conversationId) {
         setConversationId(data.conversationId);
       } else {
-        setConversationId(null);
+        const response = await fetch("/api/messages/conversationCreate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId1: userData.userId,
+            userId2: isGroupChat
+              ? activeChat.conversationId
+              : activeChat.userId,
+            isGroupChat: isGroupChat,
+          }),
+        });
+        const data = await response.json();
+
+        if (response.ok) {
+          setConversationId(data.conversationId);
+        }
       }
     } catch (error) {
       console.error("Error fetching conversationId:", error);

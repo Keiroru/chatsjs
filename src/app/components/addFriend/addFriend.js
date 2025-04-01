@@ -12,11 +12,13 @@ export default function AddFriend({
   const [receiverDisplayId, setReceiverDisplayId] = useState("");
   const [status, setStatus] = useState({ type: null, message: "" });
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingTime, setLoadingTime] = useState(false);
 
   const handleAddFriend = async () => {
     if (!receiverDisplayId.trim() || !receiverUserName.trim()) return;
 
     setIsLoading(true);
+    setLoadingTime(true);
     setStatus({ type: null, message: "" });
 
     try {
@@ -41,11 +43,13 @@ export default function AddFriend({
         });
         setUsername("");
         setReceiverDisplayId("");
+        setTimeout(() => setStatus({ type: null, message: "" }), 5000);
       } else {
         setStatus({
           type: "error",
           message: data.error || "Failed to send friend request",
         });
+        setTimeout(() => setStatus({ type: null, message: "" }), 5000);
       }
     } catch (error) {
       console.error("Error adding friend:", error);
@@ -53,8 +57,13 @@ export default function AddFriend({
         type: "error",
         message: "An error occurred. Please try again.",
       });
+      setTimeout(() => setStatus({ type: null, message: "" }), 5000);
     } finally {
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+        setLoadingTime(false);
+        setStatus({ type: null, message: "" });
+      }, 5000);
     }
   };
 
@@ -76,6 +85,11 @@ export default function AddFriend({
                 }
               >
                 {status.message}
+                {isLoading && loadingTime && (
+              <div className={styles.loaderContainer}>
+                <div className={styles.loader}></div>
+              </div>
+            )}
               </div>
             )}
             <button onClick={setAddFriendTabOpen} className={styles.button}>
@@ -89,8 +103,9 @@ export default function AddFriend({
                 aria-label="User name"
                 value={receiverUserName}
                 onChange={(e) => setUsername(e.target.value)}
-                className={`${styles.inputName} ${status.type === "error" ? styles.inputError : ""
-                  }`}
+                className={`${styles.inputName} ${
+                  status.type === "error" ? styles.inputError : ""
+                }`}
               />
               <span>#</span>
               <input
@@ -100,8 +115,9 @@ export default function AddFriend({
                 aria-label="ID"
                 value={receiverDisplayId}
                 onChange={(e) => setReceiverDisplayId(e.target.value)}
-                className={`${styles.inputId} ${status.type === "error" ? styles.inputError : ""
-                  }`}
+                className={`${styles.inputId} ${
+                  status.type === "error" ? styles.inputError : ""
+                }`}
               />
             </div>
             <button
