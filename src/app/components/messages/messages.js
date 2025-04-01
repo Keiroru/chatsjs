@@ -3,7 +3,7 @@ import Image from "next/image";
 import styles from "@/app/styles/messages.module.css";
 import Settings from "@/app/components/settings/settings";
 import Input from "@/app/components/messages/input/input";
-import { faArrowLeft, faArrowDown } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faArrowDown, faReply, faCopy, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSocket } from "@/lib/socket";
 
@@ -38,7 +38,7 @@ export default function Messages({
     if (messageEnd.current && messages.length > 0) {
       messageEnd.current.scrollIntoView({ behavior: "auto" });
     }
-  }, [conversationId, messages.length]);
+  }, [messages.length]);
 
   useEffect(() => {
     const container = messagesContainerRef.current;
@@ -419,13 +419,15 @@ export default function Messages({
             )}
 
             {showScrollButton && (
-              <button
-                className={styles.scrollToBottomButton}
-                onClick={scrollToBottom}
-                aria-label="Scroll to bottom"
-              >
-                <FontAwesomeIcon icon={faArrowDown} />
-              </button>
+              <div className={styles.scrollWrapper}>
+                <button
+                  className={styles.scrollToBottomButton}
+                  onClick={scrollToBottom}
+                  aria-label="Scroll to bottom"
+                >
+                  <FontAwesomeIcon icon={faArrowDown} />
+                </button>
+              </div>
             )}
 
             <div ref={messageEnd}></div>
@@ -449,17 +451,25 @@ export default function Messages({
                 left: `${contextMenu.x}px`,
               }}
             >
-              <div
+              <div className={styles.menuHeader}>Message Actions</div>
+
+              <button
+                className={styles.menuItem}
                 onClick={() => {
                   setreplyTo(contextMenu.message);
                   setContextMenu({ ...contextMenu, visible: false });
                   inputRef.current.focus();
                 }}
-                className={styles.menuItem}
               >
-                Reply to: {contextMenu.message?.messageText.substring(0, 20)}...
-              </div>
-              <div
+                <span className={styles.menuItemIcon}>
+                  <FontAwesomeIcon icon={faReply} />
+                </span>
+                Reply To: {contextMenu.message?.messageText.length > 20
+                  ? contextMenu.message?.messageText.substring(0, 17) + "..."
+                  : contextMenu.message?.messageText}
+              </button>
+
+              <button
                 className={styles.menuItem}
                 onClick={() => {
                   navigator.clipboard.writeText(
@@ -468,10 +478,16 @@ export default function Messages({
                   setContextMenu({ ...contextMenu, visible: false });
                 }}
               >
-                Copy
-              </div>
-              <div
-                className={styles.menuItem}
+                <span className={styles.menuItemIcon}>
+                  <FontAwesomeIcon icon={faCopy} />
+                </span>
+                Copy Text
+              </button>
+
+              <div className={styles.menuDivider}></div>
+
+              <button
+                className={`${styles.menuItem} ${styles.menuItemDelete}`}
                 onClick={() => {
                   deleteMessage(
                     contextMenu.message?.messageId,
@@ -480,8 +496,11 @@ export default function Messages({
                   setContextMenu({ ...contextMenu, visible: false });
                 }}
               >
+                <span className={styles.menuItemIcon}>
+                  <FontAwesomeIcon icon={faTrash} />
+                </span>
                 Delete
-              </div>
+              </button>
             </div>
           )}
         </main>

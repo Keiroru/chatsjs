@@ -34,7 +34,7 @@ export default function PeopleList({
 
       if (lastMessages.length > 0) {
         setFriends((prevFriends) => {
-          return prevFriends.map((friend) => {
+          const updatedFriends = prevFriends.map((friend) => {
             const lastMessage = lastMessages.find(
               (msg) => msg.friendId === friend.userId && msg.conversationId
             );
@@ -49,6 +49,12 @@ export default function PeopleList({
               };
             }
             return friend;
+          });
+
+          return [...updatedFriends].sort((a, b) => {
+            const timeA = a.lastMessageAt ? new Date(a.lastMessageAt) : new Date(0);
+            const timeB = b.lastMessageAt ? new Date(b.lastMessageAt) : new Date(0);
+            return timeB - timeA;
           });
         });
       }
@@ -73,7 +79,7 @@ export default function PeopleList({
       setFriends(data);
       setFilteredPeople(data);
 
-      if (activeTab === "friends") {
+      if (activeTab === "friends" || activeTab === "people") {
         await fetchLastMessages();
       }
     } catch (error) {
@@ -103,8 +109,9 @@ export default function PeopleList({
     if (!socket) return;
 
     const handleReceiveMessage = (newMessage) => {
-      fetchLastMessages();
-      fetchPeople();
+      if (activeTab === "friends" || activeTab === "people") {
+        fetchLastMessages();
+      }
     };
 
     socket.on("receive_message", handleReceiveMessage);
@@ -112,7 +119,7 @@ export default function PeopleList({
     return () => {
       socket.off("receive_message", handleReceiveMessage);
     };
-  }, [socket, fetchLastMessages]);
+  }, [socket, activeTab, userData?.userId]);
 
   useEffect(() => {
     if (searchQuery.trim() === "") {

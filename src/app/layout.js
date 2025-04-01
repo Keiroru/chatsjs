@@ -25,13 +25,6 @@ export default async function RootLayout({ children }) {
           content="width=device-width, initial-scale=1.0"
           charSet="UTF-8"
         />
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-          integrity="sha512-..."
-          crossOrigin="anonymous"
-          referrerPolicy="no-referrer"
-        />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <SocketProvider>{children}</SocketProvider>

@@ -211,6 +211,14 @@
   transition: all 0.3s ease;
 }
 
+.profilWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
 @media (max-width: 1400px) {
   .right-sidebar.open {
     width: 400px;
