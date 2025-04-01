@@ -67,7 +67,7 @@ export default function PeopleList({
           setFriends((prevFriends) => {
             return prevFriends.map((friend) => {
               const lastMessage = lastMessages.find(
-                (msg) => msg.friendId === friend.friendId
+                (msg) => msg.userId === friend.userId
               );
               return {
                 ...friend,

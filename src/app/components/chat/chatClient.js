@@ -86,7 +86,7 @@ export default function ChatClient({ userData }) {
     const handleFriendStatusChange = ({ userId, status }) => {
       setFriends((oldFriends) =>
         oldFriends.map((f) =>
-          f.friendId === userId
+          f.userId === userId
             ? {
                 ...f,
                 status,
@@ -97,7 +97,7 @@ export default function ChatClient({ userData }) {
       );
 
       setActiveChat((prevChat) => {
-        if (prevChat && prevChat.friendId === userId) {
+        if (prevChat && prevChat.userId === userId) {
           return {
             ...prevChat,
             isOnline: status === "online",

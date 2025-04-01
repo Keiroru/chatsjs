@@ -316,7 +316,7 @@ INSERT INTO `users` (`userId`, `displayName`, `displayId`, `email`, `telephone`,
 (39, 'Hope', '9090', 'hope@email.com', '555-9090', '$2b$10$lt4LFk70cRyFYAcNe/476exEYJTJp6SIA76i1bJTtkrgpvqBq0rRG', '2025-03-28', '2025-03-28', 0, 0, NULL, 0, 1, NULL),
 (40, 'Max', '1212', 'max@email.com', NULL, '$2b$10$lt4LFk70cRyFYAcNe/476exEYJTJp6SIA76i1bJTtkrgpvqBq0rRG', '2025-03-28', '2025-03-28', 0, 1, NULL, 0, 1, NULL),
 (41, 'Ray', '1313', 'ray@email.com', '555-1313', '$2b$10$lt4LFk70cRyFYAcNe/476exEYJTJp6SIA76i1bJTtkrgpvqBq0rRG', '2025-03-28', '2025-03-28', 0, 0, NULL, 0, 1, NULL),
-(42, 'cica', '5210', 'vnoel05@gmail.com', NULL, '$2b$10$PT6efsZ3ArHbh7t6R4HyEu7tIsGz4z105ml3PLzY6oxpOmAMqPQru', '2025-03-29', '2025-03-29', 1, 1, 'https://i.ibb.co/rGTCytZb/class-of-09-nicole-3.jpg', 0, 1, 'end me pls '),
+(42, 'cica', '5210', 'vnoel05@gmail.com', NULL, '$2b$10$PT6efsZ3ArHbh7t6R4HyEu7tIsGz4z105ml3PLzY6oxpOmAMqPQru', '2025-03-29', '2025-03-29', 0, 1, 'https://i.ibb.co/rGTCytZb/class-of-09-nicole-3.jpg', 0, 1, 'end me pls '),
 (43, 'tester', '4709', 'asd@asd.com', NULL, '$2b$10$8JB/8AGGTX9i/TnxQ/lAweZmrLzPDUlFeZcP6bvq4hAO/nx6KIrmG', '2025-03-29', '2025-03-29', 1, 0, 'https://i.ibb.co/RGbwzcK7/Screenshot-2024-11-05-180618.png', 0, 1, 'eletkedv NULL'),
 (44, 'long ahh nameeeeeeee', '9279', 'dsa@dsa.com', NULL, '$2b$10$mT3CMsHn465B8L0n75Uiqu6WzaCbHoVgaaUqIIZ18VcZQ4I/V0uDC', '2025-03-29', '2025-03-29', 0, 0, NULL, 0, 1, NULL);
 
