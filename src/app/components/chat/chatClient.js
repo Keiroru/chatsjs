@@ -233,7 +233,7 @@ export default function ChatClient({ userData }) {
           </div>
 
           <div className={styles["controls"]}>
-            <Logout userId={userData.userId} />
+            <Logout userId={userData?.userId} />
 
             <button
               className={styles["icon-button"]}

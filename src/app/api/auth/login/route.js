@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createToken } from "@/lib/auth";
 import { getConnection } from "@/lib/db";
 import bcrypt from "bcrypt"; // Import bcrypt
+import { cookies } from "next/headers";
 
 export async function POST(request) {
   try {
@@ -59,11 +60,13 @@ export async function POST(request) {
       { status: 200 }
     );
 
-    response.cookies.set("session", session, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+    const cookieStore = await cookies(request);
+
+    cookieStore.set("session", session, {
       maxAge: expiresIn,
-      path: "/",
+      httpOnly: true,
+      sameSite: "strict",
+      secure: true,
     });
 
     if (response.ok) {
