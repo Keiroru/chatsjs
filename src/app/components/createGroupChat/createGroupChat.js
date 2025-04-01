@@ -43,10 +43,11 @@ export default function CreateGroupChat({
             ?.toLowerCase()
             .includes(searchQuery.toLowerCase()) ||
           friend.displayId?.includes(searchQuery)
+          || selectedFriends.some((f) => f.userId === friend.userId)
       );
       setFilteredPeople(filtered);
     }
-  }, [searchQuery, friends]);
+  }, [searchQuery, friends, selectedFriends]);
 
   const createGroupChat = async () => {
     var allUsers = [];
@@ -77,9 +78,6 @@ export default function CreateGroupChat({
 
       handleContinueTab();
       handleNewTab();
-      setGroupChatName("");
-      setSelectedFriends([]);
-      setSearchQuery("");
     } catch (error) {
       console.error(error);
     }
@@ -87,10 +85,15 @@ export default function CreateGroupChat({
 
   const handleNewTab = () => {
     setNewTabOpen((prev) => !prev);
+    setGroupChatName("");
+    setSelectedFriends([]);
+    setSearchQuery("");
   };
 
   const handleContinueTab = () => {
     setContinueTabOpen((prev) => !prev);
+    setSelectedFriends([]);
+    setSearchQuery("");
   };
 
   const handleSearch = (e) => {
@@ -140,10 +143,10 @@ export default function CreateGroupChat({
         </>
       )}
       {continueTabOpen && (
-        <div className={styles.createContainer}>
-          <div className={styles.createContainerMenu}>
+        <div className={styles.createContainer} onClick={handleContinueTab}>
+          <div className={styles.createContainerMenu} onClick={(e) => e.stopPropagation()}>
             <div className={styles.wrapper}>
-              <p>Create new group chat as {groupChatName}</p>
+              <p>Create new group chat as <span className={styles.groupChatName}>{groupChatName}</span></p>
               <div className={styles.searchContainer}>
                 <div className={styles.searchInput}>
                   <input

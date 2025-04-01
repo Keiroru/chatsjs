@@ -1,13 +1,17 @@
 :root {
   --dark_black: #111111;
   --light_black: #1a1a1a;
-  --dark_blue: #272462;
   --dark_purple: #67288e;
   --darkest_purple: #341447;
   --light_purple: #c23ae4;
+  --lighter_purple: #e990ff;
   --dark_cyan: #2196b1;
   --light_cyan: #28bddf;
+  --dark_blue: #272462;
+  --dark_red: #9e0020;
   --error_red: #d2042d;
+  --stone_gray: #bfbfbf;
+  --white: #ffffff;
 
   --rich-black: #2e2e2e;
   --charcoal: #3a3a3a;
