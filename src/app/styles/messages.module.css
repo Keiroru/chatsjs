@@ -243,3 +243,27 @@
   opacity: 0.7 !important;
   color: #888;
 }
+
+.scrollToBottomButton {
+  position: absolute;
+  bottom: 125px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--dark_purple);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+
+.scrollToBottomButton:hover {
+  background-color: var(--deep-lavender);
+  transform: scale(1.05);
+}

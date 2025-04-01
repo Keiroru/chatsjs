@@ -3,7 +3,7 @@ import Image from "next/image";
 import styles from "@/app/styles/messages.module.css";
 import Settings from "@/app/components/settings/settings";
 import Input from "@/app/components/messages/input/input";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faArrowDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSocket } from "@/lib/socket";
 
@@ -24,12 +24,41 @@ export default function Messages({
   const socket = useSocket();
   const inputRef = useRef(null);
   const [replyTo, setreplyTo] = useState(null);
+  const messagesContainerRef = useRef(null);
+  const [showScrollButton, setShowScrollButton] = useState(false);
   const [contextMenu, setContextMenu] = useState({
     visible: false,
     x: 0,
     y: 0,
     message: null,
   });
+
+  //gorgetes cuccok
+  useEffect(() => {
+    if (messageEnd.current && messages.length > 0) {
+      messageEnd.current.scrollIntoView({ behavior: "auto" });
+    }
+  }, [conversationId, messages.length]);
+
+  useEffect(() => {
+    const container = messagesContainerRef.current;
+
+    const handleScroll = () => {
+      const distanceFromBottom =
+        container.scrollHeight - container.scrollTop - container.clientHeight;
+
+      setShowScrollButton(distanceFromBottom > 3000);
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToBottom = () => {
+    if (messageEnd.current) {
+      messageEnd.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }
 
   //Socket stuff
   useEffect(() => {
@@ -75,12 +104,6 @@ export default function Messages({
       socket.off("delete", handleDeleteMessage);
     };
   }, [socket]);
-
-  useEffect(() => {
-    if (messageEnd.current) {
-      messageEnd.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages]);
 
   // Conversation ID is fetched here
   const fetchConversationId = useCallback(async () => {
@@ -275,6 +298,7 @@ export default function Messages({
           </header>
 
           <div
+            ref={messagesContainerRef}
             onContextMenu={(e) => {
               e.preventDefault();
             }}
@@ -299,19 +323,18 @@ export default function Messages({
                   <div
                     id={`message-${message.messageId}`}
                     key={message.messageId}
-                    className={`${styles.message} ${
-                      message.senderUserId === userData.userId
-                        ? styles.outgoing
-                        : styles.incoming
-                    }`}
+                    className={`${styles.message} ${message.senderUserId === userData.userId
+                      ? styles.outgoing
+                      : styles.incoming
+                      }`}
                   >
                     <Image
                       src={
                         message.senderUserId === userData.userId
                           ? userData.profilePicPath ||
-                            "https://placehold.co/50x50"
+                          "https://placehold.co/50x50"
                           : activeChat?.profilePicPath ||
-                            "https://placehold.co/50x50"
+                          "https://placehold.co/50x50"
                       }
                       width={40}
                       height={40}
@@ -332,18 +355,16 @@ export default function Messages({
                             }
                           }}
                         >
-                          <span className={styles.replyIcon}>↩️</span>
                           <span
-                            className={`${
-                              originalMessage.isDeleted === 1
-                                ? styles["deleted-message"]
-                                : ""
-                            }`}
+                            className={`${originalMessage.isDeleted === 1
+                              ? styles["deleted-message"]
+                              : ""
+                              }`}
                           >
                             {originalMessage.isDeleted === 0
                               ? originalMessage.messageText.length > 40
                                 ? originalMessage.messageText.substring(0, 37) +
-                                  "..."
+                                "..."
                                 : originalMessage.messageText
                               : "Deleted Message"}
                           </span>
@@ -366,11 +387,10 @@ export default function Messages({
                         onClick={() => {
                           setContextMenu({ ...contextMenu, visible: false });
                         }}
-                        className={`${styles.messageContent} ${
-                          message.isDeleted === 1
-                            ? styles["deleted-message"]
-                            : ""
-                        }`}
+                        className={`${styles.messageContent} ${message.isDeleted === 1
+                          ? styles["deleted-message"]
+                          : ""
+                          }`}
                       >
                         {message.isDeleted === 1
                           ? "Deleted Message"
@@ -396,6 +416,16 @@ export default function Messages({
                   ? "No messages yet!"
                   : "Select someone to start chatting"}
               </div>
+            )}
+
+            {showScrollButton && (
+              <button
+                className={styles.scrollToBottomButton}
+                onClick={scrollToBottom}
+                aria-label="Scroll to bottom"
+              >
+                <FontAwesomeIcon icon={faArrowDown} />
+              </button>
             )}
 
             <div ref={messageEnd}></div>

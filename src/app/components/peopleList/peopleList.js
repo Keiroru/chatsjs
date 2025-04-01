@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use, useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import styles from "@/app/styles/friends.module.css";
+import { useSocket } from "@/lib/socket";
 
 export default function PeopleList({
   userData,
@@ -19,90 +20,99 @@ export default function PeopleList({
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const socket = useSocket();
+
+  const fetchLastMessages = useCallback(async () => {
+    if (!userData?.userId) return;
+
+    try {
+      const response = await fetch(
+        `/api/messages/lastMessages?userId=${userData.userId}`
+      );
+      if (!response.ok) throw new Error("Failed to fetch last messages");
+      const lastMessages = await response.json();
+
+      if (lastMessages.length > 0) {
+        setFriends((prevFriends) => {
+          return prevFriends.map((friend) => {
+            const lastMessage = lastMessages.find(
+              (msg) => msg.friendId === friend.userId && msg.conversationId
+            );
+
+            if (lastMessage) {
+              return {
+                ...friend,
+                lastMessage: lastMessage.isDeleted
+                  ? "This message was deleted"
+                  : lastMessage.messageText,
+                lastMessageAt: lastMessage.sentAt || null,
+              };
+            }
+            return friend;
+          });
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching last messages:", error);
+    }
+  }, [userData?.userId, setFriends]);
+
+  const fetchPeople = useCallback(async () => {
+    if (!userData?.userId) return;
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(
+        `/api/friends/list?userId=${userData.userId}&tab=${activeTab}`
+      );
+      if (!response.ok) throw new Error("Failed to fetch people");
+      const data = await response.json();
+
+      setFriends(data);
+      setFilteredPeople(data);
+
+      if (activeTab === "friends") {
+        await fetchLastMessages();
+      }
+    } catch (error) {
+      console.error("Error fetching people:", error);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [userData?.userId, activeTab, fetchLastMessages, setFriends]);
 
   useEffect(() => {
     let isActive = true;
-    let messageInterval = null;
 
-    async function fetchPeople() {
-      if (!userData?.userId || !isActive) {
-        if (isActive) setIsLoading(false);
-        return;
-      }
+    const fetchData = async () => {
+      if (!isActive) return;
+      await fetchPeople();
+    };
 
-      try {
-        const response = await fetch(
-          `/api/friends/list?userId=${userData.userId}&tab=${activeTab}`
-        );
-        if (!response.ok) throw new Error("Failed to fetch people");
-        const data = await response.json();
-
-        if (isActive) {
-          setFriends(data);
-          setFilteredPeople(data);
-        }
-      } catch (error) {
-        if (isActive) {
-          console.error("Error fetching people:", error);
-          setError(error.message);
-        }
-      } finally {
-        if (isActive) {
-          setIsLoading(false);
-        }
-      }
-    }
-
-    async function fetchLastMessages() {
-      if (!userData?.userId || !isActive) return;
-
-      try {
-        const response = await fetch(
-          `/api/messages/lastMessages?userId=${userData.userId}`
-        );
-        if (!response.ok) throw new Error("Failed to fetch last messages");
-        const lastMessages = await response.json();
-
-        if (isActive && lastMessages.length > 0) {
-          setFriends((prevFriends) => {
-            return prevFriends.map((friend) => {
-              const lastMessage = lastMessages.find(
-                (msg) => msg.userId === friend.userId
-              );
-              return {
-                ...friend,
-                lastMessage: lastMessage?.messageText || "No messages yet",
-                lastMessageAt: lastMessage?.sentAt || null,
-              };
-            });
-          });
-        }
-      } catch (error) {
-        if (isActive) {
-          console.error("Error fetching last messages:", error);
-        }
-      }
-    }
-
-    fetchPeople().then(() => {
-      if (activeTab === "friends") {
-        fetchLastMessages();
-      }
-    });
-
-    if (activeTab === "friends" && userData?.userId) {
-      messageInterval = setInterval(() => {
-        fetchLastMessages();
-      }, 3000);
-    }
+    fetchData();
 
     return () => {
       isActive = false;
-      if (messageInterval) {
-        clearInterval(messageInterval);
-      }
     };
-  }, [userData?.userId, userData?.refreshTrigger, setFriends, activeTab]);
+  }, [userData?.userId, userData?.refreshTrigger, fetchPeople]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleReceiveMessage = (newMessage) => {
+      fetchLastMessages();
+      fetchPeople();
+    };
+
+    socket.on("receive_message", handleReceiveMessage);
+
+    return () => {
+      socket.off("receive_message", handleReceiveMessage);
+    };
+  }, [socket, fetchLastMessages]);
 
   useEffect(() => {
     if (searchQuery.trim() === "") {
@@ -148,25 +158,22 @@ export default function PeopleList({
 
       <div className={styles.tabButtons}>
         <button
-          className={`${styles.tabButton} ${
-            activeTab === "people" ? styles.active : ""
-          }`}
+          className={`${styles.tabButton} ${activeTab === "people" ? styles.active : ""
+            }`}
           onClick={() => handleTabChange("people")}
         >
           People
         </button>
         <button
-          className={`${styles.tabButton} ${
-            activeTab === "friends" ? styles.active : ""
-          }`}
+          className={`${styles.tabButton} ${activeTab === "friends" ? styles.active : ""
+            }`}
           onClick={() => handleTabChange("friends")}
         >
           Friends
         </button>
         <button
-          className={`${styles.tabButton} ${
-            activeTab === "groups" ? styles.active : ""
-          }`}
+          className={`${styles.tabButton} ${activeTab === "groups" ? styles.active : ""
+            }`}
           onClick={() => handleTabChange("groups")}
         >
           Groups
@@ -183,9 +190,8 @@ export default function PeopleList({
             filteredPeople.map((person) => (
               <button
                 key={person.userId}
-                className={`${styles.friendItem} ${
-                  activeChat?.userId === person.userId ? styles.active : ""
-                }`}
+                className={`${styles.friendItem} ${activeChat?.userId === person.userId ? styles.active : ""
+                  }`}
                 onClick={() => handleChatClick(person, false)}
               >
                 <Image
@@ -213,9 +219,8 @@ export default function PeopleList({
                   </div>
                 </div>
                 <span
-                  className={`${styles.statusIndicator} ${
-                    person.isOnline ? styles.online : styles.offline
-                  }`}
+                  className={`${styles.statusIndicator} ${person.isOnline ? styles.online : styles.offline
+                    }`}
                 ></span>
               </button>
             ))
@@ -223,11 +228,10 @@ export default function PeopleList({
             filteredPeople.map((group) => (
               <button
                 key={`${group.conversationId}-${group.userId}`}
-                className={`${styles.friendItem} ${
-                  activeChat?.conversationId === group.conversationId
-                    ? styles.active
-                    : ""
-                }`}
+                className={`${styles.friendItem} ${activeChat?.conversationId === group.conversationId
+                  ? styles.active
+                  : ""
+                  }`}
                 onClick={() => handleChatClick(group, true)}
               >
                 <Image
@@ -243,7 +247,7 @@ export default function PeopleList({
                   </h3>
                   <p className={styles.lastMessage}>
                     {group.lastMessage || "No messages yet"}
-                    </p>
+                  </p>
                   {group.lastMessageAt && (
                     <span className={styles.messageTime}>
                       {new Date(group.lastMessageAt).toLocaleTimeString([], {
@@ -261,9 +265,8 @@ export default function PeopleList({
             filteredPeople.map((friend) => (
               <button
                 key={friend.userId}
-                className={`${styles.friendItem} ${
-                  activeChat?.userId === friend.userId ? styles.active : ""
-                }`}
+                className={`${styles.friendItem} ${activeChat?.userId === friend.userId ? styles.active : ""
+                  }`}
                 onClick={() => handleChatClick(friend)}
               >
                 <Image
@@ -291,9 +294,8 @@ export default function PeopleList({
                   </div>
                 </div>
                 <span
-                  className={`${styles.statusIndicator} ${
-                    friend.isOnline ? styles.online : styles.offline
-                  }`}
+                  className={`${styles.statusIndicator} ${friend.isOnline ? styles.online : styles.offline
+                    }`}
                 ></span>
               </button>
             ))

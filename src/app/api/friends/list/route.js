@@ -61,31 +61,42 @@ export async function GET(request) {
     } else {
       // Default friends
       query = `
-        SELECT 
-          Users.userId,
-          Users.displayName,
-          Users.displayId,
-          Users.profilePicPath,
-          Users.bio,
-          Users.isOnline,
-          Users.createdAt,
-          Friends.userId as currentUserId
-        FROM 
-          Users
-        JOIN 
-          Friends ON Friends.friendUserId = Users.userId 
-        WHERE 
-          Friends.userId = ?
-        ORDER BY 
-          Users.displayName
-      `;
+      SELECT 
+        Users.userId,
+        Users.displayName,
+        Users.displayId,
+        Users.profilePicPath,
+        Users.bio,
+        Users.isOnline,
+        Users.createdAt,
+        Friends.userId as currentUserId,
+        MAX(COALESCE(m.sentAt, '1970-01-01 00:00:00')) as lastMessageTime
+      FROM 
+        Users
+      JOIN 
+        Friends ON Friends.friendUserId = Users.userId 
+      LEFT JOIN 
+        ConversationUsers cu1 ON cu1.userId = Users.userId
+      LEFT JOIN 
+        ConversationUsers cu2 ON cu2.conversationId = cu1.conversationId AND cu2.userId = ?
+      LEFT JOIN 
+        Messages m ON m.conversationId = cu1.conversationId
+      WHERE 
+        Friends.userId = ?
+      GROUP BY
+        Users.userId
+      ORDER BY 
+        lastMessageTime DESC, Users.displayName
+    `;
     }
 
     let rows;
     if (tab === "people") {
       [rows] = await connection.execute(query, [userId, userId, userId]);
-    } else {
+    } else if (tab === "groups") {
       [rows] = await connection.execute(query, [userId]);
+    } else {
+      [rows] = await connection.execute(query, [userId, userId]);
     }
 
     await connection.end();
