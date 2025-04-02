@@ -20,15 +20,15 @@
   background-color: var(--gunmetal);
   color: var(--off-white);
   font-size: 15px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--dark_purple);
   height: 50px;
   width: 100%;
 }
 
 .message-input:focus {
   outline: none;
-  box-shadow: 0 0 0 2px var(--light-lavender);
-  border-color: var(--lavender);
+  box-shadow: 0 0 0 1px var(--light_purple);
+  border-color: var(--light_purple);
 }
 
 .send-button {

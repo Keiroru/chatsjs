@@ -222,7 +222,7 @@ export default function ChatClient({ userData }) {
             )}
             <div
               onClick={() => setSettingsOpen((prev) => !prev)}
-              className={styles.profilWrapper}>
+              className={styles.profileWrapper}>
               <Image
                 src={userData?.profilePicPath || "https://placehold.co/50x50"}
                 alt="User avatar"

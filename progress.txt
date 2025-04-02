@@ -1,5 +1,4 @@
 adatkezelési tájékoztató és felhasználási feltételek
-normális landing page
 bug report menu
 rendes szerveren való futtatás
 képek normális lekezelése
@@ -22,6 +21,7 @@ kis és nagybetű sensitive friend request
 message scroll in rework
 message break word fix
 shift enter
+event notification popup
 
 
 NINCS GONDOLKOZÁS!!!

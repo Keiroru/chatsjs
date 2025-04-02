@@ -23,7 +23,7 @@
 /* Left Sidebar */
 .left-sidebar {
   grid-area: left-sidebar;
-  border-right: 1px solid var(--shadow-black);
+  border-right: 1px solid var(--dark_purple);
   width: 300px;
 }
 
@@ -64,13 +64,16 @@
 
 /* Avatar */
 .avatar {
-  border-radius: 50%;
+  object-fit: cover;
+  border-radius: 20%;
 }
 
 /* Username */
 .username {
   font-size: 16px;
   font-weight: 500;
+  max-width: 150px;
+  overflow-wrap: break-word;
 }
 
 /* Controls */
@@ -133,7 +136,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-radius: 25px;
+  border-radius: 20%;
+  object-fit: cover;
 }
 
 .line {
@@ -213,12 +217,19 @@
   transition: all 0.3s ease;
 }
 
-.profilWrapper {
+.profileWrapper {
   display: flex;
   flex-direction: row;
   align-items: center;
+  border-radius: 10px;
+  padding: 10px;
   gap: 10px;
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.profileWrapper:hover {
+  background: var(--light_black);
 }
 
 @media (max-width: 1400px) {

@@ -45,7 +45,8 @@
 
 /* Avatar & Button styles */
 .avatar {
-  border-radius: 50%;
+  border-radius: 20%;
+  object-fit: cover;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease;
   min-width: 40px;
@@ -61,7 +62,8 @@
 }
 
 .profil {
-  border-radius: 50%;
+  border-radius: 20%;
+  object-fit: cover;
 }
 
 .avatar:hover {

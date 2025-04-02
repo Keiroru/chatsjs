@@ -108,7 +108,7 @@ export default function FriendRequests({
 
       {acceptRequestTabOpen && (
         <div>
-          <button onClick={setAcceptRequestTabOpen} className={styles.button}>
+          <button onClick={setAcceptRequestTabOpen} className={styles.closeButton}>
             Close
           </button>
           <div className={styles.cardsHolder}>

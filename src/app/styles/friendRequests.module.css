@@ -86,20 +86,24 @@
 }
 
 .button {
-    background-color: #4CAF50;
+    background-color: var(--dark_green);
     color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 10px 16px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s;
     width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    border: none;
+}
+
+.button:hover {
+  background-color: var(--light_green);
 }
 
 .acceptButton {
-    background-color: #4CAF50;
+    background-color: var(--dark_green);
     color: white;
     border: none;
     border-radius: 6px;
@@ -112,11 +116,11 @@
 }
 
 .acceptButton:hover {
-    background-color: #3d8c40;
+    background-color: var(--light_green);
 }
 
 .rejectButton {
-    background-color: #f44336;
+    background-color: var(--dark_red);
     color: white;
     border: none;
     border-radius: 6px;
@@ -129,8 +133,26 @@
 }
 
 .rejectButton:hover {
-    background-color: #d32f2f;
+    background-color: var(--error_red);
 }
+
+.closeButton {
+    border: 2px solid var(--dark_red);
+    color: white;
+    width: 30%;
+    padding: 10px;
+    width: 30%;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    background: none;
+  }
+  
+  .closeButton:hover {
+    background-color: var(--dark_red);
+  }
 
 .timestamp {
     font-size: 12px;

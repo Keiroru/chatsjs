@@ -77,11 +77,16 @@ export default function AddFriend({
     }
   };
 
+  const resetFields = () => {
+    setUsername("");
+    setReceiverDisplayId("");
+  };
+
   return (
     <div className={styles.container}>
       {!addFriendTabOpen ? (
         <button onClick={setAddFriendTabOpen} className={styles.addButton}>
-          Add a new friend
+          Add friend
         </button>
       ) : (
         <div>
@@ -102,8 +107,14 @@ export default function AddFriend({
                 )}
               </div>
             )}
-            <button onClick={setAddFriendTabOpen} className={styles.backButton}>
-              close
+            <button
+              onClick={() => {
+                setAddFriendTabOpen();
+                resetFields();
+              }}
+              className={styles.backButton}
+            >
+              Close
             </button>
             <div className={styles.searchFields}>
               <input
