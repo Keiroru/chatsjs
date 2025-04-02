@@ -118,7 +118,8 @@ export default function CreateGroupChat({
         </button>
       ) : (
         <>
-          <button onClick={handleNewTab} className={styles.backButton}>
+          <button onClick={handleNewTab} className={`${styles.backButton} ${styles.closeButton}`}
+          >
             Close
           </button>
           <div>
