@@ -37,7 +37,14 @@ export default function AddFriend({
       });
 
       const data = await response.json();
-      Socket.emit("friend_request", data);
+
+      const resData = await fetch(
+        `/api/friends/requests?receiverUserId=${data.receiverUserId}`
+      );
+
+      const res = await resData.json();
+
+      Socket.emit("friend_request", res);
 
       if (response.ok) {
         setStatus({
@@ -106,9 +113,8 @@ export default function AddFriend({
                 aria-label="User name"
                 value={receiverUserName}
                 onChange={(e) => setUsername(e.target.value)}
-                className={`${styles.inputName} ${
-                  status.type === "error" ? styles.inputError : ""
-                }`}
+                className={`${styles.inputName} ${status.type === "error" ? styles.inputError : ""
+                  }`}
               />
               <span className={styles.separator}>#</span>
               <input
@@ -118,9 +124,8 @@ export default function AddFriend({
                 aria-label="ID"
                 value={receiverDisplayId}
                 onChange={(e) => setReceiverDisplayId(e.target.value)}
-                className={`${styles.inputId} ${
-                  status.type === "error" ? styles.inputError : ""
-                }`}
+                className={`${styles.inputId} ${status.type === "error" ? styles.inputError : ""
+                  }`}
               />
             </div>
             <button

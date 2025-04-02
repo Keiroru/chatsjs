@@ -16,40 +16,29 @@ export async function POST(request) {
 
     const receiverUserId = receiverUser[0].userId;
 
-    if (senderUserId == receiverUserId) {
-      return NextResponse.json(
-        { error: "You cannot send a friend request to yourself" },
-        { status: 400 }
-      );
-    }
-
-    const [existing] = await connection.execute(
-      `SELECT * FROM FriendRequest
-       WHERE (senderUserId = ? AND receiverUserId = ?)
-       OR (senderUserId = ? AND receiverUserId = ?)`,
-      [senderUserId, receiverUserId, receiverUserId, senderUserId]
-    );
-
-    if (existing.length > 0) {
-      await connection.end();
-      return NextResponse.json(
-        { error: "Friend request already exists!" },
-        { status: 400 }
-      );
-    }
-
     const query = `
       INSERT INTO FriendRequest (senderUserId, receiverUserId)
       VALUES (?, ?)
     `;
 
     const query1 = `
-    SELECT users.userId, users.displayName, users.displayId, users.profilePicPath
-    FROM users
-    WHERE users.userId = ?
+    SELECT 
+        users.userId, 
+        users.displayName, 
+        users.displayId, 
+        users.profilePicPath, 
+        users.isOnline, 
+        users.bio, 
+        users.createdAt
+    FROM 
+        users
+    WHERE 
+        users.userId = ?;
     `;
 
     const [sender] = await connection.execute(query1, [senderUserId]);
+
+    console.log(sender);
 
     await connection.execute(query, [senderUserId, receiverUserId]);
     await connection.end();
@@ -57,7 +46,8 @@ export async function POST(request) {
     return NextResponse.json({
       success: true,
       message: "Friend request sent",
-      sender: sender[0],
+      sender: sender,
+      receiverUserId: receiverUserId,
     });
   } catch (error) {
     console.error("Database error:", error);

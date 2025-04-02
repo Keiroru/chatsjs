@@ -186,13 +186,15 @@
   padding: 4px 8px;
   border-radius: 12px;
   font-size: 12px;
-  background-color: rgba(76, 175, 80, 0.1);
+  transition: all 0.5s ease;
 }
 
 /* Online Status */
 .status-badge.online {
   color: var(--forest-green);
-  background-color: rgba(74, 222, 128, 0.2);
+  background-color: var(--dark_green);
+  box-shadow: 0 0 5px var(--dark_green);
+  transition: all 0.5s ease;
 }
 
 /* Offline Status */

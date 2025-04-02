@@ -6,6 +6,11 @@ export async function POST(request) {
     const body = await request.json();
     const requestId = Number(body.requestId);
 
+    console.log("Received request body:", body);
+    console.log("Request ID being used:", requestId);
+    console.log("Request ID type:", typeof requestId);
+
+
     const connection = await mysql.createConnection({
       host: process.env.DB_HOST || "localhost",
       user: process.env.DB_USER || "root",
@@ -24,6 +29,8 @@ export async function POST(request) {
          WHERE requestId = ?`,
         [requestId]
       );
+
+      console.log("SQL result:", requests);
 
       if (requests.length === 0) {
         await connection.rollback();

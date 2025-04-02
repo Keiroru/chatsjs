@@ -15,9 +15,9 @@ export async function POST(request) {
 
     const query = `
         UPDATE 
-            FriendRequests 
+            FriendRequest
         SET 
-            status = 'declined' 
+            status = 'rejected' 
         WHERE 
             requestId = ?
       `;
@@ -29,11 +29,11 @@ export async function POST(request) {
   } catch (error) {
     console.error("Error rejecting friend request:", error);
     return NextResponse.json(
-        {
-          error: "Failed to reject friend request",
-          details: error.message,
-        },
-        { status: 500 }
-      );
+      {
+        error: "Failed to reject friend request",
+        details: error.message,
+      },
+      { status: 500 }
+    );
   }
 }

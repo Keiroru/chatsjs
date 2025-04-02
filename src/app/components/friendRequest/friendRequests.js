@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "@/app/styles/friendRequests.module.css";
 import Image from "next/image";
 import { useSocket } from "@/lib/socket";
@@ -9,9 +9,13 @@ export default function FriendRequests({
   setAcceptRequestTabOpen,
 }) {
   const [friendRequests, setFriendRequests] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const Socket = useSocket();
 
   const fetchFriendRequests = async () => {
+    if (!userData?.userId) return;
+
+    setIsLoading(true);
     try {
       const response = await fetch(
         `/api/friends/requests?receiverUserId=${userData.userId}`
@@ -21,18 +25,23 @@ export default function FriendRequests({
       setFriendRequests(data);
     } catch (error) {
       console.error("Error fetching friend requests:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchFriendRequests();
-  }, []);
+    if (userData?.userId) {
+      fetchFriendRequests();
+    }
+  }, [userData]);
 
   useEffect(() => {
     if (!Socket) return;
 
     const handleFriendRequest = (data) => {
-      setFriendRequests((requests) => [...requests, data.sender]);
+      console.log("Received friend request:", data);
+      fetchFriendRequests();
     };
 
     Socket.on("receive_request", handleFriendRequest);
@@ -40,10 +49,11 @@ export default function FriendRequests({
     return () => {
       Socket.off("receive_request", handleFriendRequest);
     };
-  }, [Socket]);
+  }, [Socket, userData]);
 
   const handleAccept = async (requestId) => {
     try {
+      console.log("Accepting friend request:", requestId);
       const response = await fetch("/api/friends/accept", {
         method: "POST",
         headers: {
@@ -51,14 +61,12 @@ export default function FriendRequests({
         },
         body: JSON.stringify({ requestId }),
       });
-      const repsonseData = await response.json();
-      console.log(repsonseData);
+      const responseData = await response.json();
+      console.log(responseData);
 
-      setFriendRequests(
-        friendRequests.filter((request) => request.requestId !== requestId)
-      );
+      fetchFriendRequests();
 
-      Socket.emit("accept_request", repsonseData);
+      Socket.emit("accept_request", responseData.requests[0]);
     } catch (error) {
       console.error("Error accepting friend request:", error);
     }
@@ -73,37 +81,45 @@ export default function FriendRequests({
         },
         body: JSON.stringify({ requestId }),
       });
-      setFriendRequests(
-        friendRequests.filter((request) => request.requestId !== requestId)
-      );
+
+      fetchFriendRequests();
     } catch (error) {
       console.error("Error rejecting friend request:", error);
     }
   };
 
+  const formatDate = (dateString) => {
+    try {
+      return new Date(dateString).toLocaleDateString();
+    } catch (error) {
+      return "BUG sdflmbgdifl ughuidffgh diugbdfuiog h";
+    }
+  };
+
   return (
     <div className={friendRequests.length > 0 ? styles.container : ""}>
+      {isLoading && <div className={styles.loading}>Loading requests...</div>}
+
       {friendRequests.length > 0 && !acceptRequestTabOpen && (
         <button onClick={setAcceptRequestTabOpen} className={styles.button}>
           New request
         </button>
       )}
+
       {acceptRequestTabOpen && (
         <div>
           <button onClick={setAcceptRequestTabOpen} className={styles.button}>
-            close
+            Close
           </button>
           <div className={styles.cardsHolder}>
             {friendRequests.map((request) => (
               <div
                 key={request.requestId}
-                className={`${
-                  friendRequests.length > 2 ? styles.cardLessWidth : styles.card
-                }`}
+                className={friendRequests.length > 2 ? styles.cardLessWidth : styles.card}
               >
                 <div className={styles.userInfo}>
                   <Image
-                    src={request.profilePicPath || "https://placehold.co/40x40"}
+                    src={request.profilePicPath || "https://placehold.co/50x50"}
                     alt="Profile"
                     width={40}
                     height={40}
@@ -113,7 +129,7 @@ export default function FriendRequests({
                     <h3 className={styles.name}>{request.displayName}</h3>
                     <p className={styles.id}>#{request.displayId}</p>
                     <div className={styles.timestamp}>
-                      {new Date(request.sentAt).toLocaleDateString()}
+                      {formatDate(request.sentAt)}
                     </div>
                   </div>
                 </div>
