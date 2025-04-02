@@ -73,7 +73,7 @@ export default function AddFriend({
   return (
     <div className={styles.container}>
       {!addFriendTabOpen ? (
-        <button onClick={setAddFriendTabOpen} className={styles.button}>
+        <button onClick={setAddFriendTabOpen} className={styles.addButton}>
           Add a new friend
         </button>
       ) : (
@@ -95,7 +95,7 @@ export default function AddFriend({
                 )}
               </div>
             )}
-            <button onClick={setAddFriendTabOpen} className={styles.button}>
+            <button onClick={setAddFriendTabOpen} className={styles.backButton}>
               close
             </button>
             <div className={styles.searchFields}>
@@ -110,7 +110,7 @@ export default function AddFriend({
                   status.type === "error" ? styles.inputError : ""
                 }`}
               />
-              <span>#</span>
+              <span className={styles.separator}>#</span>
               <input
                 type="text"
                 maxLength="4"
@@ -125,7 +125,7 @@ export default function AddFriend({
             </div>
             <button
               onClick={handleAddFriend}
-              className={styles.button}
+              className={styles.addButton}
               disabled={
                 isLoading ||
                 !receiverDisplayId.trim() ||

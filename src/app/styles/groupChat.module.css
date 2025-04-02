@@ -1,9 +1,6 @@
 .container {
   width: 100%;
   padding: 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .wrapper {
@@ -46,6 +43,11 @@
   background: none;
 }
 
+.closeButton{
+  width: 30%;
+  padding: 10px;
+}
+
 .goButton {
   border: 2px solid var(--dark_purple);
   color: white;
@@ -84,24 +86,25 @@
 
 .inputName {
   padding: 12px 16px;
-  border: 1px solid var(--darkest_purple);
+  border: 2px solid var(--dark_purple);
   border-radius: 8px;
   font-size: 14px;
   background-color: var(--input-background);
   color: var(--white);
   text-align: center;
   transition: border 0.2s ease-in-out;
+  margin: 8px 0 8px 0;
+  background-color: var(--rich-black);
 }
 
 .inputName:focus {
-  border-color: var(--primary-color);
+  border-color: var(--white);
   outline: none;
 }
 
 .groupChatName {
   font-size: 18px;
   font-weight: bold;
-
 }
 
 .searchContainer {
@@ -124,11 +127,11 @@
   background: none;
   color: var(--white);
   font-size: 14px;
-  transition: border 0.2s ease-in-out;
+  transition: border 0.1s ease-in-out;
 }
 
 .searchField:focus {
-  border-color: var(--lighter_purple);
+  border: 2px solid var(--lighter_purple);
   outline: none;
 }
 
