@@ -170,6 +170,7 @@
 
 .statusIndicator.online {
   background-color: var(--light_green);
+  box-shadow: 0 0 5px var(--dark_green)
 }
 
 .statusIndicator.offline {
