@@ -3,7 +3,8 @@ import { getConnection } from "@/lib/db";
 
 export async function POST(request) {
   try {
-    const { senderUserId, receiverUserName, receiverDisplayId } = await request.json();
+    const { senderUserId, receiverUserName, receiverDisplayId } =
+      await request.json();
 
     const connection = await getConnection();
 
@@ -13,8 +14,8 @@ export async function POST(request) {
       [receiverUserName, receiverDisplayId]
     );
 
-    const receiverUserId = receiverUser[0].userId
-    
+    const receiverUserId = receiverUser[0].userId;
+
     if (senderUserId == receiverUserId) {
       return NextResponse.json(
         { error: "You cannot send a friend request to yourself" },
@@ -42,12 +43,21 @@ export async function POST(request) {
       VALUES (?, ?)
     `;
 
+    const query1 = `
+    SELECT users.userId, users.displayName, users.displayId, users.profilePicPath
+    FROM users
+    WHERE users.userId = ?
+    `;
+
+    const [sender] = await connection.execute(query1, [senderUserId]);
+
     await connection.execute(query, [senderUserId, receiverUserId]);
     await connection.end();
 
     return NextResponse.json({
       success: true,
       message: "Friend request sent",
+      sender: sender[0],
     });
   } catch (error) {
     console.error("Database error:", error);

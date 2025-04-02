@@ -1,35 +1,46 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import styles from "@/app/styles/friendRequests.module.css";
 import Image from "next/image";
+import { useSocket } from "@/lib/socket";
 
 export default function FriendRequests({
   userData,
-  onRequestAccept,
   acceptRequestTabOpen,
   setAcceptRequestTabOpen,
 }) {
   const [friendRequests, setFriendRequests] = useState([]);
+  const Socket = useSocket();
+
+  const fetchFriendRequests = async () => {
+    try {
+      const response = await fetch(
+        `/api/friends/requests?receiverUserId=${userData.userId}`
+      );
+      if (!response.ok) throw new Error("Failed to fetch friend requests");
+      const data = await response.json();
+      setFriendRequests(data);
+    } catch (error) {
+      console.error("Error fetching friend requests:", error);
+    }
+  };
 
   useEffect(() => {
-    async function fetchFriendRequests() {
-      try {
-        const response = await fetch(
-          `/api/friends/requests?receiverUserId=${userData.userId}`
-        );
-        if (!response.ok) throw new Error("Failed to fetch friend requests");
-        const data = await response.json();
-        setFriendRequests(data);
-      } catch (error) {
-        console.error("Error fetching friend requests:", error);
-      }
-    }
+    fetchFriendRequests();
+  }, []);
 
-    if (userData.userId) {
-      fetchFriendRequests();
-      const interval = setInterval(fetchFriendRequests, 5000);
-      return () => clearInterval(interval);
-    }
-  }, [userData.userId]);
+  useEffect(() => {
+    if (!Socket) return;
+
+    const handleFriendRequest = (data) => {
+      setFriendRequests((requests) => [...requests, data.sender]);
+    };
+
+    Socket.on("receive_request", handleFriendRequest);
+
+    return () => {
+      Socket.off("receive_request", handleFriendRequest);
+    };
+  }, [Socket]);
 
   const handleAccept = async (requestId) => {
     try {
@@ -46,7 +57,8 @@ export default function FriendRequests({
       setFriendRequests(
         friendRequests.filter((request) => request.requestId !== requestId)
       );
-      onRequestAccept();
+
+      Socket.emit("accept_request", repsonseData);
     } catch (error) {
       console.error("Error accepting friend request:", error);
     }

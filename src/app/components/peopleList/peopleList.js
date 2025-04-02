@@ -52,8 +52,12 @@ export default function PeopleList({
           });
 
           return [...updatedFriends].sort((a, b) => {
-            const timeA = a.lastMessageAt ? new Date(a.lastMessageAt) : new Date(0);
-            const timeB = b.lastMessageAt ? new Date(b.lastMessageAt) : new Date(0);
+            const timeA = a.lastMessageAt
+              ? new Date(a.lastMessageAt)
+              : new Date(0);
+            const timeB = b.lastMessageAt
+              ? new Date(b.lastMessageAt)
+              : new Date(0);
             return timeB - timeA;
           });
         });
@@ -114,10 +118,16 @@ export default function PeopleList({
       }
     };
 
+    const handleReceiveRequest = (data) => {
+      setFriends((prevFriends) => [...prevFriends, data]);
+    };
+
+    socket.on("receive_accept", handleReceiveRequest);
     socket.on("receive_message", handleReceiveMessage);
 
     return () => {
       socket.off("receive_message", handleReceiveMessage);
+      socket.off("receive_accept", handleReceiveRequest);
     };
   }, [socket, activeTab, userData?.userId]);
 
@@ -165,22 +175,25 @@ export default function PeopleList({
 
       <div className={styles.tabButtons}>
         <button
-          className={`${styles.tabButton} ${activeTab === "people" ? styles.active : ""
-            }`}
+          className={`${styles.tabButton} ${
+            activeTab === "people" ? styles.active : ""
+          }`}
           onClick={() => handleTabChange("people")}
         >
           People
         </button>
         <button
-          className={`${styles.tabButton} ${activeTab === "friends" ? styles.active : ""
-            }`}
+          className={`${styles.tabButton} ${
+            activeTab === "friends" ? styles.active : ""
+          }`}
           onClick={() => handleTabChange("friends")}
         >
           Friends
         </button>
         <button
-          className={`${styles.tabButton} ${activeTab === "groups" ? styles.active : ""
-            }`}
+          className={`${styles.tabButton} ${
+            activeTab === "groups" ? styles.active : ""
+          }`}
           onClick={() => handleTabChange("groups")}
         >
           Groups
@@ -197,8 +210,9 @@ export default function PeopleList({
             filteredPeople.map((person) => (
               <button
                 key={person.userId}
-                className={`${styles.friendItem} ${activeChat?.userId === person.userId ? styles.active : ""
-                  }`}
+                className={`${styles.friendItem} ${
+                  activeChat?.userId === person.userId ? styles.active : ""
+                }`}
                 onClick={() => handleChatClick(person, false)}
               >
                 <Image
@@ -226,8 +240,9 @@ export default function PeopleList({
                   </div>
                 </div>
                 <span
-                  className={`${styles.statusIndicator} ${person.isOnline ? styles.online : styles.offline
-                    }`}
+                  className={`${styles.statusIndicator} ${
+                    person.isOnline ? styles.online : styles.offline
+                  }`}
                 ></span>
               </button>
             ))
@@ -235,10 +250,11 @@ export default function PeopleList({
             filteredPeople.map((group) => (
               <button
                 key={`${group.conversationId}-${group.userId}`}
-                className={`${styles.friendItem} ${activeChat?.conversationId === group.conversationId
-                  ? styles.active
-                  : ""
-                  }`}
+                className={`${styles.friendItem} ${
+                  activeChat?.conversationId === group.conversationId
+                    ? styles.active
+                    : ""
+                }`}
                 onClick={() => handleChatClick(group, true)}
               >
                 <Image
@@ -272,8 +288,9 @@ export default function PeopleList({
             filteredPeople.map((friend) => (
               <button
                 key={friend.userId}
-                className={`${styles.friendItem} ${activeChat?.userId === friend.userId ? styles.active : ""
-                  }`}
+                className={`${styles.friendItem} ${
+                  activeChat?.userId === friend.userId ? styles.active : ""
+                }`}
                 onClick={() => handleChatClick(friend)}
               >
                 <Image
@@ -301,8 +318,9 @@ export default function PeopleList({
                   </div>
                 </div>
                 <span
-                  className={`${styles.statusIndicator} ${friend.isOnline ? styles.online : styles.offline
-                    }`}
+                  className={`${styles.statusIndicator} ${
+                    friend.isOnline ? styles.online : styles.offline
+                  }`}
                 ></span>
               </button>
             ))

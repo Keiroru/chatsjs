@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import styles from "@/app/styles/addFriend.module.css";
+import { useSocket } from "@/lib/socket";
 
 export default function AddFriend({
   userId,
@@ -13,6 +14,7 @@ export default function AddFriend({
   const [status, setStatus] = useState({ type: null, message: "" });
   const [isLoading, setIsLoading] = useState(false);
   const [loadingTime, setLoadingTime] = useState(false);
+  const Socket = useSocket();
 
   const handleAddFriend = async () => {
     if (!receiverDisplayId.trim() || !receiverUserName.trim()) return;
@@ -35,6 +37,7 @@ export default function AddFriend({
       });
 
       const data = await response.json();
+      Socket.emit("friend_request", data);
 
       if (response.ok) {
         setStatus({
@@ -86,10 +89,10 @@ export default function AddFriend({
               >
                 {status.message}
                 {isLoading && loadingTime && (
-              <div className={styles.loaderContainer}>
-                <div className={styles.loader}></div>
-              </div>
-            )}
+                  <div className={styles.loaderContainer}>
+                    <div className={styles.loader}></div>
+                  </div>
+                )}
               </div>
             )}
             <button onClick={setAddFriendTabOpen} className={styles.button}>
