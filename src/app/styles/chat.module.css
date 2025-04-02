@@ -15,7 +15,7 @@
 .sidebar {
   display: flex;
   flex-direction: column;
-  background-color: var(--charcoal);
+  background-color: var(--light_black);
   transition: all 0.3s ease;
   overflow: hidden;
 }

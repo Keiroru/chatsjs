@@ -19,7 +19,7 @@
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.6);
-  z-index: 1000;
+  z-index: 12000;
 }
 
 .createContainerMenu {
@@ -143,6 +143,10 @@
   font-size: 18px;
 }
 
+.infotext{
+  margin-bottom: -15px;
+}
+
 .friendsList {
   max-height: 500px;
   overflow-y: auto;
@@ -163,6 +167,7 @@
   width: 100%;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  margin: 0 0 6px 0;
 }
 
 .friendItem:hover {

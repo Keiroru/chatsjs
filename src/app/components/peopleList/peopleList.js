@@ -4,7 +4,7 @@ import { useState, useEffect, use, useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
-import styles from "@/app/styles/friends.module.css";
+import styles from "@/app/styles/peopleList.module.css";
 import { useSocket } from "@/lib/socket";
 
 export default function PeopleList({
@@ -83,7 +83,7 @@ export default function PeopleList({
       setFriends(data);
       setFilteredPeople(data);
 
-      if (activeTab === "friends" || activeTab === "people") {
+      if (activeTab === "friends" || activeTab === "people" || activeTab === "groups") {
         await fetchLastMessages();
       }
     } catch (error) {

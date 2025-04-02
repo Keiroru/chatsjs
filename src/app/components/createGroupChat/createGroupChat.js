@@ -118,8 +118,7 @@ export default function CreateGroupChat({
         </button>
       ) : (
         <>
-          <button onClick={handleNewTab} className={`${styles.backButton} ${styles.closeButton}`}
-          >
+          <button onClick={handleNewTab} className={`${styles.backButton} ${styles.closeButton}`}>
             Close
           </button>
           <div>
@@ -164,6 +163,7 @@ export default function CreateGroupChat({
                   />
                 </div>
               </div>
+              <span className={styles.infotext}>Select friends to join your group chat</span>
               <div className={styles.friendsList}>
                 {filteredPeople.map((friend) => (
                   <button
