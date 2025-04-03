@@ -1,9 +1,9 @@
 adatkezelési tájékoztató és felhasználási feltételek
-bug report menu
+bug report menu -- ongoing
 rendes szerveren való futtatás
 képek normális lekezelése
 end to end ecryption - ha lesz idő
-attachement upload
+attachment upload
 reject friend request rework
 blocked people
 block user from using site
@@ -11,17 +11,18 @@ message state (sent, delivered, seen)
 forgot password
 better message loading
 new message notification
-better styling
+better styling -- ongoing
 call function
 group chat view members and set admin
 group chat profile pic, 
 admin can add and delete users, make others admin, change name and [delete others messages]?
-better message error handling
-kis és nagybetű sensitive friend request
 message scroll in rework
-message break word fix
 shift enter
 event notification popup
+better settings menu
+not looking for friends no message send
+adjust database: group chat icon and bio
+group chat seperate styling
 
 
 NINCS GONDOLKOZÁS!!!

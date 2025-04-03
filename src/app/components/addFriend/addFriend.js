@@ -53,12 +53,14 @@ export default function AddFriend({
         });
         setUsername("");
         setReceiverDisplayId("");
+        setIsLoading(false);
         setTimeout(() => setStatus({ type: null, message: "" }), 5000);
       } else {
         setStatus({
           type: "error",
           message: data.error || "Failed to send friend request",
         });
+        setIsLoading(false);
         setTimeout(() => setStatus({ type: null, message: "" }), 5000);
       }
     } catch (error) {
@@ -70,7 +72,6 @@ export default function AddFriend({
       setTimeout(() => setStatus({ type: null, message: "" }), 5000);
     } finally {
       setTimeout(() => {
-        setIsLoading(false);
         setLoadingTime(false);
         setStatus({ type: null, message: "" });
       }, 5000);
@@ -100,7 +101,7 @@ export default function AddFriend({
                 }
               >
                 {status.message}
-                {isLoading && loadingTime && (
+                {loadingTime && (
                   <div className={styles.loaderContainer}>
                     <div className={styles.loader}></div>
                   </div>

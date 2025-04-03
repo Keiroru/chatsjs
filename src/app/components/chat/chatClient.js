@@ -33,9 +33,9 @@ export default function ChatClient({ userData }) {
 
   const formattedDate = activeChat?.createdAt
     ? new Date(activeChat.createdAt)
-      .toISOString()
-      .split("T")[0]
-      .replace(/-/g, ".")
+        .toISOString()
+        .split("T")[0]
+        .replace(/-/g, ".")
     : "No contact selected";
 
   const handleUnload = async () => {
@@ -89,10 +89,10 @@ export default function ChatClient({ userData }) {
         oldFriends.map((f) =>
           f.userId === userId
             ? {
-              ...f,
-              status,
-              isOnline: status === "online",
-            }
+                ...f,
+                status,
+                isOnline: status === "online",
+              }
             : f
         )
       );
@@ -221,12 +221,14 @@ export default function ChatClient({ userData }) {
 
   return (
     <div
-      className={`${styles["chat-container"]} ${isMobile ? styles["mobile"] : ""
-        } ${rightPanelOpen ? styles["right-open"] : ""}`}
+      className={`${styles["chat-container"]} ${
+        isMobile ? styles["mobile"] : ""
+      } ${rightPanelOpen ? styles["right-open"] : ""}`}
     >
       <aside
-        className={`${styles["sidebar"]} ${styles["left-sidebar"]} ${leftPanelOpen ? styles["open"] : styles["closed"]
-          }`}
+        className={`${styles["sidebar"]} ${styles["left-sidebar"]} ${
+          leftPanelOpen ? styles["open"] : styles["closed"]
+        }`}
       >
         <header className={styles["sidebar-header"]}>
           <div className={styles["user-info"]}>
@@ -241,7 +243,8 @@ export default function ChatClient({ userData }) {
             )}
             <div
               onClick={() => setSettingsOpen((prev) => !prev)}
-              className={styles.profileWrapper}>
+              className={styles.profileWrapper}
+            >
               <Image
                 src={userData?.profilePicPath || "https://placehold.co/50x50"}
                 alt="User avatar"
@@ -323,8 +326,9 @@ export default function ChatClient({ userData }) {
       />
 
       <aside
-        className={`${styles["sidebar"]} ${styles["right-sidebar"]} ${rightPanelOpen ? styles["open"] : ""
-          }`}
+        className={`${styles["sidebar"]} ${styles["right-sidebar"]} ${
+          rightPanelOpen ? styles["open"] : ""
+        }`}
       >
         <header className={styles["sidebar-header"]}>
           <button
@@ -347,15 +351,22 @@ export default function ChatClient({ userData }) {
           />
           <hr className={styles.line} />
           <h2 className={styles["profile-name"]}>
-            {activeChat?.displayName || "Select a contact"}
+            {activeChat?.displayName ||
+              activeChat?.conversationName ||
+              "Select a contact"}
           </h2>
-          <span className={styles.profileId}>#{activeChat?.displayId}</span>
-          <span
-            className={`${styles["status-badge"]} ${activeChat?.isOnline ? styles["online"] : styles["offline"]
-              }`}
-          >
-            {activeChat?.isOnline ? "Online" : "Offline"}
-          </span>
+          {!isGroupChat && (
+            <>
+              <span className={styles.profileId}>#{activeChat?.displayId}</span>
+              <span
+                className={`${styles["status-badge"]} ${
+                  activeChat?.isOnline ? styles["online"] : styles["offline"]
+                }`}
+              >
+                {activeChat?.isOnline ? "Online" : "Offline"}
+              </span>
+            </>
+          )}
         </div>
 
         <div className={styles["profile-details"]}>
@@ -366,8 +377,26 @@ export default function ChatClient({ userData }) {
             </p>
           </section>
           <section className={styles["profile-section"]}>
-            <h3 className={styles["profile-section-title"]}>Member Since</h3>
-            <p className={styles["profile-section-content"]}>{formattedDate}</p>
+            {!isGroupChat ? (
+              <>
+                <h3 className={styles["profile-section-title"]}>
+                  Member Since
+                </h3>
+                <p className={styles["profile-section-content"]}>
+                  {formattedDate}
+                </p>
+              </>
+            ) : (
+              <>
+                {" "}
+                <h3 className={styles["profile-section-title"]}>
+                  Created At
+                </h3>
+                <p className={styles["profile-section-content"]}>
+                  {formattedDate}
+                </p>
+              </>
+            )}
           </section>
         </div>
       </aside>

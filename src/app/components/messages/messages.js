@@ -3,7 +3,13 @@ import Image from "next/image";
 import styles from "@/app/styles/messages.module.css";
 import Settings from "@/app/components/settings/settings";
 import Input from "@/app/components/messages/input/input";
-import { faArrowLeft, faArrowDown, faReply, faCopy, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowLeft,
+  faArrowDown,
+  faReply,
+  faCopy,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSocket } from "@/lib/socket";
 
@@ -50,15 +56,15 @@ export default function Messages({
       setShowScrollButton(distanceFromBottom > 3000);
     };
 
-    container.addEventListener('scroll', handleScroll);
-    return () => container.removeEventListener('scroll', handleScroll);
+    container.addEventListener("scroll", handleScroll);
+    return () => container.removeEventListener("scroll", handleScroll);
   }, []);
 
   const scrollToBottom = () => {
     if (messageEnd.current) {
       messageEnd.current.scrollIntoView({ behavior: "smooth" });
     }
-  }
+  };
 
   //Socket stuff
   useEffect(() => {
@@ -283,7 +289,7 @@ export default function Messages({
             )}
             <button
               className={styles["contact-info-button"]}
-              onClick={onToggleRightPanel}
+              onClick={activeChat ? onToggleRightPanel : null}
               aria-label="Toggle contact info"
             >
               <Image
@@ -293,7 +299,7 @@ export default function Messages({
                 height={60}
                 className={styles.profil}
               />
-              <h1>{activeChat?.displayName || "Select a contact"}</h1>
+              <h1>{activeChat?.displayName ||activeChat?.conversationName || "Select a contact"}</h1>
             </button>
           </header>
 
@@ -323,18 +329,19 @@ export default function Messages({
                   <div
                     id={`message-${message.messageId}`}
                     key={message.messageId}
-                    className={`${styles.message} ${message.senderUserId === userData.userId
-                      ? styles.outgoing
-                      : styles.incoming
-                      }`}
+                    className={`${styles.message} ${
+                      message.senderUserId === userData.userId
+                        ? styles.outgoing
+                        : styles.incoming
+                    }`}
                   >
                     <Image
                       src={
                         message.senderUserId === userData.userId
                           ? userData.profilePicPath ||
-                          "https://placehold.co/50x50"
+                            "https://placehold.co/50x50"
                           : activeChat?.profilePicPath ||
-                          "https://placehold.co/50x50"
+                            "https://placehold.co/50x50"
                       }
                       width={40}
                       height={40}
@@ -356,15 +363,16 @@ export default function Messages({
                           }}
                         >
                           <span
-                            className={`${originalMessage.isDeleted === 1
-                              ? styles["deleted-message"]
-                              : ""
-                              }`}
+                            className={`${
+                              originalMessage.isDeleted === 1
+                                ? styles["deleted-message"]
+                                : ""
+                            }`}
                           >
                             {originalMessage.isDeleted === 0
                               ? originalMessage.messageText.length > 40
                                 ? originalMessage.messageText.substring(0, 37) +
-                                "..."
+                                  "..."
                                 : originalMessage.messageText
                               : "Deleted Message"}
                           </span>
@@ -387,10 +395,11 @@ export default function Messages({
                         onClick={() => {
                           setContextMenu({ ...contextMenu, visible: false });
                         }}
-                        className={`${styles.messageContent} ${message.isDeleted === 1
-                          ? styles["deleted-message"]
-                          : ""
-                          }`}
+                        className={`${styles.messageContent} ${
+                          message.isDeleted === 1
+                            ? styles["deleted-message"]
+                            : ""
+                        }`}
                       >
                         {message.isDeleted === 1
                           ? "Deleted Message"
@@ -432,15 +441,16 @@ export default function Messages({
 
             <div ref={messageEnd}></div>
           </div>
-
-          <Input
-            activeChat={activeChat}
-            userData={userData}
-            conversationId={conversationId}
-            ref={inputRef}
-            replyTo={replyTo}
-            setreplyTo={setreplyTo}
-          />
+          {activeChat && (
+            <Input
+              activeChat={activeChat}
+              userData={userData}
+              conversationId={conversationId}
+              ref={inputRef}
+              replyTo={replyTo}
+              setreplyTo={setreplyTo}
+            />
+          )}
 
           {contextMenu.visible && (
             <div
@@ -464,7 +474,8 @@ export default function Messages({
                 <span className={styles.menuItemIcon}>
                   <FontAwesomeIcon icon={faReply} />
                 </span>
-                Reply To: {contextMenu.message?.messageText.length > 20
+                Reply To:{" "}
+                {contextMenu.message?.messageText.length > 20
                   ? contextMenu.message?.messageText.substring(0, 17) + "..."
                   : contextMenu.message?.messageText}
               </button>

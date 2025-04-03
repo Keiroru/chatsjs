@@ -129,12 +129,10 @@ export default function PeopleList({
       console.log("Friend request accepted:", data);
 
       if (data.sender.userId === userData.userId) {
-        setFriends(prevFriends => [...prevFriends, data.receiver]);
+        setFriends((prevFriends) => [...prevFriends, data.receiver]);
         fetchLastMessages();
-      }
-
-      else if (data.receiver.userId === userData.userId) {
-        setFriends(prevFriends => [...prevFriends, data.sender]);
+      } else if (data.receiver.userId === userData.userId) {
+        setFriends((prevFriends) => [...prevFriends, data.sender]);
         fetchLastMessages();
       }
     };
@@ -220,22 +218,25 @@ export default function PeopleList({
 
       <div className={styles.tabButtons}>
         <button
-          className={`${styles.tabButton} ${activeTab === "people" ? styles.active : ""
-            }`}
+          className={`${styles.tabButton} ${
+            activeTab === "people" ? styles.active : ""
+          }`}
           onClick={() => handleTabChange("people")}
         >
           People
         </button>
         <button
-          className={`${styles.tabButton} ${activeTab === "friends" ? styles.active : ""
-            }`}
+          className={`${styles.tabButton} ${
+            activeTab === "friends" ? styles.active : ""
+          }`}
           onClick={() => handleTabChange("friends")}
         >
           Friends
         </button>
         <button
-          className={`${styles.tabButton} ${activeTab === "groups" ? styles.active : ""
-            }`}
+          className={`${styles.tabButton} ${
+            activeTab === "groups" ? styles.active : ""
+          }`}
           onClick={() => handleTabChange("groups")}
         >
           Groups
@@ -260,11 +261,12 @@ export default function PeopleList({
           <div className={styles.errorMessage}>Error: {error}</div>
         ) : filteredPeople.length > 0 ? (
           activeTab === "people" ? (
-            filteredPeople.map((person) => (
+            filteredPeople.map((person, key) => (
               <button
-                key={person.userId}
-                className={`${styles.friendItem} ${activeChat?.userId === person.userId ? styles.active : ""
-                  }`}
+                key={`${person.userId}-${key}`}
+                className={`${styles.friendItem} ${
+                  activeChat?.userId === person.userId ? styles.active : ""
+                }`}
                 onClick={() => handleChatClick(person, false)}
               >
                 <Image
@@ -292,19 +294,21 @@ export default function PeopleList({
                   </div>
                 </div>
                 <span
-                  className={`${styles.statusIndicator} ${person.isOnline ? styles.online : styles.offline
-                    }`}
+                  className={`${styles.statusIndicator} ${
+                    person.isOnline ? styles.online : styles.offline
+                  }`}
                 ></span>
               </button>
             ))
           ) : activeTab === "groups" ? (
-            filteredPeople.map((group) => (
+            filteredPeople.map((group, key) => (
               <button
-                key={`${group.conversationId}-${group.userId}`}
-                className={`${styles.friendItem} ${activeChat?.conversationId === group.conversationId
-                  ? styles.active
-                  : ""
-                  }`}
+                key={`${group.conversationId}-${key}`}
+                className={`${styles.friendItem} ${
+                  activeChat?.conversationId === group.conversationId
+                    ? styles.active
+                    : ""
+                }`}
                 onClick={() => handleChatClick(group, true)}
               >
                 <Image
@@ -335,11 +339,12 @@ export default function PeopleList({
             ))
           ) : (
             activeTab === "friends" &&
-            filteredPeople.map((friend) => (
+            filteredPeople.map((friend, key) => (
               <button
-                key={friend.userId}
-                className={`${styles.friendItem} ${activeChat?.userId === friend.userId ? styles.active : ""
-                  }`}
+                key={`${friend.userId}-${key}`}
+                className={`${styles.friendItem} ${
+                  activeChat?.userId === friend.userId ? styles.active : ""
+                }`}
                 onClick={() => handleChatClick(friend)}
                 onContextMenu={(e) => {
                   e.preventDefault();
@@ -376,8 +381,9 @@ export default function PeopleList({
                   </div>
                 </div>
                 <span
-                  className={`${styles.statusIndicator} ${friend.isOnline ? styles.online : styles.offline
-                    }`}
+                  className={`${styles.statusIndicator} ${
+                    friend.isOnline ? styles.online : styles.offline
+                  }`}
                 ></span>
               </button>
             ))

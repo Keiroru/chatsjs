@@ -10,7 +10,7 @@ export async function POST(request) {
 
     const [receiverUser] = await connection.execute(
       `SELECT userId FROM users
-       WHERE displayName = ? AND displayId = ?`,
+       WHERE BINARY displayName = ? AND displayId = ?`,
       [receiverUserName, receiverDisplayId]
     );
 
