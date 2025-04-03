@@ -33,11 +33,17 @@ export default function Home() {
           {/* Chat app preview illustration */}
           <div className={styles.mockupContainer}>
             <div className={styles.mockupWindow}>
-              <div className={styles.mockupHeader}></div>
+              <div className={styles.mockupHeader}>
+                <div className={styles.profilePic}></div>
+                <div className={styles.profileName}></div>
+              </div>
               <div className={styles.mockupContent}>
                 <div className={styles.mockupMessage1}></div>
                 <div className={styles.mockupMessage2}></div>
                 <div className={styles.mockupMessage1}></div>
+              </div>
+              <div className={styles.input}>
+                <input className={styles.messageInput} type="text"></input>
               </div>
             </div>
           </div>

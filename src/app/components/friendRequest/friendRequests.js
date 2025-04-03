@@ -98,8 +98,6 @@ export default function FriendRequests({
 
   return (
     <div className={friendRequests.length > 0 ? styles.container : ""}>
-      {isLoading && <div className={styles.loading}>Loading requests...</div>}
-
       {friendRequests.length > 0 && !acceptRequestTabOpen && (
         <button onClick={setAcceptRequestTabOpen} className={styles.button}>
           New request
@@ -108,14 +106,19 @@ export default function FriendRequests({
 
       {acceptRequestTabOpen && (
         <div>
-          <button onClick={setAcceptRequestTabOpen} className={styles.closeButton}>
+          <button
+            onClick={setAcceptRequestTabOpen}
+            className={styles.closeButton}
+          >
             Close
           </button>
           <div className={styles.cardsHolder}>
             {friendRequests.map((request) => (
               <div
                 key={request.requestId}
-                className={friendRequests.length > 2 ? styles.cardLessWidth : styles.card}
+                className={
+                  friendRequests.length > 2 ? styles.cardLessWidth : styles.card
+                }
               >
                 <div className={styles.userInfo}>
                   <Image
