@@ -170,7 +170,7 @@
 
 .statusIndicator.online {
   background-color: var(--light_green);
-  box-shadow: 0 0 5px var(--dark_green)
+  box-shadow: 0 0 5px var(--dark_green);
 }
 
 .statusIndicator.offline {
@@ -186,6 +186,70 @@
   color: var(--forest-green);
 }
 
+.menu {
+  background-color: var(--charcoal);
+  border-radius: 10px;
+  width: 220px;
+  padding: 8px 0;
+  z-index: 1000;
+}
+
+.menuHeader {
+  padding: 10px 16px;
+  margin-bottom: 5px;
+  color: var(--silver);
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  color: var(--off-white);
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 12px 16px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  font-size: 14px;
+  position: relative;
+  gap: 12px;
+}
+
+.menuItem:hover {
+  background-color: var(--dark_purple);
+}
+
+.menuItemIcon {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--silver);
+}
+
+.menuItemDelete {
+  color: #ff5555;
+}
+
+.menuItemDelete .menuItemIcon {
+  color: #ff5555;
+}
+
+.menuItemDelete:hover {
+  background-color: #b61b1b9f;
+}
+
+.menuDivider {
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin: 5px 0;
+}
 
 @media (max-width: 768px) {
   .contactsList {

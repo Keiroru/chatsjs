@@ -6,6 +6,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import styles from "@/app/styles/peopleList.module.css";
 import { useSocket } from "@/lib/socket";
+import { set } from "zod";
 
 export default function PeopleList({
   userData,
@@ -20,6 +21,12 @@ export default function PeopleList({
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [contextMenu, setContextMenu] = useState({
+    visible: false,
+    x: 0,
+    y: 0,
+    message: null,
+  });
   const socket = useSocket();
 
   const fetchLastMessages = useCallback(async () => {
@@ -156,6 +163,34 @@ export default function PeopleList({
     setActiveTab(tab);
   };
 
+  const handleFriendDelete = async (friend) => {
+    try {
+      const response = await fetch("/api/friends/delete", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: userData.userId,
+          friendId: friend.userId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete friend");
+      }
+
+      const result = await response.json();
+      console.log("Friend deleted successfully:", result);
+
+      setFriends((prevFriends) =>
+        prevFriends.filter((f) => f.userId !== contextMenu.message.userId)
+      );
+    } catch (error) {
+      console.error("Error deleting friend:", error);
+    }
+  };
+
   return (
     <>
       <div className={styles.searchContainer}>
@@ -176,29 +211,43 @@ export default function PeopleList({
 
       <div className={styles.tabButtons}>
         <button
-          className={`${styles.tabButton} ${activeTab === "people" ? styles.active : ""
-            }`}
+          className={`${styles.tabButton} ${
+            activeTab === "people" ? styles.active : ""
+          }`}
           onClick={() => handleTabChange("people")}
         >
           People
         </button>
         <button
-          className={`${styles.tabButton} ${activeTab === "friends" ? styles.active : ""
-            }`}
+          className={`${styles.tabButton} ${
+            activeTab === "friends" ? styles.active : ""
+          }`}
           onClick={() => handleTabChange("friends")}
         >
           Friends
         </button>
         <button
-          className={`${styles.tabButton} ${activeTab === "groups" ? styles.active : ""
-            }`}
+          className={`${styles.tabButton} ${
+            activeTab === "groups" ? styles.active : ""
+          }`}
           onClick={() => handleTabChange("groups")}
         >
           Groups
         </button>
       </div>
 
-      <div className={styles.friendsList}>
+      <div
+        onContextMenu={(e) => {
+          e.preventDefault();
+          if (contextMenu.visible) {
+            setContextMenu({ ...contextMenu, visible: false });
+          }
+        }}
+        className={styles.friendsList}
+        onClick={() => {
+          setContextMenu({ ...contextMenu, visible: false });
+        }}
+      >
         {isLoading ? (
           <div className={styles.loadingSpinner}>Loading friends...</div>
         ) : error ? (
@@ -208,8 +257,9 @@ export default function PeopleList({
             filteredPeople.map((person) => (
               <button
                 key={person.userId}
-                className={`${styles.friendItem} ${activeChat?.userId === person.userId ? styles.active : ""
-                  }`}
+                className={`${styles.friendItem} ${
+                  activeChat?.userId === person.userId ? styles.active : ""
+                }`}
                 onClick={() => handleChatClick(person, false)}
               >
                 <Image
@@ -237,8 +287,9 @@ export default function PeopleList({
                   </div>
                 </div>
                 <span
-                  className={`${styles.statusIndicator} ${person.isOnline ? styles.online : styles.offline
-                    }`}
+                  className={`${styles.statusIndicator} ${
+                    person.isOnline ? styles.online : styles.offline
+                  }`}
                 ></span>
               </button>
             ))
@@ -246,10 +297,11 @@ export default function PeopleList({
             filteredPeople.map((group) => (
               <button
                 key={`${group.conversationId}-${group.userId}`}
-                className={`${styles.friendItem} ${activeChat?.conversationId === group.conversationId
-                  ? styles.active
-                  : ""
-                  }`}
+                className={`${styles.friendItem} ${
+                  activeChat?.conversationId === group.conversationId
+                    ? styles.active
+                    : ""
+                }`}
                 onClick={() => handleChatClick(group, true)}
               >
                 <Image
@@ -283,9 +335,19 @@ export default function PeopleList({
             filteredPeople.map((friend) => (
               <button
                 key={friend.userId}
-                className={`${styles.friendItem} ${activeChat?.userId === friend.userId ? styles.active : ""
-                  }`}
+                className={`${styles.friendItem} ${
+                  activeChat?.userId === friend.userId ? styles.active : ""
+                }`}
                 onClick={() => handleChatClick(friend)}
+                onContextMenu={(e) => {
+                  e.preventDefault();
+                  setContextMenu({
+                    visible: true,
+                    x: e.pageX,
+                    y: e.pageY,
+                    message: friend,
+                  });
+                }}
               >
                 <Image
                   src={friend?.profilePicPath || "https://placehold.co/50x50"}
@@ -312,14 +374,47 @@ export default function PeopleList({
                   </div>
                 </div>
                 <span
-                  className={`${styles.statusIndicator} ${friend.isOnline ? styles.online : styles.offline
-                    }`}
+                  className={`${styles.statusIndicator} ${
+                    friend.isOnline ? styles.online : styles.offline
+                  }`}
                 ></span>
               </button>
             ))
           )
         ) : (
           <div className={styles.noFriends}>No friends found</div>
+        )}
+
+        {contextMenu.visible && (
+          <div
+            className={styles.menu}
+            style={{
+              position: "fixed",
+              top: `${contextMenu.y}px`,
+              left: `${contextMenu.x}px`,
+            }}
+          >
+            <div className={styles.menuHeader}>Actions</div>
+            <button
+              className={styles.menuItem}
+              onClick={() => {
+                setContextMenu({ ...contextMenu, visible: false });
+              }}
+            >
+              Block Friend
+            </button>
+
+            <button
+              className={`${styles.menuItem} ${styles.menuItem}`}
+              onClick={() => {
+                console.log("Delete friend:", contextMenu.message);
+                handleFriendDelete(contextMenu.message);
+                setContextMenu({ ...contextMenu, visible: false });
+              }}
+            >
+              Delete Friend
+            </button>
+          </div>
         )}
       </div>
     </>
