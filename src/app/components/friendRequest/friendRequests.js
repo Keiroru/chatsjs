@@ -7,28 +7,12 @@ export default function FriendRequests({
   userData,
   acceptRequestTabOpen,
   setAcceptRequestTabOpen,
+  setFriendRequests,
+  friendRequests,
+  fetchFriendRequests,
 }) {
-  const [friendRequests, setFriendRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const Socket = useSocket();
-
-  const fetchFriendRequests = async () => {
-    if (!userData?.userId) return;
-
-    setIsLoading(true);
-    try {
-      const response = await fetch(
-        `/api/friends/requests?receiverUserId=${userData.userId}`
-      );
-      if (!response.ok) throw new Error("Failed to fetch friend requests");
-      const data = await response.json();
-      setFriendRequests(data);
-    } catch (error) {
-      console.error("Error fetching friend requests:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   useEffect(() => {
     if (userData?.userId) {
@@ -66,7 +50,7 @@ export default function FriendRequests({
 
       fetchFriendRequests();
 
-      Socket.emit("accept_request", responseData.requests[0]);
+      Socket.emit("accept_request", { sender: responseData.sender, receiver: responseData.receiver });
     } catch (error) {
       console.error("Error accepting friend request:", error);
     }

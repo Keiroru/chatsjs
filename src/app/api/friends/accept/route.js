@@ -22,15 +22,60 @@ export async function POST(request) {
 
     try {
       const [requests] = await connection.execute(
-        `SELECT FriendRequest.senderUserId, FriendRequest.receiverUserId, FriendRequest.requestId,
-                Users.userId, Users.displayName, Users.createdAt, Users.isOnline, Users.bio
-         FROM FriendRequest
-         JOIN Users ON FriendRequest.senderUserId = Users.userId
-         WHERE requestId = ?`,
+        `SELECT 
+          fr.requestId, 
+          fr.senderUserId, 
+          fr.receiverUserId,
+          
+          -- Sender info
+          sender.userId AS senderUserId, 
+          sender.displayName AS senderDisplayName, 
+          sender.displayId AS senderDisplayId,
+          sender.createdAt AS senderCreatedAt, 
+          sender.isOnline AS senderIsOnline, 
+          sender.bio AS senderBio, 
+          sender.profilePicPath AS senderProfilePicPath,
+          
+          -- Receiver info
+          receiver.userId AS receiverUserId, 
+          receiver.displayName AS receiverDisplayName,
+          receiver.displayId AS receiverDisplayId,
+          receiver.createdAt AS receiverCreatedAt, 
+          receiver.isOnline AS receiverIsOnline, 
+          receiver.bio AS receiverBio, 
+          receiver.profilePicPath AS receiverProfilePicPath
+         FROM 
+          FriendRequest fr
+         JOIN 
+          Users sender ON fr.senderUserId = sender.userId
+         JOIN 
+          Users receiver ON fr.receiverUserId = receiver.userId
+         WHERE 
+          fr.requestId = ?`,
         [requestId]
       );
 
       console.log("SQL result:", requests);
+
+      const senderInfo = {
+        userId: requests[0].senderUserId,
+        displayName: requests[0].senderDisplayName,
+        displayId: requests[0].senderDisplayId,
+        profilePicPath: requests[0].senderProfilePicPath,
+        isOnline: requests[0].senderIsOnline,
+        bio: requests[0].senderBio,
+        createdAt: requests[0].senderCreatedAt
+      };
+
+      const receiverInfo = {
+        userId: requests[0].receiverUserId,
+        displayName: requests[0].receiverDisplayName,
+        displayId: requests[0].receiverDisplayId,
+        profilePicPath: requests[0].receiverProfilePicPath,
+        isOnline: requests[0].receiverIsOnline,
+        bio: requests[0].receiverBio,
+        createdAt: requests[0].receiverCreatedAt
+      };
 
       if (requests.length === 0) {
         await connection.rollback();
@@ -63,7 +108,9 @@ export async function POST(request) {
 
       return NextResponse.json(
         {
-          requests,
+          succes: true,
+          sender: senderInfo,
+          receiver: receiverInfo,
         },
         { status: 200 }
       );

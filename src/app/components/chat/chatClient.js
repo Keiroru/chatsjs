@@ -26,8 +26,9 @@ export default function ChatClient({ userData }) {
   const [friends, setFriends] = useState([]);
   const [messages, setMessages] = useState([]);
   const [groupChatName, setGroupChatName] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("friends");
+  const [friendRequests, setFriendRequests] = useState([]);
   const socket = useSocket();
 
   const formattedDate = activeChat?.createdAt
@@ -200,6 +201,24 @@ export default function ChatClient({ userData }) {
     setGroupChatName(name);
   };
 
+  const fetchFriendRequests = async () => {
+    if (!userData?.userId) return;
+
+    setIsLoading(true);
+    try {
+      const response = await fetch(
+        `/api/friends/requests?receiverUserId=${userData.userId}`
+      );
+      if (!response.ok) throw new Error("Failed to fetch friend requests");
+      const data = await response.json();
+      setFriendRequests(data);
+    } catch (error) {
+      console.error("Error fetching friend requests:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div
       className={`${styles["chat-container"]} ${isMobile ? styles["mobile"] : ""
@@ -280,6 +299,9 @@ export default function ChatClient({ userData }) {
               onRequestAccept={refreshFriendsList}
               acceptRequestTabOpen={acceptRequestTabOpen}
               setAcceptRequestTabOpen={handleAcceptRequestTabOpen}
+              friendRequests={friendRequests}
+              setFriendRequests={setFriendRequests}
+              fetchFriendRequests={fetchFriendRequests}
             />
           )}
         </div>
