@@ -3,6 +3,7 @@ import { jwtVerify } from "jose";
 import mysql from "mysql2/promise";
 import ChatClient from "../../components/chat/chatClient";
 import { SocialProvider } from "@/lib/socket";
+import { getConnection } from "@/lib/db";
 
 export default async function Chat() {
   const cookieStore = await cookies();
@@ -16,12 +17,7 @@ export default async function Chat() {
       const { payload } = await jwtVerify(token, secret);
       userId = payload.userId || "Bug";
 
-      const connection = await mysql.createConnection({
-        host: process.env.DB_HOST || "localhost",
-        user: process.env.DB_USER || "root",
-        password: process.env.DB_PASS || "",
-        database: process.env.DB_NAME || "chatdb",
-      });
+      const connection = await getConnection();
 
       const [rows] = await connection.execute(
         "SELECT * FROM Users WHERE userId = ? LIMIT 1",

@@ -1,3 +1,4 @@
+import { getConnection } from "@/lib/db";
 import mysql from "mysql2/promise";
 import { NextResponse } from "next/server";
 
@@ -11,12 +12,7 @@ export async function GET(request) {
   }
 
   try {
-    const connection = await mysql.createConnection({
-      host: process.env.DB_HOST || "localhost",
-      user: process.env.DB_USER || "root",
-      password: process.env.DB_PASS || "",
-      database: process.env.DB_NAME || "chatdb",
-    });
+    const connection = await getConnection();
 
     let query = "";
     if (tab === "people") {
