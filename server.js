@@ -58,6 +58,10 @@ io.on("connection", (socket) => {
     io.emit("friend_delete", data)
   });
 
+  socket.on("unblock_friend", (data) => {
+    io.emit("unblock", data);
+  });
+
   socket.on("user_status", ({ userId, status }) => {
     connectedUsers[userId] = { socketId: socket.id, status: status };
 

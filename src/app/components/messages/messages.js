@@ -28,6 +28,8 @@ export default function Messages({
   toggleSettings,
   setEditMessage,
   editMessage,
+  setBlock,
+  block,
 }) {
   const [conversationId, setConversationId] = useState(null);
   const messageEnd = useRef(null);
@@ -36,7 +38,6 @@ export default function Messages({
   const [replyTo, setreplyTo] = useState(null);
   const messagesContainerRef = useRef(null);
   const [showScrollButton, setShowScrollButton] = useState(false);
-  const [block, setBlock] = useState([]);
   const [contextMenu, setContextMenu] = useState({
     visible: false,
     x: 0,
@@ -90,12 +91,19 @@ export default function Messages({
       setBlock(data);
     }
 
+    const handleUnblockFriend = (data) => {
+      console.log("Unblocked friend:", data);
+      setBlock(null);
+    }
+
     socket.on("receive_message", handleReceiveMessage);
     socket.on("block", handleBlockFriend)
+    socket.on("unblock", handleUnblockFriend)
 
     return () => {
       socket.off("receive_message", handleReceiveMessage);
       socket.off("block", handleBlockFriend)
+      socket.off("unblock", handleUnblockFriend)
     };
   }, [socket, conversationId, setMessages, setBlock]);
 
@@ -278,6 +286,23 @@ export default function Messages({
     }
   };
 
+  useEffect(() => {
+    if (!contextMenu.visible) return;
+
+    function handleClickOutside(event) {
+      const menuElement = document.querySelector(`.${styles.menu}`);
+      if (menuElement && !menuElement.contains(event.target)) {
+        setContextMenu({ ...contextMenu, visible: false });
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [contextMenu.visible]);
+
   return (
     <>
       {settingsOpen ? (
@@ -325,7 +350,6 @@ export default function Messages({
             onContextMenu={(e) => {
               e.preventDefault();
             }}
-            onClick={() => setContextMenu({ ...contextMenu, visible: false })}
             className={styles["messages-container"]}
           >
             {!activeChat ? (
@@ -398,10 +422,29 @@ export default function Messages({
                         onContextMenu={(e) => {
                           e.preventDefault();
                           console.log("right click", message);
+
+                          //thank god there are smart people on the internet
+                          const viewportWidth = window.innerWidth;
+                          const viewportHeight = window.innerHeight;
+
+                          const menuWidth = 220;
+                          const menuHeight = 220;
+
+                          let x = e.clientX;
+                          let y = e.clientY;
+
+                          if (x + menuWidth > viewportWidth) {
+                            x = viewportWidth - menuWidth - 10;
+                          }
+
+                          if (y + menuHeight > viewportHeight) {
+                            y = viewportHeight - menuHeight - 20;
+                          }
+
                           setContextMenu({
                             visible: true,
-                            x: e.clientX,
-                            y: e.clientY,
+                            x: x,
+                            y: y,
                             message: message.isDeleted === 1 ? null : message,
                             senderId: message.senderUserId,
                             messageId: message.messageId,

@@ -27,6 +27,7 @@ export default function ChatClient({ userData }) {
   const [friends, setFriends] = useState([]);
   const [messages, setMessages] = useState([]);
   const [groupChatName, setGroupChatName] = useState(null);
+  const [block, setBlock] = useState([]);
   const [loading, setIsLoading] = useState(false);
   const [editMessage, setEditMessage] = useState(null);
   const [activeTab, setActiveTab] = useState("friends");
@@ -35,9 +36,9 @@ export default function ChatClient({ userData }) {
 
   const formattedDate = activeChat?.createdAt
     ? new Date(activeChat.createdAt)
-        .toISOString()
-        .split("T")[0]
-        .replace(/-/g, ".")
+      .toISOString()
+      .split("T")[0]
+      .replace(/-/g, ".")
     : "No contact selected";
 
   const handleUnload = async () => {
@@ -91,10 +92,10 @@ export default function ChatClient({ userData }) {
         oldFriends.map((f) =>
           f.userId === userId
             ? {
-                ...f,
-                status,
-                isOnline: status === "online",
-              }
+              ...f,
+              status,
+              isOnline: status === "online",
+            }
             : f
         )
       );
@@ -223,14 +224,12 @@ export default function ChatClient({ userData }) {
 
   return (
     <div
-      className={`${styles["chat-container"]} ${
-        isMobile ? styles["mobile"] : ""
-      } ${rightPanelOpen ? styles["right-open"] : ""}`}
+      className={`${styles["chat-container"]} ${isMobile ? styles["mobile"] : ""
+        } ${rightPanelOpen ? styles["right-open"] : ""}`}
     >
       <aside
-        className={`${styles["sidebar"]} ${styles["left-sidebar"]} ${
-          leftPanelOpen ? styles["open"] : styles["closed"]
-        }`}
+        className={`${styles["sidebar"]} ${styles["left-sidebar"]} ${leftPanelOpen ? styles["open"] : styles["closed"]
+          }`}
       >
         <header className={styles["sidebar-header"]}>
           <div className={styles["user-info"]}>
@@ -280,6 +279,7 @@ export default function ChatClient({ userData }) {
           setFriends={setFriends}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
+          block={block}
         />
 
         {activeTab === "groups" && (
@@ -327,12 +327,13 @@ export default function ChatClient({ userData }) {
         groupChatName={groupChatName}
         setEditMessage={setEditMessage}
         editMessage={editMessage}
+        setBlock={setBlock}
+        block={block}
       />
 
       <aside
-        className={`${styles["sidebar"]} ${styles["right-sidebar"]} ${
-          rightPanelOpen ? styles["open"] : ""
-        }`}
+        className={`${styles["sidebar"]} ${styles["right-sidebar"]} ${rightPanelOpen ? styles["open"] : ""
+          }`}
       >
         <ContactInfo
           setRightPanelOpen={setRightPanelOpen}

@@ -6,7 +6,6 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import styles from "@/app/styles/peopleList.module.css";
 import { useSocket } from "@/lib/socket";
-import { set } from "zod";
 
 export default function PeopleList({
   userData,
@@ -29,6 +28,10 @@ export default function PeopleList({
     message: null,
   });
   const socket = useSocket();
+
+  useEffect(() => {
+    console.log("PeopleList received block prop:", block);
+  }, [block]);
 
   const fetchLastMessages = useCallback(async () => {
     if (!userData?.userId) return;
@@ -212,6 +215,23 @@ export default function PeopleList({
     }
   };
 
+  useEffect(() => {
+    if (!contextMenu.visible) return;
+
+    function handleClickOutside(event) {
+      const menuElement = document.querySelector(`.${styles.menu}`);
+      if (menuElement && !menuElement.contains(event.target)) {
+        setContextMenu({ ...contextMenu, visible: false });
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [contextMenu.visible]);
+
   const handleBlockFriend = async (friend) => {
     try {
       console.log("Blocking friend:", friend.userId, userData.userId);
@@ -237,6 +257,28 @@ export default function PeopleList({
       console.error("Error blocking friend:", error);
     }
   };
+
+  const handleUnblockFriend = async (friend) => {
+    try {
+      const response = await fetch("/api/friends/unblock", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: userData.userId,
+          friendId: friend.userId,
+        }),
+      });
+
+      socket.emit("unblock_friend", {
+        unBlocker: userData.userId,
+        unBlocked: friend.userId,
+      });
+    } catch (error) {
+      console.error("Error unblocking friend:", error);
+    }
+  }
 
   return (
     <>
@@ -283,14 +325,8 @@ export default function PeopleList({
       <div
         onContextMenu={(e) => {
           e.preventDefault();
-          if (contextMenu.visible) {
-            setContextMenu({ ...contextMenu, visible: false });
-          }
         }}
         className={styles.friendsList}
-        onClick={() => {
-          setContextMenu({ ...contextMenu, visible: false });
-        }}
       >
         {isLoading ? (
           <div className={styles.loadingSpinner}>Loading friends...</div>
@@ -439,11 +475,22 @@ export default function PeopleList({
               className={styles.menuItem}
               onClick={() => {
                 console.log("Block friend:", contextMenu.message);
-                handleBlockFriend(contextMenu.message);
+                if (block?.blocked === contextMenu.message.userId) {
+                  console.log("Unblocking friend:", contextMenu.message);
+                  handleUnblockFriend(contextMenu.message);
+                }
+                else {
+                  console.log("Blocking friend:", contextMenu.message);
+                  handleBlockFriend(contextMenu.message);
+                }
                 setContextMenu({ ...contextMenu, visible: false });
               }}
             >
-              Block Friend
+              {console.log("Block friend:", contextMenu.message)}
+              {console.log("Blasdd:", block)}
+              {block?.blocked === contextMenu.message.userId
+                ? "Unblock Friend"
+                : "Block Friend"}
             </button>
 
             <button
