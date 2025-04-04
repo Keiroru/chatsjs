@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import styles from "@/app/styles/chat.module.css";
+import styles from "@/app/styles/contactInfo.module.css";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faTimes, faCog } from "@fortawesome/free-solid-svg-icons";
+import { faTimes, faSearch } from "@fortawesome/free-solid-svg-icons";
 
 export default function ContactInfo({
   setRightPanelOpen,
@@ -23,24 +23,26 @@ export default function ContactInfo({
           member.displayName
             ?.toLowerCase()
             .includes(searchQuery.toLowerCase()) ||
-            member.displayId?.includes(searchQuery)
+          member.displayId?.includes(searchQuery)
       );
       setFilteredPeople(filtered);
     }
   }, [searchQuery, members]);
 
   const getGroupChatMembers = async () => {
-    console.log(activeChat.conversationId)
     try {
       const response = await fetch(
-        `/api/messages/getMessages?conversationId=${activeChat.conversationId}`
+        `/api/friends/getGroupChatMembers?conversationId=${activeChat.conversationId}`
       );
 
       if (!response.ok) {
         throw new Error("Failed to fetch members");
+      } else {
+        let memberData = await response.json();
+        console.log(memberData);
+        setMembers(memberData);
+        console.log(members);
       }
-      // const response = await res.json();
-
     } catch (error) {
       console.error(error);
     }
@@ -52,8 +54,12 @@ export default function ContactInfo({
     }
   }, [activeChat]);
 
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
   return (
-    <div>
+    <div className={styles.mainView}>
       <header className={styles["sidebar-header"]}>
         <button
           className={`${styles["close-button"]} ${styles["icon-button"]}`}
@@ -62,7 +68,7 @@ export default function ContactInfo({
         >
           <FontAwesomeIcon icon={faTimes} />
         </button>
-        <h2>Contact Info</h2>
+        {!isGroupChat ? <h2>Chat Info</h2> : <h2>Group Chat Info</h2>}
       </header>
 
       <div className={styles["contact-profile-container"]}>
@@ -119,7 +125,45 @@ export default function ContactInfo({
           )}
         </section>
       </div>
-      gewgew
+      {isGroupChat && (
+        <>
+          <div className={styles.searchContainer}>
+            <div className={styles.searchInput}>
+              <input
+                type="text"
+                placeholder="Search someone"
+                value={searchQuery}
+                onChange={handleSearch}
+                aria-label="Search someone"
+                className={styles.searchField}
+              />
+              <FontAwesomeIcon icon={faSearch} className={styles.searchIcon} />
+            </div>
+          </div>
+          <div className={styles.friendsList}>
+            {filteredPeople.map((member) => (
+              <button
+                key={member.userId}
+                className={`${styles.friendItem}
+                }`}
+                onClick={() => toggleFriendSelection(member)}
+              >
+                <Image
+                  src={member?.profilePicPath || "https://placehold.co/50x50"}
+                  alt="Friend avatar"
+                  width={40}
+                  height={40}
+                  className={styles.avatar}
+                />
+                <div className={styles.friendInfo}>
+                  <h3 className={styles.friendName}>{member.displayName}</h3>
+                  <p className={styles.displayId}>#{member.displayId}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }

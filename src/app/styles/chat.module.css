@@ -11,7 +11,6 @@
   box-shadow: var(--shadow-effect);
 }
 
-/* Sidebar styles */
 .sidebar {
   display: flex;
   flex-direction: column;
@@ -20,7 +19,6 @@
   overflow: hidden;
 }
 
-/* Left Sidebar */
 .left-sidebar {
   grid-area: left-sidebar;
   border-right: 1px solid var(--dark_purple);
@@ -31,7 +29,6 @@
   width: 60px;
 }
 
-/* Right Sidebar */
 .right-sidebar {
   grid-area: right-sidebar;
   width: 0;
@@ -44,7 +41,6 @@
   width: 500px;
 }
 
-/* Sidebar Header */
 .sidebar-header {
   display: flex;
   justify-content: space-between;
@@ -55,34 +51,6 @@
   background-color: var(--dark_black);
 }
 
-/* User Info */
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* Avatar */
-.avatar {
-  object-fit: cover;
-  border-radius: 20%;
-}
-
-/* Username */
-.username {
-  font-size: 16px;
-  font-weight: 500;
-  max-width: 150px;
-  overflow-wrap: break-word;
-}
-
-/* Controls */
-.controls {
-  display: flex;
-  align-items: center;
-}
-
-/* Icon Button */
 .icon-button {
   background: none;
   border: none;
@@ -106,21 +74,29 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* Close Button */
-.close-button {
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: var(--silver);
-  cursor: pointer;
-  transition: all 0.2s;
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.close-button:hover {
-  color: var(--off-white);
+.avatar {
+  object-fit: cover;
+  border-radius: 20%;
 }
 
-/* Contact Profile Container */
+.username {
+  font-size: 16px;
+  font-weight: 500;
+  max-width: 150px;
+  overflow-wrap: break-word;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+}
+
 .contact-profile-container {
   display: flex;
   justify-content: center;
@@ -128,83 +104,6 @@
   flex-direction: column;
   margin-top: 50px;
   margin-bottom: 20px;
-}
-
-/* Contact Profile */
-.contact-profile {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border-radius: 20%;
-  object-fit: cover;
-}
-
-.line {
-  width: 40%;
-  height: 1px;
-  border-color: var(--dark_blue);
-}
-
-/* Profile Name */
-.profile-name {
-  font-size: 25px;
-  font-weight: 500;
-  margin: 0;
-  margin-bottom: 2px;
-}
-
-/* Profile ID */
-.profileId {
-  color: var(--medium-slate);
-  margin-bottom: 5px;
-}
-
-/* Profile Details */
-.profile-details {
-  padding: 15px 20px;
-  border-bottom: 1px solid var(--shadow-black);
-}
-
-/* Profile Section */
-.profile-section {
-  margin-bottom: 15px;
-}
-
-/* Profile Section Title */
-.profile-section-title {
-  font-size: 14px;
-  color: var(--silver);
-  margin-bottom: 5px;
-  font-weight: normal;
-}
-
-/* Profile Section Content */
-.profile-section-content {
-  font-size: 15px;
-  line-height: 1.5;
-}
-
-/* Status Badge */
-.status-badge {
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 12px;
-  transition: all 0.5s ease;
-}
-
-/* Online Status */
-.status-badge.online {
-  color: var(--forest-green);
-  background-color: var(--dark_green);
-  box-shadow: 0 0 5px var(--dark_green);
-  transition: all 0.5s ease;
-}
-
-/* Offline Status */
-.status-badge.offline {
-  color: var(--stone-gray);
-  background-color: rgba(128, 128, 128, 0.2);
 }
 
 .friendControll {
@@ -304,5 +203,4 @@
   .right-sidebar.open {
     display: block;
   }
-
 }
