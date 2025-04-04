@@ -10,6 +10,7 @@ import AddFriend from "@/app/components/addFriend/addFriend";
 import FriendRequests from "@/app/components/friendRequest/friendRequests";
 import Messages from "@/app/components/messages/messages";
 import GroupChat from "@/app/components/createGroupChat/createGroupChat";
+import ContactInfo from "@/app/components/sideBars/contactInfo";
 import { faArrowLeft, faTimes, faCog } from "@fortawesome/free-solid-svg-icons";
 import { useSocket } from "@/lib/socket";
 
@@ -330,73 +331,13 @@ export default function ChatClient({ userData }) {
           rightPanelOpen ? styles["open"] : ""
         }`}
       >
-        <header className={styles["sidebar-header"]}>
-          <button
-            className={`${styles["close-button"]} ${styles["icon-button"]}`}
-            onClick={() => setRightPanelOpen(false)}
-            aria-label="Close contact info"
-          >
-            <FontAwesomeIcon icon={faTimes} />
-          </button>
-          <h2>Contact Info</h2>
-        </header>
 
-        <div className={styles["contact-profile-container"]}>
-          <Image
-            src={activeChat?.profilePicPath || "https://placehold.co/100x100"}
-            alt="Contact profile"
-            width={150}
-            height={150}
-            className={styles["contact-profile"]}
-          />
-          <hr className={styles.line} />
-          <h2 className={styles["profile-name"]}>
-            {activeChat?.displayName ||
-              activeChat?.conversationName ||
-              "Select a contact"}
-          </h2>
-          {!isGroupChat && (
-            <>
-              <span className={styles.profileId}>#{activeChat?.displayId}</span>
-              <span
-                className={`${styles["status-badge"]} ${
-                  activeChat?.isOnline ? styles["online"] : styles["offline"]
-                }`}
-              >
-                {activeChat?.isOnline ? "Online" : "Offline"}
-              </span>
-            </>
-          )}
-        </div>
-
-        <div className={styles["profile-details"]}>
-          <section className={styles["profile-section"]}>
-            <h3 className={styles["profile-section-title"]}>Bio</h3>
-            <p className={styles["profile-section-content"]}>
-              {activeChat?.bio || "No bio available"}
-            </p>
-          </section>
-          <section className={styles["profile-section"]}>
-            {!isGroupChat ? (
-              <>
-                <h3 className={styles["profile-section-title"]}>
-                  Member Since
-                </h3>
-                <p className={styles["profile-section-content"]}>
-                  {formattedDate}
-                </p>
-              </>
-            ) : (
-              <>
-                {" "}
-                <h3 className={styles["profile-section-title"]}>Created At</h3>
-                <p className={styles["profile-section-content"]}>
-                  {formattedDate}
-                </p>
-              </>
-            )}
-          </section>
-        </div>
+        <ContactInfo 
+        setRightPanelOpen={setRightPanelOpen}
+        activeChat={activeChat}
+        isGroupChat={isGroupChat}
+        formattedDate={formattedDate}
+        />
       </aside>
     </div>
   );

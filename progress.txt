@@ -23,6 +23,7 @@ better settings menu
 not looking for friends no message send
 adjust database: group chat icon and bio
 group chat seperate styling
+újra struktúrálás
 
 
 NINCS GONDOLKOZÁS!!!
