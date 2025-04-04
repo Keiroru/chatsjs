@@ -10,13 +10,13 @@ export async function DELETE(request) {
     const connection = await getConnection();
 
     const query = `
-    DELETE FROM Friends
+    DELETE FROM friends
     WHERE (userId = ? AND friendUserId = ?)
        OR (userId = ? AND friendUserId = ?)
 `;
 
     const query1 = `
-    DELETE FROM FriendRequest 
+    DELETE FROM friendrequest 
     WHERE (senderUserId = ? AND receiverUserId = ?) OR (receiverUserId = ? AND senderUserId = ?)
     `;
 

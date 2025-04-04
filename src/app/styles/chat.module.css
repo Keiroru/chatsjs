@@ -21,6 +21,7 @@
   grid-area: left-sidebar;
   border-right: 1px solid var(--dark_purple);
   width: 300px;
+  overflow: hidden;
 }
 
 .left-sidebar.closed {

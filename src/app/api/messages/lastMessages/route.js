@@ -16,17 +16,17 @@ export async function GET(request) {
         // Modified query to ensure only one row per conversation
         const [results] = await connection.execute(`
             SELECT m.*, 
-                  (SELECT userId FROM ConversationUsers 
+                  (SELECT userId FROM conversationusers 
                    WHERE conversationId = m.conversationId AND userId != ? 
                    LIMIT 1) as friendId
-            FROM Messages m
+            FROM messages m
             INNER JOIN (
                 SELECT conversationId, MAX(sentAt) as maxSentAt
-                FROM Messages
+                FROM messages
                 GROUP BY conversationId
             ) latest ON m.conversationId = latest.conversationId AND m.sentAt = latest.maxSentAt
             WHERE m.conversationId IN (
-                SELECT conversationId FROM ConversationUsers WHERE userId = ?
+                SELECT conversationId FROM conversationusers WHERE userId = ?
             )
             GROUP BY m.conversationId
         `, [userId, userId]);

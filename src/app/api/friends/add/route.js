@@ -17,7 +17,7 @@ export async function POST(request) {
     const receiverUserId = receiverUser[0].userId;
 
     const query = `
-      INSERT INTO FriendRequest (senderUserId, receiverUserId)
+      INSERT INTO friendrequest (senderUserId, receiverUserId)
       VALUES (?, ?)
     `;
 

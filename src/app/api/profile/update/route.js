@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import mysql from "mysql2/promise";
+import { getConnection } from "@/lib/db";
 
 export async function POST(request) {
   let connection;
@@ -12,12 +12,7 @@ export async function POST(request) {
     const bio = formData.get("bio");
     const profilePicture = formData.get("profilePicture");
 
-    connection = await mysql.createConnection({
-      host: process.env.DB_HOST || "localhost",
-      user: process.env.DB_USER || "root",
-      password: process.env.DB_PASS || "",
-      database: process.env.DB_NAME || "chatdb",
-    });
+    const connection = await getConnection();
 
     const updateParams = [];
     const updateFields = [];
@@ -32,7 +27,7 @@ export async function POST(request) {
     updateParams.push(profilePicture);
 
     const query = `
-            UPDATE Users
+            UPDATE users
             SET ${updateFields.join(", ")}
             WHERE userId = ?
         `;
@@ -41,7 +36,7 @@ export async function POST(request) {
     const [result] = await connection.execute(query, updateParams);
 
     const [updatedRows] = await connection.execute(
-      "SELECT userId, displayName, bio, profilePicPath, email FROM Users WHERE userId = ?",
+      "SELECT userId, displayName, bio, profilePicPath, email FROM users WHERE userId = ?",
       [userId]
     );
     await connection.end();

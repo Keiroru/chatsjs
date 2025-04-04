@@ -41,11 +41,11 @@ export async function POST(request) {
           receiver.bio AS receiverBio, 
           receiver.profilePicPath AS receiverProfilePicPath
          FROM 
-          FriendRequest fr
+          friendrequest fr
          JOIN 
-          Users sender ON fr.senderUserId = sender.userId
+          users sender ON fr.senderUserId = sender.userId
          JOIN 
-          Users receiver ON fr.receiverUserId = receiver.userId
+          users receiver ON fr.receiverUserId = receiver.userId
          WHERE 
           fr.requestId = ?`,
         [requestId]
@@ -85,17 +85,17 @@ export async function POST(request) {
       const { senderUserId, receiverUserId } = requests[0];
 
       await connection.execute(
-        `UPDATE FriendRequest SET status = 'accepted' WHERE requestId = ?`,
+        `UPDATE friendrequest SET status = 'accepted' WHERE requestId = ?`,
         [requestId]
       );
 
       await connection.execute(
-        `INSERT INTO Friends (userId, friendUserId) VALUES (?, ?)`,
+        `INSERT INTO friends (userId, friendUserId) VALUES (?, ?)`,
         [receiverUserId, senderUserId]
       );
 
       await connection.execute(
-        `INSERT INTO Friends (userId, friendUserId) VALUES (?, ?)`,
+        `INSERT INTO friends (userId, friendUserId) VALUES (?, ?)`,
         [senderUserId, receiverUserId]
       );
 

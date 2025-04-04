@@ -18,25 +18,25 @@ export async function GET(request) {
     if (tab === "people") {
       query = `
         SELECT 
-          Users.userId,
-          Users.displayName,
-          Users.displayId,
-          Users.profilePicPath,
-          Users.bio,
-          Users.isOnline,
-          Users.createdAt
+          users.userId,
+          users.displayName,
+          users.displayId,
+          users.profilePicPath,
+          users.bio,
+          users.isOnline,
+          users.createdAt
         FROM 
-          Users
+          users
         WHERE 
-          Users.isLookingForFriends = 1
-          AND Users.userId != ?  -- Exclude the current user
+          users.isLookingForFriends = 1
+          AND users.userId != ?  -- Exclude the current user
           AND NOT EXISTS (
-            SELECT 1 FROM Friends 
-            WHERE (Friends.userId = ? AND Friends.friendUserId = Users.userId)
-            OR (Friends.userId = Users.userId AND Friends.friendUserId = ?)
+            SELECT 1 FROM friends 
+            WHERE (friends.userId = ? AND friends.friendUserId = users.userId)
+            OR (friends.userId = users.userId AND friends.friendUserId = ?)
           )
         ORDER BY 
-          Users.displayName
+          users.displayName
       `;
     } else if (tab === "groups") {
       query = `
@@ -58,31 +58,31 @@ export async function GET(request) {
       // Default friends
       query = `
       SELECT 
-        Users.userId,
-        Users.displayName,
-        Users.displayId,
-        Users.profilePicPath,
-        Users.bio,
-        Users.isOnline,
-        Users.createdAt,
-        Friends.userId as currentUserId,
+        users.userId,
+        users.displayName,
+        users.displayId,
+        users.profilePicPath,
+        users.bio,
+        users.isOnline,
+        users.createdAt,
+        friends.userId as currentUserId,
         MAX(COALESCE(m.sentAt, '1970-01-01 00:00:00')) as lastMessageTime
       FROM 
-        Users
+        users
       JOIN 
-        Friends ON Friends.friendUserId = Users.userId 
+        friends ON friends.friendUserId = users.userId 
       LEFT JOIN 
-        ConversationUsers cu1 ON cu1.userId = Users.userId
+        conversationusers cu1 ON cu1.userId = users.userId
       LEFT JOIN 
-        ConversationUsers cu2 ON cu2.conversationId = cu1.conversationId AND cu2.userId = ?
+        conversationusers cu2 ON cu2.conversationId = cu1.conversationId AND cu2.userId = ?
       LEFT JOIN 
-        Messages m ON m.conversationId = cu1.conversationId
+        messages m ON m.conversationId = cu1.conversationId
       WHERE 
-        Friends.userId = ?
+        friends.userId = ?
       GROUP BY
-        Users.userId
+        users.userId
       ORDER BY 
-        lastMessageTime DESC, Users.displayName
+        lastMessageTime DESC, users.displayName
     `;
     }
 

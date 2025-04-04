@@ -11,7 +11,7 @@ export async function POST(request) {
 
     const query = `
         UPDATE 
-            FriendRequest
+            friendrequest
         SET 
             status = 'rejected' 
         WHERE 

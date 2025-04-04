@@ -73,7 +73,9 @@ export default function ContactInfo({
 
       <div className={styles["contact-profile-container"]}>
         <Image
-          src={activeChat?.profilePicPath || "https://placehold.co/100x100"}
+          src={
+            activeChat?.profilePicPath || "/images/user-icon-placeholder.png"
+          }
           alt="Contact profile"
           width={150}
           height={150}

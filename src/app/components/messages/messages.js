@@ -331,7 +331,10 @@ export default function Messages({
               aria-label="Toggle contact info"
             >
               <Image
-                src={activeChat?.profilePicPath || "https://placehold.co/50x50"}
+                src={
+                  activeChat?.profilePicPath ||
+                  "/images/user-icon-placeholder.png"
+                }
                 alt="Contact avatar"
                 width={60}
                 height={60}
@@ -379,9 +382,9 @@ export default function Messages({
                       src={
                         message.senderUserId === userData.userId
                           ? userData.profilePicPath ||
-                          "https://placehold.co/50x50"
+                            "/images/user-icon-placeholder.png"
                           : activeChat?.profilePicPath ||
-                          "https://placehold.co/50x50"
+                            "/images/user-icon-placeholder.png"
                       }
                       width={40}
                       height={40}

@@ -18,7 +18,7 @@ export default async function Chat() {
       const connection = await getConnection();
 
       const [rows] = await connection.execute(
-        "SELECT * FROM Users WHERE userId = ? LIMIT 1",
+        "SELECT * FROM users WHERE userId = ? LIMIT 1",
         [userId]
       );
       if (rows.length > 0) {

@@ -10,23 +10,23 @@ export async function GET(request) {
 
     const query = `
       SELECT 
-          Users.userId,
-          Users.displayName,
-          Users.displayId,
-          Users.profilePicPath,
-          Users.bio,
-          Users.isOnline,
-          Users.createdAt
+          users.userId,
+          users.displayName,
+          users.displayId,
+          users.profilePicPath,
+          users.bio,
+          users.isOnline,
+          users.createdAt
         FROM 
-          Users
+          users
         JOIN 
-          Conversationusers ON Users.userId = Conversationusers.userId
+          conversationusers ON users.userId = conversationusers.userId
         JOIN 
-          Conversations ON Conversationusers.conversationId = Conversations.conversationId
+          conversations ON conversationusers.conversationId = conversations.conversationId
         WHERE 
-          Conversations.conversationId = ?
+          conversations.conversationId = ?
         ORDER BY 
-          Users.displayName
+          users.displayName
     `;
     
     const [result] = await connenction.execute(query, [conversationId]);

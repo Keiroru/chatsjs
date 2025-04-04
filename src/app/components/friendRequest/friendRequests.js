@@ -50,7 +50,10 @@ export default function FriendRequests({
 
       fetchFriendRequests();
 
-      Socket.emit("accept_request", { sender: responseData.sender, receiver: responseData.receiver });
+      Socket.emit("accept_request", {
+        sender: responseData.sender,
+        receiver: responseData.receiver,
+      });
     } catch (error) {
       console.error("Error accepting friend request:", error);
     }
@@ -106,7 +109,10 @@ export default function FriendRequests({
               >
                 <div className={styles.userInfo}>
                   <Image
-                    src={request.profilePicPath || "https://placehold.co/50x50"}
+                    src={
+                      request.profilePicPath ||
+                      "/images/user-icon-placeholder.png"
+                    }
                     alt="Profile"
                     width={40}
                     height={40}

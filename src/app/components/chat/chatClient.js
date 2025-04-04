@@ -246,8 +246,12 @@ export default function ChatClient({ userData }) {
               onClick={() => setSettingsOpen((prev) => !prev)}
               className={styles.profileWrapper}
             >
+              {console.log("userData", userData.profilePicPath)}
               <Image
-                src={userData?.profilePicPath || "https://placehold.co/50x50"}
+                src={
+                  userData?.profilePicPath ||
+                  "/images/user-icon-placeholder.png"
+                }
                 alt="User avatar"
                 width={50}
                 height={50}

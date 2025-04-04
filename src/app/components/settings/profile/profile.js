@@ -10,7 +10,8 @@ export default function Profile({ userData }) {
   const [profileForm, setProfileForm] = useState({
     displayName: userData?.displayName || "",
     bio: userData?.bio || "",
-    profilePicture: userData?.profilePicPath || "https://placehold.co/150x150",
+    profilePicture:
+      userData?.profilePicPath || "/images/user-icon-placeholder.png",
   });
   const [selectedFile, setSelectedFile] = useState(null);
   const [localPreviewUrl, setLocalPreviewUrl] = useState(null);

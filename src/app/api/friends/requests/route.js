@@ -15,12 +15,12 @@ export async function GET(request) {
         friendrequest.receiverUserId,
         friendrequest.isTimedOut,
         friendrequest.sentAt,
-        Users.displayName,
-        Users.displayId,
-        Users.email,
-        Users.profilePicPath
+        users.displayName,
+        users.displayId,
+        users.email,
+        users.profilePicPath
       FROM friendrequest
-      JOIN Users ON friendrequest.senderUserId = Users.userId
+      JOIN users ON friendrequest.senderUserId = users.userId
       WHERE friendrequest.receiverUserId = ?
       AND friendrequest.status = 'pending'
     `;

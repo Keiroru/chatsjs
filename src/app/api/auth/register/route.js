@@ -56,7 +56,7 @@ export async function POST(request) {
 
         // Check for existing email
         const [existingUsers] = await connection.execute(
-            "SELECT * FROM Users WHERE email = ?",
+            "SELECT * FROM users WHERE email = ?",
             [email]
         );
 
@@ -70,7 +70,7 @@ export async function POST(request) {
 
         // Check for existing phone number
         const [existingPhoneUser] = await connection.execute(
-            "SELECT * FROM Users WHERE telephone = ?",
+            "SELECT * FROM users WHERE telephone = ?",
             [telephone]
         );
 
@@ -87,12 +87,12 @@ export async function POST(request) {
 
         const randomId = await getRandomId(connection, trimmedDisplayName);
         if (telephone == "") {
-            const query = `INSERT INTO Users (displayName, displayId, email, password)
+            const query = `INSERT INTO users (displayName, displayId, email, password)
             VALUES (?, ?, ?, ?)`;
 
             await connection.execute(query, [trimmedDisplayName, randomId, email, hashedPassword]);
         } else {
-            const query = `INSERT INTO Users (displayName, displayId, email, telephone, password)
+            const query = `INSERT INTO users (displayName, displayId, email, telephone, password)
             VALUES (?, ?, ?, ?, ?)`;
 
             await connection.execute(query, [trimmedDisplayName, randomId, email, telephone, hashedPassword]);
@@ -114,7 +114,7 @@ export async function POST(request) {
     async function getRandomId(connection, displayName) {
         console.log("displayName:", displayName);
         const [existingIds] = await connection.execute(
-            "SELECT displayId FROM Users WHERE displayName = ?",
+            "SELECT displayId FROM users WHERE displayName = ?",
             [displayName]
         );
 

@@ -16,7 +16,7 @@ export async function POST(request) {
 
         otherUsers.forEach((user, index) => {
           connection.execute(
-            `INSERT INTO conversationUsers (userId, conversationId, isAdmin) VALUES (?, ?, ?)`,
+            `INSERT INTO conversationusers (userId, conversationId, isAdmin) VALUES (?, ?, ?)`,
             [user, result.insertId, index === 0 ? 1 : 0]
           );
         });
@@ -27,11 +27,11 @@ export async function POST(request) {
         });
       } else {
         const [user1] = await connection.execute(
-          `SELECT displayName FROM Users WHERE userId = ?`,
+          `SELECT displayName FROM users WHERE userId = ?`,
           [userId1]
         );
         const [user2] = await connection.execute(
-          `SELECT displayName FROM Users WHERE userId = ?`,
+          `SELECT displayName FROM users WHERE userId = ?`,
           [userId2]
         );
 
@@ -45,11 +45,11 @@ export async function POST(request) {
         );
 
         await connection.execute(
-          `INSERT INTO conversationUsers (userId, conversationId) VALUES (?, ?)`,
+          `INSERT INTO conversationusers (userId, conversationId) VALUES (?, ?)`,
           [userId1, result.insertId]
         );
         await connection.execute(
-          `INSERT INTO conversationUsers (userId, conversationId) VALUES (?, ?)`,
+          `INSERT INTO conversationusers (userId, conversationId) VALUES (?, ?)`,
           [userId2, result.insertId]
         );
 
