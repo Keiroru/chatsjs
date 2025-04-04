@@ -311,3 +311,15 @@
   background-color: rgba(255, 255, 255, 0.1);
   margin: 5px 0;
 }
+
+.blocked {
+  color: var(--error_red);
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 14px;
+  height: 75px;
+  background-color: var(--lighter_black);
+  margin-top: 20px;
+}

@@ -13,6 +13,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSocket } from "@/lib/socket";
+import { set } from "zod";
 
 export default function Messages({
   userData,
@@ -84,12 +85,19 @@ export default function Messages({
       }
     };
 
+    const handleBlockFriend = (data) => {
+      console.log("Blocked friend:", data);
+      setBlock(data);
+    }
+
     socket.on("receive_message", handleReceiveMessage);
+    socket.on("block", handleBlockFriend)
 
     return () => {
       socket.off("receive_message", handleReceiveMessage);
+      socket.off("block", handleBlockFriend)
     };
-  }, [socket, conversationId, setMessages]);
+  }, [socket, conversationId, setMessages, setBlock]);
 
   useEffect(() => {
     if (!socket) return;
@@ -338,19 +346,18 @@ export default function Messages({
                   <div
                     id={`message-${message.messageId}`}
                     key={message.messageId}
-                    className={`${styles.message} ${
-                      message.senderUserId === userData.userId
-                        ? styles.outgoing
-                        : styles.incoming
-                    }`}
+                    className={`${styles.message} ${message.senderUserId === userData.userId
+                      ? styles.outgoing
+                      : styles.incoming
+                      }`}
                   >
                     <Image
                       src={
                         message.senderUserId === userData.userId
                           ? userData.profilePicPath ||
-                            "https://placehold.co/50x50"
+                          "https://placehold.co/50x50"
                           : activeChat?.profilePicPath ||
-                            "https://placehold.co/50x50"
+                          "https://placehold.co/50x50"
                       }
                       width={40}
                       height={40}
@@ -372,16 +379,15 @@ export default function Messages({
                           }}
                         >
                           <span
-                            className={`${
-                              originalMessage.isDeleted === 1
-                                ? styles["deleted-message"]
-                                : ""
-                            }`}
+                            className={`${originalMessage.isDeleted === 1
+                              ? styles["deleted-message"]
+                              : ""
+                              }`}
                           >
                             {originalMessage.isDeleted === 0
                               ? originalMessage.messageText.length > 40
                                 ? originalMessage.messageText.substring(0, 37) +
-                                  "..."
+                                "..."
                                 : originalMessage.messageText
                               : "Deleted Message"}
                           </span>
@@ -404,11 +410,10 @@ export default function Messages({
                         onClick={() => {
                           setContextMenu({ ...contextMenu, visible: false });
                         }}
-                        className={`${styles.messageContent} ${
-                          message.isDeleted === 1
-                            ? styles["deleted-message"]
-                            : ""
-                        }`}
+                        className={`${styles.messageContent} ${message.isDeleted === 1
+                          ? styles["deleted-message"]
+                          : ""
+                          }`}
                       >
                         {message.isDeleted === 1
                           ? "Deleted Message"
@@ -453,9 +458,9 @@ export default function Messages({
           </div>
           {activeChat &&
             (block?.blocker === userData?.userId ? (
-              <p>You blocked this user.</p>
+              <div className={styles.blocked}>You blocked this user</div>
             ) : block?.blocked === userData?.userId ? (
-              <p>You have been blocked by this user.</p>
+              <div className={styles.blocked}>You are blocked by this user</div>
             ) : (
               <Input
                 activeChat={activeChat}

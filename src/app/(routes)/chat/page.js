@@ -1,8 +1,6 @@
 import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
-import mysql from "mysql2/promise";
 import ChatClient from "../../components/chat/chatClient";
-import { SocialProvider } from "@/lib/socket";
 import { getConnection } from "@/lib/db";
 
 export default async function Chat() {
@@ -32,8 +30,6 @@ export default async function Chat() {
     }
   }
   return (
-    <SocialProvider>
-      <ChatClient userData={userData} />
-    </SocialProvider>
+    <ChatClient userData={userData} />
   );
 }

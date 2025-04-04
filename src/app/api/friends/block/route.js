@@ -31,6 +31,8 @@ export async function POST(request) {
     return NextResponse.json({
       success: true,
       message: "Friend blocked successfully",
+      blockerId: userId,
+      blockedId: friendId,
     });
   } catch (error) {
     return NextResponse.json(

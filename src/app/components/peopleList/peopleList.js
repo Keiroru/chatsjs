@@ -6,6 +6,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import styles from "@/app/styles/peopleList.module.css";
 import { useSocket } from "@/lib/socket";
+import { set } from "zod";
 
 export default function PeopleList({
   userData,
@@ -137,12 +138,20 @@ export default function PeopleList({
       }
     };
 
+    const handleDeletefriend = (data) => {
+      setFriends((prevFriends) =>
+        prevFriends.filter((friend) => friend.userId !== data.deleter)
+      );
+    }
+
     socket.on("receive_accept", handleReceiveRequest);
     socket.on("receive_message", handleReceiveMessage);
+    socket.on("friend_delete", handleDeletefriend)
 
     return () => {
       socket.off("receive_message", handleReceiveMessage);
       socket.off("receive_accept", handleReceiveRequest);
+      socket.off("friend_delete", handleDeletefriend);
     };
   }, [socket, activeTab, userData?.userId]);
 
@@ -190,6 +199,11 @@ export default function PeopleList({
       const result = await response.json();
       console.log("Friend deleted successfully:", result);
 
+      socket.emit("delete_friend", {
+        deleter: userData.userId,
+        deleted: friend.userId,
+      })
+
       setFriends((prevFriends) =>
         prevFriends.filter((f) => f.userId !== contextMenu.message.userId)
       );
@@ -212,7 +226,12 @@ export default function PeopleList({
         }),
       });
 
+
       const result = await response.json();
+      socket.emit("block_friend", {
+        blocker: result.blockerId,
+        blocked: result.blockedId,
+      });
       console.log("Friend blocked successfully:", result);
     } catch (error) {
       console.error("Error blocking friend:", error);
@@ -239,25 +258,22 @@ export default function PeopleList({
 
       <div className={styles.tabButtons}>
         <button
-          className={`${styles.tabButton} ${
-            activeTab === "people" ? styles.active : ""
-          }`}
+          className={`${styles.tabButton} ${activeTab === "people" ? styles.active : ""
+            }`}
           onClick={() => handleTabChange("people")}
         >
           People
         </button>
         <button
-          className={`${styles.tabButton} ${
-            activeTab === "friends" ? styles.active : ""
-          }`}
+          className={`${styles.tabButton} ${activeTab === "friends" ? styles.active : ""
+            }`}
           onClick={() => handleTabChange("friends")}
         >
           Friends
         </button>
         <button
-          className={`${styles.tabButton} ${
-            activeTab === "groups" ? styles.active : ""
-          }`}
+          className={`${styles.tabButton} ${activeTab === "groups" ? styles.active : ""
+            }`}
           onClick={() => handleTabChange("groups")}
         >
           Groups
@@ -285,9 +301,8 @@ export default function PeopleList({
             filteredPeople.map((person, key) => (
               <button
                 key={`${person.userId}-${key}`}
-                className={`${styles.friendItem} ${
-                  activeChat?.userId === person.userId ? styles.active : ""
-                }`}
+                className={`${styles.friendItem} ${activeChat?.userId === person.userId ? styles.active : ""
+                  }`}
                 onClick={() => handleChatClick(person, false)}
               >
                 <Image
@@ -315,9 +330,8 @@ export default function PeopleList({
                   </div>
                 </div>
                 <span
-                  className={`${styles.statusIndicator} ${
-                    person.isOnline ? styles.online : styles.offline
-                  }`}
+                  className={`${styles.statusIndicator} ${person.isOnline ? styles.online : styles.offline
+                    }`}
                 ></span>
               </button>
             ))
@@ -325,11 +339,10 @@ export default function PeopleList({
             filteredPeople.map((group, key) => (
               <button
                 key={`${group.conversationId}-${key}`}
-                className={`${styles.friendItem} ${
-                  activeChat?.conversationId === group.conversationId
-                    ? styles.active
-                    : ""
-                }`}
+                className={`${styles.friendItem} ${activeChat?.conversationId === group.conversationId
+                  ? styles.active
+                  : ""
+                  }`}
                 onClick={() => handleChatClick(group, true)}
               >
                 <Image
@@ -363,9 +376,8 @@ export default function PeopleList({
             filteredPeople.map((friend, key) => (
               <button
                 key={`${friend.userId}-${key}`}
-                className={`${styles.friendItem} ${
-                  activeChat?.userId === friend.userId ? styles.active : ""
-                }`}
+                className={`${styles.friendItem} ${activeChat?.userId === friend.userId ? styles.active : ""
+                  }`}
                 onClick={() => handleChatClick(friend)}
                 onContextMenu={(e) => {
                   e.preventDefault();
@@ -402,9 +414,8 @@ export default function PeopleList({
                   </div>
                 </div>
                 <span
-                  className={`${styles.statusIndicator} ${
-                    friend.isOnline ? styles.online : styles.offline
-                  }`}
+                  className={`${styles.statusIndicator} ${friend.isOnline ? styles.online : styles.offline
+                    }`}
                 ></span>
               </button>
             ))

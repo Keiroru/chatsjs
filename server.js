@@ -50,6 +50,14 @@ io.on("connection", (socket) => {
     io.emit("receive_accept", data);
   });
 
+  socket.on("block_friend", (data) => {
+    io.emit("block", data);
+  });
+
+  socket.on("delete_friend", (data) => {
+    io.emit("friend_delete", data)
+  });
+
   socket.on("user_status", ({ userId, status }) => {
     connectedUsers[userId] = { socketId: socket.id, status: status };
 
