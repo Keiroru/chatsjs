@@ -5,7 +5,18 @@ import React, { forwardRef, useState, useEffect } from "react";
 import { useSocket } from "@/lib/socket";
 
 const Input = forwardRef(
-  ({ activeChat, userData, conversationId, replyTo, setreplyTo }, ref) => {
+  (
+    {
+      activeChat,
+      userData,
+      conversationId,
+      replyTo,
+      setreplyTo,
+      editMessage,
+      setEditMessage,
+    },
+    ref
+  ) => {
     const [messageInput, setMessageInput] = useState("");
     const [loading, setLoading] = useState(false);
     const socket = useSocket();
@@ -19,6 +30,31 @@ const Input = forwardRef(
     const handleSendMessage = async () => {
       if (!messageInput.trim() || !conversationId) return;
       setLoading(true);
+
+      if (editMessage) {
+        console.log("Editing message:", editMessage.messageId);
+        console.log("New message text:", messageInput.trim());
+        try {
+          const response = await fetch("/api/messages/editMessage", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              messageId: editMessage.messageId,
+              newMessage: messageInput,
+            }),
+          });
+
+          if (response.ok) {
+            setMessageInput("");
+            setEditMessage(null);
+          }
+          return;
+        } catch (error) {
+          console.error("Error editing message:", error);
+        }
+      }
 
       if (messageInput.length > 20000) {
         alert(
@@ -95,6 +131,23 @@ const Input = forwardRef(
               <button
                 className={styles.cancelReply}
                 onClick={() => setreplyTo(null)}
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        )}
+
+        {editMessage && (
+          <div className={styles.replyPreview}>
+            <div className={styles.replyContent}>
+              <p className={styles.replyTo}>
+                Editing Message: {editMessage.messageText.substring(0, 50)}
+                {editMessage.messageText.length > 50 ? "..." : ""}
+              </p>
+              <button
+                className={styles.cancelReply}
+                onClick={() => setEditMessage(null)}
               >
                 ×
               </button>

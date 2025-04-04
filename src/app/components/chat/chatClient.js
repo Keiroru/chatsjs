@@ -28,6 +28,7 @@ export default function ChatClient({ userData }) {
   const [messages, setMessages] = useState([]);
   const [groupChatName, setGroupChatName] = useState(null);
   const [loading, setIsLoading] = useState(false);
+  const [editMessage, setEditMessage] = useState(null);
   const [activeTab, setActiveTab] = useState("friends");
   const [friendRequests, setFriendRequests] = useState([]);
   const socket = useSocket();
@@ -324,6 +325,8 @@ export default function ChatClient({ userData }) {
         messages={messages}
         setMessages={setMessages}
         groupChatName={groupChatName}
+        setEditMessage={setEditMessage}
+        editMessage={editMessage}
       />
 
       <aside
@@ -331,12 +334,11 @@ export default function ChatClient({ userData }) {
           rightPanelOpen ? styles["open"] : ""
         }`}
       >
-
-        <ContactInfo 
-        setRightPanelOpen={setRightPanelOpen}
-        activeChat={activeChat}
-        isGroupChat={isGroupChat}
-        formattedDate={formattedDate}
+        <ContactInfo
+          setRightPanelOpen={setRightPanelOpen}
+          activeChat={activeChat}
+          isGroupChat={isGroupChat}
+          formattedDate={formattedDate}
         />
       </aside>
     </div>

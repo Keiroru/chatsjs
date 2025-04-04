@@ -24,6 +24,8 @@ export default function Messages({
   messages,
   setMessages,
   toggleSettings,
+  setEditMessage,
+  editMessage,
 }) {
   const [conversationId, setConversationId] = useState(null);
   const messageEnd = useRef(null);
@@ -419,6 +421,7 @@ export default function Messages({
                             : styles.messageTimeLeft
                         }
                       >
+                        {message.isEdited === 1 && "|Edited| "}
                         {message.sentAt}
                       </div>
                     </div>
@@ -460,6 +463,8 @@ export default function Messages({
                 ref={inputRef}
                 replyTo={replyTo}
                 setreplyTo={setreplyTo}
+                editMessage={editMessage}
+                setEditMessage={setEditMessage}
               />
             ))}
 
@@ -504,6 +509,20 @@ export default function Messages({
                   <FontAwesomeIcon icon={faCopy} />
                 </span>
                 Copy Text
+              </button>
+
+              <button
+                className={styles.menuItem}
+                onClick={() => {
+                  setEditMessage(contextMenu.message);
+                  inputRef.current.focus();
+                  setContextMenu({ ...contextMenu, visible: false });
+                }}
+              >
+                <span className={styles.menuItemIcon}>
+                  <FontAwesomeIcon icon={faCopy} />
+                </span>
+                Edit Message
               </button>
 
               <div className={styles.menuDivider}></div>
