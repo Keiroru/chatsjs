@@ -39,8 +39,19 @@ export async function POST(request) {
           [userId1, userId2]
         );
 
+        const [blockedUser] = await connection.execute(
+          `SELECT * FROM blocked WHERE userId = ? AND blockedUserId = ? OR blockedUserId = ? AND userId = ?`,
+          [userId1, userId2, userId1, userId2]
+        );
+
         await connection.end();
-        if (existingConversation.length > 0) {
+        if (existingConversation.length > 0 && blockedUser.length > 0) {
+          return NextResponse.json({
+            conversationId: existingConversation[0].conversationId,
+            blocked: blockedUser[0].blockedUserId,
+            blocker: blockedUser[0].userId,
+          });
+        } else if (existingConversation.length > 0) {
           return NextResponse.json({
             conversationId: existingConversation[0].conversationId,
           });

@@ -389,9 +389,7 @@ export default function ChatClient({ userData }) {
             ) : (
               <>
                 {" "}
-                <h3 className={styles["profile-section-title"]}>
-                  Created At
-                </h3>
+                <h3 className={styles["profile-section-title"]}>Created At</h3>
                 <p className={styles["profile-section-content"]}>
                   {formattedDate}
                 </p>

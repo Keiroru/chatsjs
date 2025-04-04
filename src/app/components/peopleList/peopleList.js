@@ -6,7 +6,6 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import styles from "@/app/styles/peopleList.module.css";
 import { useSocket } from "@/lib/socket";
-import { set } from "zod";
 
 export default function PeopleList({
   userData,
@@ -16,6 +15,7 @@ export default function PeopleList({
   setFriends,
   activeTab,
   setActiveTab,
+  block,
 }) {
   const [filteredPeople, setFilteredPeople] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -195,6 +195,27 @@ export default function PeopleList({
       );
     } catch (error) {
       console.error("Error deleting friend:", error);
+    }
+  };
+
+  const handleBlockFriend = async (friend) => {
+    try {
+      console.log("Blocking friend:", friend.userId, userData.userId);
+      const response = await fetch("/api/friends/block", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: userData.userId,
+          friendId: friend.userId,
+        }),
+      });
+
+      const result = await response.json();
+      console.log("Friend blocked successfully:", result);
+    } catch (error) {
+      console.error("Error blocking friend:", error);
     }
   };
 
@@ -402,9 +423,12 @@ export default function PeopleList({
             }}
           >
             <div className={styles.menuHeader}>Actions</div>
+
             <button
               className={styles.menuItem}
               onClick={() => {
+                console.log("Block friend:", contextMenu.message);
+                handleBlockFriend(contextMenu.message);
                 setContextMenu({ ...contextMenu, visible: false });
               }}
             >

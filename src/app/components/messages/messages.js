@@ -32,6 +32,7 @@ export default function Messages({
   const [replyTo, setreplyTo] = useState(null);
   const messagesContainerRef = useRef(null);
   const [showScrollButton, setShowScrollButton] = useState(false);
+  const [block, setBlock] = useState([]);
   const [contextMenu, setContextMenu] = useState({
     visible: false,
     x: 0,
@@ -127,6 +128,7 @@ export default function Messages({
       });
 
       const data = await response.json();
+      setBlock(data);
 
       if (response.ok && data.conversationId) {
         setConversationId(data.conversationId);
@@ -158,7 +160,7 @@ export default function Messages({
   // Messages are fetched here
   const fetchMessages = useCallback(async () => {
     if (!conversationId) return;
-
+    console.log(block);
     try {
       const response = await fetch(
         `/api/messages/getMessages?conversationId=${conversationId}`
@@ -299,7 +301,11 @@ export default function Messages({
                 height={60}
                 className={styles.profil}
               />
-              <h1>{activeChat?.displayName ||activeChat?.conversationName || "Select a contact"}</h1>
+              <h1>
+                {activeChat?.displayName ||
+                  activeChat?.conversationName ||
+                  "Select a contact"}
+              </h1>
             </button>
           </header>
 
@@ -441,16 +447,21 @@ export default function Messages({
 
             <div ref={messageEnd}></div>
           </div>
-          {activeChat && (
-            <Input
-              activeChat={activeChat}
-              userData={userData}
-              conversationId={conversationId}
-              ref={inputRef}
-              replyTo={replyTo}
-              setreplyTo={setreplyTo}
-            />
-          )}
+          {activeChat &&
+            (block?.blocker === userData?.userId ? (
+              <p>You blocked this user.</p>
+            ) : block?.blocked === userData?.userId ? (
+              <p>You have been blocked by this user.</p>
+            ) : (
+              <Input
+                activeChat={activeChat}
+                userData={userData}
+                conversationId={conversationId}
+                ref={inputRef}
+                replyTo={replyTo}
+                setreplyTo={setreplyTo}
+              />
+            ))}
 
           {contextMenu.visible && (
             <div
