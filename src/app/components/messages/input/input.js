@@ -31,7 +31,7 @@ const Input = forwardRef(
       if (!messageInput.trim() || !conversationId) return;
       setLoading(true);
 
-      if (editMessage) {
+      if (editMessage && editMessage.senderUserId === userData.userId) {
         console.log("Editing message:", editMessage.messageId);
         console.log("New message text:", messageInput.trim());
         try {
@@ -54,6 +54,11 @@ const Input = forwardRef(
         } catch (error) {
           console.error("Error editing message:", error);
         }
+      } else if (editMessage && editMessage.senderUserId !== userData.userId) {
+        console.log("you can only edit your own messages");
+        setMessageInput("");
+        setEditMessage(null);
+        return;
       }
 
       if (messageInput.length > 20000) {

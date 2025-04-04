@@ -9,6 +9,7 @@ import {
   faReply,
   faCopy,
   faTrash,
+  faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSocket } from "@/lib/socket";
@@ -520,7 +521,7 @@ export default function Messages({
                 }}
               >
                 <span className={styles.menuItemIcon}>
-                  <FontAwesomeIcon icon={faCopy} />
+                  <FontAwesomeIcon icon={faEdit} />
                 </span>
                 Edit Message
               </button>
