@@ -149,7 +149,10 @@ export default function ContactInfo({
                 onClick={() => toggleFriendSelection(member)}
               >
                 <Image
-                  src={member?.profilePicPath || "https://placehold.co/50x50"}
+                  src={
+                    member?.profilePicPath ||
+                    "/images/user-icon-placeholder.png"
+                  }
                   alt="Friend avatar"
                   width={40}
                   height={40}

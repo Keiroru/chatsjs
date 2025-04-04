@@ -181,10 +181,14 @@
 .friendInfo {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  align-items: baseline;
   margin-left: 20px;
   overflow: hidden;
+}
+
+.avatar{
+  border-radius: 20%;
+  object-fit: cover;
 }
 
 .friendName {

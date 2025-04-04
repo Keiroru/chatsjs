@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+const profilePicture = "/public/images/user-icon-placeholder.png";
 
 export default function CreateGroupChat({
   userData,
@@ -42,8 +43,8 @@ export default function CreateGroupChat({
           friend.displayName
             ?.toLowerCase()
             .includes(searchQuery.toLowerCase()) ||
-          friend.displayId?.includes(searchQuery)
-          || selectedFriends.some((f) => f.userId === friend.userId)
+          friend.displayId?.includes(searchQuery) ||
+          selectedFriends.some((f) => f.userId === friend.userId)
       );
       setFilteredPeople(filtered);
     }
@@ -118,7 +119,10 @@ export default function CreateGroupChat({
         </button>
       ) : (
         <>
-          <button onClick={handleNewTab} className={`${styles.backButton} ${styles.closeButton}`}>
+          <button
+            onClick={handleNewTab}
+            className={`${styles.backButton} ${styles.closeButton}`}
+          >
             Close
           </button>
           <div>
@@ -144,9 +148,15 @@ export default function CreateGroupChat({
       )}
       {continueTabOpen && (
         <div className={styles.createContainer} onClick={handleContinueTab}>
-          <div className={styles.createContainerMenu} onClick={(e) => e.stopPropagation()}>
+          <div
+            className={styles.createContainerMenu}
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className={styles.wrapper}>
-              <p>Create new group chat as <span className={styles.groupChatName}>{groupChatName}</span></p>
+              <p>
+                Create new group chat as{" "}
+                <span className={styles.groupChatName}>{groupChatName}</span>
+              </p>
               <div className={styles.searchContainer}>
                 <div className={styles.searchInput}>
                   <input
@@ -163,7 +173,9 @@ export default function CreateGroupChat({
                   />
                 </div>
               </div>
-              <span className={styles.infotext}>Select friends to join your group chat</span>
+              <span className={styles.infotext}>
+                Select friends to join your group chat
+              </span>
               <div className={styles.friendsList}>
                 {filteredPeople.map((friend) => (
                   <button
@@ -177,7 +189,8 @@ export default function CreateGroupChat({
                   >
                     <Image
                       src={
-                        friend?.profilePicPath || "https://placehold.co/50x50"
+                        friend?.profilePicPath ||
+                        "/images/user-icon-placeholder.png"
                       }
                       alt="Friend avatar"
                       width={40}
