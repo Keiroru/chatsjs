@@ -29,15 +29,23 @@ export async function POST(request) {
         ]);
 
         const [messages] = await connection.execute(
-            `SELECT * FROM messages WHERE messageId = ?`,[result.insertId]
+            `SELECT * FROM messages WHERE messageId = ?`, [result.insertId]
         );
 
+        const [receiverRows] = await connection.execute(
+            `SELECT userId from conversationusers where conversationId = ? `, [conversationId]
+        );
+
+        const actualReceiver = receiverRows
+            .filter(user => user.userId !== senderUserId)
+            .map(user => user.userId)[0];
         await connection.end();
 
         return NextResponse.json({
             success: true,
             message: "Message sent successfully",
-            data: messages[0]
+            data: messages[0],
+            receiver: actualReceiver
         });
     } catch (error) {
         console.error("Error sending message:", error);

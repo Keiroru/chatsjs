@@ -35,31 +35,65 @@ io.on("connection", (socket) => {
   console.log("New client connected:", socket.id);
 
   socket.on("send_message", (data) => {
-    io.emit("receive_message", data);
+    if (data.receiver) {
+      socket.emit("receive_message", data);
+
+      const recipientSocket = connectedUsers[data.receiver]?.socketId;
+      if (recipientSocket) {
+        socket.to(recipientSocket).emit("receive_message", data);
+      }
+    } else {
+      io.emit("receive_message", data);
+      console.log("Sending message to all:", data);
+    }
   });
 
   socket.on("delete_message", (data) => {
-    io.emit("delete", data);
+    const recipientSocket = connectedUsers[data.receiver]?.socketId;
+    if (recipientSocket) {
+      socket.to(recipientSocket).emit("delete", data);
+    }
+    socket.emit("delete", data);
   });
 
   socket.on("friend_request", (data) => {
-    io.emit("receive_request", data);
+    const recipientSocket = connectedUsers[data.receiverUserId]?.socketId;
+    if (recipientSocket) {
+      socket.to(recipientSocket).emit("receive_request", data);
+    }
+    socket.emit("receive_request", data);
   });
 
   socket.on("accept_request", (data) => {
-    io.emit("receive_accept", data);
+    const recipientSocket = connectedUsers[data.sender.userId]?.socketId;
+    if (recipientSocket) {
+      socket.to(recipientSocket).emit("receive_accept", data);
+    }
+    socket.emit("receive_accept", data);
   });
 
   socket.on("block_friend", (data) => {
-    io.emit("block", data);
+    const blockedSocket = connectedUsers[data.blocked]?.socketId;
+    if (blockedSocket) {
+      socket.to(blockedSocket).emit("block", data);
+    }
+    socket.emit("block", data);
   });
 
   socket.on("delete_friend", (data) => {
-    io.emit("friend_delete", data)
+    const friendSocket = connectedUsers[data.deleted]?.socketId;
+    if (friendSocket) {
+      socket.to(friendSocket).emit("friend_delete", data);
+    }
+    socket.emit("friend_delete", data);
   });
 
   socket.on("unblock_friend", (data) => {
-    io.emit("unblock", data);
+    const unblockedSocket = connectedUsers[data.unBlocked]?.socketId;
+    if (unblockedSocket) {
+      socket.to(unblockedSocket).emit("unblock", data);
+    }
+    socket.emit("unblock", data);
   });
 
   socket.on("user_status", ({ userId, status }) => {

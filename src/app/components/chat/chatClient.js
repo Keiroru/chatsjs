@@ -246,7 +246,6 @@ export default function ChatClient({ userData }) {
               onClick={() => setSettingsOpen((prev) => !prev)}
               className={styles.profileWrapper}
             >
-              {console.log("userData", userData.profilePicPath)}
               <Image
                 src={
                   userData?.profilePicPath ||

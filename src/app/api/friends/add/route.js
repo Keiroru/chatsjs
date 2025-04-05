@@ -43,10 +43,12 @@ export async function POST(request) {
     await connection.execute(query, [senderUserId, receiverUserId]);
     await connection.end();
 
+
+    console.log("ids", senderUserId, receiverUserId);
+
     return NextResponse.json({
       success: true,
       message: "Friend request sent",
-      sender: sender,
       receiverUserId: receiverUserId,
     });
   } catch (error) {

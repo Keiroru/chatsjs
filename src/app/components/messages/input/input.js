@@ -85,18 +85,19 @@ const Input = forwardRef(
         });
 
         var res = await response.json();
-        res = res.data.messageId;
 
         const messageData = {
           conversationId: conversationId,
-          messageId: res,
+          messageId: res.data.messageId,
           senderUserId: userData.userId,
           messageText: messageInput.trim(),
           senderName: userData.displayName,
           senderProfilePic: userData.profilePicPath,
           sentAt: new Date().toISOString(),
           replyTo: replyTo ? replyTo.messageId : null,
-          isDeleted: 0,
+          isDeleted: res.data.isDeleted,
+          isEdited: res.data.isEdited,
+          receiver: res.receiver,
         };
         if (response.ok) {
           setMessageInput("");

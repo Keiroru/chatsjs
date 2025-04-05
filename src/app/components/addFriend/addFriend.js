@@ -38,13 +38,13 @@ export default function AddFriend({
 
       const data = await response.json();
 
-      const resData = await fetch(
-        `/api/friends/requests?receiverUserId=${data.receiverUserId}`
-      );
+      const friendRequestData = {
+        sender: userId,
+        receiverUserId: data.receiverUserId
+      };
 
-      const res = await resData.json();
-
-      Socket.emit("friend_request", res);
+      console.log("Emitting friend request with data:", friendRequestData);
+      Socket.emit("friend_request", friendRequestData);
 
       if (response.ok) {
         setStatus({

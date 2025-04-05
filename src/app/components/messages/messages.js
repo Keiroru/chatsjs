@@ -254,7 +254,7 @@ export default function Messages({
     }
 
     try {
-      socket.emit("delete_message", { messageId, senderId });
+      socket.emit("delete_message", { messageId, senderId, conversationId, receiver: activeChat.userId });
 
       const response = await fetch(`/api/messages/deleteMessage`, {
         method: "POST",
@@ -382,9 +382,9 @@ export default function Messages({
                       src={
                         message.senderUserId === userData.userId
                           ? userData.profilePicPath ||
-                            "/images/user-icon-placeholder.png"
+                          "/images/user-icon-placeholder.png"
                           : activeChat?.profilePicPath ||
-                            "/images/user-icon-placeholder.png"
+                          "/images/user-icon-placeholder.png"
                       }
                       width={40}
                       height={40}
