@@ -4,9 +4,10 @@
   width: 100%;
   position: relative;
   overflow: hidden;
+  background-color: var(--rich-black);
+  box-shadow: var(--shadow-effect);
 }
 
-/* Back button styling for mobile */
 .icon-button {
   background: none;
   border: none;
@@ -29,28 +30,30 @@
 .icon-button:hover {
   background-color: var(--dark_purple);
   color: var(--off-white);
+  transform: translateY(-1px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .back-button {
   margin-right: 10px;
 }
 
-/* Sidebar Styling */
 .settingsSidebar {
-  width: 250px;
-  min-width: 250px;
-  background-color: var(--rich-black);
+  width: 280px;
+  min-width: 280px;
+  background-color: var(--light_black);
   padding: 20px 0;
   overflow-y: auto;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border-right: 1px solid var(--dark_purple);
   transition: all 0.3s ease;
 }
 
 .settingsSidebar h2 {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 600;
-  margin: 0 0 20px;
+  margin: 0 0 25px;
   padding: 0 20px;
+  color: var(--off-white);
 }
 
 .settingsNav h4 {
@@ -59,6 +62,8 @@
   margin: 20px 0 10px;
   padding: 0 20px;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .settingsNav ul {
@@ -68,42 +73,43 @@
 }
 
 .settingsNav ul li {
-  padding: 10px 20px;
+  padding: 12px 20px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   gap: 10px;
-  color: var(--medium-slate);
+  color: var(--silver);
+  border-left: 3px solid transparent;
 }
 
 .settingsNav ul li:hover {
-  background-color: var(--smoke);
-  color: var(--rich-black);
+  background-color: var(--lighter_black);
+  color: var(--off-white);
 }
 
 .settingsNav ul li.active {
-  background-color: var(--stone-gray);
+  background-color: var(--lighter_black);
   color: var(--lavender);
-  border-left: 5px solid var(--deep-lavender);
+  border-left: 3px solid var(--deep-lavender);
 }
 
-/* Content Area */
 .settingsContent {
   flex: 1;
   padding: 30px;
   overflow-y: auto;
-  background-color: var(--medium-slate);
+  background-color: var(--rich-black);
   transition: all 0.3s ease;
 }
 
 .settingsPanel {
   max-width: 800px;
-  background-color: var(--smoke);
+  background-color: var(--light_black);
   padding: 25px;
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   margin: 0 auto;
+  border: 1px solid var(--dark_purple);
 }
 
 .settingsPanel h3 {
@@ -111,21 +117,19 @@
   font-weight: 600;
   margin-top: 0;
   margin-bottom: 20px;
-  color: #333;
+  color: var(--off-white);
 }
 
-/* Large Screens */
 @media (min-width: 1200px) {
   .settingsPanel {
     max-width: 1000px;
   }
 }
 
-/* Medium Screens */
 @media (max-width: 992px) {
   .settingsSidebar {
-    width: 220px;
-    min-width: 220px;
+    width: 240px;
+    min-width: 240px;
   }
 
   .settingsContent {
@@ -137,28 +141,30 @@
   }
 }
 
-/* Mobile Screens */
 @media (max-width: 768px) {
   .settingsContainer {
     flex-direction: column;
+    height: 100vh;
   }
 
   .settingsSidebar {
     width: 100%;
-    height: auto;
+    height: 100vh;
     transition: transform 0.3s ease, opacity 0.3s ease;
+    border-right: none;
+    border-bottom: 1px solid var(--dark_purple);
   }
 
   .settingsContent {
     padding: 15px;
     margin-top: 10px;
+    height: 100vh;
   }
 
   .settingsPanel {
     padding: 15px;
     min-width: auto;
     margin-top: 40px;
-    /* Space for back button */
   }
 
   .closed {
@@ -173,20 +179,25 @@
     transform: translateX(0);
   }
 
-  /* Extra padding when sidebar is shown on mobile */
   .settingsSidebar.open {
     padding-top: 50px;
-    /* Space for the back button */
   }
 }
 
-/* Extra Small Screens */
 @media (max-width: 375px) {
   .settingsPanel {
-    padding: 10px;
+    padding: 12px;
   }
 
   .settingsContent {
     padding: 10px;
+  }
+
+  .settingsSidebar h2 {
+    font-size: 20px;
+  }
+
+  .settingsNav ul li {
+    padding: 10px 15px;
   }
 }

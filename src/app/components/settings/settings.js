@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import style from "@/app/styles/settings.module.css";
 import Profile from "@/app/components/settings/profile/profile";
 import Account from "@/app/components/settings/myAccount/myAccount";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faUser, faUserCircle, faPalette } from "@fortawesome/free-solid-svg-icons";
 
 export default function Settings({
   userData,
@@ -13,14 +13,38 @@ export default function Settings({
   toggleSettings,
 }) {
   const [selectedOption, setSelectedOption] = useState("");
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (!selectedOption && windowWidth > 768) {
+      setSelectedOption("account");
+    }
+  }, [selectedOption, windowWidth]);
+
+  const handleBackClick = () => {
+    if (isMobile && selectedOption) {
+      setSelectedOption("");
+    } else {
+      toggleSettings();
+    }
+  };
 
   return (
     <div className={style.settingsContainer}>
       {isMobile && (
         <button
           className={`${style["icon-button"]} ${style["back-button"]}`}
-          onClick={toggleSettings}
-          aria-label="Back to contacts"
+          onClick={handleBackClick}
+          aria-label={selectedOption ? "Back to settings menu" : "Back to main page"}
         >
           <FontAwesomeIcon icon={faArrowLeft} />
         </button>
@@ -37,12 +61,14 @@ export default function Settings({
               className={selectedOption === "account" ? style.active : ""}
               onClick={() => setSelectedOption("account")}
             >
+              <FontAwesomeIcon icon={faUser} />
               <span>My Account</span>
             </li>
             <li
               className={selectedOption === "profile" ? style.active : ""}
               onClick={() => setSelectedOption("profile")}
             >
+              <FontAwesomeIcon icon={faUserCircle} />
               <span>Profile</span>
             </li>
           </ul>
@@ -52,6 +78,7 @@ export default function Settings({
               className={selectedOption === "appearance" ? style.active : ""}
               onClick={() => setSelectedOption("appearance")}
             >
+              <FontAwesomeIcon icon={faPalette} />
               <span>Appearance</span>
             </li>
           </ul>
@@ -62,6 +89,12 @@ export default function Settings({
         className={`${style["settingsContent"]} ${isMobile && selectedOption ? style["open"] : style["closed"]
           }`}
       >
+        {!selectedOption && (
+          <div className={style.settingsPanel}>
+            <h3>Welcome to Settings</h3>
+            <p>Please select a setting option from the sidebar to get started.</p>
+          </div>
+        )}
         {selectedOption === "profile" && (
           <div className={style.settingsPanel}>
             <Profile userData={userData} />
@@ -74,7 +107,8 @@ export default function Settings({
         )}
         {selectedOption === "appearance" && (
           <div className={style.settingsPanel}>
-            <p>Nincs</p>
+            <h3>Appearance Settings</h3>
+            <p>Appearance settings will be available soon.</p>
           </div>
         )}
       </main>
