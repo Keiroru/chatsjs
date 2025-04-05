@@ -31,6 +31,7 @@ const Input = forwardRef(
       if (!messageInput.trim() || !conversationId) return;
       setLoading(true);
 
+      console.log("editMessage", editMessage);
       if (editMessage && editMessage.senderUserId === userData.userId) {
         console.log("Editing message:", editMessage.messageId);
         console.log("New message text:", messageInput.trim());
@@ -49,15 +50,27 @@ const Input = forwardRef(
           if (response.ok) {
             setMessageInput("");
             setEditMessage(null);
+            socket.emit("edit_message", {
+              messageId: editMessage.messageId,
+              newMessage: messageInput,
+            });
+            setTimeout(() => {
+              if (ref.current) {
+                ref.current.focus();
+              }
+            }, 1);
+            setLoading(false);
           }
           return;
         } catch (error) {
           console.error("Error editing message:", error);
+          setLoading(false);
         }
       } else if (editMessage && editMessage.senderUserId !== userData.userId) {
         console.log("you can only edit your own messages");
         setMessageInput("");
         setEditMessage(null);
+        setLoading(false);
         return;
       }
 

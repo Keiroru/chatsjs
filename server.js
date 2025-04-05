@@ -88,6 +88,10 @@ io.on("connection", (socket) => {
     socket.emit("friend_delete", data);
   });
 
+  socket.on("edit_message", (data) => {
+    io.emit("receive_edit", data);
+  });
+
   socket.on("unblock_friend", (data) => {
     const unblockedSocket = connectedUsers[data.unBlocked]?.socketId;
     if (unblockedSocket) {

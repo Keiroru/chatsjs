@@ -96,9 +96,23 @@ export default function Messages({
       setBlock(null);
     }
 
+    const handleEditMessage = (data) => {
+      console.log("Edited message:", data);
+      setMessages((prevMessages) =>
+        prevMessages.map((message) => {
+          if (message.messageId === data.messageId) {
+            return { ...message, messageText: data.newMessage, isEdited: 1 };
+          }
+          return message;
+        })
+      );
+    };
+
+
     socket.on("receive_message", handleReceiveMessage);
     socket.on("block", handleBlockFriend)
     socket.on("unblock", handleUnblockFriend)
+    socket.on("receive_edit", handleEditMessage)
 
     return () => {
       socket.off("receive_message", handleReceiveMessage);
@@ -242,10 +256,15 @@ export default function Messages({
   }, [conversationId, fetchMessages]);
 
   useEffect(() => {
-    if (activeChat && userData) {
+    if (activeChat) {
       fetchConversationId();
     }
-  }, [activeChat, userData, fetchConversationId]);
+  }, [activeChat, fetchConversationId]);
+
+  // Reset editMessage when activeChat changes
+  useEffect(() => {
+    setEditMessage(null);
+  }, [activeChat, setEditMessage]);
 
   const deleteMessage = async (messageId, senderId) => {
     if (senderId !== userData.userId) {
