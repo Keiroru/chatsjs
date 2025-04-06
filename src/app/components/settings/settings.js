@@ -84,6 +84,12 @@ export default function Settings({
               <FontAwesomeIcon icon={faPalette} />
               <span>Appearance</span>
             </li>
+            <li
+              className={selectedOption === "bugreport" ? style.active : ""}
+              onClick={() => setSelectedOption("bugreport")}
+            >
+              <span>Report a bug</span>
+            </li>
           </ul>
         </div>
       </aside>
@@ -112,6 +118,13 @@ export default function Settings({
           <div className={style.settingsPanel}>
             <h3>Appearance Settings</h3>
             <p>Appearance settings will be available soon.</p>
+            <p>Select theme</p>
+            <p>Change language</p>
+          </div>
+        )}
+        {selectedOption === "bugreport" && (
+          <div className={style.settingsPanel}>
+            <p>Please....</p>
           </div>
         )}
       </main>
