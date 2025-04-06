@@ -26,6 +26,8 @@ export default function MyAccount({ userData }) {
         </div>
         <button type="submit">Save</button>
       </form>
+        <button type="submit">I'm looking for friends</button>
+        <button type="submit">Delete account</button>
     </div>
   );
 }

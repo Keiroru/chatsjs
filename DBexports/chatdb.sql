@@ -249,7 +249,7 @@ CREATE TABLE `logins` (
 
 CREATE TABLE `messages` (
   `messageId` int(11) NOT NULL,
-  `conversationId` int(11) DEFAULT NULL,
+  `conversationId` int(11) NOT NULL,
   `senderUserId` int(11) NOT NULL,
   `sentAt` timestamp NOT NULL DEFAULT current_timestamp(),
   `state` enum('sent','delivered','seen') NOT NULL DEFAULT 'sent',
