@@ -13,7 +13,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSocket } from "@/lib/socket";
-import { set } from "zod";
 
 export default function Messages({
   userData,
@@ -585,6 +584,11 @@ export default function Messages({
               <button
                 className={styles.menuItem}
                 onClick={() => {
+                  if (contextMenu.senderId !== userData.userId) {
+                    alert("You can only edit your own messages");
+                    setContextMenu({ ...contextMenu, visible: false });
+                    return;
+                  }
                   setEditMessage(contextMenu.message);
                   inputRef.current.focus();
                   setContextMenu({ ...contextMenu, visible: false });

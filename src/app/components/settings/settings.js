@@ -14,24 +14,27 @@ export default function Settings({
 }) {
   const [selectedOption, setSelectedOption] = useState("");
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
+      setIsSmallScreen(window.innerWidth <= 900);
     };
 
+    handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   useEffect(() => {
-    if (!selectedOption && windowWidth > 768) {
+    if (!selectedOption && windowWidth > 900) {
       setSelectedOption("account");
     }
   }, [selectedOption, windowWidth]);
 
   const handleBackClick = () => {
-    if (isMobile && selectedOption) {
+    if ((isMobile || isSmallScreen) && selectedOption) {
       setSelectedOption("");
     } else {
       toggleSettings();
@@ -40,7 +43,7 @@ export default function Settings({
 
   return (
     <div className={style.settingsContainer}>
-      {isMobile && (
+      {(isMobile || isSmallScreen) && (
         <button
           className={`${style["icon-button"]} ${style["back-button"]}`}
           onClick={handleBackClick}
@@ -50,7 +53,7 @@ export default function Settings({
         </button>
       )}
       <aside
-        className={`${style["settingsSidebar"]} ${isMobile && selectedOption ? style["closed"] : style["open"]
+        className={`${style["settingsSidebar"]} ${(isMobile || isSmallScreen) && selectedOption ? style["closed"] : style["open"]
           }`}
       >
         <h2>Settings</h2>
@@ -86,7 +89,7 @@ export default function Settings({
       </aside>
 
       <main
-        className={`${style["settingsContent"]} ${isMobile && selectedOption ? style["open"] : style["closed"]
+        className={`${style["settingsContent"]} ${(isMobile || isSmallScreen) && selectedOption ? style["open"] : style["closed"]
           }`}
       >
         {!selectedOption && (

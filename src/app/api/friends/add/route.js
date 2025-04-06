@@ -21,30 +21,8 @@ export async function POST(request) {
       VALUES (?, ?)
     `;
 
-    const query1 = `
-    SELECT 
-        users.userId, 
-        users.displayName, 
-        users.displayId, 
-        users.profilePicPath, 
-        users.isOnline, 
-        users.bio, 
-        users.createdAt
-    FROM 
-        users
-    WHERE 
-        users.userId = ?;
-    `;
-
-    const [sender] = await connection.execute(query1, [senderUserId]);
-
-    console.log(sender);
-
     await connection.execute(query, [senderUserId, receiverUserId]);
     await connection.end();
-
-
-    console.log("ids", senderUserId, receiverUserId);
 
     return NextResponse.json({
       success: true,

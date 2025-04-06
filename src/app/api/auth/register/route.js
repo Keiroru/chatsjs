@@ -7,9 +7,8 @@ export async function POST(request) {
         const body = await request.json();
         const { displayName, email, telephone, password } = body;
 
-        // Validation
         const errors = [];
-        
+
         const trimmedDisplayName = decodeURIComponent(displayName.trim());
         let hasConsecutiveSpaces = /\s{2,}/.test(trimmedDisplayName);
         if (hasConsecutiveSpaces) {
@@ -54,7 +53,6 @@ export async function POST(request) {
 
         const connection = await getConnection();
 
-        // Check for existing email
         const [existingUsers] = await connection.execute(
             "SELECT * FROM users WHERE email = ?",
             [email]
@@ -68,7 +66,6 @@ export async function POST(request) {
             );
         }
 
-        // Check for existing phone number
         const [existingPhoneUser] = await connection.execute(
             "SELECT * FROM users WHERE telephone = ?",
             [telephone]
@@ -82,7 +79,6 @@ export async function POST(request) {
             );
         }
 
-        // Hash the password before inserting into the database
         const hashedPassword = await hashPassword(password);
 
         const randomId = await getRandomId(connection, trimmedDisplayName);
@@ -143,7 +139,7 @@ export async function POST(request) {
     async function hashPassword(password) {
         try {
             const salt = await bcrypt.genSalt(10);
-            
+
             const hashedPassword = await bcrypt.hash(password, salt);
             return hashedPassword;
         } catch (error) {

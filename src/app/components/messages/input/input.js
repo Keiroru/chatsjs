@@ -31,10 +31,16 @@ const Input = forwardRef(
       if (!messageInput.trim() || !conversationId) return;
       setLoading(true);
 
-      console.log("editMessage", editMessage);
-      if (editMessage && editMessage.senderUserId === userData.userId) {
-        console.log("Editing message:", editMessage.messageId);
-        console.log("New message text:", messageInput.trim());
+      if (messageInput.length > 20000) {
+        alert(
+          "Message too long. Please shorten it. Max 20,000 characters. Current char count: " +
+          messageInput.length
+        );
+        setLoading(false);
+        return;
+      }
+
+      if (editMessage) {
         try {
           const response = await fetch("/api/messages/editMessage", {
             method: "PUT",
@@ -66,22 +72,8 @@ const Input = forwardRef(
           console.error("Error editing message:", error);
           setLoading(false);
         }
-      } else if (editMessage && editMessage.senderUserId !== userData.userId) {
-        console.log("you can only edit your own messages");
-        setMessageInput("");
-        setEditMessage(null);
-        setLoading(false);
-        return;
       }
 
-      if (messageInput.length > 20000) {
-        alert(
-          "Message too long. Please shorten it. Max 20,000 characters. Current char count: " +
-          messageInput.length
-        );
-        setLoading(false);
-        return;
-      }
 
       try {
         const response = await fetch("/api/messages/postMessages", {

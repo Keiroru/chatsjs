@@ -89,14 +89,14 @@ export default function ChatClient({ userData }) {
 
     const handleFriendStatusChange = ({ userId, status }) => {
       setFriends((oldFriends) =>
-        oldFriends.map((f) =>
-          f.userId === userId
+        oldFriends.map((friend) =>
+          friend.userId === userId
             ? {
-              ...f,
+              ...friend,
               status,
               isOnline: status === "online",
             }
-            : f
+            : friend
         )
       );
 

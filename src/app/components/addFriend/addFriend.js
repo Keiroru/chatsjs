@@ -43,7 +43,6 @@ export default function AddFriend({
         receiverUserId: data.receiverUserId
       };
 
-      console.log("Emitting friend request with data:", friendRequestData);
       Socket.emit("friend_request", friendRequestData);
 
       if (response.ok) {

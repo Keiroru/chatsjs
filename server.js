@@ -43,8 +43,7 @@ io.on("connection", (socket) => {
         socket.to(recipientSocket).emit("receive_message", data);
       }
     } else {
-      io.emit("receive_message", data);
-      console.log("Sending message to all:", data);
+      console.error("No receiver found");
     }
   });
 
