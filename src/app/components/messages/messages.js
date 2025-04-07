@@ -84,21 +84,22 @@ export default function Messages({
           sentAt: formatMessageTime(newMessage.sentAt),
         };
         setMessages((prevMessages) => [...prevMessages, formattedMessage]);
+
+        if (newMessage.senderUserId !== userData.userId) {
+          markMessageAsSeen(newMessage.messageId);
+        }
       }
     };
 
     const handleBlockFriend = (data) => {
-      console.log("Blocked friend:", data);
       setBlock(data);
     };
 
     const handleUnblockFriend = (data) => {
-      console.log("Unblocked friend:", data);
       setBlock(null);
     };
 
     const handleEditMessage = (data) => {
-      console.log("Edited message:", data);
       setMessages((prevMessages) =>
         prevMessages.map((message) => {
           if (message.messageId === data.messageId) {
@@ -109,17 +110,31 @@ export default function Messages({
       );
     };
 
+    const handleMessageStateUpdate = (data) => {
+      setMessages((prevMessages) =>
+        prevMessages.map((message) => {
+          if (message.messageId === data.messageId) {
+            return { ...message, state: data.state };
+          }
+          return message;
+        })
+      );
+    };
+
     socket.on("receive_message", handleReceiveMessage);
     socket.on("block", handleBlockFriend);
     socket.on("unblock", handleUnblockFriend);
     socket.on("receive_edit", handleEditMessage);
+    socket.on("message_state_update", handleMessageStateUpdate);
 
     return () => {
       socket.off("receive_message", handleReceiveMessage);
       socket.off("block", handleBlockFriend);
       socket.off("unblock", handleUnblockFriend);
+      socket.off("receive_edit", handleEditMessage);
+      socket.off("message_state_update", handleMessageStateUpdate);
     };
-  }, [socket, conversationId, setMessages, setBlock]);
+  }, [socket, conversationId, setMessages, setBlock, userData.userId]);
 
   useEffect(() => {
     if (!socket) return;
@@ -261,7 +276,6 @@ export default function Messages({
     }
   }, [activeChat, fetchConversationId]);
 
-  // Reset editMessage when activeChat changes
   useEffect(() => {
     setEditMessage(null);
   }, [activeChat, setEditMessage]);
@@ -326,6 +340,61 @@ export default function Messages({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [contextMenu.visible]);
+
+  const markMessageAsSeen = async (messageId) => {
+    try {
+      setMessages((prevMessages) =>
+        prevMessages.map((message) => {
+          if (message.messageId === messageId) {
+            return { ...message, state: "seen" };
+          }
+          return message;
+        })
+      );
+
+      const response = await fetch("/api/messages/messageSeen", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          conversationId,
+          messageId,
+        }),
+      });
+
+      if (response.ok) {
+        socket.emit("message_seen", {
+          messageId,
+          conversationId,
+          senderId: activeChat.userId,
+        });
+
+        socket.emit("message_state_update", {
+          messageId,
+          conversationId,
+          state: "seen",
+          senderId: activeChat.userId
+        });
+      }
+    } catch (error) {
+      console.error("Error marking message as seen:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (messages.length > 0 && conversationId) {
+      const unreadMessages = messages.filter(
+        (message) =>
+          message.senderUserId !== userData.userId &&
+          message.state !== "seen"
+      );
+
+      unreadMessages.forEach((message) => {
+        markMessageAsSeen(message.messageId);
+      });
+    }
+  }, [messages, conversationId, userData.userId]);
 
   return (
     <>
@@ -397,20 +466,19 @@ export default function Messages({
                   <div
                     id={`message-${message.messageId}`}
                     key={message.messageId}
-                    className={`${styles.message} ${
-                      message.senderUserId === userData.userId
-                        ? styles.outgoing
-                        : styles.incoming
-                    }`}
+                    className={`${styles.message} ${message.senderUserId === userData.userId
+                      ? styles.outgoing
+                      : styles.incoming
+                      }`}
                   >
                     {message.senderUserId != userData.userId && (
                       <Image
                         src={
                           message.senderUserId === userData.userId
                             ? userData.profilePicPath ||
-                              "/images/user-icon-placeholder.png"
+                            "/images/user-icon-placeholder.png"
                             : activeChat?.profilePicPath ||
-                              "/images/user-icon-placeholder.png"
+                            "/images/user-icon-placeholder.png"
                         }
                         width={40}
                         height={40}
@@ -433,16 +501,15 @@ export default function Messages({
                           }}
                         >
                           <span
-                            className={`${
-                              originalMessage.isDeleted === 1
-                                ? styles["deleted-message"]
-                                : ""
-                            }`}
+                            className={`${originalMessage.isDeleted === 1
+                              ? styles["deleted-message"]
+                              : ""
+                              }`}
                           >
                             {originalMessage.isDeleted === 0
                               ? originalMessage.messageText.length > 40
                                 ? originalMessage.messageText.substring(0, 37) +
-                                  "..."
+                                "..."
                                 : originalMessage.messageText
                               : "Deleted Message"}
                           </span>
@@ -484,11 +551,10 @@ export default function Messages({
                         onClick={() => {
                           setContextMenu({ ...contextMenu, visible: false });
                         }}
-                        className={`${styles.messageContent} ${
-                          message.isDeleted === 1
-                            ? styles["deleted-message"]
-                            : ""
-                        }`}
+                        className={`${styles.messageContent} ${message.isDeleted === 1
+                          ? styles["deleted-message"]
+                          : ""
+                          }`}
                       >
                         {message.isDeleted === 1
                           ? "Deleted Message"

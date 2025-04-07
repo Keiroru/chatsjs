@@ -59,11 +59,10 @@ export default function Settings({ userData, isMobile, toggleSettings }) {
         </button>
       )}
       <aside
-        className={`${style["settingsSidebar"]} ${
-          (isMobile || isSmallScreen) && selectedOption
+        className={`${style["settingsSidebar"]} ${(isMobile || isSmallScreen) && selectedOption
             ? style["closed"]
             : style["open"]
-        }`}
+          }`}
       >
         <h2>Settings</h2>
         <div className={style.settingsNav}>
@@ -104,11 +103,10 @@ export default function Settings({ userData, isMobile, toggleSettings }) {
       </aside>
 
       <main
-        className={`${style["settingsContent"]} ${
-          (isMobile || isSmallScreen) && selectedOption
+        className={`${style["settingsContent"]} ${(isMobile || isSmallScreen) && selectedOption
             ? style["open"]
             : style["closed"]
-        }`}
+          }`}
       >
         {!selectedOption && (
           <div className={style.settingsPanel}>

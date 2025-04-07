@@ -34,7 +34,7 @@ const Input = forwardRef(
       if (messageInput.length > 20000) {
         alert(
           "Message too long. Please shorten it. Max 20,000 characters. Current char count: " +
-            messageInput.length
+          messageInput.length
         );
         setLoading(false);
         return;
@@ -108,6 +108,7 @@ const Input = forwardRef(
           setMessageInput("");
           setreplyTo(null);
           socket.emit("send_message", messageData);
+
           setTimeout(() => {
             if (ref.current) {
               ref.current.focus();

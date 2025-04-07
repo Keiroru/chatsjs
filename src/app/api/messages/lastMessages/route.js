@@ -13,22 +13,27 @@ export async function GET(request) {
     try {
         connection = await getConnection();
 
-        // Modified query to ensure only one row per conversation
         const [results] = await connection.execute(`
-            SELECT m.*, 
-                  (SELECT userId FROM conversationusers 
-                   WHERE conversationId = m.conversationId AND userId != ? 
-                   LIMIT 1) as friendId
-            FROM messages m
-            INNER JOIN (
-                SELECT conversationId, MAX(sentAt) as maxSentAt
-                FROM messages
-                GROUP BY conversationId
-            ) latest ON m.conversationId = latest.conversationId AND m.sentAt = latest.maxSentAt
-            WHERE m.conversationId IN (
-                SELECT conversationId FROM conversationusers WHERE userId = ?
-            )
-            GROUP BY m.conversationId
+           SELECT messages.*, 
+       (
+            SELECT userId 
+            FROM conversationusers 
+            WHERE conversationId = messages.conversationId AND userId != ? 
+            LIMIT 1
+       ) AS friendId
+FROM messages
+INNER JOIN (
+       SELECT conversationId, MAX(sentAt) AS maximumSentAt
+       FROM messages
+       GROUP BY conversationId
+) AS latestMessages ON messages.conversationId = latestMessages.conversationId 
+                     AND messages.sentAt = latestMessages.maximumSentAt
+WHERE messages.conversationId IN (
+       SELECT conversationId 
+       FROM conversationusers 
+       WHERE userId = ?
+)
+GROUP BY messages.conversationId;
         `, [userId, userId]);
 
         return NextResponse.json(results);

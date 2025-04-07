@@ -39,12 +39,22 @@ export default function PeopleList({
       if (!response.ok) throw new Error("Failed to fetch last messages");
       const lastMessages = await response.json();
 
+      const unreadResponse = await fetch(
+        `/api/messages/unreadCount?userId=${userData.userId}`
+      );
+      if (!unreadResponse.ok) throw new Error("Failed to fetch unread counts");
+      const unreadCounts = await unreadResponse.json();
+
       if (lastMessages.length > 0) {
         setFriends((prevFriends) => {
           const updatedFriends = prevFriends.map((friend) => {
             const lastMessage = lastMessages.find(
               (msg) => msg.friendId === friend.userId && msg.conversationId
             );
+
+            const unreadCount = unreadCounts.find(
+              (count) => count.friendId === friend.userId
+            )?.count || 0;
 
             if (lastMessage) {
               return {
@@ -53,9 +63,15 @@ export default function PeopleList({
                   ? "This message was deleted"
                   : lastMessage.messageText,
                 lastMessageAt: lastMessage.sentAt || null,
+                lastMessageState: lastMessage.state || null,
+                lastMessageSenderId: lastMessage.senderUserId || null,
+                unreadCount: unreadCount
               };
             }
-            return friend;
+            return {
+              ...friend,
+              unreadCount: unreadCount
+            };
           });
 
           return [...updatedFriends].sort((a, b) => {
@@ -143,11 +159,36 @@ export default function PeopleList({
       );
     };
 
+    const handleMessageStateUpdate = (data) => {
+      if (activeTab === "friends" || activeTab === "people") {
+        setFriends((prevFriends) => {
+          return prevFriends.map((friend) => {
+            if (friend.lastMessageSenderId === data.senderId &&
+              friend.lastMessageState === "sent") {
+              return {
+                ...friend,
+                lastMessageState: data.state
+              };
+            }
+            return friend;
+          });
+        });
+      }
+    };
+
+    const handleMessageSeen = (data) => {
+      if (activeTab === "friends" || activeTab === "people") {
+        fetchLastMessages();
+      }
+    };
+
     socket.on("receive_accept", handleReceiveRequest);
     socket.on("receive_message", handleReceiveMessage);
     socket.on("friend_delete", handleDeletefriend);
     socket.on("delete", fetchLastMessages);
     socket.on("receive_edit", fetchLastMessages);
+    socket.on("message_state_update", handleMessageStateUpdate);
+    socket.on("message_seen", handleMessageSeen);
 
     return () => {
       socket.off("receive_message", handleReceiveMessage);
@@ -155,6 +196,8 @@ export default function PeopleList({
       socket.off("friend_delete", handleDeletefriend);
       socket.off("delete", fetchLastMessages);
       socket.off("receive_edit", fetchLastMessages);
+      socket.off("message_state_update", handleMessageStateUpdate);
+      socket.off("message_seen", handleMessageSeen);
     };
   }, [socket, activeTab, userData?.userId]);
 
@@ -175,7 +218,19 @@ export default function PeopleList({
 
   const handleChatClick = (chatId, isGroupChat) => {
     onChatSelect(chatId, isGroupChat);
+    setFriends((prevFriends) => {
+      return prevFriends.map((friend) => {
+        if (friend.userId === chatId.userId) {
+          return {
+            ...friend,
+            unreadCount: 0
+          };
+        }
+        return friend;
+      });
+    });
   };
+
 
   const handleTabChange = (tab) => {
     setError(null);
@@ -198,9 +253,6 @@ export default function PeopleList({
       if (!response.ok) {
         throw new Error("Failed to delete friend");
       }
-
-      const result = await response.json();
-      console.log("Friend deleted successfully:", result);
 
       socket.emit("delete_friend", {
         deleter: userData.userId,
@@ -299,25 +351,22 @@ export default function PeopleList({
 
       <div className={styles.tabButtons}>
         <button
-          className={`${styles.tabButton} ${
-            activeTab === "people" ? styles.active : ""
-          }`}
+          className={`${styles.tabButton} ${activeTab === "people" ? styles.active : ""
+            }`}
           onClick={() => handleTabChange("people")}
         >
           People
         </button>
         <button
-          className={`${styles.tabButton} ${
-            activeTab === "friends" ? styles.active : ""
-          }`}
+          className={`${styles.tabButton} ${activeTab === "friends" ? styles.active : ""
+            }`}
           onClick={() => handleTabChange("friends")}
         >
           Friends
         </button>
         <button
-          className={`${styles.tabButton} ${
-            activeTab === "groups" ? styles.active : ""
-          }`}
+          className={`${styles.tabButton} ${activeTab === "groups" ? styles.active : ""
+            }`}
           onClick={() => handleTabChange("groups")}
         >
           Groups
@@ -339,9 +388,8 @@ export default function PeopleList({
             filteredPeople.map((person, key) => (
               <button
                 key={`${person.userId}-${key}`}
-                className={`${styles.friendItem} ${
-                  activeChat?.userId === person.userId ? styles.active : ""
-                }`}
+                className={`${styles.friendItem} ${activeChat?.userId === person.userId ? styles.active : ""
+                  }`}
                 onClick={() => handleChatClick(person, false)}
               >
                 <Image
@@ -355,10 +403,18 @@ export default function PeopleList({
                   className={styles.avatar}
                 />
                 <div className={styles.friendInfo}>
-                  <h3 className={styles.friendName}>{person.displayName}</h3>
+                  <h3 className={styles.friendName}>
+                    {person.displayName}
+                    {person.unreadCount > 0 && (
+                      <span className={styles.unreadBadge}>{person.unreadCount > 99 ? "99+" : person.unreadCount}</span>
+                    )}
+                  </h3>
                   <div className={styles.messageRow}>
                     <p className={styles.lastMessage}>
                       {person.lastMessage || "No messages yet"}
+                      {person.lastMessage && person.lastMessageState === "sent" && person.lastMessageSenderId !== userData.userId && (
+                        <span className={styles.unseenIndicator}> •</span>
+                      )}
                     </p>
                     {person.lastMessageAt && (
                       <span className={styles.messageTime}>
@@ -372,9 +428,8 @@ export default function PeopleList({
                   </div>
                 </div>
                 <span
-                  className={`${styles.statusIndicator} ${
-                    person.isOnline ? styles.online : styles.offline
-                  }`}
+                  className={`${styles.statusIndicator} ${person.isOnline ? styles.online : styles.offline
+                    }`}
                 ></span>
               </button>
             ))
@@ -382,11 +437,10 @@ export default function PeopleList({
             filteredPeople.map((group, key) => (
               <button
                 key={`${group.conversationId}-${key}`}
-                className={`${styles.friendItem} ${
-                  activeChat?.conversationId === group.conversationId
-                    ? styles.active
-                    : ""
-                }`}
+                className={`${styles.friendItem} ${activeChat?.conversationId === group.conversationId
+                  ? styles.active
+                  : ""
+                  }`}
                 onClick={() => handleChatClick(group, true)}
               >
                 <Image
@@ -422,9 +476,8 @@ export default function PeopleList({
             filteredPeople.map((friend, key) => (
               <button
                 key={`${friend.userId}-${key}`}
-                className={`${styles.friendItem} ${
-                  activeChat?.userId === friend.userId ? styles.active : ""
-                }`}
+                className={`${styles.friendItem} ${activeChat?.userId === friend.userId ? styles.active : ""
+                  }`}
                 onClick={() => handleChatClick(friend)}
                 onContextMenu={(e) => {
                   e.preventDefault();
@@ -447,7 +500,12 @@ export default function PeopleList({
                   className={styles.avatar}
                 />
                 <div className={styles.friendInfo}>
-                  <h3 className={styles.friendName}>{friend.displayName}</h3>
+                  <h3 className={styles.friendName}>
+                    {friend.displayName}
+                    {friend.unreadCount > 0 && (
+                      <span className={styles.unreadBadge}>{friend.unreadCount > 99 ? "99+" : friend.unreadCount}</span>
+                    )}
+                  </h3>
                   <div className={styles.messageRow}>
                     <p className={styles.lastMessage}>
                       {friend.lastMessage || "No messages yet"}
@@ -464,9 +522,8 @@ export default function PeopleList({
                   </div>
                 </div>
                 <span
-                  className={`${styles.statusIndicator} ${
-                    friend.isOnline ? styles.online : styles.offline
-                  }`}
+                  className={`${styles.statusIndicator} ${friend.isOnline ? styles.online : styles.offline
+                    }`}
                 ></span>
               </button>
             ))

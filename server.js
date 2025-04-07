@@ -47,6 +47,30 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("message_seen", (data) => {
+    const { messageId, conversationId, senderId } = data;
+
+    const senderSocket = connectedUsers[senderId]?.socketId;
+    if (senderSocket) {
+      socket.to(senderSocket).emit("message_state_update", {
+        messageId,
+        conversationId,
+        state: "seen"
+      });
+    }
+  });
+
+  socket.on("message_state_update", (data) => {
+    const { messageId, conversationId, state, senderId } = data;
+
+    io.emit("message_state_update", {
+      messageId,
+      conversationId,
+      state,
+      senderId
+    });
+  });
+
   socket.on("delete_message", (data) => {
     const recipientSocket = connectedUsers[data.receiver]?.socketId;
     if (recipientSocket) {

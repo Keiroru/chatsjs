@@ -243,7 +243,7 @@ export default function ChatClient({ userData }) {
               </button>
             )}
             <div
-              onClick={() => setSettingsOpen((prev) => !prev)}
+              onClick={toggleSettings}
               className={styles.profileWrapper}
             >
               <Image
