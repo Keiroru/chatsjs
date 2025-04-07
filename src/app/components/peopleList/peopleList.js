@@ -412,9 +412,6 @@ export default function PeopleList({
                   <div className={styles.messageRow}>
                     <p className={styles.lastMessage}>
                       {person.lastMessage || "No messages yet"}
-                      {person.lastMessage && person.lastMessageState === "sent" && person.lastMessageSenderId !== userData.userId && (
-                        <span className={styles.unseenIndicator}> •</span>
-                      )}
                     </p>
                     {person.lastMessageAt && (
                       <span className={styles.messageTime}>
