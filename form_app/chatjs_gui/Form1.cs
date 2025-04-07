@@ -8,6 +8,8 @@ namespace chatjs_gui
         {
             InitializeComponent();
             this.AcceptButton = loginButton;
+            usernameInputField.Text = "trixep11@gmail.com";
+            passwordInputField.Text = "Trixep11";
         }
 
         private void loginButton_Click(object sender, EventArgs e)
@@ -38,11 +40,11 @@ namespace chatjs_gui
 
             db.EndConnection();
 
-            Form2 form2 = new Form2(userId);
-                Hide();
-                form2.ShowDialog();
             if (storedHash != null && BCrypt.Net.BCrypt.Verify(password, storedHash))
             {
+                Form2 form2 = new Form2(userId);
+                Hide();
+                form2.ShowDialog();
             }
             else
             {

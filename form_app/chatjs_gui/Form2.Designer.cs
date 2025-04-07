@@ -40,7 +40,7 @@
             // 
             usernameText.AutoSize = true;
             usernameText.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            usernameText.Location = new Point(56, 47);
+            usernameText.Location = new Point(85, 48);
             usernameText.Name = "usernameText";
             usernameText.Size = new Size(57, 21);
             usernameText.TabIndex = 0;
@@ -49,7 +49,7 @@
             // exitButton
             // 
             exitButton.BackColor = Color.FromArgb(64, 0, 64);
-            exitButton.Location = new Point(40, 360);
+            exitButton.Location = new Point(85, 322);
             exitButton.Name = "exitButton";
             exitButton.Size = new Size(134, 49);
             exitButton.TabIndex = 1;
@@ -60,7 +60,7 @@
             // logoutButton
             // 
             logoutButton.BackColor = Color.FromArgb(64, 0, 64);
-            logoutButton.Location = new Point(40, 287);
+            logoutButton.Location = new Point(85, 249);
             logoutButton.Name = "logoutButton";
             logoutButton.Size = new Size(134, 49);
             logoutButton.TabIndex = 2;
