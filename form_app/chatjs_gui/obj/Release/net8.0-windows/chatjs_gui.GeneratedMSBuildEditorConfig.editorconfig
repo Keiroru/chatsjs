@@ -14,6 +14,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = chatjs_gui
-build_property.ProjectDir = C:\Users\horvath.peter\Documents\GitHub\chatsjs\form_app\chatjs_gui\
+build_property.ProjectDir = C:\Users\horvath.peter\Desktop\chatsjs\form_app\chatjs_gui\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

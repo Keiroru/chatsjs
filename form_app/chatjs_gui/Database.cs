@@ -18,11 +18,11 @@ namespace chatjs_gui
 
         public Database(string sql)
         {
-            string server = "chatdb.cryegskk82pm.eu-north-1.rds.amazonaws.com";
-            string port = "6969";
+            string server = "localhost";
+            string port = "";
             string database = "chatdb";
-            string user = "Trixep11";
-            string password = "Trixep11&";
+            string user = "root";
+            string password = "";
             serverConnect = $"server={server};port={port};database={database};user id={user};password={password}";
 
             connection = new MySqlConnection(serverConnect);

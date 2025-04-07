@@ -1653,23 +1653,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Trixep11\\.nuget\\packages\\": {},
-    "D:\\Programs\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\horvath.peter\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Trixep11\\Desktop\\chatsjs\\form_app\\chatjs_gui\\chatjs_gui.csproj",
+      "projectUniqueName": "C:\\Users\\horvath.peter\\Documents\\GitHub\\chatsjs\\form_app\\chatjs_gui\\chatjs_gui.csproj",
       "projectName": "chatjs_gui",
-      "projectPath": "C:\\Users\\Trixep11\\Desktop\\chatsjs\\form_app\\chatjs_gui\\chatjs_gui.csproj",
-      "packagesPath": "C:\\Users\\Trixep11\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Trixep11\\Desktop\\chatsjs\\form_app\\chatjs_gui\\obj\\",
+      "projectPath": "C:\\Users\\horvath.peter\\Documents\\GitHub\\chatsjs\\form_app\\chatjs_gui\\chatjs_gui.csproj",
+      "packagesPath": "C:\\Users\\horvath.peter\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\horvath.peter\\Documents\\GitHub\\chatsjs\\form_app\\chatjs_gui\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "D:\\Programs\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Trixep11\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\horvath.peter\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -1695,8 +1695,7 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      },
-      "SdkAnalysisLevel": "9.0.200"
+      }
     },
     "frameworks": {
       "net8.0-windows7.0": {
@@ -1730,7 +1729,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

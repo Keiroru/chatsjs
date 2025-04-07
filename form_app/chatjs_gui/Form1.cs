@@ -17,6 +17,7 @@ namespace chatjs_gui
             string storedHash = null;
             string userId = null;
 
+            if (user == "" || password == "") return;
             string sql = $"SELECT userId, password, isSiteAdmin FROM users WHERE email = '{user}' OR telephone = '{user}'";
             Database db = new Database(sql);
 
@@ -37,11 +38,11 @@ namespace chatjs_gui
 
             db.EndConnection();
 
-            if (storedHash != null && BCrypt.Net.BCrypt.Verify(password, storedHash))
-            {
-                Form2 form2 = new Form2(userId);
+            Form2 form2 = new Form2(userId);
                 Hide();
                 form2.ShowDialog();
+            if (storedHash != null && BCrypt.Net.BCrypt.Verify(password, storedHash))
+            {
             }
             else
             {

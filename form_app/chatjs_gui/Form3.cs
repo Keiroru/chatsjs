@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,6 +13,10 @@ namespace chatjs_gui
 {
     public partial class Form3 : Form
     {
+        DataGridViewCellEventArgs prewRow = null;
+        int userId = 0;
+        string where = "";
+
         public Form3()
         {
             InitializeComponent();
@@ -21,8 +26,9 @@ namespace chatjs_gui
         private void LoadUsers()
         {
             usersDataGrid.Rows.Clear();
+            usersDataGrid.ForeColor = Color.Black;
 
-            string sql = "select displayName, displayId, email, telephone, isSiteAdmin, isBanned from users";
+            string sql = "select displayName, displayId, email, telephone, isSiteAdmin, isBanned from users" + where;
 
             Database db = new Database(sql);
             while (db.Reader.Read())
@@ -50,9 +56,11 @@ namespace chatjs_gui
             string displayName = row.Cells["displayName"].Value?.ToString() ?? "";
             string displayId = row.Cells["displayId"].Value?.ToString() ?? "";
 
-            usersDataGrid.BackColor = Color.White;
+            if (prewRow != null) usersDataGrid.Rows[prewRow.RowIndex].DefaultCellStyle.BackColor = Color.White;
             usersDataGrid.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Yellow;
-            string sql = $"select isBanned, isSiteAdmin from users where displayName = {displayName} and displayId = {displayId}";
+            prewRow = e;
+
+            string sql = $"select userId, isBanned, isSiteAdmin from users where displayName = '{displayName}' and displayId = '{displayId}'";
             bool isBanned = false;
             bool isSiteAdmin = false;
 
@@ -61,7 +69,9 @@ namespace chatjs_gui
             {
                 isBanned = db.Reader.GetBoolean("isBanned");
                 isSiteAdmin = db.Reader.GetBoolean("isSiteAdmin");
+                userId = db.Reader.GetInt32("userId");
             }
+            db.EndConnection();
 
             banButton.Text = isBanned ? "Unban user" : "Ban user";
             siteAdminButton.Text = isSiteAdmin ? "Remove site admin" : "Make site admin";
@@ -72,6 +82,82 @@ namespace chatjs_gui
         private void backButton_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void siteAdminButton_Click(object sender, EventArgs e)
+        {
+            string sql = $"UPDATE users SET isSiteAdmin = CASE WHEN isSiteAdmin = 1 THEN 0 WHEN isSiteAdmin = 0 THEN 1 ELSE isSiteAdmin END" +
+                $" WHERE userId = {userId}";
+            Database db = new Database(sql);
+            db.EndConnection();
+
+            if (siteAdminButton.Text == "Make site admin")
+            {
+                siteAdminButton.Text = "Remove site admin";
+                usersDataGrid.Rows[prewRow.RowIndex].Cells["isSiteAdmin"].Value = "True";
+            }
+            else
+            {
+                siteAdminButton.Text = "Make site admin"; ;
+                usersDataGrid.Rows[prewRow.RowIndex].Cells["isSiteAdmin"].Value = "False";
+            }
+        }
+
+        private void banButton_Click(object sender, EventArgs e)
+        {
+            string sql = $"UPDATE users SET isBanned = CASE WHEN isBanned = 1 THEN 0 WHEN isBanned = 0 THEN 1 ELSE isBanned END" +
+                $" WHERE userId = {userId}";
+            Database db = new Database(sql);
+            db.EndConnection();
+
+            if (banButton.Text == "Unban user")
+            {
+                banButton.Text = "Ban user";
+                usersDataGrid.Rows[prewRow.RowIndex].Cells["isBanned"].Value = "False";
+            }
+            else
+            {
+                banButton.Text = "Unban user";
+                usersDataGrid.Rows[prewRow.RowIndex].Cells["isBanned"].Value = "True";
+            }
+        }
+
+        private void nameInputField_TextChanged(object sender, EventArgs e)
+        {
+            prewRow = null;
+            controlsGroupBox.Visible = false;
+
+            string whereClause = "";
+
+            if (nameInputField.Text.Length > 0)
+            {
+                whereClause += $"displayName LIKE '{MySqlHelper.EscapeString(nameInputField.Text)}%'";
+            }
+
+            if (idInputField.Text.Length > 0)
+            {
+                if (whereClause.Length > 0)
+                {
+                    whereClause += " OR ";
+                }
+                whereClause += $"displayId LIKE '{MySqlHelper.EscapeString(idInputField.Text)}%'";
+            }
+
+            if (whereClause.Length > 0)
+            {
+                where = " WHERE " + whereClause;
+            }
+            else
+            {
+                where = "";
+            }
+
+            LoadUsers();
+        }
+
+        private void idInputField_TextChanged(object sender, EventArgs e)
+        {
+            nameInputField_TextChanged(sender, e);
         }
     }
 }

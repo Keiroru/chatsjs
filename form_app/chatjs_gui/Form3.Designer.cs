@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             usersDataGrid = new DataGridView();
             displayName = new DataGridViewTextBoxColumn();
             displayId = new DataGridViewTextBoxColumn();
@@ -52,14 +52,14 @@
             // 
             usersDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             usersDataGrid.Columns.AddRange(new DataGridViewColumn[] { displayName, displayId, email, phoneNumber, isSiteAdmin, isBanned });
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Window;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            dataGridViewCellStyle2.ForeColor = Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            usersDataGrid.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Window;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.False;
+            usersDataGrid.DefaultCellStyle = dataGridViewCellStyle1;
             usersDataGrid.Location = new Point(28, 59);
             usersDataGrid.Name = "usersDataGrid";
             usersDataGrid.Size = new Size(746, 251);
@@ -135,6 +135,7 @@
             banButton.TabIndex = 9;
             banButton.Text = "Ban user";
             banButton.UseVisualStyleBackColor = false;
+            banButton.Click += banButton_Click;
             // 
             // siteAdminButton
             // 
@@ -145,6 +146,7 @@
             siteAdminButton.TabIndex = 8;
             siteAdminButton.Text = "Make site admin";
             siteAdminButton.UseVisualStyleBackColor = false;
+            siteAdminButton.Click += siteAdminButton_Click;
             // 
             // label1
             // 
@@ -169,6 +171,7 @@
             // nameInputField
             // 
             nameInputField.Location = new Point(278, 23);
+            nameInputField.MaxLength = 20;
             nameInputField.Name = "nameInputField";
             nameInputField.Size = new Size(222, 23);
             nameInputField.TabIndex = 6;
@@ -176,9 +179,11 @@
             // idInputField
             // 
             idInputField.Location = new Point(620, 25);
+            idInputField.MaxLength = 4;
             idInputField.Name = "idInputField";
             idInputField.Size = new Size(100, 23);
             idInputField.TabIndex = 7;
+            idInputField.TextChanged += idInputField_TextChanged;
             // 
             // Form3
             // 
