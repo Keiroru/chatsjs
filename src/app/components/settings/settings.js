@@ -11,6 +11,7 @@ import {
   faUser,
   faUserCircle,
   faPalette,
+  faBug,
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function Settings({ userData, isMobile, toggleSettings }) {
@@ -60,8 +61,8 @@ export default function Settings({ userData, isMobile, toggleSettings }) {
       )}
       <aside
         className={`${style["settingsSidebar"]} ${(isMobile || isSmallScreen) && selectedOption
-            ? style["closed"]
-            : style["open"]
+          ? style["closed"]
+          : style["open"]
           }`}
       >
         <h2>Settings</h2>
@@ -92,10 +93,14 @@ export default function Settings({ userData, isMobile, toggleSettings }) {
               <FontAwesomeIcon icon={faPalette} />
               <span>Appearance</span>
             </li>
+          </ul>
+          <h4>Other</h4>
+          <ul>
             <li
               className={selectedOption === "bugreport" ? style.active : ""}
               onClick={() => setSelectedOption("bugreport")}
             >
+              <FontAwesomeIcon icon={faBug} />
               <span>Report a bug</span>
             </li>
           </ul>
@@ -104,8 +109,8 @@ export default function Settings({ userData, isMobile, toggleSettings }) {
 
       <main
         className={`${style["settingsContent"]} ${(isMobile || isSmallScreen) && selectedOption
-            ? style["open"]
-            : style["closed"]
+          ? style["open"]
+          : style["closed"]
           }`}
       >
         {!selectedOption && (

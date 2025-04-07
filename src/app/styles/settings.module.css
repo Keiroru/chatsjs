@@ -95,7 +95,7 @@
 
 .settingsContent {
   flex: 1;
-  padding: 20px;
+  padding: 10px;
   overflow-y: auto;
   background-color: var(--rich-black);
   transition: all 0.3s ease;
@@ -103,11 +103,12 @@
 
 .settingsPanel {
   background-color: var(--light_black);
-  padding: 25px;
+  padding: 8px;
   border-radius: 8px;
   margin: auto;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   border: 1px solid var(--dark_purple);
+  height: 100%;
 }
 
 .settingsPanel h3 {
@@ -125,18 +126,18 @@
   }
 
   .settingsContent {
-    padding: 20px;
+    padding: 10px;
   }
 
   .settingsPanel {
-    padding: 20px;
+    padding: 10px;
   }
 }
 
 @media (max-width: 900px) {
   .settingsContainer {
     flex-direction: column;
-    height: 100vh;
+    height: 100%;
   }
 
   .settingsSidebar {
@@ -149,14 +150,12 @@
 
   .settingsContent {
     padding: 15px;
-    margin-top: 10px;
-    height: 100vh;
+    height: 100%;
   }
 
   .settingsPanel {
     padding: 15px;
     min-width: auto;
-    margin-top: 40px;
   }
 
   .closed {
@@ -172,11 +171,14 @@
   }
 
   .settingsSidebar.open {
-    padding-top: 50px;
+    padding-top: 60px;
+    padding-left: 10px;
   }
 
   .back-button {
     display: flex !important;
+    margin-top: 10px;
+    margin-left: 10px;
   }
 }
 
