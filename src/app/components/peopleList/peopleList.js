@@ -29,10 +29,6 @@ export default function PeopleList({
   });
   const socket = useSocket();
 
-  useEffect(() => {
-    console.log("PeopleList received block prop:", block);
-  }, [block]);
-
   const fetchLastMessages = useCallback(async () => {
     if (!userData?.userId) return;
 
@@ -130,14 +126,14 @@ export default function PeopleList({
     };
 
     const handleReceiveRequest = (data) => {
-      console.log("Friend request accepted:", data);
-
-      if (data.sender.userId === userData.userId) {
-        setFriends((prevFriends) => [...prevFriends, data.receiver]);
-        fetchLastMessages();
-      } else if (data.receiver.userId === userData.userId) {
-        setFriends((prevFriends) => [...prevFriends, data.sender]);
-        fetchLastMessages();
+      if (activeTab === "friends") {
+        if (data.sender.userId === userData.userId) {
+          setFriends((prevFriends) => [...prevFriends, data.receiver]);
+          fetchLastMessages();
+        } else if (data.receiver.userId === userData.userId) {
+          setFriends((prevFriends) => [...prevFriends, data.sender]);
+          fetchLastMessages();
+        }
       }
     };
 
@@ -150,11 +146,15 @@ export default function PeopleList({
     socket.on("receive_accept", handleReceiveRequest);
     socket.on("receive_message", handleReceiveMessage);
     socket.on("friend_delete", handleDeletefriend);
+    socket.on("delete", fetchLastMessages);
+    socket.on("receive_edit", fetchLastMessages);
 
     return () => {
       socket.off("receive_message", handleReceiveMessage);
       socket.off("receive_accept", handleReceiveRequest);
       socket.off("friend_delete", handleDeletefriend);
+      socket.off("delete", fetchLastMessages);
+      socket.off("receive_edit", fetchLastMessages);
     };
   }, [socket, activeTab, userData?.userId]);
 

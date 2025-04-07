@@ -4,16 +4,20 @@ import { useState, useEffect } from "react";
 import style from "@/app/styles/settings.module.css";
 import Profile from "@/app/components/settings/profile/profile";
 import Account from "@/app/components/settings/myAccount/myAccount";
+import Report from "./bugReport/report";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faUser, faUserCircle, faPalette } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowLeft,
+  faUser,
+  faUserCircle,
+  faPalette,
+} from "@fortawesome/free-solid-svg-icons";
 
-export default function Settings({
-  userData,
-  isMobile,
-  toggleSettings,
-}) {
+export default function Settings({ userData, isMobile, toggleSettings }) {
   const [selectedOption, setSelectedOption] = useState("");
-  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== "undefined" ? window.innerWidth : 0
+  );
   const [isSmallScreen, setIsSmallScreen] = useState(false);
 
   useEffect(() => {
@@ -23,8 +27,8 @@ export default function Settings({
     };
 
     handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
@@ -47,14 +51,19 @@ export default function Settings({
         <button
           className={`${style["icon-button"]} ${style["back-button"]}`}
           onClick={handleBackClick}
-          aria-label={selectedOption ? "Back to settings menu" : "Back to main page"}
+          aria-label={
+            selectedOption ? "Back to settings menu" : "Back to main page"
+          }
         >
           <FontAwesomeIcon icon={faArrowLeft} />
         </button>
       )}
       <aside
-        className={`${style["settingsSidebar"]} ${(isMobile || isSmallScreen) && selectedOption ? style["closed"] : style["open"]
-          }`}
+        className={`${style["settingsSidebar"]} ${
+          (isMobile || isSmallScreen) && selectedOption
+            ? style["closed"]
+            : style["open"]
+        }`}
       >
         <h2>Settings</h2>
         <div className={style.settingsNav}>
@@ -95,13 +104,18 @@ export default function Settings({
       </aside>
 
       <main
-        className={`${style["settingsContent"]} ${(isMobile || isSmallScreen) && selectedOption ? style["open"] : style["closed"]
-          }`}
+        className={`${style["settingsContent"]} ${
+          (isMobile || isSmallScreen) && selectedOption
+            ? style["open"]
+            : style["closed"]
+        }`}
       >
         {!selectedOption && (
           <div className={style.settingsPanel}>
             <h3>Welcome to Settings</h3>
-            <p>Please select a setting option from the sidebar to get started.</p>
+            <p>
+              Please select a setting option from the sidebar to get started.
+            </p>
           </div>
         )}
         {selectedOption === "profile" && (
@@ -124,7 +138,7 @@ export default function Settings({
         )}
         {selectedOption === "bugreport" && (
           <div className={style.settingsPanel}>
-            <p>Please....</p>
+            <Report userData={userData} />
           </div>
         )}
       </main>

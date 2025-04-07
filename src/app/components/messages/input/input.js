@@ -34,7 +34,7 @@ const Input = forwardRef(
       if (messageInput.length > 20000) {
         alert(
           "Message too long. Please shorten it. Max 20,000 characters. Current char count: " +
-          messageInput.length
+            messageInput.length
         );
         setLoading(false);
         return;
@@ -74,7 +74,6 @@ const Input = forwardRef(
         }
       }
 
-
       try {
         const response = await fetch("/api/messages/postMessages", {
           method: "POST",
@@ -103,6 +102,7 @@ const Input = forwardRef(
           isDeleted: res.data.isDeleted,
           isEdited: res.data.isEdited,
           receiver: res.receiver,
+          state: "sent",
         };
         if (response.ok) {
           setMessageInput("");

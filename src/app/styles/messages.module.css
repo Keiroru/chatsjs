@@ -137,10 +137,11 @@
 }
 
 .messageTime {
-  display: block;
+  display: flex;
   font-size: 11px;
   text-align: right;
   color: var(--silver);
+  flex-direction: row-reverse;
 }
 
 .messageTimeLeft {
@@ -148,6 +149,14 @@
   font-size: 11px;
   color: var(--silver);
   text-align: left;
+  flex-direction: row-reverse;
+}
+
+.messageTime .icon {
+  padding-left: 5px;
+}
+.messageTimeLeft .icon {
+  padding-right: 5px;
 }
 
 .emptyChat {

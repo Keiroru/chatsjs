@@ -48,6 +48,16 @@ export default function Profile({ userData }) {
     setIsUploading(true);
     setUploadError("");
 
+    if (profileForm.displayName.length > 20) {
+      alert("Displayname too long");
+      setIsUploading(false);
+      return;
+    } else if (profileForm.displayName.trim().length < 4) {
+      alert("Displayname too short");
+      setIsUploading(false);
+      return;
+    }
+
     try {
       let imageUrl = profileForm.profilePicture;
 
@@ -71,14 +81,13 @@ export default function Profile({ userData }) {
 
         if (data.success) {
           imageUrl = data.data.display_url || data.data.url;
-          console.log("Image uploaded successfully:", imageUrl);
         } else {
           throw new Error(data.error?.message || "Upload failed");
         }
       }
 
       const formData = new FormData();
-      formData.append("userId", userData?.userId || "");
+      formData.append("userId", userData?.userId);
       formData.append("displayName", profileForm.displayName);
       formData.append("bio", profileForm.bio);
       formData.append("profilePicture", imageUrl);
@@ -106,7 +115,6 @@ export default function Profile({ userData }) {
       }
       setLocalPreviewUrl(null);
 
-      const result = await response.json();
       window.location.reload();
     } catch (error) {
       console.error("Error updating profile:", error);
@@ -168,7 +176,9 @@ export default function Profile({ userData }) {
             </div>
           )}
         </div>
-        <span>A te userid #{userData.displayId}</span>
+        <div>
+          User ID: <span className={style.id}>#{userData.displayId}</span>
+        </div>
         <div className={style.formField}>
           <label htmlFor="displayName" className={style.fieldLabel}>
             Display Name
@@ -180,9 +190,12 @@ export default function Profile({ userData }) {
             value={profileForm.displayName}
             onChange={handleInputChange}
             required
-            maxLength={50}
+            maxLength={20}
             className={style.textInput}
           />
+          <div className={style.charCount}>
+            {profileForm.displayName.length}/20
+          </div>
         </div>
 
         <div className={style.formField}>

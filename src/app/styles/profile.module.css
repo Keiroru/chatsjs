@@ -91,7 +91,7 @@
   border-radius: 4px;
   background-color: var(--off-white);
   font-size: 16px;
-  resize: vertical;
+  resize: none;
   min-height: 100px;
 }
 
@@ -142,6 +142,12 @@
   align-items: center;
   gap: 8px;
   transition: background-color 0.2s;
+}
+
+.id {
+  font-style: italic !important;
+  opacity: 0.7 !important;
+  color: var(--smoke);
 }
 
 .uploadButton:hover {

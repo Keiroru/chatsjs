@@ -6,7 +6,6 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const conversationId = searchParams.get("conversationId");
 
-
     const connenction = await getConnection();
 
     const query = `

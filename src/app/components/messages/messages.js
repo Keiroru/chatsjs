@@ -10,6 +10,8 @@ import {
   faCopy,
   faTrash,
   faEdit,
+  faSquareCheck,
+  faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSocket } from "@/lib/socket";
@@ -88,12 +90,12 @@ export default function Messages({
     const handleBlockFriend = (data) => {
       console.log("Blocked friend:", data);
       setBlock(data);
-    }
+    };
 
     const handleUnblockFriend = (data) => {
       console.log("Unblocked friend:", data);
       setBlock(null);
-    }
+    };
 
     const handleEditMessage = (data) => {
       console.log("Edited message:", data);
@@ -107,16 +109,15 @@ export default function Messages({
       );
     };
 
-
     socket.on("receive_message", handleReceiveMessage);
-    socket.on("block", handleBlockFriend)
-    socket.on("unblock", handleUnblockFriend)
-    socket.on("receive_edit", handleEditMessage)
+    socket.on("block", handleBlockFriend);
+    socket.on("unblock", handleUnblockFriend);
+    socket.on("receive_edit", handleEditMessage);
 
     return () => {
       socket.off("receive_message", handleReceiveMessage);
-      socket.off("block", handleBlockFriend)
-      socket.off("unblock", handleUnblockFriend)
+      socket.off("block", handleBlockFriend);
+      socket.off("unblock", handleUnblockFriend);
     };
   }, [socket, conversationId, setMessages, setBlock]);
 
@@ -272,7 +273,12 @@ export default function Messages({
     }
 
     try {
-      socket.emit("delete_message", { messageId, senderId, conversationId, receiver: activeChat.userId });
+      socket.emit("delete_message", {
+        messageId,
+        senderId,
+        conversationId,
+        receiver: activeChat.userId,
+      });
 
       const response = await fetch(`/api/messages/deleteMessage`, {
         method: "POST",
@@ -314,10 +320,10 @@ export default function Messages({
       }
     }
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [contextMenu.visible]);
 
@@ -391,24 +397,27 @@ export default function Messages({
                   <div
                     id={`message-${message.messageId}`}
                     key={message.messageId}
-                    className={`${styles.message} ${message.senderUserId === userData.userId
-                      ? styles.outgoing
-                      : styles.incoming
-                      }`}
+                    className={`${styles.message} ${
+                      message.senderUserId === userData.userId
+                        ? styles.outgoing
+                        : styles.incoming
+                    }`}
                   >
-                    <Image
-                      src={
-                        message.senderUserId === userData.userId
-                          ? userData.profilePicPath ||
-                          "/images/user-icon-placeholder.png"
-                          : activeChat?.profilePicPath ||
-                          "/images/user-icon-placeholder.png"
-                      }
-                      width={40}
-                      height={40}
-                      alt="Sender avatar"
-                      className={styles.avatar}
-                    />
+                    {message.senderUserId != userData.userId && (
+                      <Image
+                        src={
+                          message.senderUserId === userData.userId
+                            ? userData.profilePicPath ||
+                              "/images/user-icon-placeholder.png"
+                            : activeChat?.profilePicPath ||
+                              "/images/user-icon-placeholder.png"
+                        }
+                        width={40}
+                        height={40}
+                        alt="Sender avatar"
+                        className={styles.avatar}
+                      />
+                    )}
 
                     <div className={styles.messageWrapper}>
                       {originalMessage && (
@@ -424,15 +433,16 @@ export default function Messages({
                           }}
                         >
                           <span
-                            className={`${originalMessage.isDeleted === 1
-                              ? styles["deleted-message"]
-                              : ""
-                              }`}
+                            className={`${
+                              originalMessage.isDeleted === 1
+                                ? styles["deleted-message"]
+                                : ""
+                            }`}
                           >
                             {originalMessage.isDeleted === 0
                               ? originalMessage.messageText.length > 40
                                 ? originalMessage.messageText.substring(0, 37) +
-                                "..."
+                                  "..."
                                 : originalMessage.messageText
                               : "Deleted Message"}
                           </span>
@@ -474,10 +484,11 @@ export default function Messages({
                         onClick={() => {
                           setContextMenu({ ...contextMenu, visible: false });
                         }}
-                        className={`${styles.messageContent} ${message.isDeleted === 1
-                          ? styles["deleted-message"]
-                          : ""
-                          }`}
+                        className={`${styles.messageContent} ${
+                          message.isDeleted === 1
+                            ? styles["deleted-message"]
+                            : ""
+                        }`}
                       >
                         {message.isDeleted === 1
                           ? "Deleted Message"
@@ -491,6 +502,17 @@ export default function Messages({
                             : styles.messageTimeLeft
                         }
                       >
+                        {message.state === "sent" ? (
+                          <FontAwesomeIcon
+                            icon={faCheck}
+                            className={styles.icon}
+                          />
+                        ) : message.state === "seen" ? (
+                          <FontAwesomeIcon
+                            icon={faSquareCheck}
+                            className={styles.icon}
+                          />
+                        ) : null}
                         {message.isEdited === 1 && "|Edited| "}
                         {message.sentAt}
                       </div>
