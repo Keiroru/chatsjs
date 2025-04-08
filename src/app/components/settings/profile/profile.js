@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
-import style from "@/app/styles/profile.module.css";
+import style from "@/app/styles/account.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera, faSave } from "@fortawesome/free-solid-svg-icons";
 
@@ -126,106 +126,115 @@ export default function Profile({ userData }) {
   };
 
   return (
-    <div className={style.profileContainer}>
-      <h2 className={style.sectionTitle}>Edit Profile</h2>
+    <div className={style.accountContainer}>
+      <h1 className={style.accountTitle}>Edit Profile</h1>
+      <p className={style.accountDescription}>
+        Update your profile information and customize how others see you on the platform.
+      </p>
 
-      <form ref={formRef} onSubmit={handleSubmit} className={style.profileForm}>
-        <div className={style.profileImageSection}>
-          <div className={style.imageContainer}>
-            <Image
-              src={localPreviewUrl || profileForm.profilePicture}
-              alt="Profile picture"
-              width={150}
-              height={150}
-              className={style.profileImage}
+      <div className={style.accountSection}>
+        <h2 className={style.accountSectionTitle}>Profile Information</h2>
+        <form ref={formRef} onSubmit={handleSubmit}>
+          <div className={style.profileImageSection}>
+            <div className={style.imageContainer}>
+              <Image
+                src={localPreviewUrl || profileForm.profilePicture}
+                alt="Profile picture"
+                width={150}
+                height={150}
+                className={style.profileImage}
+              />
+            </div>
+
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              accept="image/*"
+              style={{ display: "none" }}
             />
+
+            <button
+              type="button"
+              className={style.imgButton}
+              onClick={handleUploadButtonClick}
+              disabled={isUploading}
+            >
+              <FontAwesomeIcon icon={faCamera} />
+              {isUploading ? "Uploading..." : "Change Profile Picture"}
+            </button>
+
+            {selectedFile && (
+              <div className={style.selectedFileInfo}>
+                Selected: {selectedFile.name}
+              </div>
+            )}
+
+            {uploadError && <div className={style.errorText}>{uploadError}</div>}
+
+            {isUploading && (
+              <div className={style.progressBar}>
+                <div
+                  className={style.progressFill}
+                  style={{ width: `${uploadProgress}%` }}
+                ></div>
+              </div>
+            )}
           </div>
 
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleFileChange}
-            accept="image/*"
-            style={{ display: "none" }}
-          />
-
-          <button
-            type="button"
-            className={style.uploadButton}
-            onClick={handleUploadButtonClick}
-            disabled={isUploading}
-          >
-            <FontAwesomeIcon icon={faCamera} />
-            {isUploading ? "Uploading..." : "Change Profile Picture"}
-          </button>
-
-          {selectedFile && (
-            <div className={style.selectedFileInfo}>
-              Selected: {selectedFile.name}
-            </div>
-          )}
-
-          {uploadError && <div className={style.errorText}>{uploadError}</div>}
-
-          {isUploading && (
-            <div className={style.progressBar}>
-              <div
-                className={style.progressFill}
-                style={{ width: `${uploadProgress}%` }}
-              ></div>
-            </div>
-          )}
-        </div>
-        <div>
-          User ID: <span className={style.id}>#{userData.displayId}</span>
-        </div>
-        <div className={style.formField}>
-          <label htmlFor="displayName" className={style.fieldLabel}>
-            Display Name
-          </label>
-          <input
-            type="text"
-            id="displayName"
-            name="displayName"
-            value={profileForm.displayName}
-            onChange={handleInputChange}
-            required
-            maxLength={20}
-            className={style.textInput}
-          />
-          <div className={style.charCount}>
-            {profileForm.displayName.length}/20
+          <div className={style.userIdDisplay}>
+            User ID: <span className={style.userId}>#{userData.displayId}</span>
           </div>
-        </div>
 
-        <div className={style.formField}>
-          <label htmlFor="bio" className={style.fieldLabel}>
-            Bio
-          </label>
-          <textarea
-            id="bio"
-            name="bio"
-            rows={4}
-            value={profileForm.bio}
-            onChange={handleInputChange}
-            maxLength={200}
-            placeholder="Write something about yourself"
-            className={style.textArea}
-          ></textarea>
-          <div className={style.charCount}>{profileForm.bio.length}/200</div>
-        </div>
+          <div className={style.formField}>
+            <label htmlFor="displayName" className={style.fieldLabel}>
+              Display Name
+            </label>
+            <input
+              type="text"
+              id="displayName"
+              name="displayName"
+              value={profileForm.displayName}
+              onChange={handleInputChange}
+              required
+              maxLength={20}
+              className={style.textInput}
+              placeholder="Your display name"
+            />
+            <div className={style.charCount}>
+              {profileForm.displayName.length}/20
+            </div>
+          </div>
 
-        <div className={style.formActions}>
-          <button
-            type="submit"
-            disabled={isUploading}
-            className={style.saveButton}
-          >
-            <FontAwesomeIcon icon={faSave} />
-            {isUploading ? "Saving..." : "Save Changes"}
-          </button>
-        </div>
-      </form>
+          <div className={style.formField}>
+            <label htmlFor="bio" className={style.fieldLabel}>
+              Bio
+            </label>
+            <textarea
+              id="bio"
+              name="bio"
+              rows={4}
+              value={profileForm.bio}
+              onChange={handleInputChange}
+              maxLength={200}
+              placeholder="Write something about yourself"
+              className={style.textInput}
+            ></textarea>
+            <div className={style.charCount}>{profileForm.bio.length}/200</div>
+          </div>
+
+          <div className={style.formActions}>
+            <button
+              type="submit"
+              disabled={isUploading}
+              className={style.defaultButton}
+            >
+              <FontAwesomeIcon icon={faSave} />
+              {isUploading ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

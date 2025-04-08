@@ -73,6 +73,24 @@
     transform: translateY(-2px);
 }
 
+.imgButton {
+    background-color: var(--dark_purple);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 14px;
+    width: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    align-self: center;
+}
+
+.imgButton:hover {
+    background-color: var(--light_purple);
+    transform: translateY(-2px);
+}
+
 .deleteAccountSection {
     background-color: var(--dark_black);
     border-radius: 10px;
@@ -255,4 +273,182 @@
 .reportMenuAction {
     margin-left: auto;
     color: var(--silver);
+}
+
+.formField {
+    margin-bottom: 20px;
+}
+
+.fieldLabel {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--off-white);
+}
+
+.textInput {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid var(--dark_blue);
+    background-color: var(--dark_black);
+    color: var(--off-white);
+    font-size: 14px;
+    transition: border-color 0.2s ease;
+    resize: none;
+}
+
+.textInput:focus {
+    outline: none;
+    border-color: var(--light_purple);
+}
+
+.charCount {
+    text-align: right;
+    font-size: 12px;
+    color: var(--silver);
+    margin-top: 5px;
+}
+
+.formActions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.profileImageSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.imageContainer {
+    width: 150px;
+    height: 150px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 15px;
+    border: 2px solid var(--dark_blue);
+}
+
+.profileImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.selectedFileInfo {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--silver);
+}
+
+.errorText {
+    color: var(--error_red);
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.progressBar {
+    width: 100%;
+    height: 8px;
+    background-color: var(--dark_blue);
+    border-radius: 4px;
+    margin-top: 15px;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background-color: var(--light_purple);
+    transition: width 0.3s ease;
+}
+
+.userIdDisplay {
+    margin-bottom: 20px;
+    color: var(--silver);
+}
+
+.userId {
+    font-weight: 500;
+    color: var(--off-white);
+}
+
+.confirmationOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.confirmationDialog {
+    background-color: var(--dark_black);
+    border-radius: 10px;
+    padding: 25px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--error_red);
+}
+
+.confirmationTitle {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: var(--error_red);
+}
+
+.confirmationMessage {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--silver);
+    margin-bottom: 25px;
+}
+
+.confirmationActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+}
+
+.cancelButton {
+    background-color: var(--dark_green);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cancelButton:hover {
+    background-color: var(--light_green);
+    transform: translateY(-2px);
+}
+
+.confirmDeleteButton {
+    background-color: var(--error_red);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.confirmDeleteButton:hover {
+    background-color: #d32f2f;
+    transform: translateY(-2px);
 }

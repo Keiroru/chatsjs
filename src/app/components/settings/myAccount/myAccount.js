@@ -3,10 +3,41 @@
 import { useState } from "react";
 import style from "@/app/styles/account.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faTrash, faToggleOn, faToggleOff } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export default function MyAccount({ userData }) {
-  const [lookingForFriends, setLookingForFriends] = useState(userData.lookingForFriends);
+  const [lookingForFriends, setLookingForFriends] = useState(userData.lookingForFriends === 1 ? 1 : 0);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+
+  const handleLookingForFriends = async () => {
+    const response = await fetch("/api/profile/updateLookingForFriends", {
+      method: "POST",
+      body: JSON.stringify({ isLookingForFriends: lookingForFriends === 0 ? 1 : 0, userId: userData.userId }),
+    });
+    if (response.ok) {
+      console.log("Looking for friends updated successfully");
+    } else {
+      console.error("Failed to update looking for friends");
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      const response = await fetch("/api/profile/deleteProfile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: userData.userId }),
+      });
+
+      if (response.ok) {
+        console.log("Account deleted successfully");
+      }
+    } catch (error) {
+      console.error("Error deleting account:", error);
+    }
+  };
 
   return (
     <div className={style.accountContainer}>
@@ -62,6 +93,7 @@ export default function MyAccount({ userData }) {
           className={style.defaultButton}
           onClick={() => {
             setLookingForFriends(!lookingForFriends);
+            handleLookingForFriends();
           }}
         >
           {lookingForFriends ? "Stop Looking for Friends" : "Start Looking for Friends"}
@@ -73,10 +105,38 @@ export default function MyAccount({ userData }) {
         <p className={style.deleteAccountDescription}>
           Once you delete your account, there is no going back.
         </p>
-        <button className={style.deleteAccountButton} type="submit">
+        <button
+          className={style.deleteAccountButton}
+          onClick={() => setShowDeleteConfirmation(true)}
+        >
           <FontAwesomeIcon icon={faTrash} /> Delete Account
         </button>
       </div>
+
+      {showDeleteConfirmation && (
+        <div className={style.confirmationOverlay}>
+          <div className={style.confirmationDialog}>
+            <h3 className={style.confirmationTitle}>Confirm</h3>
+            <p className={style.confirmationMessage}>
+              Are you sure you want to delete your account? This action cannot be undone.
+            </p>
+            <div className={style.confirmationActions}>
+              <button
+                className={style.cancelButton}
+                onClick={() => setShowDeleteConfirmation(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className={style.confirmDeleteButton}
+                onClick={handleDeleteAccount}
+              >
+                <FontAwesomeIcon icon={faTrash} /> Delete Account
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

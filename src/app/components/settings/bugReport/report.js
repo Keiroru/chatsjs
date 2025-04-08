@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import style from "@/app/styles/profile.module.css";
+import style from "@/app/styles/account.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 
@@ -47,6 +47,7 @@ export default function Report({ userData }) {
           title: "",
           desc: "",
         });
+        alert("Report submitted successfully!");
       }
     } catch (error) {
       console.error(error);
@@ -54,51 +55,58 @@ export default function Report({ userData }) {
   };
 
   return (
-    <div>
-      <h2 className={style.sectionTitle}>Bug Reports</h2>
-      <form onSubmit={handleSubmit} className={style.profileForm}>
-        <div className={style.formField}>
-          <label htmlFor="title" className={style.fieldLabel}>
-            Title
-          </label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            value={reportForm.title}
-            onChange={handleInputChange}
-            required
-            maxLength={30}
-            className={style.textInput}
-          />
-          <div className={style.charCount}>{reportForm.title.length}/30</div>
-        </div>
+    <div className={style.accountContainer}>
+      <h1 className={style.accountTitle}>Bug Reports</h1>
+      <p className={style.accountDescription}>
+        Submit a bug report to help us improve the application. Please provide as much detail as possible.
+      </p>
 
-        <div className={style.formField}>
-          <label htmlFor="desc" className={style.fieldLabel}>
-            Description
-          </label>
-          <textarea
-            type="text"
-            id="desc"
-            name="desc"
-            value={reportForm.desc}
-            onChange={handleInputChange}
-            required
-            rows={10}
-            maxLength={1024}
-            className={style.textInput}
-          />
-          <div className={style.charCount}>{reportForm.desc.length}/1024</div>
-        </div>
+      <div className={style.accountSection}>
+        <h2 className={style.accountSectionTitle}>Report Details</h2>
+        <form onSubmit={handleSubmit}>
+          <div className={style.formField}>
+            <label htmlFor="title" className={style.fieldLabel}>
+              Title
+            </label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value={reportForm.title}
+              onChange={handleInputChange}
+              required
+              maxLength={30}
+              className={style.textInput}
+              placeholder="Brief description of the issue"
+            />
+            <div className={style.charCount}>{reportForm.title.length}/30</div>
+          </div>
 
-        <div className={style.formActions}>
-          <button type="submit" className={style.saveButton}>
-            <FontAwesomeIcon icon={faSave} />
-            Send Report
-          </button>
-        </div>
-      </form>
+          <div className={style.formField}>
+            <label htmlFor="desc" className={style.fieldLabel}>
+              Description
+            </label>
+            <textarea
+              id="desc"
+              name="desc"
+              value={reportForm.desc}
+              onChange={handleInputChange}
+              required
+              rows={10}
+              maxLength={1024}
+              className={style.textInput}
+              placeholder="Detailed description of the bug, including steps to reproduce"
+            />
+            <div className={style.charCount}>{reportForm.desc.length}/1024</div>
+          </div>
+
+          <div className={style.formActions}>
+            <button type="submit" className={style.defaultButton}>
+              <FontAwesomeIcon icon={faSave} /> Submit Report
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
