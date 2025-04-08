@@ -28,8 +28,8 @@ export async function POST(request) {
     const connection = await getConnection();
 
     const query = isPhone
-      ? "SELECT userId, password FROM users WHERE telephone = ?"
-      : "SELECT userId, password FROM users WHERE email = ?";
+      ? "SELECT userId, password, isDeleted FROM users WHERE telephone = ?"
+      : "SELECT userId, password, isDeleted FROM users WHERE email = ?";
 
     const [results] = await connection.execute(query, [email]);
     await connection.end();
@@ -41,7 +41,11 @@ export async function POST(request) {
       );
     }
 
-    const { userId, password: storedHash } = results[0];
+    const { userId, password: storedHash, isDeleted } = results[0];
+
+    if (isDeleted === 1) {
+      return NextResponse.json({ error: "This Account was deleted" }, { status: 401 });
+    }
 
     const isPasswordValid = await bcrypt.compare(password, storedHash);
 

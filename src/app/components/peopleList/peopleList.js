@@ -27,6 +27,12 @@ export default function PeopleList({
     y: 0,
     message: null,
   });
+  const [peopleContextMenu, setPeopleContextMenu] = useState({
+    visible: false,
+    x: 0,
+    y: 0,
+    friend: null,
+  });
   const socket = useSocket();
 
   const fetchLastMessages = useCallback(async () => {
@@ -54,7 +60,7 @@ export default function PeopleList({
 
             const unreadCount = unreadCounts.find(
               (count) => count.friendId === friend.userId
-            )?.count || 0;
+            )?.count;
 
             if (lastMessage) {
               return {
@@ -63,8 +69,8 @@ export default function PeopleList({
                   ? "This message was deleted"
                   : lastMessage.messageText,
                 lastMessageAt: lastMessage.sentAt || null,
-                lastMessageState: lastMessage.state || null,
-                lastMessageSenderId: lastMessage.senderUserId || null,
+                lastMessageState: lastMessage.state,
+                lastMessageSenderId: lastMessage.senderUserId,
                 unreadCount: unreadCount
               };
             }
@@ -268,25 +274,32 @@ export default function PeopleList({
   };
 
   useEffect(() => {
-    if (!contextMenu.visible) return;
-
     function handleClickOutside(event) {
-      const menuElement = document.querySelector(`.${styles.menu}`);
-      if (menuElement && !menuElement.contains(event.target)) {
-        setContextMenu({ ...contextMenu, visible: false });
+      const friendMenuElement = document.querySelector(`.${styles.menu}`);
+      const isFriendMenuClick = friendMenuElement && friendMenuElement.contains(event.target);
+
+      if (!isFriendMenuClick) {
+        if (contextMenu.visible) {
+          setContextMenu({ ...contextMenu, visible: false });
+        }
+
+        if (peopleContextMenu.visible) {
+          setPeopleContextMenu({ ...peopleContextMenu, visible: false });
+        }
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside);
+    if (contextMenu.visible || peopleContextMenu.visible) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [contextMenu.visible]);
+  }, [contextMenu.visible, peopleContextMenu.visible]);
 
   const handleBlockFriend = async (friend) => {
     try {
-      console.log("Blocking friend:", friend.userId, userData.userId);
       const response = await fetch("/api/friends/block", {
         method: "POST",
         headers: {
@@ -303,7 +316,6 @@ export default function PeopleList({
         blocker: result.blockerId,
         blocked: result.blockedId,
       });
-      console.log("Friend blocked successfully:", result);
     } catch (error) {
       console.error("Error blocking friend:", error);
     }
@@ -330,6 +342,34 @@ export default function PeopleList({
       console.error("Error unblocking friend:", error);
     }
   };
+
+  const handleAddFriend = async (friend) => {
+    try {
+      const response = await fetch("/api/friends/addById", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: userData.userId,
+          friendId: friend.userId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to add friend");
+      }
+
+      socket.emit("friend_request", {
+        senderUserId: userData.userId,
+        receiverUserId: friend.userId,
+      });
+
+    } catch (error) {
+      console.error("Error adding friend:", error);
+    }
+  }
+
 
   return (
     <>
@@ -391,6 +431,16 @@ export default function PeopleList({
                 className={`${styles.friendItem} ${activeChat?.userId === person.userId ? styles.active : ""
                   }`}
                 onClick={() => handleChatClick(person, false)}
+                onContextMenu={(e) => {
+                  e.preventDefault();
+                  setPeopleContextMenu({
+                    visible: true,
+                    x: e.pageX,
+                    y: e.pageY,
+                    friend: person,
+                  });
+                  console.log("People context menu:", peopleContextMenu);
+                }}
               >
                 <Image
                   src={
@@ -533,6 +583,27 @@ export default function PeopleList({
           </div>
         )}
 
+        {peopleContextMenu.visible && (
+          <div
+            className={styles.menu}
+            style={{
+              position: "fixed",
+              top: `${peopleContextMenu.y}px`,
+              left: `${peopleContextMenu.x}px`,
+            }}
+          >
+            <div className={styles.menuHeader}>Actions</div>
+            <button
+              className={styles.menuItem}
+              onClick={() => {
+                setPeopleContextMenu({ ...peopleContextMenu, visible: false });
+                handleAddFriend(peopleContextMenu.friend);
+              }}
+            >
+              Add friend
+            </button>
+          </div>
+        )}
         {contextMenu.visible && (
           <div
             className={styles.menu}
@@ -547,19 +618,14 @@ export default function PeopleList({
             <button
               className={styles.menuItem}
               onClick={() => {
-                console.log("Block friend:", contextMenu.message);
                 if (block?.blocked === contextMenu.message.userId) {
-                  console.log("Unblocking friend:", contextMenu.message);
                   handleUnblockFriend(contextMenu.message);
                 } else {
-                  console.log("Blocking friend:", contextMenu.message);
                   handleBlockFriend(contextMenu.message);
                 }
                 setContextMenu({ ...contextMenu, visible: false });
               }}
             >
-              {console.log("Block friend:", contextMenu.message)}
-              {console.log("Blasdd:", block)}
               {block?.blocked === contextMenu.message.userId
                 ? "Unblock Friend"
                 : "Block Friend"}
@@ -568,7 +634,6 @@ export default function PeopleList({
             <button
               className={`${styles.menuItem} ${styles.menuItem}`}
               onClick={() => {
-                console.log("Delete friend:", contextMenu.message);
                 handleFriendDelete(contextMenu.message);
                 setContextMenu({ ...contextMenu, visible: false });
               }}

@@ -30,7 +30,6 @@ export default function Home() {
           </Link>
         </div>
         <div className={styles.heroImage}>
-          {/* Chat app preview illustration */}
           <div className={styles.mockupContainer}>
             <div className={styles.mockupWindow}>
               <div className={styles.mockupHeader}>
@@ -61,7 +60,7 @@ export default function Home() {
           <div className={styles.featureCard}>
             <FontAwesomeIcon icon={faComments} className={styles.featureIcon} />
             <h3>Real-time Messaging</h3>
-            <p>Instant message delivery with read receipts.</p>
+            <p>Instant message delivery.</p>
           </div>
           <div className={styles.featureCard}>
             <FontAwesomeIcon icon={faLock} className={styles.featureIcon} />

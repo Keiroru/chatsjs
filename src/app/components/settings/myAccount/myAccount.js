@@ -1,21 +1,25 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import style from "@/app/styles/account.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export default function MyAccount({ userData }) {
-  const [lookingForFriends, setLookingForFriends] = useState(userData.lookingForFriends === 1 ? 1 : 0);
+  const [lookingForFriends, setLookingForFriends] = useState(userData.isLookingForFriends === 1 ? 1 : 0);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const router = useRouter();
 
   const handleLookingForFriends = async () => {
+    const newValue = lookingForFriends === 0 ? 1 : 0;
     const response = await fetch("/api/profile/updateLookingForFriends", {
       method: "POST",
-      body: JSON.stringify({ isLookingForFriends: lookingForFriends === 0 ? 1 : 0, userId: userData.userId }),
+      body: JSON.stringify({ isLookingForFriends: newValue, userId: userData.userId }),
     });
     if (response.ok) {
-      console.log("Looking for friends updated successfully");
+      setLookingForFriends(newValue);
+      window.location.reload();
     } else {
       console.error("Failed to update looking for friends");
     }
@@ -32,7 +36,14 @@ export default function MyAccount({ userData }) {
       });
 
       if (response.ok) {
-        console.log("Account deleted successfully");
+        await fetch("/api/auth/logout", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: userData.userId }),
+        });
+        router.push("/");
       }
     } catch (error) {
       console.error("Error deleting account:", error);
@@ -87,7 +98,7 @@ export default function MyAccount({ userData }) {
         <h2 className={style.lookingForFriendsTitle}>Friend Preferences</h2>
         <div className={style.lookingForFriendsStatus}>
           <span className={style.statusLabel}>Looking for friends:</span>
-          <span className={style.statusValue}>{lookingForFriends ? "Yes" : "No"}</span>
+          <span className={style.statusValue}>{lookingForFriends === 1 ? "Yes" : "No"}</span>
         </div>
         <button
           className={style.defaultButton}
@@ -96,7 +107,7 @@ export default function MyAccount({ userData }) {
             handleLookingForFriends();
           }}
         >
-          {lookingForFriends ? "Stop Looking for Friends" : "Start Looking for Friends"}
+          {lookingForFriends === 1 ? "Stop Looking for Friends" : "Start Looking for Friends"}
         </button>
       </div>
 

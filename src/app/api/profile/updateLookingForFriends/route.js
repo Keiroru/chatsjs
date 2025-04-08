@@ -11,6 +11,7 @@ export async function POST(request) {
         const query = "UPDATE users SET isLookingForFriends = ? WHERE userId = ?";
 
         await connection.execute(query, [isLookingForFriends, userId]);
+        await connection.end();
 
         return NextResponse.json({ success: true });
     } catch (error) {

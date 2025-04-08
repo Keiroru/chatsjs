@@ -613,7 +613,7 @@ export default function Messages({
               <div className={styles.blocked}>You blocked this user</div>
             ) : block?.blocked === userData?.userId ? (
               <div className={styles.blocked}>You are blocked by this user</div>
-            ) : (
+            ) : (userData.isLookingForFriends === 1 ? (
               <Input
                 activeChat={activeChat}
                 userData={userData}
@@ -624,7 +624,9 @@ export default function Messages({
                 editMessage={editMessage}
                 setEditMessage={setEditMessage}
               />
-            ))}
+            ) : (
+              <div className={styles.blocked}>You can only send messages to strangers if you are looking for friends</div>
+            )))}
 
           {contextMenu.visible && (
             <div
