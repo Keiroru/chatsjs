@@ -25,6 +25,7 @@ namespace chatjs_gui
 
         private void LoadUsers()
         {
+            usersDataGrid.AllowUserToAddRows = false;
             usersDataGrid.Rows.Clear();
             usersDataGrid.ForeColor = Color.Black;
 

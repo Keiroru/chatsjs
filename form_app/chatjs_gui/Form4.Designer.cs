@@ -40,6 +40,7 @@
             openTicketsRadioButton = new RadioButton();
             groupBox1 = new GroupBox();
             closedTicketsRadioButton = new RadioButton();
+            refreshButton = new Button();
             ((System.ComponentModel.ISupportInitialize)reportsDataGrid).BeginInit();
             groupBox1.SuspendLayout();
             SuspendLayout();
@@ -53,7 +54,6 @@
             reportsDataGrid.Size = new Size(563, 350);
             reportsDataGrid.TabIndex = 0;
             reportsDataGrid.CellClick += reportsDataGrid_CellClick;
-            reportsDataGrid.CellContentClick += dataGridView1_CellContentClick;
             // 
             // displayName
             // 
@@ -113,13 +113,14 @@
             // doneButton
             // 
             doneButton.BackColor = Color.Green;
-            doneButton.Location = new Point(783, 417);
+            doneButton.Location = new Point(792, 417);
             doneButton.Name = "doneButton";
             doneButton.Size = new Size(134, 49);
             doneButton.TabIndex = 6;
             doneButton.Text = "Mark as done";
             doneButton.UseVisualStyleBackColor = false;
             doneButton.Visible = false;
+            doneButton.Click += doneButton_Click;
             // 
             // openTicketsRadioButton
             // 
@@ -132,13 +133,13 @@
             openTicketsRadioButton.TabStop = true;
             openTicketsRadioButton.Text = "Show open tickets";
             openTicketsRadioButton.UseVisualStyleBackColor = true;
-            openTicketsRadioButton.CheckedChanged += radioButton1_CheckedChanged;
+            openTicketsRadioButton.CheckedChanged += openTicketsRadioButton_CheckedChanged;
             // 
             // groupBox1
             // 
             groupBox1.Controls.Add(closedTicketsRadioButton);
             groupBox1.Controls.Add(openTicketsRadioButton);
-            groupBox1.Location = new Point(307, 378);
+            groupBox1.Location = new Point(230, 387);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(220, 88);
             groupBox1.TabIndex = 8;
@@ -153,6 +154,18 @@
             closedTicketsRadioButton.TabIndex = 8;
             closedTicketsRadioButton.Text = "Show closed tickets";
             closedTicketsRadioButton.UseVisualStyleBackColor = true;
+            closedTicketsRadioButton.CheckedChanged += closedTicketsRadioButton_CheckedChanged;
+            // 
+            // refreshButton
+            // 
+            refreshButton.BackColor = Color.FromArgb(0, 0, 64);
+            refreshButton.Location = new Point(470, 417);
+            refreshButton.Name = "refreshButton";
+            refreshButton.Size = new Size(97, 49);
+            refreshButton.TabIndex = 9;
+            refreshButton.Text = "Refresh";
+            refreshButton.UseVisualStyleBackColor = false;
+            refreshButton.Click += refreshButton_Click;
             // 
             // Form4
             // 
@@ -160,6 +173,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(64, 64, 64);
             ClientSize = new Size(1121, 501);
+            Controls.Add(refreshButton);
             Controls.Add(groupBox1);
             Controls.Add(doneButton);
             Controls.Add(titleText);
@@ -191,5 +205,6 @@
         private DataGridViewTextBoxColumn displayId;
         private DataGridViewTextBoxColumn bugReportName;
         private DataGridViewTextBoxColumn bugReportId;
+        private Button refreshButton;
     }
 }

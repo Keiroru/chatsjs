@@ -15,25 +15,28 @@ namespace chatjs_gui
     {
         DataGridViewCellEventArgs prewRow = null;
         int reportId = 0;
+        bool isClosedTickets = false;
 
         public Form4()
         {
             InitializeComponent();
-            LoadBugs(false);
+            LoadBugs(isClosedTickets);
         }
 
         private void LoadBugs(bool isClosed)
         {
+            reportsDataGrid.AllowUserToAddRows = false;
             reportsDataGrid.Rows.Clear();
             reportsDataGrid.ForeColor = Color.Black;
 
             int isClosedValue = isClosed ? 1 : 0;
 
             string sql = "select users.displayName, users.displayId, bugreports.header, bugreports.bugReportId from users" +
-                " inner join bugreports on users.userId = bugreports.senderUserId" +
-                $" where bugreports.isClosed = {isClosedValue}";
+                         " inner join bugreports on users.userId = bugreports.senderUserId" +
+                         $" where bugreports.isClosed = {isClosedValue}";
 
             Database db = new Database(sql);
+
             while (db.Reader.Read())
             {
                 string nev = db.Reader.GetString("displayName");
@@ -50,7 +53,7 @@ namespace chatjs_gui
         private void reportsDataGrid_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             var row = reportsDataGrid.Rows[e.RowIndex];
-            string reportId = row.Cells["bugReportId"].Value?.ToString() ?? "";
+            reportId = int.Parse(row.Cells["bugReportId"].Value?.ToString());
 
             if (prewRow != null) reportsDataGrid.Rows[prewRow.RowIndex].DefaultCellStyle.BackColor = Color.White;
             reportsDataGrid.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Yellow;
@@ -80,20 +83,36 @@ namespace chatjs_gui
             Close();
         }
 
-        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        private void refreshButton_Click(object sender, EventArgs e)
         {
-
+            LoadBugs(isClosedTickets);
         }
 
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void doneButton_Click(object sender, EventArgs e)
         {
+            string sql = $"UPDATE bugreports SET isClosed = CASE WHEN isClosed = 1 THEN 0 WHEN isClosed = 0 THEN 1 ELSE isClosed END" +
+                $" WHERE bugReportId = {reportId}";
 
+            Database db = new Database(sql);
+            db.EndConnection();
+
+            doneButton.Visible = false;
+            titleText.Visible = false;
+            descriptionText.Text = "";
+
+            LoadBugs(isClosedTickets);
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void openTicketsRadioButton_CheckedChanged(object sender, EventArgs e)
         {
+            isClosedTickets = false;
+            LoadBugs(isClosedTickets);
+        }
 
+        private void closedTicketsRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            isClosedTickets = true;
+            LoadBugs(isClosedTickets);
         }
     }
 }

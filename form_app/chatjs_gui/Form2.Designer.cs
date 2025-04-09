@@ -33,7 +33,7 @@
             logoutButton = new Button();
             goToUsersButton = new Button();
             goToBugReportsButton = new Button();
-            customSqlButton = new Button();
+            reportedMessagesButton = new Button();
             SuspendLayout();
             // 
             // usernameText
@@ -90,16 +90,16 @@
             goToBugReportsButton.UseVisualStyleBackColor = false;
             goToBugReportsButton.Click += goToBugReportsButton_Click;
             // 
-            // customSqlButton
+            // reportedMessagesButton
             // 
-            customSqlButton.BackColor = Color.FromArgb(0, 0, 64);
-            customSqlButton.Location = new Point(512, 306);
-            customSqlButton.Name = "customSqlButton";
-            customSqlButton.Size = new Size(188, 70);
-            customSqlButton.TabIndex = 5;
-            customSqlButton.Text = "Custom SQL";
-            customSqlButton.UseVisualStyleBackColor = false;
-            customSqlButton.Click += customSqlButton_Click;
+            reportedMessagesButton.BackColor = Color.Navy;
+            reportedMessagesButton.Location = new Point(512, 306);
+            reportedMessagesButton.Name = "reportedMessagesButton";
+            reportedMessagesButton.Size = new Size(188, 70);
+            reportedMessagesButton.TabIndex = 5;
+            reportedMessagesButton.Text = "Go to reported messages";
+            reportedMessagesButton.UseVisualStyleBackColor = false;
+            reportedMessagesButton.Click += customSqlButton_Click;
             // 
             // Form2
             // 
@@ -107,7 +107,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(30, 30, 30);
             ClientSize = new Size(800, 450);
-            Controls.Add(customSqlButton);
+            Controls.Add(reportedMessagesButton);
             Controls.Add(goToBugReportsButton);
             Controls.Add(goToUsersButton);
             Controls.Add(logoutButton);
@@ -130,6 +130,6 @@
         private Button logoutButton;
         private Button goToUsersButton;
         private Button goToBugReportsButton;
-        private Button customSqlButton;
+        private Button reportedMessagesButton;
     }
 }

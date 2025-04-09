@@ -8,12 +8,15 @@ export async function POST(request) {
 
     const connection = await getConnection();
 
+    const decodedTitle = decodeURIComponent(title);
+    const decodedDesc = decodeURIComponent(desc);
+
     const query = `
         INSERT INTO bugreports(senderUserId, header, description)
         VALUES(?,?,?)
         `;
 
-    await connection.execute(query, [senderId, title, desc]);
+    await connection.execute(query, [senderId, decodedTitle, decodedDesc]);
     await connection.end();
     return NextResponse.json(
       {
