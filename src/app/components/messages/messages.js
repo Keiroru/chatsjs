@@ -374,7 +374,7 @@ export default function Messages({
           messageId,
           conversationId,
           state: "seen",
-          senderId: activeChat.userId
+          senderId: activeChat.userId,
         });
       }
     } catch (error) {
@@ -386,8 +386,7 @@ export default function Messages({
     if (messages.length > 0 && conversationId) {
       const unreadMessages = messages.filter(
         (message) =>
-          message.senderUserId !== userData.userId &&
-          message.state !== "seen"
+          message.senderUserId !== userData.userId && message.state !== "seen"
       );
 
       unreadMessages.forEach((message) => {
@@ -466,19 +465,20 @@ export default function Messages({
                   <div
                     id={`message-${message.messageId}`}
                     key={message.messageId}
-                    className={`${styles.message} ${message.senderUserId === userData.userId
-                      ? styles.outgoing
-                      : styles.incoming
-                      }`}
+                    className={`${styles.message} ${
+                      message.senderUserId === userData.userId
+                        ? styles.outgoing
+                        : styles.incoming
+                    }`}
                   >
                     {message.senderUserId != userData.userId && (
                       <Image
                         src={
                           message.senderUserId === userData.userId
                             ? userData.profilePicPath ||
-                            "/images/user-icon-placeholder.png"
+                              "/images/user-icon-placeholder.png"
                             : activeChat?.profilePicPath ||
-                            "/images/user-icon-placeholder.png"
+                              "/images/user-icon-placeholder.png"
                         }
                         width={40}
                         height={40}
@@ -501,15 +501,16 @@ export default function Messages({
                           }}
                         >
                           <span
-                            className={`${originalMessage.isDeleted === 1
-                              ? styles["deleted-message"]
-                              : ""
-                              }`}
+                            className={`${
+                              originalMessage.isDeleted === 1
+                                ? styles["deleted-message"]
+                                : ""
+                            }`}
                           >
                             {originalMessage.isDeleted === 0
                               ? originalMessage.messageText.length > 40
                                 ? originalMessage.messageText.substring(0, 37) +
-                                "..."
+                                  "..."
                                 : originalMessage.messageText
                               : "Deleted Message"}
                           </span>
@@ -551,10 +552,11 @@ export default function Messages({
                         onClick={() => {
                           setContextMenu({ ...contextMenu, visible: false });
                         }}
-                        className={`${styles.messageContent} ${message.isDeleted === 1
-                          ? styles["deleted-message"]
-                          : ""
-                          }`}
+                        className={`${styles.messageContent} ${
+                          message.isDeleted === 1
+                            ? styles["deleted-message"]
+                            : ""
+                        }`}
                       >
                         {message.isDeleted === 1
                           ? "Deleted Message"
@@ -613,7 +615,7 @@ export default function Messages({
               <div className={styles.blocked}>You blocked this user</div>
             ) : block?.blocked === userData?.userId ? (
               <div className={styles.blocked}>You are blocked by this user</div>
-            ) : (userData.isLookingForFriends === 1 ? (
+            ) : userData.isLookingForFriends === 1 ? (
               <Input
                 activeChat={activeChat}
                 userData={userData}
@@ -625,8 +627,17 @@ export default function Messages({
                 setEditMessage={setEditMessage}
               />
             ) : (
-              <div className={styles.blocked}>You can only send messages to strangers if you are looking for friends</div>
-            )))}
+              <Input
+                activeChat={activeChat}
+                userData={userData}
+                conversationId={conversationId}
+                ref={inputRef}
+                replyTo={replyTo}
+                setreplyTo={setreplyTo}
+                editMessage={editMessage}
+                setEditMessage={setEditMessage}
+              />
+            ))}
 
           {contextMenu.visible && (
             <div

@@ -108,7 +108,7 @@
   margin: auto;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   border: 1px solid var(--dark_purple);
-  height: 100%;
+  height: fit-content;
 }
 
 .settingsPanel h3 {
@@ -176,9 +176,19 @@
   }
 
   .back-button {
-    display: flex !important;
-    margin-top: 10px;
-    margin-left: 10px;
+    display: block;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
+}
+
+@media (max-width: 900px) {
+  .settingsContent {
+    padding: 5px;
+  }
+  .settingsPanel {
+    padding: 5px;
   }
 }
 

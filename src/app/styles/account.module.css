@@ -1,454 +1,471 @@
 .accountContainer {
-    max-width: 90%;
-    margin: auto;
-    padding: 20px;
-    color: var(--off-white);
+  max-width: 90%;
+  margin: auto;
+  padding: 20px;
+  color: var(--off-white);
 }
 
 .accountTitle {
-    font-size: 28px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    color: var(--off-white);
-    border-bottom: 1px solid var(--dark_blue);
-    padding-bottom: 10px;
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: var(--off-white);
+  border-bottom: 1px solid var(--dark_blue);
+  padding-bottom: 10px;
 }
 
 .accountDescription {
-    font-size: 16px;
-    line-height: 1.6;
-    color: var(--silver);
-    margin-bottom: 30px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--silver);
+  margin-bottom: 30px;
 }
 
 .lookingForFriends {
-    display: flex;
-    flex-direction: column;
-    background-color: var(--dark_black);
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 30px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--dark_blue);
+  display: flex;
+  flex-direction: column;
+  background-color: var(--dark_black);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--dark_blue);
 }
 
 .lookingForFriendsTitle {
-    font-size: 18px;
-    font-weight: 500;
-    margin-bottom: 15px;
-    color: var(--off-white);
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 15px;
+  color: var(--off-white);
 }
 
 .lookingForFriendsStatus {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
 }
 
 .statusLabel {
-    margin-right: 10px;
-    color: var(--silver);
+  margin-right: 10px;
+  color: var(--silver);
 }
 
 .statusValue {
-    font-weight: 500;
-    color: var(--light_green);
+  font-weight: 500;
+  color: var(--light_green);
 }
 
 .defaultButton {
-    background-color: var(--dark_purple);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    font-size: 14px;
-    width: 100%;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    align-self: flex-start;
+  background-color: var(--dark_purple);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 14px;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  align-self: flex-start;
 }
 
 .defaultButton:hover {
-    background-color: var(--light_purple);
-    transform: translateY(-2px);
+  background-color: var(--light_purple);
+  transform: translateY(-2px);
 }
 
 .imgButton {
-    background-color: var(--dark_purple);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    font-size: 14px;
-    width: 50%;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    align-self: center;
+  background-color: var(--dark_purple);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 14px;
+  width: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  align-self: center;
 }
 
 .imgButton:hover {
-    background-color: var(--light_purple);
-    transform: translateY(-2px);
+  background-color: var(--light_purple);
+  transform: translateY(-2px);
 }
 
 .deleteAccountSection {
-    background-color: var(--dark_black);
-    border-radius: 10px;
-    padding: 20px;
-    margin-top: 30px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--error_red);
+  background-color: var(--dark_black);
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 30px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--error_red);
 }
 
 .deleteAccountTitle {
-    font-size: 18px;
-    font-weight: 500;
-    margin-bottom: 15px;
-    color: var(--error_red);
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 15px;
+  color: var(--error_red);
 }
 
 .deleteAccountDescription {
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--silver);
-    margin-bottom: 20px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--silver);
+  margin-bottom: 20px;
 }
 
 .deleteAccountButton {
-    background-color: var(--error_red);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    font-size: 14px;
-    width: 100%;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  background-color: var(--error_red);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 14px;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .deleteAccountButton:hover {
-    background-color: #d32f2f;
-    transform: translateY(-2px);
+  background-color: #d32f2f;
+  transform: translateY(-2px);
 }
 
 .accountSection {
-    background-color: var(--dark_black);
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 30px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--dark_blue);
+  background-color: var(--dark_black);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--dark_blue);
 }
 
 .accountSectionTitle {
-    font-size: 18px;
-    font-weight: 500;
-    margin-bottom: 15px;
-    color: var(--off-white);
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 15px;
+  color: var(--off-white);
 }
 
 .accountSectionContent {
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--silver);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--silver);
 }
 
 .accountTable {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
 }
 
 .accountTableRow {
-    border-bottom: 1px solid var(--dark_blue);
+  border-bottom: 1px solid var(--dark_blue);
 }
 
 .accountTableRow:last-child {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .accountTableCell {
-    padding: 12px 15px;
-    text-align: left;
+  padding: 12px 15px;
+  text-align: left;
 }
 
 .accountTableHeader {
-    color: var(--silver);
-    font-weight: 500;
-    width: 30%;
+  color: var(--silver);
+  font-weight: 500;
+  width: 30%;
 }
 
 .accountTableData {
-    color: var(--off-white);
-    font-weight: 500;
+  color: var(--off-white);
+  font-weight: 500;
 }
 
 .accountTableAction {
-    text-align: right;
+  text-align: right;
 }
 
 .profileMenu {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
 }
 
 .profileMenuRow {
-    border-bottom: 1px solid var(--dark_blue);
+  border-bottom: 1px solid var(--dark_blue);
 }
 
 .profileMenuRow:last-child {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .profileMenuItem {
-    padding: 12px 15px;
-    text-align: left;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+  padding: 12px 15px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .profileMenuItem:hover {
-    background-color: var(--dark_blue);
+  background-color: var(--dark_blue);
 }
 
 .profileMenuIcon {
-    margin-right: 10px;
-    color: var(--silver);
-    width: 20px;
-    text-align: center;
+  margin-right: 10px;
+  color: var(--silver);
+  width: 20px;
+  text-align: center;
 }
 
 .profileMenuText {
-    color: var(--off-white);
-    font-weight: 500;
+  color: var(--off-white);
+  font-weight: 500;
 }
 
 .profileMenuAction {
-    margin-left: auto;
-    color: var(--silver);
+  margin-left: auto;
+  color: var(--silver);
 }
 
 .reportMenu {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
 }
 
 .reportMenuRow {
-    border-bottom: 1px solid var(--dark_blue);
+  border-bottom: 1px solid var(--dark_blue);
 }
 
 .reportMenuRow:last-child {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .reportMenuItem {
-    padding: 12px 15px;
-    text-align: left;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+  padding: 12px 15px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .reportMenuItem:hover {
-    background-color: var(--dark_blue);
+  background-color: var(--dark_blue);
 }
 
 .reportMenuIcon {
-    margin-right: 10px;
-    color: var(--silver);
-    width: 20px;
-    text-align: center;
+  margin-right: 10px;
+  color: var(--silver);
+  width: 20px;
+  text-align: center;
 }
 
 .reportMenuText {
-    color: var(--off-white);
-    font-weight: 500;
+  color: var(--off-white);
+  font-weight: 500;
 }
 
 .reportMenuAction {
-    margin-left: auto;
-    color: var(--silver);
+  margin-left: auto;
+  color: var(--silver);
 }
 
 .formField {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .fieldLabel {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: var(--off-white);
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--off-white);
 }
 
 .textInput {
-    width: 100%;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid var(--dark_blue);
-    background-color: var(--dark_black);
-    color: var(--off-white);
-    font-size: 14px;
-    transition: border-color 0.2s ease;
-    resize: none;
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid var(--dark_blue);
+  background-color: var(--dark_black);
+  color: var(--off-white);
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+  resize: none;
 }
 
 .textInput:focus {
-    outline: none;
-    border-color: var(--light_purple);
+  outline: none;
+  border-color: var(--light_purple);
 }
 
 .charCount {
-    text-align: right;
-    font-size: 12px;
-    color: var(--silver);
-    margin-top: 5px;
+  text-align: right;
+  font-size: 12px;
+  color: var(--silver);
+  margin-top: 5px;
 }
 
 .formActions {
-    margin-top: 20px;
-    display: flex;
-    justify-content: flex-end;
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .profileImageSection {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
 }
 
 .imageContainer {
-    width: 150px;
-    height: 150px;
-    border-radius: 20px;
-    overflow: hidden;
-    margin-bottom: 15px;
-    border: 2px solid var(--dark_blue);
+  width: 150px;
+  height: 150px;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 15px;
+  border: 2px solid var(--dark_blue);
 }
 
 .profileImage {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .selectedFileInfo {
-    margin-top: 10px;
-    font-size: 14px;
-    color: var(--silver);
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--silver);
 }
 
 .errorText {
-    color: var(--error_red);
-    margin-top: 10px;
-    font-size: 14px;
+  color: var(--error_red);
+  margin-top: 10px;
+  font-size: 14px;
 }
 
 .progressBar {
-    width: 100%;
-    height: 8px;
-    background-color: var(--dark_blue);
-    border-radius: 4px;
-    margin-top: 15px;
-    overflow: hidden;
+  width: 100%;
+  height: 8px;
+  background-color: var(--dark_blue);
+  border-radius: 4px;
+  margin-top: 15px;
+  overflow: hidden;
 }
 
 .progressFill {
-    height: 100%;
-    background-color: var(--light_purple);
-    transition: width 0.3s ease;
+  height: 100%;
+  background-color: var(--light_purple);
+  transition: width 0.3s ease;
 }
 
 .userIdDisplay {
-    margin-bottom: 20px;
-    color: var(--silver);
+  margin-bottom: 20px;
+  color: var(--silver);
 }
 
 .userId {
-    font-weight: 500;
-    color: var(--off-white);
+  font-weight: 500;
+  color: var(--off-white);
 }
 
 .confirmationOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
 .confirmationDialog {
-    background-color: var(--dark_black);
-    border-radius: 10px;
-    padding: 25px;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    border: 1px solid var(--error_red);
+  background-color: var(--dark_black);
+  border-radius: 10px;
+  padding: 25px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--error_red);
 }
 
 .confirmationTitle {
-    font-size: 20px;
-    font-weight: 600;
-    margin-bottom: 15px;
-    color: var(--error_red);
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: var(--error_red);
 }
 
 .confirmationMessage {
-    font-size: 16px;
-    line-height: 1.6;
-    color: var(--silver);
-    margin-bottom: 25px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--silver);
+  margin-bottom: 25px;
 }
 
 .confirmationActions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 15px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
 }
 
 .cancelButton {
-    background-color: var(--dark_green);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  background-color: var(--dark_green);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .cancelButton:hover {
-    background-color: var(--light_green);
-    transform: translateY(-2px);
+  background-color: var(--light_green);
+  transform: translateY(-2px);
 }
 
 .confirmDeleteButton {
-    background-color: var(--error_red);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  background-color: var(--error_red);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .confirmDeleteButton:hover {
-    background-color: #d32f2f;
-    transform: translateY(-2px);
+  background-color: #d32f2f;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 900px) {
+  .accountContainer {
+    max-width: 100%;
+    padding: 5px;
+  }
+
+  .defaultButton,
+  .imgButton,
+  .deleteAccountButton,
+  .cancelButton,
+  .confirmDeleteButton {
+    width: 100%;
+    font-size: 12px;
+    padding: 8px 10px;
+  }
 }
