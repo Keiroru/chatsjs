@@ -257,7 +257,8 @@ CREATE TABLE `messages` (
   `isEdited` tinyint(1) NOT NULL DEFAULT 0,
   `messageText` text DEFAULT NULL,
   `attachmentId` int(11) DEFAULT NULL,
-  `replyTo` int(11) DEFAULT NULL
+  `replyTo` int(11) DEFAULT NULL,
+  `isReported` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -398,7 +399,8 @@ CREATE TABLE `users` (
   `isSiteAdmin` tinyint(1) DEFAULT 0,
   `currentThemeId` int(11) DEFAULT 1,
   `bio` varchar(255) DEFAULT NULL,
-  `isBanned` tinyint(1) default 0
+  `isBanned` tinyint(1) DEFAULT 0,
+  `isDeleted` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
