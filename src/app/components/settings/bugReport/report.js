@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import style from "@/app/styles/account.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
@@ -10,6 +10,7 @@ export default function Report({ userData }) {
     title: "",
     desc: "",
   });
+  const [reports, setReports] = useState([]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -53,6 +54,20 @@ export default function Report({ userData }) {
       console.error(error);
     }
   };
+
+  const fetchReports = async () => {
+    const response = await fetch(`/api/profile/getReports?userId=${userData.userId}`);
+    if (response.ok) {
+      const data = await response.json();
+      setReports(data.result);
+    } else {
+      console.error("Failed to fetch reports");
+    }
+  };
+
+  useEffect(() => {
+    fetchReports();
+  }, []);
 
   return (
     <div className={style.accountContainer}>
@@ -106,6 +121,36 @@ export default function Report({ userData }) {
             </button>
           </div>
         </form>
+      </div>
+
+      <div className={style.accountSection}>
+        <h2 className={style.accountSectionTitle}>Report History</h2>
+        <div className={style.reportHistory}>
+          {reports.length > 0 ? (
+            <>
+              <div className={style.gridContainer}>
+                <div className={style.gridHeader}>Title</div>
+                <div className={style.gridHeader}>Description</div>
+                <div className={style.gridHeader}>State</div>
+              </div>
+              {reports.map((report, index) => (
+                <div key={index} className={style.reportItem}>
+                  <div className={style.gridContainer}>
+                    <div className={style.gridCell}>{report.header}</div>
+                    <div className={style.gridCell}>{report.description}</div>
+                    <div className={style.gridCell}>
+                      <span>
+                        {report.isClosed === 0 ? "Open" : "Closed"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </>
+          ) : (
+            <div className={style.noReports}>No reports found</div>
+          )}
+        </div>
       </div>
     </div>
   );

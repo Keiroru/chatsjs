@@ -465,20 +465,19 @@ export default function Messages({
                   <div
                     id={`message-${message.messageId}`}
                     key={message.messageId}
-                    className={`${styles.message} ${
-                      message.senderUserId === userData.userId
+                    className={`${styles.message} ${message.senderUserId === userData.userId
                         ? styles.outgoing
                         : styles.incoming
-                    }`}
+                      }`}
                   >
                     {message.senderUserId != userData.userId && (
                       <Image
                         src={
                           message.senderUserId === userData.userId
                             ? userData.profilePicPath ||
-                              "/images/user-icon-placeholder.png"
+                            "/images/user-icon-placeholder.png"
                             : activeChat?.profilePicPath ||
-                              "/images/user-icon-placeholder.png"
+                            "/images/user-icon-placeholder.png"
                         }
                         width={40}
                         height={40}
@@ -501,16 +500,15 @@ export default function Messages({
                           }}
                         >
                           <span
-                            className={`${
-                              originalMessage.isDeleted === 1
+                            className={`${originalMessage.isDeleted === 1
                                 ? styles["deleted-message"]
                                 : ""
-                            }`}
+                              }`}
                           >
                             {originalMessage.isDeleted === 0
                               ? originalMessage.messageText.length > 40
                                 ? originalMessage.messageText.substring(0, 37) +
-                                  "..."
+                                "..."
                                 : originalMessage.messageText
                               : "Deleted Message"}
                           </span>
@@ -552,11 +550,10 @@ export default function Messages({
                         onClick={() => {
                           setContextMenu({ ...contextMenu, visible: false });
                         }}
-                        className={`${styles.messageContent} ${
-                          message.isDeleted === 1
+                        className={`${styles.messageContent} ${message.isDeleted === 1
                             ? styles["deleted-message"]
                             : ""
-                        }`}
+                          }`}
                       >
                         {message.isDeleted === 1
                           ? "Deleted Message"

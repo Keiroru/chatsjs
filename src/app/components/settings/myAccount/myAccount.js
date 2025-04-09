@@ -9,6 +9,12 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 export default function MyAccount({ userData }) {
   const [lookingForFriends, setLookingForFriends] = useState(userData.isLookingForFriends === 1 ? 1 : 0);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [showChangeEmail, setShowChangeEmail] = useState(false);
+  const [showChangePassword, setShowChangePassword] = useState(false);
+  const [showChangeUserId, setShowChangeUserId] = useState(false);
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [userIdError, setUserIdError] = useState("");
   const router = useRouter();
 
   const handleLookingForFriends = async () => {
@@ -50,6 +56,58 @@ export default function MyAccount({ userData }) {
     }
   };
 
+  const handleChangeEmail = async () => {
+    const newEmail = document.getElementById("newEmail").value;
+    const response = await fetch("/api/profile/updateEmail", {
+      method: "POST",
+      body: JSON.stringify({ email: newEmail, userId: userData.userId }),
+    });
+    if (response.ok) {
+      setShowChangeEmail(false);
+      setEmailError("");
+      window.location.reload();
+    } else {
+      const data = await response.json();
+      setEmailError(data.error);
+    }
+  };
+
+  const handleChangePassword = async () => {
+    const newPassword = document.getElementById("newPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+    if (newPassword !== confirmPassword) {
+      setPasswordError("Passwords do not match");
+      return;
+    }
+    const response = await fetch("/api/profile/updatePassword", {
+      method: "POST",
+      body: JSON.stringify({ password: newPassword, userId: userData.userId }),
+    });
+    if (response.ok) {
+      setShowChangePassword(false);
+      setPasswordError("");
+    } else {
+      const data = await response.json();
+      setPasswordError(data.error);
+    }
+  };
+
+  const handleChangeUserId = async () => {
+    const newUserId = document.getElementById("newUserId").value;
+    const response = await fetch("/api/profile/updateUserId", {
+      method: "POST",
+      body: JSON.stringify({ displayId: newUserId, userId: userData.userId, displayName: userData.displayName }),
+    });
+    if (response.ok) {
+      setShowChangeUserId(false);
+      setUserIdError("");
+      window.location.reload();
+    } else {
+      const data = await response.json();
+      setUserIdError(data.error);
+    }
+  };
+
   return (
     <div className={style.accountContainer}>
       <h1 className={style.accountTitle}>My Account</h1>
@@ -66,21 +124,25 @@ export default function MyAccount({ userData }) {
               <th className={`${style.accountTableCell} ${style.accountTableHeader}`}>Email</th>
               <td className={`${style.accountTableCell} ${style.accountTableData}`}>{userData.email}</td>
               <td className={`${style.accountTableCell} ${style.accountTableAction}`}>
-                <button className={style.defaultButton}>Change Email</button>
+                <button
+                  onClick={() => {
+                    setShowChangeEmail(true);
+                  }}
+                  className={style.defaultButton}>Change Email</button>
               </td>
             </tr>
             <tr className={style.accountTableRow}>
               <th className={`${style.accountTableCell} ${style.accountTableHeader}`}>User ID</th>
               <td className={`${style.accountTableCell} ${style.accountTableData}`}>#{userData.displayId}</td>
               <td className={`${style.accountTableCell} ${style.accountTableAction}`}>
-                <button className={style.defaultButton}>Change User ID</button>
+                <button className={style.defaultButton} onClick={() => setShowChangeUserId(true)}>Change User ID</button>
               </td>
             </tr>
             <tr className={style.accountTableRow}>
               <th className={`${style.accountTableCell} ${style.accountTableHeader}`}>Password</th>
               <td className={`${style.accountTableCell} ${style.accountTableData}`}>••••••••</td>
               <td className={`${style.accountTableCell} ${style.accountTableAction}`}>
-                <button className={style.defaultButton}>Change Password</button>
+                <button className={style.defaultButton} onClick={() => setShowChangePassword(true)}>Change Password</button>
               </td>
             </tr>
             <tr className={style.accountTableRow}>
@@ -148,6 +210,59 @@ export default function MyAccount({ userData }) {
           </div>
         </div>
       )}
+
+      {showChangeEmail && (
+        <div className={style.confirmationOverlay}>
+          <div className={style.normalConfirmationDialog}>
+            <h3 className={style.confirmationTitle}>Change Email</h3>
+            {emailError && <p className={style.errorText}>{emailError}</p>}
+            <label htmlFor="newEmail">New Email</label>
+            <input type="email" className={style.changeEmailInput} id="newEmail" />
+            <div className={style.confirmationActions}>
+              <button className={style.emailCancelButton} onClick={() => { setShowChangeEmail(false); setEmailError("") }}>Cancel</button>
+              <button className={style.emailChangeButton} onClick={handleChangeEmail}>Change Email</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showChangePassword && (
+        <div className={style.confirmationOverlay}>
+          <div className={style.normalConfirmationDialog}>
+            <h3 className={style.confirmationTitle}>Change Password</h3>
+            {passwordError && <p className={style.errorText}>{passwordError}</p>}
+            <div className={style.passwordForm}>
+              <form action="">
+                <label htmlFor="newPassword">New Password</label>
+                <input type="password" className={style.changePasswordInput} id="newPassword" />
+                <label htmlFor="confirmPassword">Confirm New Password</label>
+                <input type="password" className={style.changePasswordInput} id="confirmPassword" />
+              </form>
+            </div>
+            <div className={style.confirmationActions}>
+              <button className={style.emailCancelButton} onClick={() => { setShowChangePassword(false); setPasswordError(""); }}>Cancel</button>
+              <button className={style.emailChangeButton} onClick={handleChangePassword}>Change Password</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+      {showChangeUserId && (
+        <div className={style.confirmationOverlay}>
+          <div className={style.normalConfirmationDialog}>
+            <h3 className={style.confirmationTitle}>Change User ID</h3>
+            {userIdError && <p className={style.errorText}>{userIdError}</p>}
+            <label htmlFor="newUserId">New User ID</label>
+            <input type="text" className={style.changeEmailInput} id="newUserId" />
+            <div className={style.confirmationActions}>
+              <button className={style.emailCancelButton} onClick={() => { setShowChangeUserId(false); setUserIdError("") }}>Cancel</button>
+              <button className={style.emailChangeButton} onClick={handleChangeUserId}>Change User ID</button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
