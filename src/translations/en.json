@@ -124,5 +124,7 @@
     "noReports": "No reports found",
     "bugTitle": "Brief description of the issue",
     "bugDescription": "Detailed description of the bug, including steps to reproduce",
-    "changeLanguage": "Change Language"
+    "changeLanguage": "Change Language",
+    "userDeleted": "This user has been deleted",
+    "notFriends": "You can only message friends. Add them as a friend first or enable 'Looking for Friends' in your settings."
 }

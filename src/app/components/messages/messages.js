@@ -630,6 +630,8 @@ export default function Messages({
               <div className={styles.blocked}>{t("blocked")}</div>
             ) : block?.blocked === userData?.userId ? (
               <div className={styles.blocked}>{t("blockedBy")}</div>
+            ) : activeChat.isDeleted === 1 ? (
+              <div className={styles.blocked}>{t("userDeleted")}</div>
             ) : userData.isLookingForFriends === 1 ? (
               <Input
                 activeChat={activeChat}

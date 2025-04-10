@@ -64,6 +64,7 @@ export async function GET(request) {
         users.bio,
         users.isOnline,
         users.createdAt,
+        users.isDeleted,
         friends.userId as currentUserId,
         MAX(COALESCE(m.sentAt, '1970-01-01 00:00:00')) as lastMessageTime
       FROM 

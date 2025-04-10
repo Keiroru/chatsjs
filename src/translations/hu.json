@@ -124,5 +124,7 @@
     "noReports": "Nem találhatók hibajelentések",
     "bugTitle": "A probléma rövid leírása",
     "bugDescription": "A hiba részletes leírása, beleértve a megismétlés lépéseit",
-    "changeLanguage": "Nyelv módosítása"
+    "changeLanguage": "Nyelv módosítása",
+    "userDeleted": "Ez a felhasználó törölve lett",
+    "notFriends": "Csak barátoknak küldhetsz üzenetet. Először add hozzá őket barátként, vagy engedélyezd a 'Barátokat keresek' opciót a beállításokban."
 }
