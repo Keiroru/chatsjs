@@ -12,6 +12,7 @@ import {
   faEdit,
   faSquareCheck,
   faCheck,
+  faExclamationCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSocket } from "@/lib/socket";
@@ -395,6 +396,21 @@ export default function Messages({
     }
   }, [messages, conversationId, userData.userId]);
 
+  const handleReportMessage = async (message) => {
+    const response = await fetch("/api/messages/reportMessage", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ messageId: message.messageId }),
+    });
+    if (response.ok) {
+      alert("Message reported successfully");
+    } else {
+      alert("Failed to report message");
+    }
+  };
+
   return (
     <>
       {settingsOpen ? (
@@ -465,19 +481,20 @@ export default function Messages({
                   <div
                     id={`message-${message.messageId}`}
                     key={message.messageId}
-                    className={`${styles.message} ${message.senderUserId === userData.userId
+                    className={`${styles.message} ${
+                      message.senderUserId === userData.userId
                         ? styles.outgoing
                         : styles.incoming
-                      }`}
+                    }`}
                   >
                     {message.senderUserId != userData.userId && (
                       <Image
                         src={
                           message.senderUserId === userData.userId
                             ? userData.profilePicPath ||
-                            "/images/user-icon-placeholder.png"
+                              "/images/user-icon-placeholder.png"
                             : activeChat?.profilePicPath ||
-                            "/images/user-icon-placeholder.png"
+                              "/images/user-icon-placeholder.png"
                         }
                         width={40}
                         height={40}
@@ -500,15 +517,16 @@ export default function Messages({
                           }}
                         >
                           <span
-                            className={`${originalMessage.isDeleted === 1
+                            className={`${
+                              originalMessage.isDeleted === 1
                                 ? styles["deleted-message"]
                                 : ""
-                              }`}
+                            }`}
                           >
                             {originalMessage.isDeleted === 0
                               ? originalMessage.messageText.length > 40
                                 ? originalMessage.messageText.substring(0, 37) +
-                                "..."
+                                  "..."
                                 : originalMessage.messageText
                               : "Deleted Message"}
                           </span>
@@ -550,10 +568,11 @@ export default function Messages({
                         onClick={() => {
                           setContextMenu({ ...contextMenu, visible: false });
                         }}
-                        className={`${styles.messageContent} ${message.isDeleted === 1
+                        className={`${styles.messageContent} ${
+                          message.isDeleted === 1
                             ? styles["deleted-message"]
                             : ""
-                          }`}
+                        }`}
                       >
                         {message.isDeleted === 1
                           ? "Deleted Message"
@@ -700,6 +719,18 @@ export default function Messages({
 
               <div className={styles.menuDivider}></div>
 
+              <button
+                onClick={() => {
+                  handleReportMessage(contextMenu.message);
+                  setContextMenu({ ...contextMenu, visible: false });
+                }}
+                className={`${styles.menuItem} ${styles.menuItemDelete}`}
+              >
+                <span className={styles.menuItemIcon}>
+                  <FontAwesomeIcon icon={faExclamationCircle} />
+                </span>
+                Report Message
+              </button>
               <button
                 className={`${styles.menuItem} ${styles.menuItemDelete}`}
                 onClick={() => {

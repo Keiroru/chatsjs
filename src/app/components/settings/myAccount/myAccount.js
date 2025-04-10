@@ -7,7 +7,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export default function MyAccount({ userData }) {
-  const [lookingForFriends, setLookingForFriends] = useState(userData.isLookingForFriends === 1 ? 1 : 0);
+  const [lookingForFriends, setLookingForFriends] = useState(
+    userData.isLookingForFriends === 1 ? 1 : 0
+  );
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [showChangeEmail, setShowChangeEmail] = useState(false);
   const [showChangePassword, setShowChangePassword] = useState(false);
@@ -21,7 +23,10 @@ export default function MyAccount({ userData }) {
     const newValue = lookingForFriends === 0 ? 1 : 0;
     const response = await fetch("/api/profile/updateLookingForFriends", {
       method: "POST",
-      body: JSON.stringify({ isLookingForFriends: newValue, userId: userData.userId }),
+      body: JSON.stringify({
+        isLookingForFriends: newValue,
+        userId: userData.userId,
+      }),
     });
     if (response.ok) {
       setLookingForFriends(newValue);
@@ -96,7 +101,11 @@ export default function MyAccount({ userData }) {
     const newUserId = document.getElementById("newUserId").value;
     const response = await fetch("/api/profile/updateUserId", {
       method: "POST",
-      body: JSON.stringify({ displayId: newUserId, userId: userData.userId, displayName: userData.displayName }),
+      body: JSON.stringify({
+        displayId: newUserId,
+        userId: userData.userId,
+        displayName: userData.displayName,
+      }),
     });
     if (response.ok) {
       setShowChangeUserId(false);
@@ -118,49 +127,71 @@ export default function MyAccount({ userData }) {
 
       <div className={style.accountSection}>
         <h2 className={style.accountSectionTitle}>Account Information</h2>
-        <table className={style.accountTable}>
-          <tbody>
-            <tr className={style.accountTableRow}>
-              <th className={`${style.accountTableCell} ${style.accountTableHeader}`}>Email</th>
-              <td className={`${style.accountTableCell} ${style.accountTableData}`}>{userData.email}</td>
-              <td className={`${style.accountTableCell} ${style.accountTableAction}`}>
-                <button
-                  onClick={() => {
-                    setShowChangeEmail(true);
-                  }}
-                  className={style.defaultButton}>Change Email</button>
-              </td>
-            </tr>
-            <tr className={style.accountTableRow}>
-              <th className={`${style.accountTableCell} ${style.accountTableHeader}`}>User ID</th>
-              <td className={`${style.accountTableCell} ${style.accountTableData}`}>#{userData.displayId}</td>
-              <td className={`${style.accountTableCell} ${style.accountTableAction}`}>
-                <button className={style.defaultButton} onClick={() => setShowChangeUserId(true)}>Change User ID</button>
-              </td>
-            </tr>
-            <tr className={style.accountTableRow}>
-              <th className={`${style.accountTableCell} ${style.accountTableHeader}`}>Password</th>
-              <td className={`${style.accountTableCell} ${style.accountTableData}`}>••••••••</td>
-              <td className={`${style.accountTableCell} ${style.accountTableAction}`}>
-                <button className={style.defaultButton} onClick={() => setShowChangePassword(true)}>Change Password</button>
-              </td>
-            </tr>
-            <tr className={style.accountTableRow}>
-              <th className={`${style.accountTableCell} ${style.accountTableHeader}`}>Member Since</th>
-              <td className={`${style.accountTableCell} ${style.accountTableData}`}>
-                {new Date(userData.createdAt).toLocaleDateString()}
-              </td>
-              <td className={`${style.accountTableCell} ${style.accountTableAction}`}></td>
-            </tr>
-          </tbody>
-        </table>
+        <div className={style.accountGrid}>
+          <div
+            className={`${style.accountGridItem} ${style.accountGridHeader}`}
+          >
+            Email
+          </div>
+          <div className={style.accountGridItem}>{userData.email}</div>
+          <div className={style.accountGridItem}>
+            <button
+              onClick={() => setShowChangeEmail(true)}
+              className={style.defaultButton}
+            >
+              Change Email
+            </button>
+          </div>
+
+          <div
+            className={`${style.accountGridItem} ${style.accountGridHeader}`}
+          >
+            User ID
+          </div>
+          <div className={style.accountGridItem}>#{userData.displayId}</div>
+          <div className={style.accountGridItem}>
+            <button
+              onClick={() => setShowChangeUserId(true)}
+              className={style.defaultButton}
+            >
+              Change User ID
+            </button>
+          </div>
+
+          <div
+            className={`${style.accountGridItem} ${style.accountGridHeader}`}
+          >
+            Password
+          </div>
+          <div className={style.accountGridItem}>••••••••</div>
+          <div className={style.accountGridItem}>
+            <button
+              onClick={() => setShowChangePassword(true)}
+              className={style.defaultButton}
+            >
+              Change Password
+            </button>
+          </div>
+
+          <div
+            className={`${style.accountGridItem} ${style.accountGridHeader}`}
+          >
+            Member Since
+          </div>
+          <div className={style.accountGridItem}>
+            {new Date(userData.createdAt).toLocaleDateString()}
+          </div>
+          <div className={style.accountGridItem}></div>
+        </div>
       </div>
 
       <div className={style.lookingForFriends}>
         <h2 className={style.lookingForFriendsTitle}>Friend Preferences</h2>
         <div className={style.lookingForFriendsStatus}>
           <span className={style.statusLabel}>Looking for friends:</span>
-          <span className={style.statusValue}>{lookingForFriends === 1 ? "Yes" : "No"}</span>
+          <span className={style.statusValue}>
+            {lookingForFriends === 1 ? "Yes" : "No"}
+          </span>
         </div>
         <button
           className={style.defaultButton}
@@ -169,7 +200,9 @@ export default function MyAccount({ userData }) {
             handleLookingForFriends();
           }}
         >
-          {lookingForFriends === 1 ? "Stop Looking for Friends" : "Start Looking for Friends"}
+          {lookingForFriends === 1
+            ? "Stop Looking for Friends"
+            : "Start Looking for Friends"}
         </button>
       </div>
 
@@ -191,7 +224,8 @@ export default function MyAccount({ userData }) {
           <div className={style.confirmationDialog}>
             <h3 className={style.confirmationTitle}>Confirm</h3>
             <p className={style.confirmationMessage}>
-              Are you sure you want to delete your account? This action cannot be undone.
+              Are you sure you want to delete your account? This action cannot
+              be undone.
             </p>
             <div className={style.confirmationActions}>
               <button
@@ -217,10 +251,27 @@ export default function MyAccount({ userData }) {
             <h3 className={style.confirmationTitle}>Change Email</h3>
             {emailError && <p className={style.errorText}>{emailError}</p>}
             <label htmlFor="newEmail">New Email</label>
-            <input type="email" className={style.changeEmailInput} id="newEmail" />
+            <input
+              type="email"
+              className={style.changeEmailInput}
+              id="newEmail"
+            />
             <div className={style.confirmationActions}>
-              <button className={style.emailCancelButton} onClick={() => { setShowChangeEmail(false); setEmailError("") }}>Cancel</button>
-              <button className={style.emailChangeButton} onClick={handleChangeEmail}>Change Email</button>
+              <button
+                className={style.emailCancelButton}
+                onClick={() => {
+                  setShowChangeEmail(false);
+                  setEmailError("");
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                className={style.emailChangeButton}
+                onClick={handleChangeEmail}
+              >
+                Change Email
+              </button>
             </div>
           </div>
         </div>
@@ -230,23 +281,45 @@ export default function MyAccount({ userData }) {
         <div className={style.confirmationOverlay}>
           <div className={style.normalConfirmationDialog}>
             <h3 className={style.confirmationTitle}>Change Password</h3>
-            {passwordError && <p className={style.errorText}>{passwordError}</p>}
+            {passwordError && (
+              <p className={style.errorText}>{passwordError}</p>
+            )}
             <div className={style.passwordForm}>
               <form action="">
                 <label htmlFor="newPassword">New Password</label>
-                <input type="password" className={style.changePasswordInput} id="newPassword" />
+                <input
+                  type="password"
+                  className={style.changePasswordInput}
+                  id="newPassword"
+                />
                 <label htmlFor="confirmPassword">Confirm New Password</label>
-                <input type="password" className={style.changePasswordInput} id="confirmPassword" />
+                <input
+                  type="password"
+                  className={style.changePasswordInput}
+                  id="confirmPassword"
+                />
               </form>
             </div>
             <div className={style.confirmationActions}>
-              <button className={style.emailCancelButton} onClick={() => { setShowChangePassword(false); setPasswordError(""); }}>Cancel</button>
-              <button className={style.emailChangeButton} onClick={handleChangePassword}>Change Password</button>
+              <button
+                className={style.emailCancelButton}
+                onClick={() => {
+                  setShowChangePassword(false);
+                  setPasswordError("");
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                className={style.emailChangeButton}
+                onClick={handleChangePassword}
+              >
+                Change Password
+              </button>
             </div>
           </div>
         </div>
       )}
-
 
       {showChangeUserId && (
         <div className={style.confirmationOverlay}>
@@ -254,15 +327,31 @@ export default function MyAccount({ userData }) {
             <h3 className={style.confirmationTitle}>Change User ID</h3>
             {userIdError && <p className={style.errorText}>{userIdError}</p>}
             <label htmlFor="newUserId">New User ID</label>
-            <input type="text" className={style.changeEmailInput} id="newUserId" />
+            <input
+              type="text"
+              className={style.changeEmailInput}
+              id="newUserId"
+            />
             <div className={style.confirmationActions}>
-              <button className={style.emailCancelButton} onClick={() => { setShowChangeUserId(false); setUserIdError("") }}>Cancel</button>
-              <button className={style.emailChangeButton} onClick={handleChangeUserId}>Change User ID</button>
+              <button
+                className={style.emailCancelButton}
+                onClick={() => {
+                  setShowChangeUserId(false);
+                  setUserIdError("");
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                className={style.emailChangeButton}
+                onClick={handleChangeUserId}
+              >
+                Change User ID
+              </button>
             </div>
           </div>
         </div>
       )}
-
     </div>
   );
 }
