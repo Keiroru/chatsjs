@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SocketProvider } from "@/lib/socket";
+import { TranslationProvider } from "@/contexts/TranslationContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,8 +27,14 @@ export default async function RootLayout({ children }) {
           charSet="UTF-8"
         />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <SocketProvider>{children}</SocketProvider>
+      <body className={`${geistSans.variable} ${geistMono.variable} min-h-screen flex flex-col`}>
+        <TranslationProvider>
+          <SocketProvider>
+            <main className="flex-grow">
+              {children}
+            </main>
+          </SocketProvider>
+        </TranslationProvider>
       </body>
     </html>
   );

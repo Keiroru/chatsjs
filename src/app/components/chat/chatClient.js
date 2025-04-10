@@ -13,6 +13,7 @@ import GroupChat from "@/app/components/createGroupChat/createGroupChat";
 import ContactInfo from "@/app/components/sideBars/contactInfo";
 import { faArrowLeft, faTimes, faCog } from "@fortawesome/free-solid-svg-icons";
 import { useSocket } from "@/lib/socket";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 export default function ChatClient({ userData }) {
   const [rightPanelOpen, setRightPanelOpen] = useState(false);
@@ -32,13 +33,14 @@ export default function ChatClient({ userData }) {
   const [editMessage, setEditMessage] = useState(null);
   const [activeTab, setActiveTab] = useState("friends");
   const [friendRequests, setFriendRequests] = useState([]);
+  const { t } = useTranslation();
   const socket = useSocket();
 
   const formattedDate = activeChat?.createdAt
     ? new Date(activeChat.createdAt)
-        .toISOString()
-        .split("T")[0]
-        .replace(/-/g, ".")
+      .toISOString()
+      .split("T")[0]
+      .replace(/-/g, ".")
     : "No contact selected";
 
   const handleUnload = async () => {
@@ -75,14 +77,14 @@ export default function ChatClient({ userData }) {
 
     socket.emit("user_status", {
       userId: userData.userId,
-      status: "online",
+      status: t("online"),
     });
 
     const handleBeforeUnload = () => {
       handleUnload();
       socket.emit("user_status", {
         userId: userData.userId,
-        status: "offline",
+        status: t("offline"),
       });
     };
 
@@ -91,10 +93,10 @@ export default function ChatClient({ userData }) {
         oldFriends.map((friend) =>
           friend.userId === userId
             ? {
-                ...friend,
-                status,
-                isOnline: status === "online",
-              }
+              ...friend,
+              status,
+              isOnline: status === t("online"),
+            }
             : friend
         )
       );
@@ -103,7 +105,7 @@ export default function ChatClient({ userData }) {
         if (prevChat && prevChat.userId === userId) {
           return {
             ...prevChat,
-            isOnline: status === "online",
+            isOnline: status === t("online"),
             status,
           };
         }
@@ -118,7 +120,7 @@ export default function ChatClient({ userData }) {
       if (socket && userData?.userId) {
         socket.emit("user_status", {
           userId: userData.userId,
-          status: "offline",
+          status: t("offline"),
         });
       }
       window.removeEventListener("beforeunload", handleBeforeUnload);
@@ -170,8 +172,8 @@ export default function ChatClient({ userData }) {
   const handleChatClick = (chatId, getGroupChat) => {
     setActiveChat({
       ...chatId,
-      isOnline: chatId.isOnline || false,
-      status: chatId.status || "offline",
+      isOnline: chatId.isOnline,
+      status: chatId.status,
     });
 
     if (settingsOpen) {
@@ -223,14 +225,12 @@ export default function ChatClient({ userData }) {
 
   return (
     <div
-      className={`${styles["chat-container"]} ${
-        isMobile ? styles["mobile"] : ""
-      } ${rightPanelOpen ? styles["right-open"] : ""}`}
+      className={`${styles["chat-container"]} ${isMobile ? styles["mobile"] : ""
+        } ${rightPanelOpen ? styles["right-open"] : ""}`}
     >
       <aside
-        className={`${styles["sidebar"]} ${styles["left-sidebar"]} ${
-          leftPanelOpen ? styles["open"] : styles["closed"]
-        }`}
+        className={`${styles["sidebar"]} ${styles["left-sidebar"]} ${leftPanelOpen ? styles["open"] : styles["closed"]
+          }`}
       >
         <header className={styles["sidebar-header"]}>
           <div className={styles["user-info"]}>
@@ -333,9 +333,8 @@ export default function ChatClient({ userData }) {
       />
 
       <aside
-        className={`${styles["sidebar"]} ${styles["right-sidebar"]} ${
-          rightPanelOpen ? styles["open"] : ""
-        }`}
+        className={`${styles["sidebar"]} ${styles["right-sidebar"]} ${rightPanelOpen ? styles["open"] : ""
+          }`}
       >
         <ContactInfo
           setRightPanelOpen={setRightPanelOpen}

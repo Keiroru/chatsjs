@@ -3,10 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from '@/app/styles/auth.module.css';
+import { useTranslation } from "@/contexts/TranslationContext";
 
 function Register() {
   const router = useRouter();
-
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     displayName: "",
     email: "",
@@ -43,7 +44,7 @@ function Register() {
       const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data), // Use the data object, not formData which includes confirmPassword
+        body: JSON.stringify(data),
       });
 
       const result = await response.json();
@@ -84,12 +85,12 @@ function Register() {
 
   return (
     <div className={styles.box}>
-      <h1>Sign Up</h1>
+      <h1>{t("signUp")}</h1>
       <form onSubmit={handleRegister}>
         <input
           type="text"
           id="displayName"
-          placeholder="Display Name*"
+          placeholder={t("displayName") + "*"}
           value={formData.displayName}
           onChange={handleChange}
           required
@@ -101,7 +102,7 @@ function Register() {
         <input
           type="email"
           id="email"
-          placeholder="Email*"
+          placeholder={t("email") + "*"}
           autoComplete="email"
           value={formData.email}
           onChange={handleChange}
@@ -112,7 +113,7 @@ function Register() {
         <input
           type="text"
           id="telephone"
-          placeholder="Phone Number"
+          placeholder={t("telephone")}
           autoComplete="tel"
           value={formData.telephone}
           onChange={handleChange}
@@ -122,7 +123,7 @@ function Register() {
         <input
           type="password"
           id="password"
-          placeholder="Password*"
+          placeholder={t("password") + "*"}
           autoComplete="new-password"
           value={formData.password}
           onChange={handleChange}
@@ -135,7 +136,7 @@ function Register() {
         <input
           type="password"
           id="confirmPassword"
-          placeholder="Confirm Password*"
+          placeholder={t("confirmPassword") + "*"}
           autoComplete="new-password"
           value={formData.confirmPassword}
           onChange={handleChange}
@@ -146,12 +147,12 @@ function Register() {
           <p className={styles.errorMessage}>{errorMap.confirmPassword}</p>
         )}
         <p className={styles.required}>
-          * fields are required
+          * {t("required")}
         </p>
-        <input type="submit" value="Sign Up" className={styles.submitButton} />
+        <input type="submit" value={t("signUp")} className={styles.submitButton} />
       </form>
       <p className={styles.link}>
-        Already have an account? <a href="/login" className={styles.authLink}>Login Here</a>
+        {t("haveAccount")} <a href="/login" className={styles.authLink}>{t("loginHere")}</a>
       </p>
     </div>
   );

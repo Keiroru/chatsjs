@@ -264,12 +264,54 @@
 }
 
 .footer {
-  padding: 2rem;
+  background: linear-gradient(to right, var(--rich-black), var(--charcoal));
+  padding: 3rem 2rem;
   text-align: center;
-  color: var(--silver);
-  background-color: var(--dark_black);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+.footer p {
+  color: var(--off-white);
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  opacity: 0.9;
+}
+
+.footerLinks {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.footerLinks a {
+  color: var(--off-white);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 0.5rem 0;
+}
+
+.footerLinks a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(to right, var(--dark_purple), var(--light_purple));
+  transition: width 0.3s ease;
+}
+
+.footerLinks a:hover {
+  color: var(--light_purple);
+}
+
+.footerLinks a:hover::after {
+  width: 100%;
+}
+
 
 /* Responsive adjustments */
 @media (max-width: 992px) {
@@ -303,6 +345,14 @@
 
   .heroTitle {
     font-size: 2rem;
+  }
+
+  .footer {
+    padding: 2rem 1rem;
+  }
+
+  .footerLinks {
+    gap: 1.5rem;
   }
 }
 

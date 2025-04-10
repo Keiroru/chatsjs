@@ -3,6 +3,7 @@ import styles from "@/app/styles/contactInfo.module.css";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 export default function ContactInfo({
   setRightPanelOpen,
@@ -11,6 +12,7 @@ export default function ContactInfo({
   formattedDate,
   userData,
 }) {
+  const { t } = useTranslation();
   const [members, setMembers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isUserAdmin, setIsUserAdmin] = useState(false);
@@ -100,11 +102,10 @@ export default function ContactInfo({
           <>
             <span className={styles.profileId}>#{activeChat?.displayId}</span>
             <span
-              className={`${styles["status-badge"]} ${
-                activeChat?.isOnline ? styles["online"] : styles["offline"]
-              }`}
+              className={`${styles["status-badge"]} ${activeChat?.isOnline ? styles["online"] : styles["offline"]
+                }`}
             >
-              {activeChat?.isOnline ? "Online" : "Offline"}
+              {activeChat?.isOnline ? t("online") : t("offline")}
             </span>
           </>
         )}
@@ -112,23 +113,21 @@ export default function ContactInfo({
 
       <div className={styles["profile-details"]}>
         <section className={styles["profile-section"]}>
-          <h3 className={styles["profile-section-title"]}>Bio</h3>
+          <h3 className={styles["profile-section-title"]}>{t("bio")}</h3>
           <p className={styles["profile-section-content"]}>
-            {activeChat?.bio || "No bio available"}
+            {activeChat?.bio || t("noBioAvailable")}
           </p>
         </section>
         <section className={styles["profile-section"]}>
           {!isGroupChat ? (
             <>
-              <h3 className={styles["profile-section-title"]}>Member Since</h3>
+              <h3 className={styles["profile-section-title"]}>{t("memberSince")}</h3>
               <p className={styles["profile-section-content"]}>
                 {formattedDate}
               </p>
             </>
           ) : (
             <>
-              {" "}
-              <h3 className={styles["profile-section-title"]}>Created At</h3>
               <p className={styles["profile-section-content"]}>
                 {formattedDate}
               </p>
@@ -142,7 +141,7 @@ export default function ContactInfo({
             <div className={styles.searchInput}>
               <input
                 type="text"
-                placeholder="Search someone"
+                placeholder={t("search")}
                 value={searchQuery}
                 onChange={handleSearch}
                 aria-label="Search someone"
@@ -176,12 +175,12 @@ export default function ContactInfo({
                 {isUserAdmin === true && member.userId != userData.userId && (
                   <>
                     {member.isAdmin === 1 ? (
-                      <button>Remove admin</button>
+                      <button>{t("removeAdmin")}</button>
                     ) : (
-                      <button>Make admin</button>
+                      <button>{t("makeAdmin")}</button>
                     )}
 
-                    <button>Kick</button>
+                    <button>{t("kick")}</button>
                   </>
                 )}
               </div>
@@ -189,8 +188,7 @@ export default function ContactInfo({
           </div>
           <div>
             <button>
-              Push button, more friends come! Big chat with lots of friends, so
-              fun! Talk, laugh, play, all together!
+              {t("pushButton")}
             </button>
           </div>
         </>

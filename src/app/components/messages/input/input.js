@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import React, { forwardRef, useState, useEffect } from "react";
 import { useSocket } from "@/lib/socket";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 const Input = forwardRef(
   (
@@ -20,6 +21,7 @@ const Input = forwardRef(
     const [messageInput, setMessageInput] = useState("");
     const [loading, setLoading] = useState(false);
     const socket = useSocket();
+    const { t } = useTranslation();
 
     useEffect(() => {
       if (replyTo && ref?.current) {
@@ -33,8 +35,7 @@ const Input = forwardRef(
 
       if (messageInput.length > 20000) {
         alert(
-          "Message too long. Please shorten it. Max 20,000 characters. Current char count: " +
-          messageInput.length
+          t("messageTooLong") + messageInput.length
         );
         setLoading(false);
         return;
@@ -137,7 +138,7 @@ const Input = forwardRef(
           <div className={styles.replyPreview}>
             <div className={styles.replyContent}>
               <p className={styles.replyTo}>
-                Replying to: {replyTo.messageText.substring(0, 50)}
+                {t("replyPreview")} {replyTo.messageText.substring(0, 50)}
                 {replyTo.messageText.length > 50 ? "..." : ""}
               </p>
               <button
@@ -154,7 +155,7 @@ const Input = forwardRef(
           <div className={styles.replyPreview}>
             <div className={styles.replyContent}>
               <p className={styles.replyTo}>
-                Editing Message: {editMessage.messageText.substring(0, 50)}
+                {t("editingMessage")} {editMessage.messageText.substring(0, 50)}
                 {editMessage.messageText.length > 50 ? "..." : ""}
               </p>
               <button
@@ -171,7 +172,7 @@ const Input = forwardRef(
             <input
               type="text"
               ref={ref}
-              placeholder="Type a message"
+              placeholder={t("typeMessage")}
               className={styles["message-input"]}
               aria-label="Type a message"
               value={messageInput}

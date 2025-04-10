@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import style from "@/app/styles/account.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 export default function MyAccount({ userData }) {
   const [lookingForFriends, setLookingForFriends] = useState(
@@ -18,6 +19,7 @@ export default function MyAccount({ userData }) {
   const [passwordError, setPasswordError] = useState("");
   const [userIdError, setUserIdError] = useState("");
   const router = useRouter();
+  const { t } = useTranslation();
 
   const handleLookingForFriends = async () => {
     const newValue = lookingForFriends === 0 ? 1 : 0;
@@ -119,19 +121,18 @@ export default function MyAccount({ userData }) {
 
   return (
     <div className={style.accountContainer}>
-      <h1 className={style.accountTitle}>My Account</h1>
+      <h1 className={style.accountTitle}>{t("account")}</h1>
       <p className={style.accountDescription}>
-        Welcome to your account settings page. Here you can update your account
-        information and manage your preferences.
+        {t("accountDescription")}
       </p>
 
       <div className={style.accountSection}>
-        <h2 className={style.accountSectionTitle}>Account Information</h2>
+        <h2 className={style.accountSectionTitle}>{t("accountInformation")}</h2>
         <div className={style.accountGrid}>
           <div
             className={`${style.accountGridItem} ${style.accountGridHeader}`}
           >
-            Email
+            {t("email")}
           </div>
           <div className={style.accountGridItem}>{userData.email}</div>
           <div className={style.accountGridItem}>
@@ -139,14 +140,14 @@ export default function MyAccount({ userData }) {
               onClick={() => setShowChangeEmail(true)}
               className={style.defaultButton}
             >
-              Change Email
+              {t("changeEmail")}
             </button>
           </div>
 
           <div
             className={`${style.accountGridItem} ${style.accountGridHeader}`}
           >
-            User ID
+            {t("userId")}
           </div>
           <div className={style.accountGridItem}>#{userData.displayId}</div>
           <div className={style.accountGridItem}>
@@ -154,14 +155,14 @@ export default function MyAccount({ userData }) {
               onClick={() => setShowChangeUserId(true)}
               className={style.defaultButton}
             >
-              Change User ID
+              {t("changeUserId")}
             </button>
           </div>
 
           <div
             className={`${style.accountGridItem} ${style.accountGridHeader}`}
           >
-            Password
+            {t("password")}
           </div>
           <div className={style.accountGridItem}>••••••••</div>
           <div className={style.accountGridItem}>
@@ -169,14 +170,14 @@ export default function MyAccount({ userData }) {
               onClick={() => setShowChangePassword(true)}
               className={style.defaultButton}
             >
-              Change Password
+              {t("changePassword")}
             </button>
           </div>
 
           <div
             className={`${style.accountGridItem} ${style.accountGridHeader}`}
           >
-            Member Since
+            {t("memberSince")}
           </div>
           <div className={style.accountGridItem}>
             {new Date(userData.createdAt).toLocaleDateString()}
@@ -186,11 +187,11 @@ export default function MyAccount({ userData }) {
       </div>
 
       <div className={style.lookingForFriends}>
-        <h2 className={style.lookingForFriendsTitle}>Friend Preferences</h2>
+        <h2 className={style.lookingForFriendsTitle}>{t("friendPreferences")}</h2>
         <div className={style.lookingForFriendsStatus}>
-          <span className={style.statusLabel}>Looking for friends:</span>
+          <span className={style.statusLabel}>{t("lookingForFriends")}:</span>
           <span className={style.statusValue}>
-            {lookingForFriends === 1 ? "Yes" : "No"}
+            {lookingForFriends === 1 ? t("yes") : t("no")}
           </span>
         </div>
         <button
@@ -201,44 +202,43 @@ export default function MyAccount({ userData }) {
           }}
         >
           {lookingForFriends === 1
-            ? "Stop Looking for Friends"
-            : "Start Looking for Friends"}
+            ? t("stopLookingForFriends")
+            : t("startLookingForFriends")}
         </button>
       </div>
 
       <div className={style.deleteAccountSection}>
-        <h2 className={style.deleteAccountTitle}>Danger Zone</h2>
+        <h2 className={style.deleteAccountTitle}>{t("dangerZone")}</h2>
         <p className={style.deleteAccountDescription}>
-          Once you delete your account, there is no going back.
+          {t("deleteAccountDescription")}
         </p>
         <button
           className={style.deleteAccountButton}
           onClick={() => setShowDeleteConfirmation(true)}
         >
-          <FontAwesomeIcon icon={faTrash} /> Delete Account
+          <FontAwesomeIcon icon={faTrash} /> {t("deleteAccount")}
         </button>
       </div>
 
       {showDeleteConfirmation && (
         <div className={style.confirmationOverlay}>
           <div className={style.confirmationDialog}>
-            <h3 className={style.confirmationTitle}>Confirm</h3>
+            <h3 className={style.confirmationTitle}>{t("confirm")}</h3>
             <p className={style.confirmationMessage}>
-              Are you sure you want to delete your account? This action cannot
-              be undone.
+              {t("deleteAccountConfirmation")}
             </p>
             <div className={style.confirmationActions}>
               <button
                 className={style.cancelButton}
                 onClick={() => setShowDeleteConfirmation(false)}
               >
-                Cancel
+                {t("cancel")}
               </button>
               <button
                 className={style.confirmDeleteButton}
                 onClick={handleDeleteAccount}
               >
-                <FontAwesomeIcon icon={faTrash} /> Delete Account
+                <FontAwesomeIcon icon={faTrash} /> {t("deleteAccount")}
               </button>
             </div>
           </div>
@@ -248,9 +248,9 @@ export default function MyAccount({ userData }) {
       {showChangeEmail && (
         <div className={style.confirmationOverlay}>
           <div className={style.normalConfirmationDialog}>
-            <h3 className={style.confirmationTitle}>Change Email</h3>
+            <h3 className={style.confirmationTitle}>{t("changeEmail")}</h3>
             {emailError && <p className={style.errorText}>{emailError}</p>}
-            <label htmlFor="newEmail">New Email</label>
+            <label htmlFor="newEmail">{t("newEmail")}</label>
             <input
               type="email"
               className={style.changeEmailInput}
@@ -264,13 +264,13 @@ export default function MyAccount({ userData }) {
                   setEmailError("");
                 }}
               >
-                Cancel
+                {t("cancel")}
               </button>
               <button
                 className={style.emailChangeButton}
                 onClick={handleChangeEmail}
               >
-                Change Email
+                {t("changeEmail")}
               </button>
             </div>
           </div>
@@ -280,19 +280,19 @@ export default function MyAccount({ userData }) {
       {showChangePassword && (
         <div className={style.confirmationOverlay}>
           <div className={style.normalConfirmationDialog}>
-            <h3 className={style.confirmationTitle}>Change Password</h3>
+            <h3 className={style.confirmationTitle}>{t("changePassword")}</h3>
             {passwordError && (
               <p className={style.errorText}>{passwordError}</p>
             )}
             <div className={style.passwordForm}>
               <form action="">
-                <label htmlFor="newPassword">New Password</label>
+                <label htmlFor="newPassword">{t("newPassword")}</label>
                 <input
                   type="password"
                   className={style.changePasswordInput}
                   id="newPassword"
                 />
-                <label htmlFor="confirmPassword">Confirm New Password</label>
+                <label htmlFor="confirmPassword">{t("confirmNewPassword")}</label>
                 <input
                   type="password"
                   className={style.changePasswordInput}
@@ -308,13 +308,13 @@ export default function MyAccount({ userData }) {
                   setPasswordError("");
                 }}
               >
-                Cancel
+                {t("cancel")}
               </button>
               <button
                 className={style.emailChangeButton}
                 onClick={handleChangePassword}
               >
-                Change Password
+                {t("changePassword")}
               </button>
             </div>
           </div>
@@ -324,9 +324,9 @@ export default function MyAccount({ userData }) {
       {showChangeUserId && (
         <div className={style.confirmationOverlay}>
           <div className={style.normalConfirmationDialog}>
-            <h3 className={style.confirmationTitle}>Change User ID</h3>
+            <h3 className={style.confirmationTitle}>{t("changeUserId")}</h3>
             {userIdError && <p className={style.errorText}>{userIdError}</p>}
-            <label htmlFor="newUserId">New User ID</label>
+            <label htmlFor="newUserId">{t("newUserId")}</label>
             <input
               type="text"
               className={style.changeEmailInput}
@@ -340,13 +340,13 @@ export default function MyAccount({ userData }) {
                   setUserIdError("");
                 }}
               >
-                Cancel
+                {t("cancel")}
               </button>
               <button
                 className={style.emailChangeButton}
                 onClick={handleChangeUserId}
               >
-                Change User ID
+                {t("changeUserId")}
               </button>
             </div>
           </div>

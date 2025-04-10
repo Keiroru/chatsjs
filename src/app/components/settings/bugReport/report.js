@@ -4,8 +4,10 @@ import { useState, useEffect } from "react";
 import style from "@/app/styles/account.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 export default function Report({ userData }) {
+  const { t } = useTranslation();
   const [reportForm, setReportForm] = useState({
     title: "",
     desc: "",
@@ -71,17 +73,17 @@ export default function Report({ userData }) {
 
   return (
     <div className={style.accountContainer}>
-      <h1 className={style.accountTitle}>Bug Reports</h1>
+      <h1 className={style.accountTitle}>{t("bugReport")}</h1>
       <p className={style.accountDescription}>
-        Submit a bug report to help us improve the application. Please provide as much detail as possible.
+        {t("bugReportDescription")}
       </p>
 
       <div className={style.accountSection}>
-        <h2 className={style.accountSectionTitle}>Report Details</h2>
+        <h2 className={style.accountSectionTitle}>{t("reportDetails")}</h2>
         <form onSubmit={handleSubmit}>
           <div className={style.formField}>
             <label htmlFor="title" className={style.fieldLabel}>
-              Title
+              {t("title")}
             </label>
             <input
               type="text"
@@ -92,14 +94,14 @@ export default function Report({ userData }) {
               required
               maxLength={30}
               className={style.textInput}
-              placeholder="Brief description of the issue"
+              placeholder={t("bugTitle")}
             />
             <div className={style.charCount}>{reportForm.title.length}/30</div>
           </div>
 
           <div className={style.formField}>
             <label htmlFor="desc" className={style.fieldLabel}>
-              Description
+              {t("description")}
             </label>
             <textarea
               id="desc"
@@ -110,28 +112,28 @@ export default function Report({ userData }) {
               rows={10}
               maxLength={1024}
               className={style.textInput}
-              placeholder="Detailed description of the bug, including steps to reproduce"
+              placeholder={t("bugDescription")}
             />
             <div className={style.charCount}>{reportForm.desc.length}/1024</div>
           </div>
 
           <div className={style.formActions}>
             <button type="submit" className={style.defaultButton}>
-              <FontAwesomeIcon icon={faSave} /> Submit Report
+              <FontAwesomeIcon icon={faSave} /> {t("submit")}
             </button>
           </div>
         </form>
       </div>
 
       <div className={style.accountSection}>
-        <h2 className={style.accountSectionTitle}>Report History</h2>
+        <h2 className={style.accountSectionTitle}>{t("reportHistory")}</h2>
         <div className={style.reportHistory}>
           {reports.length > 0 ? (
             <>
               <div className={style.gridContainer}>
-                <div className={style.gridHeader}>Title</div>
-                <div className={style.gridHeader}>Description</div>
-                <div className={style.gridHeader}>State</div>
+                <div className={style.gridHeader}>{t("title")}</div>
+                <div className={style.gridHeader}>{t("description")}</div>
+                <div className={style.gridHeader}>{t("state")}</div>
               </div>
               {reports.map((report, index) => (
                 <div key={index} className={style.reportItem}>
@@ -140,7 +142,7 @@ export default function Report({ userData }) {
                     <div className={style.gridCell}>{report.description}</div>
                     <div className={style.gridCell}>
                       <span>
-                        {report.isClosed === 0 ? "Open" : "Closed"}
+                        {report.isClosed === 0 ? t("open") : t("closed")}
                       </span>
                     </div>
                   </div>
@@ -148,7 +150,7 @@ export default function Report({ userData }) {
               ))}
             </>
           ) : (
-            <div className={style.noReports}>No reports found</div>
+            <div className={style.noReports}>{t("noReports")}</div>
           )}
         </div>
       </div>

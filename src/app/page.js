@@ -1,32 +1,37 @@
+"use client";
+
 import Link from "next/link";
 import styles from "@/app/styles/page.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComments, faLock, faUserFriends, faGlobe } from "@fortawesome/free-solid-svg-icons";
-
+import { useTranslation } from "@/contexts/TranslationContext";
+import LanguageSwitcher from "@/app/components/LanguageSwitcher";
 export default function Home() {
+  const { t } = useTranslation();
+
   return (
     <div className={styles.landingContainer}>
       <div className={styles.navBar}>
         <div className={styles.logo}>ChatJS</div>
         <div className={styles.navButtons}>
+          <LanguageSwitcher />
           <Link href="/login">
-            <button className={styles.loginButton}>Login</button>
+            <button className={styles.loginButton}>{t("login")}</button>
           </Link>
           <Link href="/register">
-            <button className={styles.registerButton}>Sign Up</button>
+            <button className={styles.registerButton}>{t("register")}</button>
           </Link>
         </div>
       </div>
 
       <div className={styles.heroSection}>
         <div className={styles.heroContent}>
-          <h1 className={styles.heroTitle}>Connect with friends and the world</h1>
+          <h1 className={styles.heroTitle}>{t("heroTitle")}</h1>
           <p className={styles.heroSubtitle}>
-            A simple, secure, and reliable way to stay connected.
-            Chat with anyone, anywhere.
+            {t("heroSubtitle")}
           </p>
           <Link href="/register">
-            <button className={styles.heroButton}>Get Started</button>
+            <button className={styles.heroButton}>{t("heroButton")}</button>
           </Link>
         </div>
         <div className={styles.heroImage}>
@@ -50,33 +55,38 @@ export default function Home() {
       </div>
 
       <div className={styles.featuresSection}>
-        <h2 className={styles.sectionTitle}>Key Features</h2>
+        <h2 className={styles.sectionTitle}>{t("featuresSectionTitle")}</h2>
         <div className={styles.featuresGrid}>
           <div className={styles.featureCard}>
             <FontAwesomeIcon icon={faUserFriends} className={styles.featureIcon} />
-            <h3>Connect with Friends</h3>
-            <p>Add friends and stay connected with people who matter.</p>
+            <h3>{t("connectWithFriends")}</h3>
+            <p>{t("connectWithFriendsSubtitle")}</p>
           </div>
           <div className={styles.featureCard}>
             <FontAwesomeIcon icon={faComments} className={styles.featureIcon} />
-            <h3>Real-time Messaging</h3>
-            <p>Instant message delivery.</p>
+            <h3>{t("realTimeChat")}</h3>
+            <p>{t("realTimeChatSubtitle")}</p>
           </div>
           <div className={styles.featureCard}>
             <FontAwesomeIcon icon={faLock} className={styles.featureIcon} />
-            <h3>Secure Chats</h3>
-            <p>Your conversations are protected and private.</p>
+            <h3>{t("secureChats")}</h3>
+            <p>{t("secureChatsSubtitle")}</p>
           </div>
           <div className={styles.featureCard}>
             <FontAwesomeIcon icon={faGlobe} className={styles.featureIcon} />
-            <h3>Group Conversations</h3>
-            <p>Create group chats and collaborate with multiple people.</p>
+            <h3>{t("groupChats")}</h3>
+            <p>{t("groupChatsSubtitle")}</p>
           </div>
         </div>
       </div>
 
       <footer className={styles.footer}>
-        <p>© 2025 ChatJS. All rights reserved.</p>
+        <p>{t("footerTitle")}</p>
+        <div className={styles.footerLinks}>
+          <Link href="/terms">{t("terms")}</Link>
+          <Link href="/privacy">{t("privacy")}</Link>
+          <Link href="/contact">{t("contact")}</Link>
+        </div>
       </footer>
     </div>
   );

@@ -4,7 +4,9 @@ import { useState, useEffect } from "react";
 import style from "@/app/styles/settings.module.css";
 import Profile from "@/app/components/settings/profile/profile";
 import Account from "@/app/components/settings/myAccount/myAccount";
-import Report from "./bugReport/report";
+import Report from "@/app/components/settings/bugReport/report";
+import Appearance from "@/app/components/settings/Appearance";
+import { useTranslation } from "@/contexts/TranslationContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft,
@@ -20,7 +22,7 @@ export default function Settings({ userData, isMobile, toggleSettings }) {
     typeof window !== "undefined" ? window.innerWidth : 0
   );
   const [isSmallScreen, setIsSmallScreen] = useState(false);
-
+  const { t } = useTranslation();
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -65,43 +67,43 @@ export default function Settings({ userData, isMobile, toggleSettings }) {
           : style["open"]
           }`}
       >
-        <h2>Settings</h2>
+        <h2>{t("settings")}</h2>
         <div className={style.settingsNav}>
-          <h4>User Settings</h4>
+          <h4>{t("usersettings")}</h4>
           <ul>
             <li
               className={selectedOption === "account" ? style.active : ""}
               onClick={() => setSelectedOption("account")}
             >
               <FontAwesomeIcon icon={faUser} />
-              <span>My Account</span>
+              <span>{t("account")}</span>
             </li>
             <li
               className={selectedOption === "profile" ? style.active : ""}
               onClick={() => setSelectedOption("profile")}
             >
               <FontAwesomeIcon icon={faUserCircle} />
-              <span>Profile</span>
+              <span>{t("profile")}</span>
             </li>
           </ul>
-          <h4>App Settings</h4>
+          <h4>{t("appsettings")}</h4>
           <ul>
             <li
               className={selectedOption === "appearance" ? style.active : ""}
               onClick={() => setSelectedOption("appearance")}
             >
               <FontAwesomeIcon icon={faPalette} />
-              <span>Appearance</span>
+              <span>{t("appearance")}</span>
             </li>
           </ul>
-          <h4>Other</h4>
+          <h4>{t("other")}</h4>
           <ul>
             <li
               className={selectedOption === "bugreport" ? style.active : ""}
               onClick={() => setSelectedOption("bugreport")}
             >
               <FontAwesomeIcon icon={faBug} />
-              <span>Report a bug</span>
+              <span>{t("bugreport")}</span>
             </li>
           </ul>
         </div>
@@ -115,9 +117,9 @@ export default function Settings({ userData, isMobile, toggleSettings }) {
       >
         {!selectedOption && (
           <div className={style.settingsPanel}>
-            <h3>Welcome to Settings</h3>
+            <h3>{t("welcome")}</h3>
             <p>
-              Please select a setting option from the sidebar to get started.
+              {t("selectoption")}
             </p>
           </div>
         )}
@@ -133,10 +135,7 @@ export default function Settings({ userData, isMobile, toggleSettings }) {
         )}
         {selectedOption === "appearance" && (
           <div className={style.settingsPanel}>
-            <h3>Appearance Settings</h3>
-            <p>Appearance settings will be available soon.</p>
-            <p>Select theme</p>
-            <p>Change language</p>
+            <Appearance />
           </div>
         )}
         {selectedOption === "bugreport" && (

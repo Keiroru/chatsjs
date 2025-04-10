@@ -6,6 +6,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import styles from "@/app/styles/peopleList.module.css";
 import { useSocket } from "@/lib/socket";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 export default function PeopleList({
   userData,
@@ -21,6 +22,7 @@ export default function PeopleList({
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { t } = useTranslation();
   const [contextMenu, setContextMenu] = useState({
     visible: false,
     x: 0,
@@ -391,28 +393,25 @@ export default function PeopleList({
 
       <div className={styles.tabButtons}>
         <button
-          className={`${styles.tabButton} ${
-            activeTab === "people" ? styles.active : ""
-          }`}
+          className={`${styles.tabButton} ${activeTab === "people" ? styles.active : ""
+            }`}
           onClick={() => handleTabChange("people")}
         >
-          People
+          {t("people")}
         </button>
         <button
-          className={`${styles.tabButton} ${
-            activeTab === "friends" ? styles.active : ""
-          }`}
+          className={`${styles.tabButton} ${activeTab === "friends" ? styles.active : ""
+            }`}
           onClick={() => handleTabChange("friends")}
         >
-          Friends
+          {t("friends")}
         </button>
         <button
-          className={`${styles.tabButton} ${
-            activeTab === "groups" ? styles.active : ""
-          }`}
+          className={`${styles.tabButton} ${activeTab === "groups" ? styles.active : ""
+            }`}
           onClick={() => handleTabChange("groups")}
         >
-          Groups
+          {t("groups")}
         </button>
       </div>
 
@@ -431,9 +430,8 @@ export default function PeopleList({
             filteredPeople.map((person, key) => (
               <button
                 key={`${person.userId}-${key}`}
-                className={`${styles.friendItem} ${
-                  activeChat?.userId === person.userId ? styles.active : ""
-                }`}
+                className={`${styles.friendItem} ${activeChat?.userId === person.userId ? styles.active : ""
+                  }`}
                 onClick={() => handleChatClick(person, false)}
                 onContextMenu={(e) => {
                   e.preventDefault();
@@ -481,9 +479,8 @@ export default function PeopleList({
                   </div>
                 </div>
                 <span
-                  className={`${styles.statusIndicator} ${
-                    person.isOnline ? styles.online : styles.offline
-                  }`}
+                  className={`${styles.statusIndicator} ${person.isOnline ? styles.online : styles.offline
+                    }`}
                 ></span>
               </button>
             ))
@@ -491,11 +488,10 @@ export default function PeopleList({
             filteredPeople.map((group, key) => (
               <button
                 key={`${group.conversationId}-${key}`}
-                className={`${styles.friendItem} ${
-                  activeChat?.conversationId === group.conversationId
-                    ? styles.active
-                    : ""
-                }`}
+                className={`${styles.friendItem} ${activeChat?.conversationId === group.conversationId
+                  ? styles.active
+                  : ""
+                  }`}
                 onClick={() => handleChatClick(group, true)}
               >
                 <Image
@@ -531,9 +527,8 @@ export default function PeopleList({
             filteredPeople.map((friend, key) => (
               <button
                 key={`${friend.userId}-${key}`}
-                className={`${styles.friendItem} ${
-                  activeChat?.userId === friend.userId ? styles.active : ""
-                }`}
+                className={`${styles.friendItem} ${activeChat?.userId === friend.userId ? styles.active : ""
+                  }`}
                 onClick={() => handleChatClick(friend)}
                 onContextMenu={(e) => {
                   e.preventDefault();
@@ -580,9 +575,8 @@ export default function PeopleList({
                   </div>
                 </div>
                 <span
-                  className={`${styles.statusIndicator} ${
-                    friend.isOnline ? styles.online : styles.offline
-                  }`}
+                  className={`${styles.statusIndicator} ${friend.isOnline ? styles.online : styles.offline
+                    }`}
                 ></span>
               </button>
             ))
@@ -604,7 +598,7 @@ export default function PeopleList({
               left: `${peopleContextMenu.x}px`,
             }}
           >
-            <div className={styles.menuHeader}>Actions</div>
+            <div className={styles.menuHeader}>{t("actions")}</div>
             <button
               className={styles.menuItem}
               onClick={() => {
@@ -612,7 +606,7 @@ export default function PeopleList({
                 handleAddFriend(peopleContextMenu.friend);
               }}
             >
-              Add friend
+              {t("addFriend")}
             </button>
           </div>
         )}
@@ -625,7 +619,7 @@ export default function PeopleList({
               left: `${contextMenu.x}px`,
             }}
           >
-            <div className={styles.menuHeader}>Actions</div>
+            <div className={styles.menuHeader}>{t("actions")}</div>
 
             <button
               className={styles.menuItem}
@@ -639,8 +633,8 @@ export default function PeopleList({
               }}
             >
               {block?.blocked === contextMenu.message.userId
-                ? "Unblock Friend"
-                : "Block Friend"}
+                ? t("unblock")
+                : t("block")}
             </button>
 
             <button
@@ -650,7 +644,7 @@ export default function PeopleList({
                 setContextMenu({ ...contextMenu, visible: false });
               }}
             >
-              Delete Friend
+              {t("removeFriend")}
             </button>
           </div>
         )}

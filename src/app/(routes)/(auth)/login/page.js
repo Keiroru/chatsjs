@@ -3,8 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "@/app/styles/auth.module.css";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 export default function Login() {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -49,13 +51,13 @@ export default function Login() {
 
   return (
     <div className={styles.box}>
-      <h1>Login</h1>
+      <h1>{t("login")}</h1>
       {error && <p className={styles.errorMessage}>{error}</p>}
       <form onSubmit={handleSubmit}>
         <input
           type="text"
           name="email"
-          placeholder="Email or Phone Number"
+          placeholder={t("emailOrPhone")}
           className={styles.input}
           value={formData.email}
           onChange={handleChange}
@@ -63,18 +65,15 @@ export default function Login() {
         <input
           type="password"
           name="password"
-          placeholder="Password"
+          placeholder={t("password")}
           className={styles.input}
           value={formData.password}
           onChange={handleChange}
         />
-        <input type="submit" value="Login" className={styles.submitButton} />
+        <input type="submit" value={t("login")} className={styles.submitButton} />
       </form>
       <div className={styles.link}>
-        Need an account?{" "}
-        <a href="/register" className={styles.authLink}>
-          Register
-        </a>
+        {t("dontHaveAccount")} <a href="/register" className={styles.authLink}>{t("signUpHere")}</a>
       </div>
     </div>
   );

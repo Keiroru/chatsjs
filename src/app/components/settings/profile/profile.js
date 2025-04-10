@@ -5,6 +5,7 @@ import Image from "next/image";
 import style from "@/app/styles/account.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera, faSave } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 export default function Profile({ userData }) {
   const [profileForm, setProfileForm] = useState({
@@ -20,6 +21,7 @@ export default function Profile({ userData }) {
   const [uploadError, setUploadError] = useState("");
   const fileInputRef = useRef(null);
   const formRef = useRef(null);
+  const { t } = useTranslation();
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -127,13 +129,13 @@ export default function Profile({ userData }) {
 
   return (
     <div className={style.accountContainer}>
-      <h1 className={style.accountTitle}>Edit Profile</h1>
+      <h1 className={style.accountTitle}>{t("editProfile")}</h1>
       <p className={style.accountDescription}>
-        Update your profile information and customize how others see you on the platform.
+        {t("profileText")}
       </p>
 
       <div className={style.accountSection}>
-        <h2 className={style.accountSectionTitle}>Profile Information</h2>
+        <h2 className={style.accountSectionTitle}>{t("profileInformation")}</h2>
         <form ref={formRef} onSubmit={handleSubmit}>
           <div className={style.profileImageSection}>
             <div className={style.imageContainer}>
@@ -161,7 +163,7 @@ export default function Profile({ userData }) {
               disabled={isUploading}
             >
               <FontAwesomeIcon icon={faCamera} />
-              {isUploading ? "Uploading..." : "Change Profile Picture"}
+              {isUploading ? t("uploading") : t("profileImage")}
             </button>
 
             {selectedFile && (
@@ -188,7 +190,7 @@ export default function Profile({ userData }) {
 
           <div className={style.formField}>
             <label htmlFor="displayName" className={style.fieldLabel}>
-              Display Name
+              {t("displayName")}
             </label>
             <input
               type="text"
@@ -199,7 +201,7 @@ export default function Profile({ userData }) {
               required
               maxLength={20}
               className={style.textInput}
-              placeholder="Your display name"
+              placeholder={t("displayName")}
             />
             <div className={style.charCount}>
               {profileForm.displayName.length}/20
@@ -208,7 +210,7 @@ export default function Profile({ userData }) {
 
           <div className={style.formField}>
             <label htmlFor="bio" className={style.fieldLabel}>
-              Bio
+              {t("bio")}
             </label>
             <textarea
               id="bio"
@@ -217,7 +219,7 @@ export default function Profile({ userData }) {
               value={profileForm.bio}
               onChange={handleInputChange}
               maxLength={200}
-              placeholder="Write something about yourself"
+              placeholder={t("writeSomething")}
               className={style.textInput}
             ></textarea>
             <div className={style.charCount}>{profileForm.bio.length}/200</div>
@@ -230,7 +232,7 @@ export default function Profile({ userData }) {
               className={style.defaultButton}
             >
               <FontAwesomeIcon icon={faSave} />
-              {isUploading ? "Saving..." : "Save Changes"}
+              {isUploading ? t("saving") : t("saveChanges")}
             </button>
           </div>
         </form>

@@ -3,12 +3,14 @@
 import { useState } from "react";
 import styles from "@/app/styles/addFriend.module.css";
 import { useSocket } from "@/lib/socket";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 export default function AddFriend({
   userId,
   addFriendTabOpen,
   setAddFriendTabOpen,
 }) {
+  const { t } = useTranslation();
   const [receiverUserName, setUsername] = useState("");
   const [receiverDisplayId, setReceiverDisplayId] = useState("");
   const [status, setStatus] = useState({ type: null, message: "" });
@@ -86,7 +88,7 @@ export default function AddFriend({
     <div className={styles.container}>
       {!addFriendTabOpen ? (
         <button onClick={setAddFriendTabOpen} className={styles.addButton}>
-          Add friend
+          {t("addFriend")}
         </button>
       ) : (
         <div>
@@ -114,13 +116,13 @@ export default function AddFriend({
               }}
               className={styles.backButton}
             >
-              Close
+              {t("close")}
             </button>
             <div className={styles.searchFields}>
               <input
                 type="text"
                 maxLength="20"
-                placeholder="User's name"
+                placeholder={t("usersname")}
                 aria-label="User name"
                 value={receiverUserName}
                 onChange={(e) => setUsername(e.target.value)}
@@ -148,7 +150,7 @@ export default function AddFriend({
                 !receiverUserName.trim()
               }
             >
-              {isLoading ? "Sending..." : "Send request"}
+              {isLoading ? t("sending") : t("sendRequest")}
             </button>
           </div>
         </div>

@@ -3,6 +3,7 @@ import Image from "next/image";
 import styles from "@/app/styles/messages.module.css";
 import Settings from "@/app/components/settings/settings";
 import Input from "@/app/components/messages/input/input";
+import { useTranslation } from "@/contexts/TranslationContext";
 import {
   faArrowLeft,
   faArrowDown,
@@ -33,6 +34,7 @@ export default function Messages({
   setBlock,
   block,
 }) {
+  const { t } = useTranslation();
   const [conversationId, setConversationId] = useState(null);
   const messageEnd = useRef(null);
   const socket = useSocket();
@@ -451,7 +453,7 @@ export default function Messages({
               <h1>
                 {activeChat?.displayName ||
                   activeChat?.conversationName ||
-                  "Select a contact"}
+                  t("selectacontact")}
               </h1>
             </button>
           </header>
@@ -465,7 +467,7 @@ export default function Messages({
           >
             {!activeChat ? (
               <div className={styles.emptyChat}>
-                Select someone to start chatting
+                {t("selectacontact")}
               </div>
             ) : conversationId === null ? (
               <div className={styles.emptyChat}>
@@ -481,20 +483,19 @@ export default function Messages({
                   <div
                     id={`message-${message.messageId}`}
                     key={message.messageId}
-                    className={`${styles.message} ${
-                      message.senderUserId === userData.userId
-                        ? styles.outgoing
-                        : styles.incoming
-                    }`}
+                    className={`${styles.message} ${message.senderUserId === userData.userId
+                      ? styles.outgoing
+                      : styles.incoming
+                      }`}
                   >
                     {message.senderUserId != userData.userId && (
                       <Image
                         src={
                           message.senderUserId === userData.userId
                             ? userData.profilePicPath ||
-                              "/images/user-icon-placeholder.png"
+                            "/images/user-icon-placeholder.png"
                             : activeChat?.profilePicPath ||
-                              "/images/user-icon-placeholder.png"
+                            "/images/user-icon-placeholder.png"
                         }
                         width={40}
                         height={40}
@@ -517,18 +518,17 @@ export default function Messages({
                           }}
                         >
                           <span
-                            className={`${
-                              originalMessage.isDeleted === 1
-                                ? styles["deleted-message"]
-                                : ""
-                            }`}
+                            className={`${originalMessage.isDeleted === 1
+                              ? styles["deleted-message"]
+                              : ""
+                              }`}
                           >
                             {originalMessage.isDeleted === 0
                               ? originalMessage.messageText.length > 40
                                 ? originalMessage.messageText.substring(0, 37) +
-                                  "..."
+                                "..."
                                 : originalMessage.messageText
-                              : "Deleted Message"}
+                              : t("deletedMessage")}
                           </span>
                         </div>
                       )}
@@ -553,7 +553,7 @@ export default function Messages({
                           }
 
                           if (y + menuHeight > viewportHeight) {
-                            y = viewportHeight - menuHeight - 20;
+                            y = viewportHeight - menuHeight - 50;
                           }
 
                           setContextMenu({
@@ -568,14 +568,13 @@ export default function Messages({
                         onClick={() => {
                           setContextMenu({ ...contextMenu, visible: false });
                         }}
-                        className={`${styles.messageContent} ${
-                          message.isDeleted === 1
-                            ? styles["deleted-message"]
-                            : ""
-                        }`}
+                        className={`${styles.messageContent} ${message.isDeleted === 1
+                          ? styles["deleted-message"]
+                          : ""
+                          }`}
                       >
                         {message.isDeleted === 1
-                          ? "Deleted Message"
+                          ? t("deletedMessage")
                           : message.messageText}
                       </div>
 
@@ -597,7 +596,7 @@ export default function Messages({
                             className={styles.icon}
                           />
                         ) : null}
-                        {message.isEdited === 1 && "|Edited| "}
+                        {message.isEdited === 1 && t("|" + "editedMessage" + "|") + " "}
                         {message.sentAt}
                       </div>
                     </div>
@@ -607,8 +606,8 @@ export default function Messages({
             ) : (
               <div className={styles.emptyChat}>
                 {activeChat
-                  ? "No messages yet!"
-                  : "Select someone to start chatting"}
+                  ? t("noMessagesYet")
+                  : t("selectsomeone")}
               </div>
             )}
 
@@ -628,9 +627,9 @@ export default function Messages({
           </div>
           {activeChat &&
             (block?.blocker === userData?.userId ? (
-              <div className={styles.blocked}>You blocked this user</div>
+              <div className={styles.blocked}>{t("blocked")}</div>
             ) : block?.blocked === userData?.userId ? (
-              <div className={styles.blocked}>You are blocked by this user</div>
+              <div className={styles.blocked}>{t("blockedBy")}</div>
             ) : userData.isLookingForFriends === 1 ? (
               <Input
                 activeChat={activeChat}
@@ -664,7 +663,7 @@ export default function Messages({
                 left: `${contextMenu.x}px`,
               }}
             >
-              <div className={styles.menuHeader}>Message Actions</div>
+              <div className={styles.menuHeader}>{t("actions")}</div>
 
               <button
                 className={styles.menuItem}
@@ -677,7 +676,7 @@ export default function Messages({
                 <span className={styles.menuItemIcon}>
                   <FontAwesomeIcon icon={faReply} />
                 </span>
-                Reply To:{" "}
+                {t("replyTo")}:{" "}
                 {contextMenu.message?.messageText.length > 20
                   ? contextMenu.message?.messageText.substring(0, 17) + "..."
                   : contextMenu.message?.messageText}
@@ -695,7 +694,7 @@ export default function Messages({
                 <span className={styles.menuItemIcon}>
                   <FontAwesomeIcon icon={faCopy} />
                 </span>
-                Copy Text
+                {t("copyText")}
               </button>
 
               <button
@@ -714,7 +713,7 @@ export default function Messages({
                 <span className={styles.menuItemIcon}>
                   <FontAwesomeIcon icon={faEdit} />
                 </span>
-                Edit Message
+                {t("edit")}
               </button>
 
               <div className={styles.menuDivider}></div>
@@ -729,7 +728,7 @@ export default function Messages({
                 <span className={styles.menuItemIcon}>
                   <FontAwesomeIcon icon={faExclamationCircle} />
                 </span>
-                Report Message
+                {t("reportMessage")}
               </button>
               <button
                 className={`${styles.menuItem} ${styles.menuItemDelete}`}
@@ -744,7 +743,7 @@ export default function Messages({
                 <span className={styles.menuItemIcon}>
                   <FontAwesomeIcon icon={faTrash} />
                 </span>
-                Delete
+                {t("delete")}
               </button>
             </div>
           )}
