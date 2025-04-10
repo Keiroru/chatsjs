@@ -75,6 +75,8 @@ namespace chatjs_gui
             titleText.Text = title;
             descriptionText.Text = description;
 
+            doneButton.Text = isClosedTickets ? "Re-open ticket" : "Mark as done";
+
             titleText.Visible = true;
             doneButton.Visible = true;
         }
