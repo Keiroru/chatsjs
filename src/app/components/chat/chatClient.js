@@ -342,6 +342,7 @@ export default function ChatClient({ userData }) {
           activeChat={activeChat}
           isGroupChat={isGroupChat}
           formattedDate={formattedDate}
+          userData={userData}
         />
       </aside>
     </div>

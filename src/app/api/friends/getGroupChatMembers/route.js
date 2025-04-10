@@ -16,7 +16,8 @@ export async function GET(request) {
           users.profilePicPath,
           users.bio,
           users.isOnline,
-          users.createdAt
+          users.createdAt,
+          conversationusers.isAdmin
         FROM 
           users
         JOIN 
@@ -28,7 +29,7 @@ export async function GET(request) {
         ORDER BY 
           users.displayName
     `;
-    
+
     const [result] = await connenction.execute(query, [conversationId]);
     await connenction.end();
 

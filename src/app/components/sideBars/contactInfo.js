@@ -9,9 +9,11 @@ export default function ContactInfo({
   activeChat,
   isGroupChat,
   formattedDate,
+  userData,
 }) {
   const [members, setMembers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isUserAdmin, setIsUserAdmin] = useState(false);
   const [filteredPeople, setFilteredPeople] = useState([]);
 
   useEffect(() => {
@@ -39,9 +41,16 @@ export default function ContactInfo({
         throw new Error("Failed to fetch members");
       } else {
         let memberData = await response.json();
-        console.log(memberData);
         setMembers(memberData);
-        console.log(members);
+
+        const currentUser = memberData.find(
+          (member) => member.userId === userData.userId
+        );
+        if (currentUser && currentUser.isAdmin === 1) {
+          setIsUserAdmin(true);
+        } else {
+          setIsUserAdmin(false);
+        }
       }
     } catch (error) {
       console.error(error);
@@ -52,7 +61,7 @@ export default function ContactInfo({
     if (activeChat && isGroupChat) {
       getGroupChatMembers();
     }
-  }, [activeChat]);
+  }, [activeChat, isGroupChat]);
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
@@ -144,11 +153,10 @@ export default function ContactInfo({
           </div>
           <div className={styles.friendsList}>
             {filteredPeople.map((member) => (
-              <button
+              <div
                 key={member.userId}
                 className={`${styles.friendItem}
                 }`}
-                onClick={() => toggleFriendSelection(member)}
               >
                 <Image
                   src={
@@ -164,8 +172,26 @@ export default function ContactInfo({
                   <h3 className={styles.friendName}>{member.displayName}</h3>
                   <p className={styles.displayId}>#{member.displayId}</p>
                 </div>
-              </button>
+                {member.isAdmin === 1 && <p>ADMIN</p>}
+                {isUserAdmin === true && member.userId != userData.userId && (
+                  <>
+                    {member.isAdmin === 1 ? (
+                      <button>Remove admin</button>
+                    ) : (
+                      <button>Make admin</button>
+                    )}
+
+                    <button>Kick</button>
+                  </>
+                )}
+              </div>
             ))}
+          </div>
+          <div>
+            <button>
+              Push button, more friends come! Big chat with lots of friends, so
+              fun! Talk, laugh, play, all together!
+            </button>
           </div>
         </>
       )}
