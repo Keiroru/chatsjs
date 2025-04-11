@@ -177,7 +177,7 @@ export default function Messages({
           isGroupChat: isGroupChat,
         }),
       });
-
+// :3
       const data = await response.json();
       setBlock(data);
 
