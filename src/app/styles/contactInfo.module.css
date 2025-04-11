@@ -192,8 +192,6 @@
   margin: 0 0 6px 0;
 }
 
-
-
 .friendItem.active {
   border: 2px solid var(--dark_cyan);
 }
