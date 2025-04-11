@@ -188,13 +188,8 @@
   border-radius: 8px;
   color: var(--white);
   width: 100%;
-  cursor: pointer;
   transition: all 0.2s ease-in-out;
   margin: 0 0 6px 0;
-}
-
-.friendItem:hover {
-  background-color: var(--dark_blue);
 }
 
 .friendItem.active {
@@ -231,4 +226,52 @@
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 150px;
+}
+
+.adminText{
+  color: var(--error_red);
+  font-weight: bold;
+  margin: 0 20px 0 20px;
+}
+
+.buttonsHolder{
+  margin-left: auto;
+  display: flex;
+  gap: 10px;
+}
+
+.addButtonHolder{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 30px 0 30px 0;
+}
+
+.goButton,
+.backButton {
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  background: none;
+}
+
+.goButton {
+  border: 2px solid var(--dark_purple);
+  color: white;
+}
+
+.goButton:hover {
+  background-color: var(--dark_purple);
+}
+
+.backButton {
+  border: 2px solid var(--dark_red);
+  color: white;
+}
+
+.backButton:hover {
+  background-color: var(--dark_red);
 }

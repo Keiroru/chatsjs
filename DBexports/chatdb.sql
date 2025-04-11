@@ -108,7 +108,7 @@ INSERT INTO `conversations` (`conversationId`, `conversationName`, `createdAt`, 
 --
 
 CREATE TABLE `conversationusers` (
-  `conversationUserId` int(11) NOT NULL,
+  `conversationUsersId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
   `conversationId` int(11) NOT NULL,
   `isAdmin` tinyint(1) NOT NULL DEFAULT 0,

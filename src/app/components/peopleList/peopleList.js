@@ -496,7 +496,7 @@ export default function PeopleList({
               >
                 <Image
                   src={
-                    group?.profilePicPath || "/images/user-icon-placeholder.png"
+                    group?.profilePicPath || "/images/groupchat-icon-placeholder.png"
                   }
                   alt="Group avatar"
                   width={40}
