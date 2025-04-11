@@ -47,36 +47,44 @@
             // 
             // reportsDataGrid
             // 
+            reportsDataGrid.AllowUserToAddRows = false;
+            reportsDataGrid.AllowUserToDeleteRows = false;
             reportsDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             reportsDataGrid.Columns.AddRange(new DataGridViewColumn[] { displayName, displayId, bugReportName, bugReportId });
             reportsDataGrid.Location = new Point(23, 22);
             reportsDataGrid.Name = "reportsDataGrid";
+            reportsDataGrid.ReadOnly = true;
             reportsDataGrid.Size = new Size(563, 350);
             reportsDataGrid.TabIndex = 0;
             reportsDataGrid.CellClick += reportsDataGrid_CellClick;
+            reportsDataGrid.CellContentClick += reportsDataGrid_CellContentClick;
             // 
             // displayName
             // 
             displayName.HeaderText = "Display Name";
             displayName.Name = "displayName";
+            displayName.ReadOnly = true;
             displayName.Width = 200;
             // 
             // displayId
             // 
             displayId.HeaderText = "Display ID";
             displayId.Name = "displayId";
+            displayId.ReadOnly = true;
             displayId.Width = 60;
             // 
             // bugReportName
             // 
             bugReportName.HeaderText = "Bug Report Name";
             bugReportName.Name = "bugReportName";
+            bugReportName.ReadOnly = true;
             bugReportName.Width = 200;
             // 
             // bugReportId
             // 
             bugReportId.HeaderText = "ID";
             bugReportId.Name = "bugReportId";
+            bugReportId.ReadOnly = true;
             bugReportId.Width = 60;
             // 
             // backButton
@@ -92,9 +100,9 @@
             // 
             // descriptionText
             // 
-            descriptionText.Enabled = false;
             descriptionText.Location = new Point(636, 97);
             descriptionText.Name = "descriptionText";
+            descriptionText.ReadOnly = true;
             descriptionText.Size = new Size(434, 275);
             descriptionText.TabIndex = 4;
             descriptionText.Text = "";
@@ -169,8 +177,7 @@
             // 
             // Form4
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleMode = AutoScaleMode.None;
             BackColor = Color.FromArgb(64, 64, 64);
             ClientSize = new Size(1121, 501);
             Controls.Add(refreshButton);
@@ -184,7 +191,7 @@
             ForeColor = Color.White;
             Name = "Form4";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "Bug Reports";
+            Text = "Reported Bugs";
             ((System.ComponentModel.ISupportInitialize)reportsDataGrid).EndInit();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();

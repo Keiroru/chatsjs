@@ -44,12 +44,15 @@
             label2 = new Label();
             nameInputField = new TextBox();
             idInputField = new TextBox();
+            andOrButton = new Button();
             ((System.ComponentModel.ISupportInitialize)usersDataGrid).BeginInit();
             controlsGroupBox.SuspendLayout();
             SuspendLayout();
             // 
             // usersDataGrid
             // 
+            usersDataGrid.AllowUserToAddRows = false;
+            usersDataGrid.AllowUserToDeleteRows = false;
             usersDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             usersDataGrid.Columns.AddRange(new DataGridViewColumn[] { displayName, displayId, email, phoneNumber, isSiteAdmin, isBanned });
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -62,6 +65,7 @@
             usersDataGrid.DefaultCellStyle = dataGridViewCellStyle1;
             usersDataGrid.Location = new Point(28, 59);
             usersDataGrid.Name = "usersDataGrid";
+            usersDataGrid.ReadOnly = true;
             usersDataGrid.Size = new Size(746, 251);
             usersDataGrid.TabIndex = 0;
             usersDataGrid.CellClick += usersDataGrid_CellClick;
@@ -71,36 +75,42 @@
             // 
             displayName.HeaderText = "Display Name";
             displayName.Name = "displayName";
+            displayName.ReadOnly = true;
             displayName.Width = 200;
             // 
             // displayId
             // 
             displayId.HeaderText = "Display ID";
             displayId.Name = "displayId";
+            displayId.ReadOnly = true;
             displayId.Width = 60;
             // 
             // email
             // 
             email.HeaderText = "Email";
             email.Name = "email";
+            email.ReadOnly = true;
             email.Width = 200;
             // 
             // phoneNumber
             // 
             phoneNumber.HeaderText = "Phone Number";
             phoneNumber.Name = "phoneNumber";
+            phoneNumber.ReadOnly = true;
             phoneNumber.Width = 120;
             // 
             // isSiteAdmin
             // 
             isSiteAdmin.HeaderText = "Is Site Admin";
             isSiteAdmin.Name = "isSiteAdmin";
+            isSiteAdmin.ReadOnly = true;
             isSiteAdmin.Width = 60;
             // 
             // isBanned
             // 
             isBanned.HeaderText = "Is Banned";
             isBanned.Name = "isBanned";
+            isBanned.ReadOnly = true;
             isBanned.Width = 60;
             // 
             // backButton
@@ -152,7 +162,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            label1.Location = new Point(63, 23);
+            label1.Location = new Point(28, 22);
             label1.Name = "label1";
             label1.Size = new Size(209, 21);
             label1.TabIndex = 4;
@@ -162,28 +172,40 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            label2.Location = new Point(519, 23);
+            label2.Location = new Point(598, 23);
             label2.Name = "label2";
-            label2.Size = new Size(95, 21);
+            label2.Size = new Size(31, 21);
             label2.TabIndex = 5;
-            label2.Text = "and / or ID:";
+            label2.Text = "ID:";
             // 
             // nameInputField
             // 
-            nameInputField.Location = new Point(278, 23);
+            nameInputField.Location = new Point(242, 21);
             nameInputField.MaxLength = 20;
             nameInputField.Name = "nameInputField";
             nameInputField.Size = new Size(222, 23);
             nameInputField.TabIndex = 6;
+            nameInputField.TextChanged += nameInputField_TextChanged;
             // 
             // idInputField
             // 
-            idInputField.Location = new Point(620, 25);
+            idInputField.Location = new Point(635, 21);
             idInputField.MaxLength = 4;
             idInputField.Name = "idInputField";
             idInputField.Size = new Size(100, 23);
             idInputField.TabIndex = 7;
-            idInputField.TextChanged += idInputField_TextChanged;
+            idInputField.TextChanged += idInputField_TextChanged_1;
+            // 
+            // andOrButton
+            // 
+            andOrButton.BackColor = Color.Green;
+            andOrButton.Location = new Point(502, 16);
+            andOrButton.Name = "andOrButton";
+            andOrButton.Size = new Size(71, 37);
+            andOrButton.TabIndex = 8;
+            andOrButton.Text = "And";
+            andOrButton.UseVisualStyleBackColor = false;
+            andOrButton.Click += andOrButton_Click;
             // 
             // Form3
             // 
@@ -191,6 +213,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(64, 64, 64);
             ClientSize = new Size(800, 450);
+            Controls.Add(andOrButton);
             Controls.Add(idInputField);
             Controls.Add(nameInputField);
             Controls.Add(label2);
@@ -226,5 +249,6 @@
         private DataGridViewTextBoxColumn isBanned;
         private Button banButton;
         private Button siteAdminButton;
+        private Button andOrButton;
     }
 }
