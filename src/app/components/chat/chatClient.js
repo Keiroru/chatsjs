@@ -62,6 +62,10 @@ export default function ChatClient({ userData }) {
       });
       if (res.ok) {
         console.log("Load successful");
+        socket.emit("user_status", {
+          userId: userData.userId,
+          status: t("online"),
+        });
       } else {
         console.error("Load failed");
       }
@@ -74,11 +78,6 @@ export default function ChatClient({ userData }) {
     if (!socket || !userData?.userId) return;
 
     handleLoad();
-
-    socket.emit("user_status", {
-      userId: userData.userId,
-      status: t("online"),
-    });
 
     const handleBeforeUnload = () => {
       handleUnload();

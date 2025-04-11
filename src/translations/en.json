@@ -126,5 +126,14 @@
     "bugDescription": "Detailed description of the bug, including steps to reproduce",
     "changeLanguage": "Change Language",
     "userDeleted": "This user has been deleted",
-    "notFriends": "You can only message friends. Add them as a friend first or enable 'Looking for Friends' in your settings."
+    "notFriends": "You can only message friends. Add them as a friend first or enable 'Looking for Friends' in your settings.",
+    "notMatchPassword": "Passwords do not match",
+    "noSpaces": "can't have two or more spaces next to each other",
+    "displayNameShort": "Display name must be at least 4 characters long",
+    "displayNameLong": "Display name must be less than 20 characters long",
+    "validEmail": "Please enter a valid email address",
+    "validPassword": "Password must be at least 8 characters long and contain at least one uppercase letter and a number",
+    "emailExists": "Email already exists",
+    "phoneExists": "Phone number already in use",
+    "friendRequest": "New requests"
 }

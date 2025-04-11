@@ -64,5 +64,10 @@ namespace chatjs_gui
                 errorTimer.Start();
             }
         }
+
+        private void loginForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

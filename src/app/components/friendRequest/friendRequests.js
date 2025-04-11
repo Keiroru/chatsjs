@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "@/app/styles/friendRequests.module.css";
 import Image from "next/image";
 import { useSocket } from "@/lib/socket";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 export default function FriendRequests({
   userData,
@@ -13,6 +14,7 @@ export default function FriendRequests({
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const Socket = useSocket();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (userData?.userId) {
@@ -87,7 +89,7 @@ export default function FriendRequests({
     <div className={friendRequests.length > 0 ? styles.container : ""}>
       {friendRequests.length > 0 && !acceptRequestTabOpen && (
         <button onClick={setAcceptRequestTabOpen} className={styles.button}>
-          New request
+          {t("friendRequest")}
         </button>
       )}
 

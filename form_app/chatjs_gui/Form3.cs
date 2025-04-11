@@ -161,7 +161,6 @@ namespace chatjs_gui
                 where = "";
             }
 
-            backButton.Text = whereClause;
             LoadUsers();
         }
 

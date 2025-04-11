@@ -596,7 +596,8 @@ export default function Messages({
                             className={styles.icon}
                           />
                         ) : null}
-                        {message.isEdited === 1 && t("|" + "editedMessage" + "|") + " "}
+                        {message.isEdited === 1 && t("editedMessage")}
+                        {" "}
                         {message.sentAt}
                       </div>
                     </div>

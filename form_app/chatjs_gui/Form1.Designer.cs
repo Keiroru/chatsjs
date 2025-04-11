@@ -44,7 +44,7 @@
             label1.ForeColor = Color.White;
             label1.Location = new Point(241, 61);
             label1.Name = "label1";
-            label1.Size = new Size(290, 37);
+            label1.Size = new Size(360, 46);
             label1.TabIndex = 0;
             label1.Text = "Login to admin panel";
             // 
@@ -55,7 +55,7 @@
             label2.ForeColor = Color.White;
             label2.Location = new Point(104, 157);
             label2.Name = "label2";
-            label2.Size = new Size(195, 21);
+            label2.Size = new Size(240, 28);
             label2.TabIndex = 1;
             label2.Text = "Email or phone number:";
             // 
@@ -66,7 +66,7 @@
             label3.ForeColor = Color.White;
             label3.Location = new Point(213, 220);
             label3.Name = "label3";
-            label3.Size = new Size(86, 21);
+            label3.Size = new Size(106, 28);
             label3.TabIndex = 2;
             label3.Text = "Password:";
             // 
@@ -77,7 +77,7 @@
             errorText.ForeColor = Color.Red;
             errorText.Location = new Point(233, 276);
             errorText.Name = "errorText";
-            errorText.Size = new Size(303, 19);
+            errorText.Size = new Size(361, 23);
             errorText.TabIndex = 3;
             errorText.Text = "Incorrect email, phone number or password";
             errorText.Visible = false;
@@ -86,14 +86,14 @@
             // 
             usernameInputField.Location = new Point(322, 159);
             usernameInputField.Name = "usernameInputField";
-            usernameInputField.Size = new Size(254, 23);
+            usernameInputField.Size = new Size(254, 27);
             usernameInputField.TabIndex = 4;
             // 
             // passwordInputField
             // 
             passwordInputField.Location = new Point(322, 218);
             passwordInputField.Name = "passwordInputField";
-            passwordInputField.Size = new Size(254, 23);
+            passwordInputField.Size = new Size(254, 27);
             passwordInputField.TabIndex = 5;
             passwordInputField.UseSystemPasswordChar = true;
             // 
@@ -111,10 +111,11 @@
             // 
             // loginForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(9F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(64, 0, 64);
             ClientSize = new Size(800, 450);
+            MaximizeBox = false;
             Controls.Add(loginButton);
             Controls.Add(passwordInputField);
             Controls.Add(usernameInputField);
@@ -124,9 +125,11 @@
             Controls.Add(label1);
             Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             ForeColor = Color.FromArgb(64, 0, 64);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
             Name = "loginForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "ChatJS Admin Panel";
+            Load += loginForm_Load;
             ResumeLayout(false);
             PerformLayout();
         }

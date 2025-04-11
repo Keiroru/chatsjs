@@ -126,5 +126,14 @@
     "bugDescription": "A hiba részletes leírása, beleértve a megismétlés lépéseit",
     "changeLanguage": "Nyelv módosítása",
     "userDeleted": "Ez a felhasználó törölve lett",
-    "notFriends": "Csak barátoknak küldhetsz üzenetet. Először add hozzá őket barátként, vagy engedélyezd a 'Barátokat keresek' opciót a beállításokban."
+    "notFriends": "Csak barátoknak küldhetsz üzenetet. Először add hozzá őket barátként, vagy engedélyezd a 'Barátokat keresek' opciót a beállításokban.",
+    "notMatchPassword": "A jelszavak nem egyeznek",
+    "noSpaces": "Nem lehet kettő vagy több szóköz egymás mellett",
+    "displayNameShort": "A megjelenítési névnek legalább 4 karakter hosszúnak kell lennie",
+    "displayNameLong": "A megjelenítési névnek rövidebbnek kell lennie, mint 20 karakter",
+    "validEmail": "Kérjük, adjon meg egy érvényes email-címet",
+    "validPassword": "A jelszónak legalább 8 karakter hosszúnak kell lennie, és tartalmaznia kell legalább egy nagybetűt és egy számot",
+    "emailExists": "Az email már létezik",
+    "phoneExists": "A telefonszám már használatban van",
+    "friendRequest": "Bejövő barátkérelemek"
 }
