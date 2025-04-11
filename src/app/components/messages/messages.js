@@ -33,9 +33,11 @@ export default function Messages({
   editMessage,
   setBlock,
   block,
+  fetchConversationId,
+  conversationId,
+  setConversationId,
 }) {
   const { t } = useTranslation();
-  const [conversationId, setConversationId] = useState(null);
   const messageEnd = useRef(null);
   const socket = useSocket();
   const inputRef = useRef(null);
@@ -163,55 +165,11 @@ export default function Messages({
     };
   }, [socket]);
 
-  // Conversation ID is fetched here
-  const fetchConversationId = useCallback(async () => {
-    try {
-      const response = await fetch("/api/messages/conversationGet", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId1: userData.userId,
-          userId2: isGroupChat ? activeChat.conversationId : activeChat.userId,
-          isGroupChat: isGroupChat,
-        }),
-      });
 
-      const data = await response.json();
-      setBlock(data);
-
-      if (response.ok && data.conversationId) {
-        setConversationId(data.conversationId);
-      } else {
-        const response = await fetch("/api/messages/conversationCreate", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            userId1: userData.userId,
-            userId2: isGroupChat
-              ? activeChat.conversationId
-              : activeChat.userId,
-            isGroupChat: isGroupChat,
-          }),
-        });
-        const data = await response.json();
-
-        if (response.ok) {
-          setConversationId(data.conversationId);
-        }
-      }
-    } catch (error) {
-      console.error("Error fetching conversationId:", error);
-    }
-  }, [activeChat, userData]);
 
   // Messages are fetched here
   const fetchMessages = useCallback(async () => {
     if (!conversationId) return;
-    console.log(block);
     try {
       const response = await fetch(
         `/api/messages/getMessages?conversationId=${conversationId}`
@@ -642,6 +600,8 @@ export default function Messages({
                 setreplyTo={setreplyTo}
                 editMessage={editMessage}
                 setEditMessage={setEditMessage}
+                setMessages={setMessages}
+                formatMessageTime={formatMessageTime}
               />
             ) : (
               <Input
@@ -653,6 +613,8 @@ export default function Messages({
                 setreplyTo={setreplyTo}
                 editMessage={editMessage}
                 setEditMessage={setEditMessage}
+                setMessages={setMessages}
+                formatMessageTime={formatMessageTime}
               />
             ))}
 

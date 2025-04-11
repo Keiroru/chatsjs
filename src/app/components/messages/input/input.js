@@ -15,6 +15,8 @@ const Input = forwardRef(
       setreplyTo,
       editMessage,
       setEditMessage,
+      setMessages,
+      formatMessageTime,
     },
     ref
   ) => {
@@ -57,9 +59,15 @@ const Input = forwardRef(
           if (response.ok) {
             setMessageInput("");
             setEditMessage(null);
+            setMessages((prevMessages) => prevMessages.map(msg =>
+              msg.messageId === editMessage.messageId
+                ? { ...msg, messageText: messageInput, isEdited: 1 }
+                : msg
+            ));
             socket.emit("edit_message", {
               messageId: editMessage.messageId,
               newMessage: messageInput,
+              conversationId: conversationId,
             });
             setTimeout(() => {
               if (ref.current) {
@@ -105,7 +113,13 @@ const Input = forwardRef(
           receiver: res.receiver,
           state: "sent",
         };
+
         if (response.ok) {
+          setMessages((prevMessages) => [...prevMessages, {
+            ...messageData,
+            sentAt: formatMessageTime(messageData.sentAt)
+          }]);
+
           setMessageInput("");
           setreplyTo(null);
           socket.emit("send_message", messageData);

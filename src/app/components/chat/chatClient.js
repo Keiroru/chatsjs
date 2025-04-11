@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "@/app/styles/chat.module.css";
@@ -33,6 +33,7 @@ export default function ChatClient({ userData }) {
   const [editMessage, setEditMessage] = useState(null);
   const [activeTab, setActiveTab] = useState("friends");
   const [friendRequests, setFriendRequests] = useState([]);
+  const [conversationId, setConversationId] = useState(null);
   const { t } = useTranslation();
   const socket = useSocket();
 
@@ -42,6 +43,49 @@ export default function ChatClient({ userData }) {
       .split("T")[0]
       .replace(/-/g, ".")
     : "No contact selected";
+
+  // Conversation ID is fetched here
+  const fetchConversationId = useCallback(async () => {
+    try {
+      const response = await fetch("/api/messages/conversationGet", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId1: userData.userId,
+          userId2: activeChat.userId,
+          isGroupChat: isGroupChat,
+        }),
+      });
+      const data = await response.json();
+      if (response.ok && data.conversationId) {
+        setConversationId(data.conversationId);
+        socket.emit("join_conversation", { conversationId: data.conversationId, userId: userData.userId });
+      } else {
+        const response = await fetch("/api/messages/conversationCreate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId1: userData.userId,
+            userId2: isGroupChat
+              ? activeChat.conversationId
+              : activeChat.userId,
+            isGroupChat: isGroupChat,
+          }),
+        });
+        const data = await response.json();
+
+        if (response.ok) {
+          setConversationId(data.conversationId);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching conversationId:", error);
+    }
+  }, [activeChat, userData]);
 
   const handleUnload = async () => {
     const res = await fetch(`/api/auth/unload?userId=${userData.userId}`, {
@@ -330,6 +374,9 @@ export default function ChatClient({ userData }) {
         editMessage={editMessage}
         setBlock={setBlock}
         block={block}
+        fetchConversationId={fetchConversationId}
+        conversationId={conversationId}
+        setConversationId={setConversationId}
       />
 
       <aside

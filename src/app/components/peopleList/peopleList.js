@@ -17,6 +17,7 @@ export default function PeopleList({
   activeTab,
   setActiveTab,
   block,
+  conversationId,
 }) {
   const [filteredPeople, setFilteredPeople] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -67,10 +68,10 @@ export default function PeopleList({
             if (lastMessage) {
               return {
                 ...friend,
-                lastMessage: lastMessage.isDeleted
+                lastMessage: lastMessage.isDeleted === 1
                   ? "This message was deleted"
                   : lastMessage.messageText,
-                lastMessageAt: lastMessage.sentAt || null,
+                lastMessageAt: lastMessage.sentAt,
                 lastMessageState: lastMessage.state,
                 lastMessageSenderId: lastMessage.senderUserId,
                 unreadCount: unreadCount,

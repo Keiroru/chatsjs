@@ -32,38 +32,28 @@ const io = new Server(server, {
 const connectedUsers = {};
 
 io.on("connection", (socket) => {
-  console.log("New client connected:", socket.id);
+  socket.on("join_conversation", ({ conversationId }) => {
+    socket.join(conversationId);
+  });
+
+  socket.on("leave_conversation", ({ conversationId }) => {
+    socket.leave(conversationId);
+  });
 
   socket.on("send_message", (data) => {
-    if (data.receiver) {
-      socket.emit("receive_message", data);
-
-      const recipientSocket = connectedUsers[data.receiver]?.socketId;
-      if (recipientSocket) {
-        socket.to(recipientSocket).emit("receive_message", data);
-      }
-    } else {
-      console.error("No receiver found");
-    }
+    socket.to(data.conversationId).emit("receive_message", data);
   });
 
   socket.on("message_seen", (data) => {
     const { messageId, conversationId, senderId } = data;
 
-    const senderSocket = connectedUsers[senderId]?.socketId;
-    if (senderSocket) {
-      socket.to(senderSocket).emit("message_state_update", {
-        messageId,
-        conversationId,
-        state: "seen"
-      });
-    }
+    socket.to(conversationId).emit("message_seen", { messageId, conversationId, senderId });
   });
 
   socket.on("message_state_update", (data) => {
     const { messageId, conversationId, state, senderId } = data;
 
-    io.emit("message_state_update", {
+    socket.to(conversationId).emit("message_state_update", {
       messageId,
       conversationId,
       state,
@@ -72,11 +62,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("delete_message", (data) => {
-    const recipientSocket = connectedUsers[data.receiver]?.socketId;
-    if (recipientSocket) {
-      socket.to(recipientSocket).emit("delete", data);
-    }
-    socket.emit("delete", data);
+    socket.to(data.conversationId).emit("delete", data);
   });
 
   socket.on("friend_request", (data) => {
@@ -112,7 +98,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("edit_message", (data) => {
-    io.emit("receive_edit", data);
+    socket.to(data.conversationId).emit("receive_edit", data);
   });
 
   socket.on("unblock_friend", (data) => {
