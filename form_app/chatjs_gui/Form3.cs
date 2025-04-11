@@ -44,15 +44,18 @@ namespace chatjs_gui
             }
 
             db.EndConnection();
+            prewRow = null;
         }
 
         private void usersDataGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-
+            
         }
 
         private void usersDataGrid_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex < 0) return;
+
             var row = usersDataGrid.Rows[e.RowIndex];
             string displayName = row.Cells["displayName"].Value?.ToString() ?? "";
             string displayId = row.Cells["displayId"].Value?.ToString() ?? "";
@@ -139,8 +142,13 @@ namespace chatjs_gui
             {
                 if (whereClause.Length > 0)
                 {
-                    whereClause += " OR ";
+                    whereClause += $" {andOrButton.Text} ";
                 }
+                else
+                {
+                    whereClause = "";
+                }
+
                 whereClause += $"displayId LIKE '{MySqlHelper.EscapeString(idInputField.Text)}%'";
             }
 
@@ -156,8 +164,22 @@ namespace chatjs_gui
             LoadUsers();
         }
 
-        private void idInputField_TextChanged(object sender, EventArgs e)
+        private void idInputField_TextChanged_1(object sender, EventArgs e)
         {
+            nameInputField_TextChanged(sender, e);
+        }
+
+        private void andOrButton_Click(object sender, EventArgs e)
+        {
+            if (andOrButton.Text == "And")
+            {
+                andOrButton.Text = "Or";
+            }
+            else
+            {
+                andOrButton.Text = "And";
+            }
+
             nameInputField_TextChanged(sender, e);
         }
     }

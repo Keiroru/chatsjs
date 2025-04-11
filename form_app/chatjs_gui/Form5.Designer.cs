@@ -29,120 +29,125 @@
         private void InitializeComponent()
         {
             refreshButton = new Button();
-            groupBox1 = new GroupBox();
-            closedTicketsRadioButton = new RadioButton();
-            openTicketsRadioButton = new RadioButton();
-            doneButton = new Button();
-            titleText = new Label();
-            descriptionText = new RichTextBox();
+            closeReportButton = new Button();
+            messageText = new RichTextBox();
             backButton = new Button();
             reportsDataGrid = new DataGridView();
+            dateText = new Label();
+            banUserButton = new Button();
+            deleteMessageButton = new Button();
             displayName = new DataGridViewTextBoxColumn();
             displayId = new DataGridViewTextBoxColumn();
-            bugReportName = new DataGridViewTextBoxColumn();
-            bugReportId = new DataGridViewTextBoxColumn();
-            groupBox1.SuspendLayout();
+            reportedMessageId = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)reportsDataGrid).BeginInit();
             SuspendLayout();
             // 
             // refreshButton
             // 
             refreshButton.BackColor = Color.FromArgb(0, 0, 64);
-            refreshButton.Location = new Point(483, 440);
+            refreshButton.Location = new Point(320, 330);
+            refreshButton.Margin = new Padding(3, 2, 3, 2);
             refreshButton.Name = "refreshButton";
-            refreshButton.Size = new Size(97, 49);
+            refreshButton.Size = new Size(85, 37);
             refreshButton.TabIndex = 16;
             refreshButton.Text = "Refresh";
             refreshButton.UseVisualStyleBackColor = false;
+            refreshButton.Click += refreshButton_Click;
             // 
-            // groupBox1
+            // closeReportButton
             // 
-            groupBox1.Controls.Add(closedTicketsRadioButton);
-            groupBox1.Controls.Add(openTicketsRadioButton);
-            groupBox1.Location = new Point(243, 410);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(220, 88);
-            groupBox1.TabIndex = 15;
-            groupBox1.TabStop = false;
+            closeReportButton.BackColor = Color.Green;
+            closeReportButton.Location = new Point(704, 330);
+            closeReportButton.Margin = new Padding(3, 2, 3, 2);
+            closeReportButton.Name = "closeReportButton";
+            closeReportButton.Size = new Size(117, 37);
+            closeReportButton.TabIndex = 14;
+            closeReportButton.Text = "Close Report";
+            closeReportButton.UseVisualStyleBackColor = false;
+            closeReportButton.Visible = false;
+            closeReportButton.Click += closeReportButton_Click;
             // 
-            // closedTicketsRadioButton
+            // messageText
             // 
-            closedTicketsRadioButton.AutoSize = true;
-            closedTicketsRadioButton.Location = new Point(17, 54);
-            closedTicketsRadioButton.Name = "closedTicketsRadioButton";
-            closedTicketsRadioButton.Size = new Size(159, 24);
-            closedTicketsRadioButton.TabIndex = 8;
-            closedTicketsRadioButton.Text = "Show closed tickets";
-            closedTicketsRadioButton.UseVisualStyleBackColor = true;
-            // 
-            // openTicketsRadioButton
-            // 
-            openTicketsRadioButton.AutoSize = true;
-            openTicketsRadioButton.Checked = true;
-            openTicketsRadioButton.Location = new Point(17, 22);
-            openTicketsRadioButton.Name = "openTicketsRadioButton";
-            openTicketsRadioButton.Size = new Size(150, 24);
-            openTicketsRadioButton.TabIndex = 7;
-            openTicketsRadioButton.TabStop = true;
-            openTicketsRadioButton.Text = "Show open tickets";
-            openTicketsRadioButton.UseVisualStyleBackColor = true;
-            // 
-            // doneButton
-            // 
-            doneButton.BackColor = Color.Green;
-            doneButton.Location = new Point(805, 440);
-            doneButton.Name = "doneButton";
-            doneButton.Size = new Size(134, 49);
-            doneButton.TabIndex = 14;
-            doneButton.Text = "Mark as done";
-            doneButton.UseVisualStyleBackColor = false;
-            doneButton.Visible = false;
-            // 
-            // titleText
-            // 
-            titleText.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            titleText.Location = new Point(649, 53);
-            titleText.Name = "titleText";
-            titleText.Size = new Size(434, 64);
-            titleText.TabIndex = 13;
-            titleText.Text = "title";
-            titleText.TextAlign = ContentAlignment.MiddleCenter;
-            titleText.Visible = false;
-            // 
-            // descriptionText
-            // 
-            descriptionText.Enabled = false;
-            descriptionText.Location = new Point(649, 120);
-            descriptionText.Name = "descriptionText";
-            descriptionText.Size = new Size(434, 275);
-            descriptionText.TabIndex = 12;
-            descriptionText.Text = "";
+            messageText.Location = new Point(441, 34);
+            messageText.Margin = new Padding(3, 2, 3, 2);
+            messageText.Name = "messageText";
+            messageText.ReadOnly = true;
+            messageText.Size = new Size(380, 207);
+            messageText.TabIndex = 12;
+            messageText.Text = "";
             // 
             // backButton
             // 
             backButton.BackColor = Color.FromArgb(64, 0, 64);
-            backButton.Location = new Point(36, 440);
+            backButton.Location = new Point(32, 330);
+            backButton.Margin = new Padding(3, 2, 3, 2);
             backButton.Name = "backButton";
-            backButton.Size = new Size(134, 49);
+            backButton.Size = new Size(117, 37);
             backButton.TabIndex = 11;
             backButton.Text = "Go Back";
             backButton.UseVisualStyleBackColor = false;
+            backButton.Click += backButton_Click;
             // 
             // reportsDataGrid
             // 
+            reportsDataGrid.AllowUserToAddRows = false;
+            reportsDataGrid.AllowUserToDeleteRows = false;
             reportsDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            reportsDataGrid.Columns.AddRange(new DataGridViewColumn[] { displayName, displayId, bugReportName, bugReportId });
-            reportsDataGrid.Location = new Point(36, 45);
+            reportsDataGrid.Columns.AddRange(new DataGridViewColumn[] { displayName, displayId, reportedMessageId });
+            reportsDataGrid.Location = new Point(32, 34);
+            reportsDataGrid.Margin = new Padding(3, 2, 3, 2);
             reportsDataGrid.Name = "reportsDataGrid";
+            reportsDataGrid.ReadOnly = true;
             reportsDataGrid.RowHeadersWidth = 51;
-            reportsDataGrid.Size = new Size(563, 350);
+            reportsDataGrid.Size = new Size(373, 262);
             reportsDataGrid.TabIndex = 10;
+            reportsDataGrid.CellClick += reportsDataGrid_CellClick;
+            reportsDataGrid.CellContentClick += reportsDataGrid_CellContentClick;
+            // 
+            // dateText
+            // 
+            dateText.AutoSize = true;
+            dateText.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            dateText.Location = new Point(441, 275);
+            dateText.Name = "dateText";
+            dateText.Size = new Size(57, 21);
+            dateText.TabIndex = 17;
+            dateText.Text = "label1";
+            dateText.Visible = false;
+            // 
+            // banUserButton
+            // 
+            banUserButton.BackColor = Color.Red;
+            banUserButton.Location = new Point(573, 330);
+            banUserButton.Margin = new Padding(3, 2, 3, 2);
+            banUserButton.Name = "banUserButton";
+            banUserButton.Size = new Size(117, 37);
+            banUserButton.TabIndex = 18;
+            banUserButton.Text = "Ban User";
+            banUserButton.UseVisualStyleBackColor = false;
+            banUserButton.Visible = false;
+            banUserButton.Click += banUserButton_Click;
+            // 
+            // deleteMessageButton
+            // 
+            deleteMessageButton.BackColor = Color.FromArgb(255, 128, 0);
+            deleteMessageButton.Location = new Point(441, 330);
+            deleteMessageButton.Margin = new Padding(3, 2, 3, 2);
+            deleteMessageButton.Name = "deleteMessageButton";
+            deleteMessageButton.Size = new Size(117, 37);
+            deleteMessageButton.TabIndex = 19;
+            deleteMessageButton.Text = "Delete Message";
+            deleteMessageButton.UseVisualStyleBackColor = false;
+            deleteMessageButton.Visible = false;
+            deleteMessageButton.Click += deleteMessageButton_Click;
             // 
             // displayName
             // 
             displayName.HeaderText = "Display Name";
             displayName.MinimumWidth = 6;
             displayName.Name = "displayName";
+            displayName.ReadOnly = true;
             displayName.Width = 200;
             // 
             // displayId
@@ -150,58 +155,53 @@
             displayId.HeaderText = "Display ID";
             displayId.MinimumWidth = 6;
             displayId.Name = "displayId";
+            displayId.ReadOnly = true;
             displayId.Width = 60;
             // 
-            // bugReportName
+            // reportedMessageId
             // 
-            bugReportName.HeaderText = "Bug Report Name";
-            bugReportName.MinimumWidth = 6;
-            bugReportName.Name = "bugReportName";
-            bugReportName.Width = 200;
-            // 
-            // bugReportId
-            // 
-            bugReportId.HeaderText = "ID";
-            bugReportId.MinimumWidth = 6;
-            bugReportId.Name = "bugReportId";
-            bugReportId.Width = 60;
+            reportedMessageId.HeaderText = "ID";
+            reportedMessageId.MinimumWidth = 6;
+            reportedMessageId.Name = "reportedMessageId";
+            reportedMessageId.ReadOnly = true;
+            reportedMessageId.Width = 60;
             // 
             // Form5
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(64, 64, 64);
-            ClientSize = new Size(1128, 561);
+            ClientSize = new Size(847, 421);
+            Controls.Add(deleteMessageButton);
+            Controls.Add(banUserButton);
+            Controls.Add(dateText);
             Controls.Add(refreshButton);
-            Controls.Add(groupBox1);
-            Controls.Add(doneButton);
-            Controls.Add(titleText);
-            Controls.Add(descriptionText);
+            Controls.Add(closeReportButton);
+            Controls.Add(messageText);
             Controls.Add(backButton);
             Controls.Add(reportsDataGrid);
-            Margin = new Padding(3, 4, 3, 4);
+            Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            ForeColor = Color.White;
             Name = "Form5";
-            Text = "Form5";
-            groupBox1.ResumeLayout(false);
-            groupBox1.PerformLayout();
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Reported Messages";
             ((System.ComponentModel.ISupportInitialize)reportsDataGrid).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
         private Button refreshButton;
-        private GroupBox groupBox1;
-        private RadioButton closedTicketsRadioButton;
-        private RadioButton openTicketsRadioButton;
-        private Button doneButton;
-        private Label titleText;
-        private RichTextBox descriptionText;
+        private Button closeReportButton;
+        private RichTextBox messageText;
         private Button backButton;
         private DataGridView reportsDataGrid;
+        private Label dateText;
+        private Button banUserButton;
+        private Button deleteMessageButton;
         private DataGridViewTextBoxColumn displayName;
         private DataGridViewTextBoxColumn displayId;
-        private DataGridViewTextBoxColumn bugReportName;
-        private DataGridViewTextBoxColumn bugReportId;
+        private DataGridViewTextBoxColumn reportedMessageId;
     }
 }

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("chatjs_gui")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3ed5f4b956f82d81520ea3ba366f59945ca9af6f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a042f9a1a46f089b0d21e2c1a528628b00095823")]
 [assembly: System.Reflection.AssemblyProductAttribute("chatjs_gui")]
 [assembly: System.Reflection.AssemblyTitleAttribute("chatjs_gui")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

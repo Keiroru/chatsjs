@@ -48,10 +48,17 @@ namespace chatjs_gui
             }
 
             db.EndConnection();
+
+            titleText.Visible = false;
+            doneButton.Visible = false;
+            descriptionText.Text = "";
+            prewRow = null;
         }
 
         private void reportsDataGrid_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex < 0) return;
+
             var row = reportsDataGrid.Rows[e.RowIndex];
             reportId = int.Parse(row.Cells["bugReportId"].Value?.ToString());
 
@@ -75,7 +82,7 @@ namespace chatjs_gui
             titleText.Text = title;
             descriptionText.Text = description;
 
-            doneButton.Text = isClosedTickets ? "Re-open ticket" : "Mark as done";
+            doneButton.Text = isClosedTickets ? "Re-open" : "Mark as done";
 
             titleText.Visible = true;
             doneButton.Visible = true;
@@ -115,6 +122,11 @@ namespace chatjs_gui
         {
             isClosedTickets = true;
             LoadBugs(isClosedTickets);
+        }
+
+        private void reportsDataGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+           
         }
     }
 }

@@ -29,7 +29,7 @@ function Register() {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      setErrors([{ msg: "Passwords do not match", path: "confirmPassword" }]);
+      setErrors([{ msg: t("notMatchPassword"), path: "confirmPassword" }]);
       return;
     }
 

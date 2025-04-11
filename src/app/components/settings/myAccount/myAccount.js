@@ -32,7 +32,6 @@ export default function MyAccount({ userData }) {
     });
     if (response.ok) {
       setLookingForFriends(newValue);
-      window.location.reload();
     } else {
       console.error("Failed to update looking for friends");
     }

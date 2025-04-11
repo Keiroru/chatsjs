@@ -76,31 +76,6 @@ CREATE TABLE `conversations` (
   `isGroupChat` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `conversations`
---
-
-INSERT INTO `conversations` (`conversationId`, `conversationName`, `createdAt`, `isGroupChat`) VALUES
-(1, 'tester and cica', '2025-03-29', 0),
-(2, 'tester2 and cica', '2025-03-29', 0),
-(3, 'Trixep11 and Alex', '2025-03-31', 0),
-(4, 'fe', '2025-04-01', 1),
-(5, 'Trixep11 and John', '2025-04-01', 0),
-(6, 'Trixep11 and Alice', '2025-04-01', 0),
-(7, 'Trixep11 and Ava', '2025-04-01', 0),
-(8, 'Trixep11 and Char', '2025-04-01', 0),
-(9, 'Trixep11 and Dean', '2025-04-01', 0),
-(10, 'Trixep11 and Emily', '2025-04-01', 0),
-(11, 'MMMMMMMMMMMMMMMMMMMM', '2025-04-01', 1),
-(12, 'Trixep11 and cica', '2025-04-02', 0),
-(13, 'Trixep11 and Eve', '2025-04-02', 0),
-(14, 'Trixep11 and Grace', '2025-04-02', 0),
-(15, 'Trixep11 and Isa', '2025-04-03', 0),
-(16, 'z5e4', '2025-04-03', 1),
-(17, 'valami and cica', '2025-04-03', 0),
-(18, 'Trixep11 and valami', '2025-04-03', 0),
-(19, 'Trixep11 and Max', '2025-04-03', 0);
-
 -- --------------------------------------------------------
 
 --
@@ -108,55 +83,12 @@ INSERT INTO `conversations` (`conversationId`, `conversationName`, `createdAt`, 
 --
 
 CREATE TABLE `conversationusers` (
-  `conversationUserId` int(11) NOT NULL,
+  `conversationUsersId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
   `conversationId` int(11) NOT NULL,
   `isAdmin` tinyint(1) NOT NULL DEFAULT 0,
   `joinedAt` date NOT NULL DEFAULT curdate()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `conversationusers`
---
-
-INSERT INTO `conversationusers` (`conversationUserId`, `userId`, `conversationId`, `isAdmin`, `joinedAt`) VALUES
-(1, 43, 1, 0, '2025-03-29'),
-(2, 42, 1, 0, '2025-03-29'),
-(3, 44, 2, 0, '2025-03-29'),
-(4, 42, 2, 0, '2025-03-29'),
-(5, 1, 3, 0, '2025-03-31'),
-(6, 22, 3, 0, '2025-03-31'),
-(7, 22, 4, 1, '2025-04-01'),
-(8, 1, 4, 0, '2025-04-01'),
-(9, 1, 5, 0, '2025-04-01'),
-(10, 2, 5, 0, '2025-04-01'),
-(11, 1, 6, 0, '2025-04-01'),
-(12, 7, 6, 0, '2025-04-01'),
-(13, 1, 7, 0, '2025-04-01'),
-(14, 19, 7, 0, '2025-04-01'),
-(15, 1, 8, 0, '2025-04-01'),
-(16, 17, 8, 0, '2025-04-01'),
-(17, 1, 9, 0, '2025-04-01'),
-(18, 38, 9, 0, '2025-04-01'),
-(19, 1, 10, 0, '2025-04-01'),
-(20, 5, 10, 0, '2025-04-01'),
-(21, 1, 11, 1, '2025-04-01'),
-(22, 22, 11, 0, '2025-04-01'),
-(23, 1, 12, 0, '2025-04-02'),
-(24, 42, 12, 0, '2025-04-02'),
-(25, 1, 13, 0, '2025-04-02'),
-(26, 27, 13, 0, '2025-04-02'),
-(27, 1, 14, 0, '2025-04-02'),
-(28, 15, 14, 0, '2025-04-02'),
-(29, 1, 15, 0, '2025-04-03'),
-(30, 21, 15, 0, '2025-04-03'),
-(31, 45, 16, 1, '2025-04-03'),
-(32, 45, 17, 0, '2025-04-03'),
-(33, 42, 17, 0, '2025-04-03'),
-(34, 1, 18, 0, '2025-04-03'),
-(35, 45, 18, 0, '2025-04-03'),
-(36, 1, 19, 0, '2025-04-03'),
-(37, 40, 19, 0, '2025-04-03');
 
 -- --------------------------------------------------------
 
@@ -173,25 +105,6 @@ CREATE TABLE `friendrequest` (
   `status` enum('pending','accepted','rejected') NOT NULL DEFAULT 'pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `friendrequest`
---
-
-INSERT INTO `friendrequest` (`requestId`, `senderUserId`, `receiverUserId`, `sentAt`, `isTimedOut`, `status`) VALUES
-(1, 43, 42, '2025-03-29', 0, 'accepted'),
-(2, 44, 42, '2025-03-29', 0, 'accepted'),
-(3, 22, 1, '2025-03-31', 0, 'accepted'),
-(4, 17, 1, '2025-04-02', 0, 'accepted'),
-(5, 45, 42, '2025-04-03', 0, 'pending'),
-(8, 45, 1, '2025-04-03', 0, 'accepted'),
-(10, 1, 5, '2025-04-03', 0, 'pending'),
-(11, 19, 1, '2025-04-03', 0, 'pending'),
-(12, 46, 1, '2025-04-03', 0, 'pending'),
-(14, 1, 21, '2025-04-03', 0, 'pending'),
-(15, 47, 1, '2025-04-03', 0, 'pending'),
-(18, 1, 22, '2025-04-03', 0, 'pending'),
-(24, 1, 45, '2025-04-03', 0, 'pending');
-
 -- --------------------------------------------------------
 
 --
@@ -204,24 +117,6 @@ CREATE TABLE `friends` (
   `friendUserId` int(11) NOT NULL,
   `friendedAt` date NOT NULL DEFAULT curdate()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `friends`
---
-
-INSERT INTO `friends` (`friendsId`, `userId`, `friendUserId`, `friendedAt`) VALUES
-(1, 42, 43, '2025-03-29'),
-(2, 43, 42, '2025-03-29'),
-(3, 42, 44, '2025-03-29'),
-(4, 44, 42, '2025-03-29'),
-(5, 1, 22, '2025-03-31'),
-(6, 22, 1, '2025-03-31'),
-(7, 1, 17, '2025-04-02'),
-(8, 17, 1, '2025-04-02'),
-(9, 1, 45, '2025-04-03'),
-(10, 45, 1, '2025-04-03'),
-(11, 1, 45, '2025-04-03'),
-(12, 45, 1, '2025-04-03');
 
 -- --------------------------------------------------------
 
@@ -260,104 +155,6 @@ CREATE TABLE `messages` (
   `replyTo` int(11) DEFAULT NULL,
   `isReported` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `messages`
---
-
-INSERT INTO `messages` (`messageId`, `conversationId`, `senderUserId`, `sentAt`, `state`, `isDeleted`, `isEdited`, `messageText`, `attachmentId`, `replyTo`) VALUES
-(1, 1, 43, '2025-03-29 16:16:29', 'sent', 0, 0, 'szia', NULL, NULL),
-(2, 1, 43, '2025-03-29 16:27:25', 'sent', 0, 0, 'szeretlek', NULL, NULL),
-(3, 1, 42, '2025-03-29 17:02:40', 'sent', 0, 0, 'ja en se', NULL, NULL),
-(4, 1, 43, '2025-03-29 17:22:44', 'sent', 0, 0, 'asd', NULL, NULL),
-(5, 1, 43, '2025-03-29 17:24:53', 'sent', 0, 0, 'asd', NULL, NULL),
-(6, 1, 43, '2025-03-29 17:36:54', 'sent', 0, 0, 'wp gg', NULL, NULL),
-(7, 1, 43, '2025-03-29 17:38:47', 'sent', 0, 0, 'lula', NULL, NULL),
-(8, 1, 43, '2025-03-29 17:39:27', 'sent', 0, 0, 'asd', NULL, NULL),
-(9, 1, 42, '2025-03-29 20:34:48', 'sent', 0, 0, 'asdasdasdasdas', NULL, NULL),
-(10, 1, 42, '2025-03-29 20:35:00', 'sent', 0, 0, 'de ha mmost jo akkor mi bajod de ha mmost jo akkor mi bajod', NULL, NULL),
-(11, 1, 42, '2025-03-29 20:43:29', 'sent', 0, 0, 'asd', NULL, NULL),
-(12, 1, 42, '2025-03-29 20:45:07', 'sent', 0, 0, 'asd', NULL, NULL),
-(13, 1, 42, '2025-03-29 20:46:28', 'sent', 0, 0, 'dsa', NULL, NULL),
-(14, 1, 42, '2025-03-29 20:46:38', 'sent', 0, 0, 'dik', NULL, NULL),
-(15, 1, 42, '2025-03-29 20:47:30', 'sent', 0, 0, 'asd', NULL, NULL),
-(16, 1, 42, '2025-03-29 20:48:42', 'sent', 0, 0, 'asd', NULL, NULL),
-(17, 1, 42, '2025-03-29 20:48:46', 'sent', 0, 0, 'dsa', NULL, NULL),
-(18, 1, 42, '2025-03-29 20:57:05', 'sent', 0, 0, 'asd', NULL, NULL),
-(19, 1, 42, '2025-03-29 21:00:51', 'sent', 0, 0, 'what', NULL, NULL),
-(20, 1, 42, '2025-03-29 21:01:04', 'sent', 0, 0, 'elmegy?', NULL, NULL),
-(21, 1, 42, '2025-03-29 21:01:34', 'sent', 0, 0, 'mostmar en is kinda', NULL, NULL),
-(22, 1, 42, '2025-03-29 21:08:07', 'sent', 0, 0, 'pedig so close volt', NULL, NULL),
-(23, 1, 42, '2025-03-29 21:10:41', 'sent', 0, 0, 'well gg', NULL, NULL),
-(24, 1, 42, '2025-03-29 21:11:34', 'sent', 0, 0, 'ceri', NULL, NULL),
-(25, 1, 43, '2025-03-29 21:17:55', 'sent', 0, 0, 'cig', NULL, NULL),
-(26, 1, 42, '2025-03-29 21:20:22', 'sent', 0, 0, 'test', NULL, 8),
-(27, 1, 42, '2025-03-29 21:25:30', 'sent', 0, 0, 'szar', NULL, 6),
-(28, 1, 42, '2025-03-29 21:25:55', 'sent', 0, 0, 'asd', NULL, 8),
-(29, 1, 42, '2025-03-29 21:26:10', 'sent', 0, 0, 'dsa', NULL, 8),
-(30, 1, 42, '2025-03-29 21:26:28', 'sent', 0, 0, 'dsa', NULL, 17),
-(31, 1, 42, '2025-03-29 21:27:13', 'sent', 0, 0, 'dsa', NULL, 25),
-(32, 1, 42, '2025-03-29 21:27:16', 'sent', 0, 0, 'asd', NULL, 2147483647),
-(33, 1, 42, '2025-03-29 21:27:27', 'sent', 0, 0, 'szia', NULL, 1),
-(34, 1, 42, '2025-03-29 21:34:59', 'sent', 0, 0, 'no', NULL, 25),
-(35, 1, 42, '2025-03-29 21:36:32', 'sent', 0, 0, 'asd', NULL, NULL),
-(36, 1, 42, '2025-03-29 21:36:34', 'sent', 0, 0, 'dsa', NULL, 25),
-(37, 1, 42, '2025-03-29 21:38:41', 'sent', 0, 0, 'dsa', NULL, 25),
-(38, 1, 42, '2025-03-29 21:39:56', 'sent', 0, 0, 'gggg', NULL, 6),
-(39, 1, 43, '2025-03-29 21:40:07', 'sent', 0, 0, 'GEGE', NULL, NULL),
-(40, 1, 43, '2025-03-29 21:40:15', 'sent', 0, 0, 'well said', NULL, 23),
-(41, 1, 43, '2025-03-29 21:40:24', 'sent', 0, 0, 'well said', NULL, 23),
-(42, 1, 42, '2025-03-29 21:45:35', 'sent', 0, 0, 'vaok', NULL, 25),
-(43, 1, 42, '2025-03-29 21:47:58', 'sent', 0, 0, 'meow', NULL, 2),
-(44, 1, 42, '2025-03-29 21:51:33', 'sent', 0, 0, 'huh', NULL, 39),
-(45, 1, 42, '2025-03-29 21:52:10', 'sent', 0, 0, 'no?', NULL, 39),
-(46, 1, 42, '2025-03-29 21:53:48', 'sent', 0, 0, 'vagy megis?', NULL, NULL),
-(47, 1, 42, '2025-03-29 21:56:00', 'sent', 0, 0, 'bruh?', NULL, 39),
-(48, 3, 1, '2025-03-31 18:25:44', 'sent', 1, 0, 'hzgregred', NULL, NULL),
-(49, 3, 22, '2025-03-31 18:26:05', 'sent', 1, 0, 'ddd', NULL, NULL),
-(50, 3, 1, '2025-03-31 18:26:14', 'sent', 0, 0, 'gregr', NULL, NULL),
-(51, 3, 22, '2025-03-31 18:26:17', 'sent', 1, 0, 'fgewgew', NULL, NULL),
-(52, 3, 1, '2025-03-31 18:26:22', 'sent', 1, 0, 'trtr', NULL, 2147483647),
-(53, 3, 22, '2025-03-31 23:39:48', 'sent', 1, 0, 'hgt', NULL, NULL),
-(54, 4, 22, '2025-03-31 23:40:29', 'sent', 0, 0, 'vfd', NULL, NULL),
-(55, 4, 22, '2025-03-31 23:40:40', 'sent', 0, 0, 'hj', NULL, 2147483647),
-(56, 4, 1, '2025-03-31 23:41:00', 'sent', 0, 0, 'joijjoi', NULL, NULL),
-(57, 4, 1, '2025-03-31 23:41:08', 'sent', 0, 0, 'jkl', NULL, 55),
-(58, 3, 1, '2025-03-31 23:47:16', 'sent', 0, 0, 'tr', NULL, 49),
-(59, 6, 1, '2025-03-31 23:48:21', 'sent', 0, 0, 'z5', NULL, NULL),
-(60, 3, 1, '2025-03-31 23:52:45', 'sent', 0, 0, '98', NULL, 53),
-(61, 7, 1, '2025-04-01 00:02:03', 'sent', 0, 0, 'ngn', NULL, NULL),
-(62, 3, 22, '2025-04-01 00:04:07', 'sent', 1, 0, 'gtr', NULL, 48),
-(63, 3, 1, '2025-04-01 00:04:27', 'sent', 0, 0, 'k', NULL, NULL),
-(64, 3, 1, '2025-04-01 19:01:15', 'sent', 0, 0, 'uz', NULL, NULL),
-(65, 6, 1, '2025-04-01 19:01:19', 'sent', 0, 0, 'űőp', NULL, NULL),
-(66, 10, 1, '2025-04-01 19:01:22', 'sent', 0, 0, 'ápo', NULL, NULL),
-(67, 8, 1, '2025-04-01 19:08:05', 'sent', 0, 0, 'loiuz', NULL, NULL),
-(68, 4, 1, '2025-04-02 17:19:15', 'sent', 0, 0, 'hterdjkhejihjeoioijehoijehoijehr', NULL, NULL),
-(69, 3, 1, '2025-04-02 17:19:21', 'sent', 0, 0, 'jthrjttjtrrrjtjtjtj', NULL, NULL),
-(70, 3, 1, '2025-04-02 17:19:25', 'sent', 0, 0, 'gehriaumhgieurgzersimghieurgmhiehgmiurehgmioerhgisoer', NULL, NULL),
-(71, 3, 1, '2025-04-02 17:27:32', 'sent', 0, 0, 'luz', NULL, NULL),
-(72, 3, 1, '2025-04-02 17:27:44', 'sent', 0, 0, 'gehriaumhgieurgzersimghieurgmhiehgmiurehgmioerhgisoer', NULL, NULL),
-(73, 9, 1, '2025-04-02 18:18:46', 'sent', 0, 0, 'fsdfsd', NULL, NULL),
-(74, 6, 1, '2025-04-02 18:58:40', 'sent', 0, 0, 'jztjz', NULL, NULL),
-(75, 6, 1, '2025-04-02 18:58:42', 'sent', 0, 0, 'úőpúőp', NULL, NULL),
-(76, 6, 1, '2025-04-02 18:58:44', 'sent', 0, 0, 'őpoőopőpo', NULL, NULL),
-(77, 6, 1, '2025-04-02 18:58:46', 'sent', 0, 0, 'poúúpőúőp', NULL, NULL),
-(78, 6, 1, '2025-04-02 18:58:46', 'sent', 0, 0, 'őp', NULL, NULL),
-(79, 6, 1, '2025-04-02 18:58:46', 'sent', 0, 0, 'őp', NULL, NULL),
-(80, 6, 1, '2025-04-02 18:58:47', 'sent', 0, 0, 'őp', NULL, NULL),
-(81, 6, 1, '2025-04-02 18:58:47', 'sent', 0, 0, 'őp', NULL, NULL),
-(82, 15, 1, '2025-04-03 19:52:11', 'sent', 0, 0, 'ujrzt', NULL, NULL),
-(83, 15, 1, '2025-04-03 19:52:12', 'sent', 0, 0, 'fgewgew', NULL, NULL),
-(84, 15, 1, '2025-04-03 19:52:12', 'sent', 0, 0, 'gwe', NULL, NULL),
-(85, 15, 1, '2025-04-03 19:52:13', 'sent', 0, 0, 'gwe', NULL, NULL),
-(86, 15, 1, '2025-04-03 19:52:13', 'sent', 0, 0, 'gw', NULL, NULL),
-(87, 15, 1, '2025-04-03 19:52:13', 'sent', 0, 0, 'g', NULL, NULL),
-(88, 15, 1, '2025-04-03 19:52:13', 'sent', 0, 0, 'weg', NULL, NULL),
-(89, 15, 1, '2025-04-03 19:52:15', 'sent', 0, 0, 'we', NULL, NULL),
-(90, 17, 45, '2025-04-03 19:53:25', 'sent', 0, 0, 'hii', NULL, NULL),
-(91, 16, 45, '2025-04-03 19:53:34', 'sent', 0, 0, 'éui', NULL, NULL),
-(92, 18, 1, '2025-04-03 20:02:31', 'sent', 0, 0, 'ktuz', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -408,7 +205,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`userId`, `displayName`, `displayId`, `email`, `telephone`, `password`, `createdAt`, `updatedAt`, `isOnline`, `isLookingForFriends`, `profilePicPath`, `isSiteAdmin`, `currentThemeId`, `bio`) VALUES
-(1, 'Trixep11', '6735', 'trixep11@gmail.com', NULL, '$2b$10$lt4LFk70cRyFYAcNe/476exEYJTJp6SIA76i1bJTtkrgpvqBq0rRG', '2025-03-28', '2025-03-28', 1, 0, 'https://placehold.co/150x150', 1, 1, 'halihóóu'),
+(1, 'Trixep11', '6735', 'trixep11@gmail.com', NULL, '$2b$10$lt4LFk70cRyFYAcNe/476exEYJTJp6SIA76i1bJTtkrgpvqBq0rRG', '2025-03-28', '2025-03-28', 0, 0, NULL, 1, 1, 'halihóóu'),
 (2, 'John', '1234', 'john@email.com', '555-1234', '$2b$10$lt4LFk70cRyFYAcNe/476exEYJTJp6SIA76i1bJTtkrgpvqBq0rRG', '2025-03-28', '2025-03-28', 0, 1, NULL, 0, 1, NULL),
 (3, 'Jane', '5678', 'jane@email.com', '555-5678', '$2b$10$lt4LFk70cRyFYAcNe/476exEYJTJp6SIA76i1bJTtkrgpvqBq0rRG', '2025-03-28', '2025-03-28', 0, 1, NULL, 0, 1, NULL),
 (4, 'Tom', '9101', 'tom@email.com', NULL, '$2b$10$lt4LFk70cRyFYAcNe/476exEYJTJp6SIA76i1bJTtkrgpvqBq0rRG', '2025-03-28', '2025-03-28', 0, 0, NULL, 0, 1, NULL),
@@ -492,7 +289,7 @@ ALTER TABLE `conversations`
 -- Indexes for table `conversationusers`
 --
 ALTER TABLE `conversationusers`
-  ADD PRIMARY KEY (`conversationUserId`),
+  ADD PRIMARY KEY (`conversationUsersId`),
   ADD KEY `FK_ConversationUsers_Users` (`userId`),
   ADD KEY `FK_ConversationUsers_Conversations` (`conversationId`);
 
@@ -576,7 +373,7 @@ ALTER TABLE `conversations`
 -- AUTO_INCREMENT for table `conversationusers`
 --
 ALTER TABLE `conversationusers`
-  MODIFY `conversationUserId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `conversationUsersId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `friendrequest`
