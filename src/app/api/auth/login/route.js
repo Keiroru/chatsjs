@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createToken } from "@/lib/auth";
 import { getConnection } from "@/lib/db";
-import bcrypt from "bcrypt"; 
+import bcrypt from "bcrypt";
 import { cookies } from "next/headers";
 
 export async function POST(request) {
@@ -36,7 +36,7 @@ export async function POST(request) {
 
     if (results.length === 0) {
       return NextResponse.json(
-        { error: "Incorrect email or phone number" },
+        { error: "incorrectEmailOrPhone" },
         { status: 401 }
       );
     }
@@ -44,17 +44,17 @@ export async function POST(request) {
     const { userId, password: storedHash, isDeleted, isBanned } = results[0];
 
     if (isDeleted === 1) {
-      return NextResponse.json({ error: "This Account was deleted" }, { status: 401 });
+      return NextResponse.json({ error: "accountDeleted" }, { status: 401 });
     }
-    if(isBanned === 1) {
-      return NextResponse.json({ error: "This Account was banned" }, { status: 401 });
+    if (isBanned === 1) {
+      return NextResponse.json({ error: "accountBanned" }, { status: 401 });
     }
 
     const isPasswordValid = await bcrypt.compare(password, storedHash);
 
     if (!isPasswordValid) {
       return NextResponse.json(
-        { error: "Incorrect password" },
+        { error: "incorrectPassword" },
         { status: 401 }
       );
     }
@@ -63,9 +63,10 @@ export async function POST(request) {
     const session = await createToken({ userId, expiresIn });
 
     const response = NextResponse.json(
-      { message: "Login successful",
+      {
+        message: "Login successful",
         userId: userId,
-       },
+      },
       { status: 200 }
     );
 

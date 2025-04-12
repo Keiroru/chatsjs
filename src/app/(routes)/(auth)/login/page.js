@@ -52,7 +52,7 @@ export default function Login() {
   return (
     <div className={styles.box}>
       <h1>{t("login")}</h1>
-      {error && <p className={styles.errorMessage}>{error}</p>}
+      {error && <p className={styles.errorMessage}>{t(error)}</p>}
       <form onSubmit={handleSubmit}>
         <input
           type="text"

@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
-import ChatClient from "../../components/chat/chatClient";
+import ChatClient from "../../components/chatClient";
 import { getConnection } from "@/lib/db";
 
 export default async function Chat() {

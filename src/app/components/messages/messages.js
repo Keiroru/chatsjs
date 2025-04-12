@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import styles from "@/app/styles/messages.module.css";
 import Settings from "@/app/components/settings/settings";
-import Input from "@/app/components/messages/input/input";
+import Input from "@/app/components/messages/input";
 import { useTranslation } from "@/contexts/TranslationContext";
 import {
   faArrowLeft,

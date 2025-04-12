@@ -135,5 +135,9 @@
     "validPassword": "Password must be at least 8 characters long and contain at least one uppercase letter and a number",
     "emailExists": "Email already exists",
     "phoneExists": "Phone number already in use",
-    "friendRequest": "New requests"
+    "friendRequest": "New requests",
+    "incorrectEmailOrPhone": "Incorrect email or phone number",
+    "incorrectPassword": "Incorrect password",
+    "accountDeleted": "This account has been deleted",
+    "accountBanned": "This account has been banned"
 }

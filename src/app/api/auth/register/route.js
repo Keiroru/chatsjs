@@ -13,26 +13,26 @@ export async function POST(request) {
         let hasConsecutiveSpaces = /\s{2,}/.test(trimmedDisplayName);
         if (hasConsecutiveSpaces) {
             errors.push({
-                msg: "Can't have two or more spaces next to each other",
+                msg: "noSpaces",
                 path: "displayName"
             });
         }
         else if (!trimmedDisplayName || trimmedDisplayName.length < 4) {
             errors.push({
-                msg: "Display name must be at least 4 characters long",
+                msg: "displayNameShort",
                 path: "displayName"
             });
         }
         else if (trimmedDisplayName.length > 20) {
             errors.push({
-                msg: "Display name can't be more than 20 characters long",
+                msg: "displayNameLong",
                 path: "displayName"
             });
         }
 
         if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
             errors.push({
-                msg: "A valid email is required",
+                msg: "validEmail",
                 path: "email"
             });
         }
@@ -42,7 +42,7 @@ export async function POST(request) {
             !/[A-Z]/.test(password) ||
             !/[0-9]/.test(password)) {
             errors.push({
-                msg: "Password must be at least 8 characters long and must contain lowercase, uppercase, and number",
+                msg: "validPassword",
                 path: "password"
             });
         }
@@ -61,7 +61,7 @@ export async function POST(request) {
         if (existingUsers.length > 0) {
             await connection.end();
             return NextResponse.json(
-                { errors: [{ msg: "Email already exists", path: "email" }] },
+                { errors: [{ msg: "emailExists", path: "email" }] },
                 { status: 400 }
             );
         }
@@ -74,7 +74,7 @@ export async function POST(request) {
         if (existingPhoneUser.length > 0) {
             await connection.end();
             return NextResponse.json(
-                { errors: [{ msg: "Phone number already in use", path: "telephone" }] },
+                { errors: [{ msg: "phoneExists", path: "telephone" }] },
                 { status: 400 }
             );
         }

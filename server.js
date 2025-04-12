@@ -33,7 +33,15 @@ const connectedUsers = {};
 
 io.on("connection", (socket) => {
   socket.on("join_conversation", ({ conversationId }) => {
+    console.log("joined conversation", conversationId);
     socket.join(conversationId);
+  });
+
+  socket.on("joinAll_conversations", (data) => {
+    data.forEach((conversationId) => {
+      socket.join(conversationId);
+      console.log("joined conversation", conversationId);
+    });
   });
 
   socket.on("leave_conversation", ({ conversationId }) => {
@@ -65,6 +73,7 @@ io.on("connection", (socket) => {
     socket.to(data.conversationId).emit("delete", data);
   });
 
+
   socket.on("friend_request", (data) => {
     const recipientSocket = connectedUsers[data.receiverUserId]?.socketId;
     if (recipientSocket) {
@@ -74,11 +83,11 @@ io.on("connection", (socket) => {
   });
 
   socket.on("accept_request", (data) => {
+    console.log("all", data);
     const recipientSocket = connectedUsers[data.sender.userId]?.socketId;
     if (recipientSocket) {
       socket.to(recipientSocket).emit("receive_accept", data);
     }
-    socket.emit("receive_accept", data);
   });
 
   socket.on("block_friend", (data) => {

@@ -11,6 +11,7 @@ export default function FriendRequests({
   setFriendRequests,
   friendRequests,
   fetchFriendRequests,
+  setFriends,
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const Socket = useSocket();
@@ -26,7 +27,6 @@ export default function FriendRequests({
     if (!Socket) return;
 
     const handleFriendRequest = (data) => {
-      console.log("Received friend request:", data);
       fetchFriendRequests();
     };
 
@@ -39,7 +39,6 @@ export default function FriendRequests({
 
   const handleAccept = async (requestId) => {
     try {
-      console.log("Accepting friend request:", requestId);
       const response = await fetch("/api/friends/accept", {
         method: "POST",
         headers: {
@@ -48,13 +47,14 @@ export default function FriendRequests({
         body: JSON.stringify({ requestId }),
       });
       const responseData = await response.json();
-      console.log(responseData);
 
       fetchFriendRequests();
 
+      setFriends((prev) => [...prev, responseData.sender]);
+
       Socket.emit("accept_request", {
         sender: responseData.sender,
-        receiver: responseData.receiver,
+        receiver: responseData.receiver
       });
     } catch (error) {
       console.error("Error accepting friend request:", error);

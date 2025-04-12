@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import style from "@/app/styles/settings.module.css";
-import Profile from "@/app/components/settings/profile/profile";
-import Account from "@/app/components/settings/myAccount/myAccount";
-import Report from "@/app/components/settings/bugReport/report";
+import Profile from "@/app/components/settings/profile";
+import Account from "@/app/components/settings/myAccount";
+import Report from "@/app/components/settings/report";
 import Appearance from "@/app/components/settings/Appearance";
 import { useTranslation } from "@/contexts/TranslationContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

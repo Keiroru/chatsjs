@@ -97,7 +97,7 @@ function Register() {
           className={styles.input}
         />
         {errorMap.displayName && (
-          <p className={styles.errorMessage}>{errorMap.displayName}</p>
+          <p className={styles.errorMessage}>{t(errorMap.displayName)}</p>
         )}
         <input
           type="email"
@@ -109,7 +109,7 @@ function Register() {
           required
           className={styles.input}
         />
-        {errorMap.email && <p className={styles.errorMessage}>{errorMap.email}</p>}
+        {errorMap.email && <p className={styles.errorMessage}>{t(errorMap.email)}</p>}
         <input
           type="text"
           id="telephone"
@@ -119,7 +119,7 @@ function Register() {
           onChange={handleChange}
           className={styles.input}
         />
-        {errorMap.telephone && <p className={styles.errorMessage}>{errorMap.telephone}</p>}
+        {errorMap.telephone && <p className={styles.errorMessage}>{t(errorMap.telephone)}</p>}
         <input
           type="password"
           id="password"
@@ -131,7 +131,7 @@ function Register() {
           className={styles.input}
         />
         {errorMap.password && (
-          <p className={styles.errorMessage}>{errorMap.password}</p>
+          <p className={styles.errorMessage}>{t(errorMap.password)}</p>
         )}
         <input
           type="password"
@@ -144,7 +144,7 @@ function Register() {
           className={styles.input}
         />
         {errorMap.confirmPassword && (
-          <p className={styles.errorMessage}>{errorMap.confirmPassword}</p>
+          <p className={styles.errorMessage}>{t(errorMap.confirmPassword)}</p>
         )}
         <p className={styles.required}>
           * {t("required")}
