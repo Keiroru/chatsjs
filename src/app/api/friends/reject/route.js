@@ -2,7 +2,7 @@ import { getConnection } from "@/lib/db";
 import mysql from "mysql2/promise";
 import { NextResponse } from "next/server";
 
-export async function POST(request) {
+export async function DELETE(request) {
   try {
     const body = await request.json();
     const requestId = Number(body.requestId);
@@ -10,12 +10,7 @@ export async function POST(request) {
     const connection = await getConnection();
 
     const query = `
-        UPDATE 
-            friendrequest
-        SET 
-            status = 'rejected' 
-        WHERE 
-            requestId = ?
+      DELETE FROM friendrequest WHERE requestId = ?
       `;
 
     const [result] = await connection.execute(query, [requestId]);

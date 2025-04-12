@@ -78,7 +78,7 @@ export default function ChatClient({ userData }) {
 
         if (response.ok) {
           setConversationId(data.conversationId);
-          socket.emit("join_conversation", { conversationId: data.conversationId });
+          socket.emit("join_conversation", { conversationId: data.conversationId, userId: userData.userId });
         }
       }
     } catch (error) {
@@ -395,6 +395,7 @@ export default function ChatClient({ userData }) {
         fetchConversationId={fetchConversationId}
         conversationId={conversationId}
         setConversationId={setConversationId}
+        setFriends={setFriends}
       />
 
       <aside

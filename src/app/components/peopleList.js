@@ -17,7 +17,6 @@ export default function PeopleList({
   activeTab,
   setActiveTab,
   block,
-  conversationId,
 }) {
   const [filteredPeople, setFilteredPeople] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -69,7 +68,7 @@ export default function PeopleList({
               return {
                 ...friend,
                 lastMessage: lastMessage.isDeleted === 1
-                  ? "This message was deleted"
+                  ? "deletedMessage"
                   : lastMessage.messageText,
                 lastMessageAt: lastMessage.sentAt,
                 lastMessageState: lastMessage.state,
@@ -466,7 +465,7 @@ export default function PeopleList({
                   </h3>
                   <div className={styles.messageRow}>
                     <p className={styles.lastMessage}>
-                      {person.lastMessage || "No messages yet"}
+                      {person.lastMessage === "deletedMessage" ? t("deletedMessage") : person.lastMessage || "No messages yet"}
                     </p>
                     {person.lastMessageAt && (
                       <span className={styles.messageTime}>
@@ -509,7 +508,7 @@ export default function PeopleList({
                     {group.conversationName}
                   </h3>
                   <p className={styles.lastMessage}>
-                    {group.lastMessage || "No messages yet"}
+                    {group.lastMessage === "deletedMessage" ? t("deletedMessage") : group.lastMessage || "No messages yet"}
                   </p>
                   {group.lastMessageAt && (
                     <span className={styles.messageTime}>
@@ -562,7 +561,7 @@ export default function PeopleList({
                   </h3>
                   <div className={styles.messageRow}>
                     <p className={styles.lastMessage}>
-                      {friend.lastMessage || "No messages yet"}
+                      {friend.lastMessage === "deletedMessage" ? t("deletedMessage") : friend.lastMessage || "No messages yet"}
                     </p>
                     {friend.lastMessageAt && (
                       <span className={styles.messageTime}>

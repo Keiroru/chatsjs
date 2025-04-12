@@ -17,6 +17,7 @@ const Input = forwardRef(
       setEditMessage,
       setMessages,
       formatMessageTime,
+      setFriends,
     },
     ref
   ) => {
@@ -42,6 +43,7 @@ const Input = forwardRef(
         setLoading(false);
         return;
       }
+
 
       if (editMessage) {
         try {
@@ -84,6 +86,11 @@ const Input = forwardRef(
       }
 
       try {
+        setFriends((prevFriends) => prevFriends.map(friend =>
+          friend.userId === activeChat.userId
+            ? { ...friend, lastMessage: messageInput.trim() }
+            : friend
+        ));
         const response = await fetch("/api/messages/postMessages", {
           method: "POST",
           headers: {

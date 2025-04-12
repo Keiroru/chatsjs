@@ -35,7 +35,7 @@ export default function Messages({
   block,
   fetchConversationId,
   conversationId,
-  setConversationId,
+  setFriends,
 }) {
   const { t } = useTranslation();
   const messageEnd = useRef(null);
@@ -246,6 +246,12 @@ export default function Messages({
       console.warn("You can only delete your own messages.");
       return;
     }
+
+    setFriends((prevFriends) => prevFriends.map(friend =>
+      friend.userId === activeChat.userId
+        ? { ...friend, lastMessage: t("deletedMessage") }
+        : friend
+    ));
 
     try {
       socket.emit("delete_message", {
@@ -603,6 +609,7 @@ export default function Messages({
                 setEditMessage={setEditMessage}
                 setMessages={setMessages}
                 formatMessageTime={formatMessageTime}
+                setFriends={setFriends}
               />
             ) : (
               <Input
@@ -616,6 +623,7 @@ export default function Messages({
                 setEditMessage={setEditMessage}
                 setMessages={setMessages}
                 formatMessageTime={formatMessageTime}
+                setFriends={setFriends}
               />
             ))}
 

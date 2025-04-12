@@ -33,6 +33,12 @@ export default function Report({ userData }) {
       return;
     }
 
+    setReports((prevReports) => [...prevReports, {
+      header: reportForm.title,
+      description: reportForm.desc.trim(),
+      isClosed: 0,
+    }]);
+
     try {
       const response = await fetch("/api/profile/bugReport", {
         method: "POST",
@@ -46,10 +52,6 @@ export default function Report({ userData }) {
         }),
       });
       if (response.ok) {
-        setReportForm({
-          title: "",
-          desc: "",
-        });
         alert("Report submitted successfully!");
       }
     } catch (error) {

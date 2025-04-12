@@ -37,6 +37,15 @@ export default function FriendRequests({
     };
   }, [Socket, userData]);
 
+  const createConversation = async (sender, receiver) => {
+    const response = await fetch("/api/messages/conversationCreate", {
+      method: "POST",
+      body: JSON.stringify({ userId1: sender, userId2: receiver }),
+    });
+    const data = await response.json();
+    return data.conversationId;
+  };
+
   const handleAccept = async (requestId) => {
     try {
       const response = await fetch("/api/friends/accept", {
@@ -48,13 +57,21 @@ export default function FriendRequests({
       });
       const responseData = await response.json();
 
+      const conversationId = await createConversation(responseData.sender.userId, responseData.receiver.userId);
+      console.log("conversationId", conversationId);
+
+      Socket.emit("join_conversation", { conversationId: conversationId });
+
       fetchFriendRequests();
 
       setFriends((prev) => [...prev, responseData.sender]);
 
+
+
       Socket.emit("accept_request", {
         sender: responseData.sender,
-        receiver: responseData.receiver
+        receiver: responseData.receiver,
+        conversationId: conversationId
       });
     } catch (error) {
       console.error("Error accepting friend request:", error);
@@ -64,7 +81,7 @@ export default function FriendRequests({
   const handleReject = async (requestId) => {
     try {
       await fetch("/api/friends/reject", {
-        method: "POST",
+        method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },

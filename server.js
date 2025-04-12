@@ -76,34 +76,24 @@ io.on("connection", (socket) => {
 
   socket.on("friend_request", (data) => {
     const recipientSocket = connectedUsers[data.receiverUserId]?.socketId;
-    if (recipientSocket) {
-      socket.to(recipientSocket).emit("receive_request", data);
-    }
-    socket.emit("receive_request", data);
+    socket.to(recipientSocket).emit("receive_request", data);
   });
 
   socket.on("accept_request", (data) => {
-    console.log("all", data);
     const recipientSocket = connectedUsers[data.sender.userId]?.socketId;
-    if (recipientSocket) {
-      socket.to(recipientSocket).emit("receive_accept", data);
-    }
+    socket.to(recipientSocket).emit("receive_accept", data);
+    socket.join(data.conversationId);
   });
 
   socket.on("block_friend", (data) => {
     const blockedSocket = connectedUsers[data.blocked]?.socketId;
-    if (blockedSocket) {
-      socket.to(blockedSocket).emit("block", data);
-    }
+    socket.to(blockedSocket).emit("block", data);
     socket.emit("block", data);
   });
 
   socket.on("delete_friend", (data) => {
     const friendSocket = connectedUsers[data.deleted]?.socketId;
-    if (friendSocket) {
-      socket.to(friendSocket).emit("friend_delete", data);
-    }
-    socket.emit("friend_delete", data);
+    socket.to(friendSocket).emit("friend_delete", data);
   });
 
   socket.on("edit_message", (data) => {
@@ -112,9 +102,7 @@ io.on("connection", (socket) => {
 
   socket.on("unblock_friend", (data) => {
     const unblockedSocket = connectedUsers[data.unBlocked]?.socketId;
-    if (unblockedSocket) {
-      socket.to(unblockedSocket).emit("unblock", data);
-    }
+    socket.to(unblockedSocket).emit("unblock", data);
     socket.emit("unblock", data);
   });
 
