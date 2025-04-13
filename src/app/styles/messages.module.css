@@ -62,7 +62,7 @@
 }
 
 .profil {
-  border-radius: 20%;
+  border-radius: 15%;
   object-fit: cover;
 }
 
@@ -115,6 +115,24 @@
   margin-bottom: 6px;
   overflow-wrap: anywhere;
   transition: all 0.3s;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 10px;
+}
+
+.messageImage {
+  border-radius: 5%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+  height: 100px;
+  width: auto;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+.messageImage:hover {
+  transform: scale(1.05);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
 }
 
 .incoming .messageContent {

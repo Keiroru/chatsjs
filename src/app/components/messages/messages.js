@@ -45,6 +45,7 @@ export default function Messages({
   const [replyTo, setreplyTo] = useState(null);
   const messagesContainerRef = useRef(null);
   const [showScrollButton, setShowScrollButton] = useState(false);
+      const [attachment, setAttachment] = useState(null);
   const [contextMenu, setContextMenu] = useState({
     visible: false,
     x: 0,
@@ -85,6 +86,7 @@ export default function Messages({
 
     const handleReceiveMessage = (newMessage) => {
       if (newMessage.conversationId === conversationId) {
+        console.log(newMessage);
         const formattedMessage = {
           ...newMessage,
           sentAt: formatMessageTime(newMessage.sentAt),
@@ -166,8 +168,6 @@ export default function Messages({
     };
   }, [socket]);
 
-
-
   // Messages are fetched here
   const fetchMessages = useCallback(async () => {
     if (!conversationId) return;
@@ -243,16 +243,13 @@ export default function Messages({
   }, [activeChat, setEditMessage]);
 
   const deleteMessage = async (messageId, senderId) => {
-    if (senderId !== userData.userId) {
-      console.warn("You can only delete your own messages.");
-      return;
-    }
-
-    setFriends((prevFriends) => prevFriends.map(friend =>
-      friend.userId === activeChat.userId
-        ? { ...friend, lastMessage: t("deletedMessage") }
-        : friend
-    ));
+    setFriends((prevFriends) =>
+      prevFriends.map((friend) =>
+        friend.userId === activeChat.userId
+          ? { ...friend, lastMessage: t("deletedMessage") }
+          : friend
+      )
+    );
 
     try {
       socket.emit("delete_message", {
@@ -431,9 +428,7 @@ export default function Messages({
             className={styles["messages-container"]}
           >
             {!activeChat ? (
-              <div className={styles.emptyChat}>
-                {t("selectacontact")}
-              </div>
+              <div className={styles.emptyChat}>{t("selectacontact")}</div>
             ) : conversationId === null ? (
               <div className={styles.emptyChat}>
                 You are not friends with this user
@@ -448,19 +443,20 @@ export default function Messages({
                   <div
                     id={`message-${message.messageId}`}
                     key={message.messageId}
-                    className={`${styles.message} ${message.senderUserId === userData.userId
-                      ? styles.outgoing
-                      : styles.incoming
-                      }`}
+                    className={`${styles.message} ${
+                      message.senderUserId === userData.userId
+                        ? styles.outgoing
+                        : styles.incoming
+                    }`}
                   >
                     {message.senderUserId != userData.userId && (
                       <Image
                         src={
                           message.senderUserId === userData.userId
                             ? userData.profilePicPath ||
-                            "/images/user-icon-placeholder.png"
+                              "/images/user-icon-placeholder.png"
                             : activeChat?.profilePicPath ||
-                            "/images/user-icon-placeholder.png"
+                              "/images/user-icon-placeholder.png"
                         }
                         width={40}
                         height={40}
@@ -483,15 +479,16 @@ export default function Messages({
                           }}
                         >
                           <span
-                            className={`${originalMessage.isDeleted === 1
-                              ? styles["deleted-message"]
-                              : ""
-                              }`}
+                            className={`${
+                              originalMessage.isDeleted === 1
+                                ? styles["deleted-message"]
+                                : ""
+                            }`}
                           >
                             {originalMessage.isDeleted === 0
                               ? originalMessage.messageText.length > 40
                                 ? originalMessage.messageText.substring(0, 37) +
-                                "..."
+                                  "..."
                                 : originalMessage.messageText
                               : t("deletedMessage")}
                           </span>
@@ -501,9 +498,7 @@ export default function Messages({
                       <div
                         onContextMenu={(e) => {
                           e.preventDefault();
-                          console.log("right click", message);
 
-                          //thank god there are smart people on the internet
                           const viewportWidth = window.innerWidth;
                           const viewportHeight = window.innerHeight;
 
@@ -513,12 +508,12 @@ export default function Messages({
                           let x = e.clientX;
                           let y = e.clientY;
 
-                          if (x + menuWidth > viewportWidth) {
-                            x = viewportWidth - menuWidth - 10;
+                          if (x + menuWidth > viewportWidth - 10) {
+                            x = x - menuWidth;
                           }
 
-                          if (y + menuHeight > viewportHeight) {
-                            y = viewportHeight - menuHeight - 50;
+                          if (y + menuHeight > viewportHeight - 50) {
+                            y = y - menuHeight - 5;
                           }
 
                           setContextMenu({
@@ -533,14 +528,24 @@ export default function Messages({
                         onClick={() => {
                           setContextMenu({ ...contextMenu, visible: false });
                         }}
-                        className={`${styles.messageContent} ${message.isDeleted === 1
-                          ? styles["deleted-message"]
-                          : ""
-                          }`}
+                        className={`${styles.messageContent} ${
+                          message.isDeleted === 1
+                            ? styles["deleted-message"]
+                            : ""
+                        }`}
                       >
                         {message.isDeleted === 1
                           ? t("deletedMessage")
                           : message.messageText}
+                        {message.filePath && message.isDeleted != 1 && (
+                          <Image
+                            src={message.filePath}
+                            alt={message.fileName}
+                            width={150}
+                            height={150}
+                            className={styles.messageImage}
+                          />
+                        )}
                       </div>
 
                       <div
@@ -561,8 +566,7 @@ export default function Messages({
                             className={styles.icon}
                           />
                         ) : null}
-                        {message.isEdited === 1 && t("editedMessage")}
-                        {" "}
+                        {message.isEdited === 1 && t("editedMessage")}{" "}
                         {message.sentAt}
                       </div>
                     </div>
@@ -571,9 +575,7 @@ export default function Messages({
               })
             ) : (
               <div className={styles.emptyChat}>
-                {activeChat
-                  ? t("noMessagesYet")
-                  : t("selectsomeone")}
+                {activeChat ? t("noMessagesYet") : t("selectsomeone")}
               </div>
             )}
 
@@ -611,6 +613,8 @@ export default function Messages({
                 setMessages={setMessages}
                 formatMessageTime={formatMessageTime}
                 setFriends={setFriends}
+                attachment={attachment}
+                setAttachment={setAttachment}
               />
             ) : (
               <Input
@@ -625,6 +629,8 @@ export default function Messages({
                 setMessages={setMessages}
                 formatMessageTime={formatMessageTime}
                 setFriends={setFriends}
+                attachment={attachment}
+                setAttachment={setAttachment}
               />
             ))}
 
@@ -645,80 +651,93 @@ export default function Messages({
                   setreplyTo(contextMenu.message);
                   setContextMenu({ ...contextMenu, visible: false });
                   inputRef.current.focus();
+                  setEditMessage(null);
+                  setAttachment(null);
                 }}
               >
                 <span className={styles.menuItemIcon}>
                   <FontAwesomeIcon icon={faReply} />
                 </span>
                 {t("replyTo")}:{" "}
-                {contextMenu.message?.messageText.length > 20
-                  ? contextMenu.message?.messageText.substring(0, 17) + "..."
-                  : contextMenu.message?.messageText}
+                {contextMenu.message?.messageText &&
+                contextMenu.message?.messageText.length > 0
+                  ? contextMenu.message.messageText.length > 20
+                    ? contextMenu.message.messageText.substring(0, 17) + "..."
+                    : contextMenu.message.messageText
+                  : contextMenu.message?.fileName.length > 20
+                  ? contextMenu.message.fileName.substring(0, 17) + "..."
+                  : contextMenu.message?.fileName}
               </button>
 
-              <button
-                className={styles.menuItem}
-                onClick={() => {
-                  navigator.clipboard.writeText(
-                    contextMenu.message?.messageText || ""
-                  );
-                  setContextMenu({ ...contextMenu, visible: false });
-                }}
-              >
-                <span className={styles.menuItemIcon}>
-                  <FontAwesomeIcon icon={faCopy} />
-                </span>
-                {t("copyText")}
-              </button>
-
-              <button
-                className={styles.menuItem}
-                onClick={() => {
-                  if (contextMenu.senderId !== userData.userId) {
-                    alert("You can only edit your own messages");
+              {contextMenu.message?.messageText.length > 0 && (
+                <button
+                  className={styles.menuItem}
+                  onClick={() => {
+                    navigator.clipboard.writeText(
+                      contextMenu.message?.messageText || ""
+                    );
                     setContextMenu({ ...contextMenu, visible: false });
-                    return;
-                  }
-                  setEditMessage(contextMenu.message);
-                  inputRef.current.focus();
-                  setContextMenu({ ...contextMenu, visible: false });
-                }}
-              >
-                <span className={styles.menuItemIcon}>
-                  <FontAwesomeIcon icon={faEdit} />
-                </span>
-                {t("edit")}
-              </button>
+                  }}
+                >
+                  <span className={styles.menuItemIcon}>
+                    <FontAwesomeIcon icon={faCopy} />
+                  </span>
+                  {t("copyText")}
+                </button>
+              )}
+
+              {contextMenu.senderId === userData.userId && (
+                <button
+                  className={styles.menuItem}
+                  onClick={() => {
+                    setEditMessage(contextMenu.message);
+                    inputRef.current.focus();
+                    setContextMenu({ ...contextMenu, visible: false });
+                    setreplyTo(null);
+                    setAttachment(null);
+                  }}
+                >
+                  <span className={styles.menuItemIcon}>
+                    <FontAwesomeIcon icon={faEdit} />
+                  </span>
+                  {t("edit")}
+                </button>
+              )}
 
               <div className={styles.menuDivider}></div>
 
-              <button
-                onClick={() => {
-                  handleReportMessage(contextMenu.message);
-                  setContextMenu({ ...contextMenu, visible: false });
-                }}
-                className={`${styles.menuItem} ${styles.menuItemDelete}`}
-              >
-                <span className={styles.menuItemIcon}>
-                  <FontAwesomeIcon icon={faExclamationCircle} />
-                </span>
-                {t("reportMessage")}
-              </button>
-              <button
-                className={`${styles.menuItem} ${styles.menuItemDelete}`}
-                onClick={() => {
-                  deleteMessage(
-                    contextMenu.message?.messageId,
-                    contextMenu.senderId
-                  );
-                  setContextMenu({ ...contextMenu, visible: false });
-                }}
-              >
-                <span className={styles.menuItemIcon}>
-                  <FontAwesomeIcon icon={faTrash} />
-                </span>
-                {t("delete")}
-              </button>
+              {contextMenu.senderId !== userData.userId && (
+                <button
+                  onClick={() => {
+                    handleReportMessage(contextMenu.message);
+                    setContextMenu({ ...contextMenu, visible: false });
+                  }}
+                  className={`${styles.menuItem} ${styles.menuItemDelete}`}
+                >
+                  <span className={styles.menuItemIcon}>
+                    <FontAwesomeIcon icon={faExclamationCircle} />
+                  </span>
+                  {t("reportMessage")}
+                </button>
+              )}
+
+              {contextMenu.senderId === userData.userId && (
+                <button
+                  className={`${styles.menuItem} ${styles.menuItemDelete}`}
+                  onClick={() => {
+                    deleteMessage(
+                      contextMenu.message?.messageId,
+                      contextMenu.senderId
+                    );
+                    setContextMenu({ ...contextMenu, visible: false });
+                  }}
+                >
+                  <span className={styles.menuItemIcon}>
+                    <FontAwesomeIcon icon={faTrash} />
+                  </span>
+                  {t("delete")}
+                </button>
+              )}
             </div>
           )}
         </main>
