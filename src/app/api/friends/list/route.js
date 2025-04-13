@@ -42,16 +42,21 @@ export async function GET(request) {
         SELECT 
           conversations.conversationId,
           conversations.conversationName,
-          conversations.createdAt
+          conversations.createdAt,
+          MAX(COALESCE(m.sentAt, '1970-01-01 00:00:00')) as lastMessageTime
         FROM 
           conversations
         JOIN 
           conversationusers ON conversationusers.conversationId = conversations.conversationId 
+        LEFT JOIN
+          messages m ON m.conversationId = conversations.conversationId
         WHERE 
           conversationusers.userId = ?
-          and conversations.isGroupChat = 1
+          AND conversations.isGroupChat = 1
+        GROUP BY
+          conversations.conversationId
         ORDER BY 
-          conversations.conversationName
+          lastMessageTime DESC, conversations.conversationName
       `;
     } else {
       // Default friends

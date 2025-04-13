@@ -15,15 +15,22 @@ export async function GET(request) {
 
         const [results] = await connection.execute(`
             SELECT 
-                (
-                    SELECT userId 
-                    FROM conversationusers 
-                    WHERE conversationId = messages.conversationId AND userId != ? 
-                    LIMIT 1
-                ) AS friendId,
+                messages.conversationId,
+                conversations.isGroupChat,
+                CASE 
+                    WHEN conversations.isGroupChat = 1 THEN NULL
+                    ELSE (
+                        SELECT userId 
+                        FROM conversationusers 
+                        WHERE conversationId = messages.conversationId AND userId != ? 
+                        LIMIT 1
+                    )
+                END AS friendId,
                 COUNT(*) AS count
             FROM 
                 messages
+            JOIN
+                conversations ON messages.conversationId = conversations.conversationId
             WHERE 
                 messages.conversationId IN (
                     SELECT conversationId 
@@ -33,7 +40,7 @@ export async function GET(request) {
                 AND messages.senderUserId != ?
                 AND messages.state != 'seen'
             GROUP BY 
-                messages.conversationId
+                messages.conversationId, conversations.isGroupChat
         `, [userId, userId, userId]);
 
         return NextResponse.json(results);

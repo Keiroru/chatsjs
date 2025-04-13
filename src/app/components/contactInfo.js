@@ -317,32 +317,31 @@ export default function ContactInfo({
             </>
           )}
         </section>
-        {!isGroupChat && (
-          <div className={styles["profile-section"]}>
-            <h3 className={styles["profile-section-title"]}>{t("pictures")}</h3>
-          </div>
-        )}
       </div>
 
 
       {!isGroupChat && (
-        <div className={styles.picturesGrid}>
+        <>
+          <h1 className={styles.attachmentsTitle}>{t("attachments")}</h1>
           {attachments.length > 0 ? (
-            attachments.map((attachment) => (
-              <div key={attachment.attachmentId} className={styles.pictureItem}>
-                <Image
-                  src={attachment.filePath}
-                  alt={`Attachment ${attachment.fileName}`}
-                  width={100}
-                  height={100}
-                  className={styles.picture}
-                />
-              </div>
-            ))
+            <div className={styles.picturesGrid}>
+              {attachments.map((attachment) => (
+                <div key={attachment.attachmentId} className={styles.pictureItem}>
+                  <Image
+                    src={attachment.filePath}
+                    alt={`Attachment ${attachment.fileName}`}
+                    width={100}
+                    height={100}
+                    className={styles.picture}
+                  />
+                </div>
+              ))}
+            </div>
           ) : (
             <p className={styles.noAttachments}>{t("noAttachments")}</p>
           )}
-        </div>
+
+        </>
       )}
 
       {isGroupChat && (

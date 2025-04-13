@@ -14,26 +14,32 @@ export async function GET(request) {
         connection = await getConnection();
 
         const [results] = await connection.execute(`
-           SELECT messages.*, 
-       (
-            SELECT userId 
-            FROM conversationusers 
-            WHERE conversationId = messages.conversationId AND userId != ? 
-            LIMIT 1
-       ) AS friendId
-FROM messages
-INNER JOIN (
-       SELECT conversationId, MAX(sentAt) AS maximumSentAt
-       FROM messages
-       GROUP BY conversationId
-) AS latestMessages ON messages.conversationId = latestMessages.conversationId 
-                     AND messages.sentAt = latestMessages.maximumSentAt
-WHERE messages.conversationId IN (
-       SELECT conversationId 
-       FROM conversationusers 
-       WHERE userId = ?
-)
-GROUP BY messages.conversationId;
+           SELECT 
+                messages.*, 
+                conversations.isGroupChat,
+                CASE 
+                    WHEN conversations.isGroupChat = 1 THEN NULL
+                    ELSE (
+                        SELECT userId 
+                        FROM conversationusers 
+                        WHERE conversationId = messages.conversationId AND userId != ? 
+                        LIMIT 1
+                    )
+                END AS friendId
+            FROM messages
+            JOIN conversations ON messages.conversationId = conversations.conversationId
+            INNER JOIN (
+                SELECT conversationId, MAX(sentAt) AS maximumSentAt
+                FROM messages
+                GROUP BY conversationId
+            ) AS latestMessages ON messages.conversationId = latestMessages.conversationId 
+                              AND messages.sentAt = latestMessages.maximumSentAt
+            WHERE messages.conversationId IN (
+                SELECT conversationId 
+                FROM conversationusers 
+                WHERE userId = ?
+            )
+            GROUP BY messages.conversationId;
         `, [userId, userId]);
 
         return NextResponse.json(results);

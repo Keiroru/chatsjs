@@ -139,5 +139,7 @@
     "incorrectEmailOrPhone": "Hibás email vagy telefonszám",
     "incorrectPassword": "Hibás jelszó",
     "accountDeleted": "Ez a fiók törölve lett",
-    "accountBanned": "Ez a fiók ki lett tiltva"
+    "accountBanned": "Ez a fiók ki lett tiltva",
+    "noAttachments": "Nincsenek mellékletek",
+    "attachments": "Mellékletek"
 }

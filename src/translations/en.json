@@ -139,5 +139,7 @@
     "incorrectEmailOrPhone": "Incorrect email or phone number",
     "incorrectPassword": "Incorrect password",
     "accountDeleted": "This account has been deleted",
-    "accountBanned": "This account has been banned"
+    "accountBanned": "This account has been banned",
+    "noAttachments": "No attachments found",
+    "attachments": "Attachments"
 }

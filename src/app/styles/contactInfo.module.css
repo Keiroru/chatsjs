@@ -306,3 +306,17 @@
   width: 100%;
   height: 100%;
 }
+
+.attachmentsTitle {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.noAttachments {
+  font-size: 16px;
+  color: var(--silver);
+  text-align: center;
+}
