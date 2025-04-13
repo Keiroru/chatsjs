@@ -36,6 +36,7 @@ export default function Messages({
   fetchConversationId,
   conversationId,
   setFriends,
+  rightPanelOpen,
 }) {
   const { t } = useTranslation();
   const messageEnd = useRef(null);
@@ -388,7 +389,7 @@ export default function Messages({
           ref={inputRef}
         />
       ) : (
-        <main className={styles["chat-main"]}>
+        <main className={`${styles["chat-main"]} ${rightPanelOpen ? styles["right-open"] : ""}`}>
           <header className={styles["chat-header"]}>
             {isMobile && (
               <button

@@ -126,7 +126,7 @@ export default function ChatClient({ userData }) {
         console.log("Load successful");
         socket.emit("user_status", {
           userId: userData.userId,
-          status: t("online"),
+          status: "online",
         });
       } else {
         console.error("Load failed");
@@ -145,7 +145,7 @@ export default function ChatClient({ userData }) {
       handleUnload();
       socket.emit("user_status", {
         userId: userData.userId,
-        status: t("offline"),
+        status: "offline",
       });
     };
 
@@ -156,7 +156,7 @@ export default function ChatClient({ userData }) {
             ? {
               ...friend,
               status,
-              isOnline: status === t("online"),
+              isOnline: status === "online",
             }
             : friend
         )
@@ -166,7 +166,7 @@ export default function ChatClient({ userData }) {
         if (prevChat && prevChat.userId === userId) {
           return {
             ...prevChat,
-            isOnline: status === t("online"),
+            isOnline: status === "online",
             status,
           };
         }
@@ -181,7 +181,7 @@ export default function ChatClient({ userData }) {
       if (socket && userData?.userId) {
         socket.emit("user_status", {
           userId: userData.userId,
-          status: t("offline"),
+          status: "offline",
         });
       }
       window.removeEventListener("beforeunload", handleBeforeUnload);
@@ -387,14 +387,12 @@ export default function ChatClient({ userData }) {
         settingsOpen={settingsOpen}
         messages={messages}
         setMessages={setMessages}
-        groupChatName={groupChatName}
         setEditMessage={setEditMessage}
         editMessage={editMessage}
         setBlock={setBlock}
         block={block}
         fetchConversationId={fetchConversationId}
         conversationId={conversationId}
-        setConversationId={setConversationId}
         setFriends={setFriends}
       />
 
