@@ -45,7 +45,7 @@ export default function Messages({
   const [replyTo, setreplyTo] = useState(null);
   const messagesContainerRef = useRef(null);
   const [showScrollButton, setShowScrollButton] = useState(false);
-      const [attachment, setAttachment] = useState(null);
+  const [attachment, setAttachment] = useState(null);
   const [contextMenu, setContextMenu] = useState({
     visible: false,
     x: 0,
@@ -443,20 +443,19 @@ export default function Messages({
                   <div
                     id={`message-${message.messageId}`}
                     key={message.messageId}
-                    className={`${styles.message} ${
-                      message.senderUserId === userData.userId
-                        ? styles.outgoing
-                        : styles.incoming
-                    }`}
+                    className={`${styles.message} ${message.senderUserId === userData.userId
+                      ? styles.outgoing
+                      : styles.incoming
+                      }`}
                   >
                     {message.senderUserId != userData.userId && (
                       <Image
                         src={
                           message.senderUserId === userData.userId
                             ? userData.profilePicPath ||
-                              "/images/user-icon-placeholder.png"
+                            "/images/user-icon-placeholder.png"
                             : activeChat?.profilePicPath ||
-                              "/images/user-icon-placeholder.png"
+                            "/images/user-icon-placeholder.png"
                         }
                         width={40}
                         height={40}
@@ -466,108 +465,113 @@ export default function Messages({
                     )}
 
                     <div className={styles.messageWrapper}>
-                      {originalMessage && (
-                        <div
-                          className={styles.replyReference}
-                          onClick={() => {
-                            const scroll = document.getElementById(
-                              `message-${originalMessage.messageId}`
-                            );
-                            if (scroll) {
-                              scroll.scrollIntoView({ behavior: "smooth" });
-                            }
-                          }}
-                        >
-                          <span
-                            className={`${
-                              originalMessage.isDeleted === 1
-                                ? styles["deleted-message"]
-                                : ""
-                            }`}
-                          >
-                            {originalMessage.isDeleted === 0
-                              ? originalMessage.messageText.length > 40
-                                ? originalMessage.messageText.substring(0, 37) +
-                                  "..."
-                                : originalMessage.messageText
-                              : t("deletedMessage")}
-                          </span>
+                      {isGroupChat && message.senderUserId !== userData.userId && (
+                        <div className={styles.senderName}>
+                          {message.senderName}
                         </div>
                       )}
+                      <div className={styles.messageContentWrapper}>
+                        {originalMessage && (
+                          <div
+                            className={styles.replyReference}
+                            onClick={() => {
+                              const scroll = document.getElementById(
+                                `message-${originalMessage.messageId}`
+                              );
+                              if (scroll) {
+                                scroll.scrollIntoView({ behavior: "smooth" });
+                              }
+                            }}
+                          >
+                            <span
+                              className={`${originalMessage.isDeleted === 1
+                                ? styles["deleted-message"]
+                                : ""
+                                }`}
+                            >
+                              {originalMessage.isDeleted === 0
+                                ? originalMessage.messageText.length > 40
+                                  ? originalMessage.messageText.substring(0, 37) +
+                                  "..."
+                                  : originalMessage.messageText
+                                : t("deletedMessage")}
+                            </span>
+                          </div>
+                        )}
 
-                      <div
-                        onContextMenu={(e) => {
-                          e.preventDefault();
+                        <div
+                          onContextMenu={(e) => {
+                            e.preventDefault();
 
-                          const viewportWidth = window.innerWidth;
-                          const viewportHeight = window.innerHeight;
+                            const viewportWidth = window.innerWidth;
+                            const viewportHeight = window.innerHeight;
 
-                          const menuWidth = 220;
-                          const menuHeight = 220;
+                            const menuWidth = 220;
+                            const menuHeight = 220;
 
-                          let x = e.clientX;
-                          let y = e.clientY;
+                            let x = e.clientX;
+                            let y = e.clientY;
 
-                          if (x + menuWidth > viewportWidth - 10) {
-                            x = x - menuWidth;
-                          }
+                            if (x + menuWidth > viewportWidth - 10) {
+                              x = x - menuWidth;
+                            }
 
-                          if (y + menuHeight > viewportHeight - 50) {
-                            y = y - menuHeight - 5;
-                          }
+                            if (y + menuHeight > viewportHeight - 50) {
+                              y = y - menuHeight - 5;
+                            }
 
-                          setContextMenu({
-                            visible: true,
-                            x: x,
-                            y: y,
-                            message: message.isDeleted === 1 ? null : message,
-                            senderId: message.senderUserId,
-                            messageId: message.messageId,
-                          });
-                        }}
-                        onClick={() => {
-                          setContextMenu({ ...contextMenu, visible: false });
-                        }}
-                        className={`${styles.messageContent} ${
-                          message.isDeleted === 1
+                            setContextMenu({
+                              visible: true,
+                              x: x,
+                              y: y,
+                              message: message.isDeleted === 1 ? null : message,
+                              senderId: message.senderUserId,
+                              messageId: message.messageId,
+                            });
+                          }}
+                          onClick={() => {
+                            setContextMenu({ ...contextMenu, visible: false });
+                          }}
+                          className={`${styles.messageContent} ${message.isDeleted === 1
                             ? styles["deleted-message"]
                             : ""
-                        }`}
-                      >
-                        {message.isDeleted === 1
-                          ? t("deletedMessage")
-                          : message.messageText}
-                        {message.filePath && message.isDeleted != 1 && (
-                          <Image
-                            src={message.filePath}
-                            alt={message.fileName}
-                            width={150}
-                            height={150}
-                            className={styles.messageImage}
-                          />
-                        )}
-                      </div>
+                            }`}
+                        >
+                          {message.isDeleted === 1
+                            ? t("deletedMessage")
+                            : message.messageText}
+                          {message.filePath && message.isDeleted != 1 && (
+                            <Image
+                              src={message.filePath}
+                              alt={message.fileName}
+                              width={150}
+                              height={150}
+                              className={styles.messageImage}
+                            />
+                          )}
+                        </div>
 
-                      <div
-                        className={
-                          message.senderUserId === userData.userId
-                            ? styles.messageTime
-                            : styles.messageTimeLeft
-                        }
-                      >
-                        {message.state === "sent" ? (
-                          <FontAwesomeIcon
-                            icon={faCheck}
-                            className={styles.icon}
-                          />
-                        ) : message.state === "seen" ? (
-                          <FontAwesomeIcon
-                            icon={faSquareCheck}
-                            className={styles.icon}
-                          />
-                        ) : null}
-                        {message.isEdited === 1 && t("editedMessage")}{" "}
-                        {message.sentAt}
+                        <div
+                          className={
+                            message.senderUserId === userData.userId
+                              ? styles.messageTime
+                              : styles.messageTimeLeft
+                          }
+                        >
+                          {message.state === "sent" ? (
+                            <FontAwesomeIcon
+                              icon={faCheck}
+                              className={styles.icon}
+                            />
+                          ) : message.state === "seen" ? (
+                            <FontAwesomeIcon
+                              icon={faSquareCheck}
+                              className={styles.icon}
+                            />
+                          ) : null}
+                          {message.isEdited === 1 && t("editedMessage")}{" "}
+                          {message.sentAt}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -660,13 +664,13 @@ export default function Messages({
                 </span>
                 {t("replyTo")}:{" "}
                 {contextMenu.message?.messageText &&
-                contextMenu.message?.messageText.length > 0
+                  contextMenu.message?.messageText.length > 0
                   ? contextMenu.message.messageText.length > 20
                     ? contextMenu.message.messageText.substring(0, 17) + "..."
                     : contextMenu.message.messageText
                   : contextMenu.message?.fileName.length > 20
-                  ? contextMenu.message.fileName.substring(0, 17) + "..."
-                  : contextMenu.message?.fileName}
+                    ? contextMenu.message.fileName.substring(0, 17) + "..."
+                    : contextMenu.message?.fileName}
               </button>
 
               {contextMenu.message?.messageText.length > 0 && (
