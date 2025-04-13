@@ -520,12 +520,23 @@ export default function Messages({
                               }`}
                             >
                               {originalMessage.isDeleted === 0
-                                ? originalMessage.messageText.length > 40
-                                  ? originalMessage.messageText.substring(
-                                      0,
-                                      37
-                                    ) + "..."
-                                  : originalMessage.messageText
+                                ? originalMessage.messageText &&
+                                  originalMessage.messageText.length > 0
+                                  ? originalMessage.messageText.length > 40
+                                    ? originalMessage.messageText.substring(
+                                        0,
+                                        37
+                                      ) + "..."
+                                    : originalMessage.messageText
+                                  : originalMessage.fileName &&
+                                    originalMessage.fileName.length > 0
+                                  ? originalMessage.fileName.length > 40
+                                    ? originalMessage.fileName.substring(
+                                        0,
+                                        37
+                                      ) + "..."
+                                    : originalMessage.fileName
+                                  : t("deletedMessage")
                                 : t("deletedMessage")}
                             </span>
                           </div>
