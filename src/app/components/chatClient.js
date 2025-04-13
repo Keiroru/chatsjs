@@ -46,6 +46,7 @@ export default function ChatClient({ userData }) {
 
   const fetchConversationId = useCallback(async () => {
     try {
+      console.log("fetching conversationId:", activeChat, isGroupChat);
       const response = await fetch("/api/messages/conversationGet", {
         method: "POST",
         headers: {
@@ -53,7 +54,7 @@ export default function ChatClient({ userData }) {
         },
         body: JSON.stringify({
           userId1: userData.userId,
-          userId2: activeChat.userId,
+          userId2: isGroupChat ? activeChat.conversationId : activeChat.userId,
           isGroupChat: isGroupChat,
         }),
       });
