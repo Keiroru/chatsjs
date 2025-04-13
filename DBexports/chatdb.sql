@@ -30,6 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `attachment` (
   `attachmentId` int(11) NOT NULL,
   `fileType` varchar(10) NOT NULL,
+  `fileName` varchar(255) NOT NULL,
   `filePath` varchar(255) NOT NULL,
   `fileSize` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

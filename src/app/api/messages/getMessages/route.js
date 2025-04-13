@@ -19,12 +19,15 @@ export async function GET(request) {
         messages.isDeleted,
         messages.isEdited,
         messages.replyTo,
+        attachment.fileName,
+        attachment.filePath,
         users.displayName AS senderName,
         users.profilePicPath AS senderProfilePic
       FROM 
         messages
       JOIN 
-        users ON messages.senderUserId = users.userId
+        users ON messages.senderUserId = users.userId 
+        JOIN attachment ON messages.attachmentId = attachment.attachmentId
       WHERE 
         messages.conversationId = ? 
       ORDER BY 
