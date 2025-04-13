@@ -134,7 +134,8 @@ CREATE TABLE `logins` (
   `location` varchar(100) NOT NULL,
   `ipAddress` varchar(39) NOT NULL,
   `deviceType` varchar(20) NOT NULL,
-  `userAgent` varchar(20) NOT NULL
+  `userAgent` varchar(20) NOT NULL,
+  `deviceName` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
