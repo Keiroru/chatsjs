@@ -9,29 +9,30 @@ export async function GET(request) {
     const connenction = await getConnection();
 
     const query = `
-      SELECT 
-        messages.messageId, 
-        messages.conversationId,
-        messages.senderUserId, 
-        messages.messageText, 
-        messages.sentAt,
-        messages.state,
-        messages.isDeleted,
-        messages.isEdited,
-        messages.replyTo,
-        attachment.fileName,
-        attachment.filePath,
-        users.displayName AS senderName,
-        users.profilePicPath AS senderProfilePic
-      FROM 
-        messages
-      JOIN 
-        users ON messages.senderUserId = users.userId 
-        JOIN attachment ON messages.attachmentId = attachment.attachmentId
-      WHERE 
-        messages.conversationId = ? 
-      ORDER BY 
-        messages.sentAt ASC
+SELECT 
+    messages.messageId, 
+    messages.conversationId,
+    messages.senderUserId, 
+    messages.messageText, 
+    messages.sentAt,
+    messages.state,
+    messages.isDeleted,
+    messages.isEdited,
+    messages.replyTo,
+    attachment.fileName,
+    attachment.filePath,
+    users.displayName AS senderName,
+    users.profilePicPath AS senderProfilePic
+FROM 
+    messages
+LEFT JOIN 
+    attachment ON messages.attachmentId = attachment.attachmentId
+JOIN 
+    users ON messages.senderUserId = users.userId
+WHERE 
+    messages.conversationId = ?
+ORDER BY 
+    messages.sentAt ASC;
     `;
 
     const [result] = await connenction.execute(query, [conversationId]);
