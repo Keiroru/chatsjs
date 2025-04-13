@@ -1,6 +1,10 @@
 import styles from "@/app/styles/input.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPaperPlane, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPaperPlane,
+  faPlus,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import React, { forwardRef, useState, useEffect, useRef } from "react";
 import { useSocket } from "@/lib/socket";
 import { useTranslation } from "@/contexts/TranslationContext";
@@ -330,7 +334,7 @@ const Input = forwardRef(
                 className={styles.cancelReply}
                 onClick={() => setreplyTo(null)}
               >
-                ×
+                <FontAwesomeIcon icon={faXmark} />
               </button>
             </div>
           </div>
@@ -358,7 +362,7 @@ const Input = forwardRef(
                 className={styles.cancelReply}
                 onClick={() => handleCancelAttachment()}
               >
-                ×
+                <FontAwesomeIcon icon={faXmark} />
               </button>
             </div>
           </div>
@@ -387,7 +391,7 @@ const Input = forwardRef(
                 className={styles.cancelReply}
                 onClick={() => setEditMessage(null)}
               >
-                ×
+                <FontAwesomeIcon icon={faXmark} />
               </button>
             </div>
           </div>

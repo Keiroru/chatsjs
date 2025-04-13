@@ -14,6 +14,8 @@ import {
   faSquareCheck,
   faCheck,
   faExclamationCircle,
+  faXmark,
+  faDownload,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSocket } from "@/lib/socket";
@@ -46,12 +48,33 @@ export default function Messages({
   const messagesContainerRef = useRef(null);
   const [showScrollButton, setShowScrollButton] = useState(false);
   const [attachment, setAttachment] = useState(null);
+  const [imageOpen, setImageOpen] = useState(false);
+  const [imageView, setImageView] = useState(null);
   const [contextMenu, setContextMenu] = useState({
     visible: false,
     x: 0,
     y: 0,
     message: null,
   });
+
+  const downloadImage = async (image) => {
+    try {
+      const response = await fetch(image.filePath);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = image.fileName || "image.jpg";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Download failed:", error);
+    }
+  };
 
   //gorgetes cuccok
   useEffect(() => {
@@ -386,7 +409,11 @@ export default function Messages({
           ref={inputRef}
         />
       ) : (
-        <main className={`${styles["chat-main"]} ${rightPanelOpen ? styles["right-open"] : ""}`}>
+        <main
+          className={`${styles["chat-main"]} ${
+            rightPanelOpen ? styles["right-open"] : ""
+          }`}
+        >
           <header className={styles["chat-header"]}>
             {isMobile && (
               <button
@@ -443,17 +470,20 @@ export default function Messages({
                   <div
                     id={`message-${message.messageId}`}
                     key={message.messageId}
-                    className={`${styles.message} ${message.senderUserId === userData.userId
-                      ? styles.outgoing
-                      : styles.incoming
-                      }`}
+                    className={`${styles.message} ${
+                      message.senderUserId === userData.userId
+                        ? styles.outgoing
+                        : styles.incoming
+                    }`}
                   >
                     {message.senderUserId != userData.userId && (
                       <Image
                         src={
                           isGroupChat
-                            ? message.senderProfilePic || "/images/user-icon-placeholder.png"
-                            : activeChat?.profilePicPath || "/images/user-icon-placeholder.png"
+                            ? message.senderProfilePic ||
+                              "/images/user-icon-placeholder.png"
+                            : activeChat?.profilePicPath ||
+                              "/images/user-icon-placeholder.png"
                         }
                         width={40}
                         height={40}
@@ -463,11 +493,12 @@ export default function Messages({
                     )}
 
                     <div className={styles.messageWrapper}>
-                      {isGroupChat && message.senderUserId !== userData.userId && (
-                        <div className={styles.senderName}>
-                          {message.senderName}
-                        </div>
-                      )}
+                      {isGroupChat &&
+                        message.senderUserId !== userData.userId && (
+                          <div className={styles.senderName}>
+                            {message.senderName}
+                          </div>
+                        )}
                       <div className={styles.messageContentWrapper}>
                         {originalMessage && (
                           <div
@@ -482,15 +513,18 @@ export default function Messages({
                             }}
                           >
                             <span
-                              className={`${originalMessage.isDeleted === 1
-                                ? styles["deleted-message"]
-                                : ""
-                                }`}
+                              className={`${
+                                originalMessage.isDeleted === 1
+                                  ? styles["deleted-message"]
+                                  : ""
+                              }`}
                             >
                               {originalMessage.isDeleted === 0
                                 ? originalMessage.messageText.length > 40
-                                  ? originalMessage.messageText.substring(0, 37) +
-                                  "..."
+                                  ? originalMessage.messageText.substring(
+                                      0,
+                                      37
+                                    ) + "..."
                                   : originalMessage.messageText
                                 : t("deletedMessage")}
                             </span>
@@ -530,10 +564,11 @@ export default function Messages({
                           onClick={() => {
                             setContextMenu({ ...contextMenu, visible: false });
                           }}
-                          className={`${styles.messageContent} ${message.isDeleted === 1
-                            ? styles["deleted-message"]
-                            : ""
-                            }`}
+                          className={`${styles.messageContent} ${
+                            message.isDeleted === 1
+                              ? styles["deleted-message"]
+                              : ""
+                          }`}
                         >
                           {message.isDeleted === 1
                             ? t("deletedMessage")
@@ -545,6 +580,10 @@ export default function Messages({
                               width={150}
                               height={150}
                               className={styles.messageImage}
+                              onClick={() => {
+                                setImageOpen(true);
+                                setImageView(message);
+                              }}
                             />
                           )}
                         </div>
@@ -578,6 +617,50 @@ export default function Messages({
             ) : (
               <div className={styles.emptyChat}>
                 {activeChat ? t("noMessagesYet") : t("selectsomeone")}
+              </div>
+            )}
+
+            {imageOpen && (
+              <div
+                className={styles.imageViewerOverlay}
+                onClick={() => setImageOpen(false)}
+              >
+                <div
+                  className={styles.imageViewerContent}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className={styles.imageViewerHeader}>
+                    <button
+                      className={styles.downloadButton}
+                      onClick={async () => {
+                        downloadImage(imageView);
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faDownload} />
+                    </button>
+                    <button
+                      className={styles.closeButton}
+                      onClick={() => setImageOpen(false)}
+                    >
+                      <FontAwesomeIcon icon={faXmark} />
+                    </button>
+                  </div>
+
+                  <Image
+                    src={imageView.filePath}
+                    alt={imageView.fileName}
+                    width={500}
+                    height={500}
+                    className={styles.imageViewerImage}
+                  />
+
+                  <div className={styles.imageViewerDetails}>
+                    <p className={styles.imageName}>{imageView.fileName}</p>
+                    <p className={styles.imageSize}>
+                      {(imageView.fileSize / 1024).toFixed(1)} KB
+                    </p>
+                  </div>
+                </div>
               </div>
             )}
 
@@ -662,13 +745,13 @@ export default function Messages({
                 </span>
                 {t("replyTo")}:{" "}
                 {contextMenu.message?.messageText &&
-                  contextMenu.message?.messageText.length > 0
+                contextMenu.message?.messageText.length > 0
                   ? contextMenu.message.messageText.length > 20
                     ? contextMenu.message.messageText.substring(0, 17) + "..."
                     : contextMenu.message.messageText
                   : contextMenu.message?.fileName.length > 20
-                    ? contextMenu.message.fileName.substring(0, 17) + "..."
-                    : contextMenu.message?.fileName}
+                  ? contextMenu.message.fileName.substring(0, 17) + "..."
+                  : contextMenu.message?.fileName}
               </button>
 
               {contextMenu.message?.messageText.length > 0 && (
