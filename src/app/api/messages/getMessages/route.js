@@ -21,6 +21,7 @@ SELECT
     messages.replyTo,
     attachment.fileName,
     attachment.filePath,
+    attachment.fileSize,
     users.displayName AS senderName,
     users.profilePicPath AS senderProfilePic
 FROM 

@@ -76,6 +76,14 @@ export default function Messages({
     }
   };
 
+  const formatFileSize = (bytes) => {
+    if (bytes >= 1024 * 1024) {
+      return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+    } else {
+      return (bytes / 1024).toFixed(1) + " KB";
+    }
+  };
+
   //gorgetes cuccok
   useEffect(() => {
     if (messageEnd.current && messages.length > 0) {
@@ -664,7 +672,7 @@ export default function Messages({
                   <div className={styles.imageViewerDetails}>
                     <p className={styles.imageName}>{imageView.fileName}</p>
                     <p className={styles.imageSize}>
-                      {(imageView.fileSize / 1024).toFixed(1)} KB
+                      {formatFileSize(imageView.fileSize)}
                     </p>
                   </div>
                 </div>

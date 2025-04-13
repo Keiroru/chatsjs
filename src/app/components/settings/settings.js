@@ -6,6 +6,7 @@ import Profile from "@/app/components/settings/profile";
 import Account from "@/app/components/settings/myAccount";
 import Report from "@/app/components/settings/report";
 import Appearance from "@/app/components/settings/Appearance";
+import Logins from "@/app/components/settings/logins";
 import { useTranslation } from "@/contexts/TranslationContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -62,10 +63,11 @@ export default function Settings({ userData, isMobile, toggleSettings }) {
         </button>
       )}
       <aside
-        className={`${style["settingsSidebar"]} ${(isMobile || isSmallScreen) && selectedOption
-          ? style["closed"]
-          : style["open"]
-          }`}
+        className={`${style["settingsSidebar"]} ${
+          (isMobile || isSmallScreen) && selectedOption
+            ? style["closed"]
+            : style["open"]
+        }`}
       >
         <h2>{t("settings")}</h2>
         <div className={style.settingsNav}>
@@ -77,6 +79,13 @@ export default function Settings({ userData, isMobile, toggleSettings }) {
             >
               <FontAwesomeIcon icon={faUser} />
               <span>{t("account")}</span>
+            </li>
+            <li
+              className={selectedOption === "logins" ? style.active : ""}
+              onClick={() => setSelectedOption("logins")}
+            >
+              <FontAwesomeIcon icon={faUser} />
+              <span>{t("account")} gergfreu login</span>
             </li>
             <li
               className={selectedOption === "profile" ? style.active : ""}
@@ -110,22 +119,26 @@ export default function Settings({ userData, isMobile, toggleSettings }) {
       </aside>
 
       <main
-        className={`${style["settingsContent"]} ${(isMobile || isSmallScreen) && selectedOption
-          ? style["open"]
-          : style["closed"]
-          }`}
+        className={`${style["settingsContent"]} ${
+          (isMobile || isSmallScreen) && selectedOption
+            ? style["open"]
+            : style["closed"]
+        }`}
       >
         {!selectedOption && (
           <div className={style.settingsPanel}>
             <h3>{t("welcome")}</h3>
-            <p>
-              {t("selectoption")}
-            </p>
+            <p>{t("selectoption")}</p>
           </div>
         )}
         {selectedOption === "profile" && (
           <div className={style.settingsPanel}>
             <Profile userData={userData} />
+          </div>
+        )}
+        {selectedOption === "logins" && (
+          <div className={style.settingsPanel}>
+            <Logins userData={userData} />
           </div>
         )}
         {selectedOption === "account" && (

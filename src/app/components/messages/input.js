@@ -186,6 +186,7 @@ const Input = forwardRef(
           messageText: messageInput.trim(),
           filePath: res.data.filePath,
           fileName: res.data.fileName,
+          fileSize: res.data.fileSize,
           senderName: userData.displayName,
           senderProfilePic: userData.profilePicPath,
           sentAt: new Date().toISOString(),
