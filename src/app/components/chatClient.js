@@ -403,10 +403,13 @@ export default function ChatClient({ userData }) {
       >
         <ContactInfo
           setRightPanelOpen={setRightPanelOpen}
+          rightPanelOpen={rightPanelOpen}
           activeChat={activeChat}
           isGroupChat={isGroupChat}
           formattedDate={formattedDate}
           userData={userData}
+          conversationId={conversationId}
+          fetchConversationId={fetchConversationId}
         />
       </aside>
     </div>

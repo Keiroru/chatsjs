@@ -12,6 +12,8 @@ export default function ContactInfo({
   isGroupChat,
   formattedDate,
   userData,
+  conversationId,
+  fetchConversationId
 }) {
   const { t } = useTranslation();
   const [members, setMembers] = useState([]);
@@ -22,6 +24,7 @@ export default function ContactInfo({
   const [filteredPeople2, setFilteredPeople2] = useState([]);
   const [addFriendsTab, setAddFriendsTab] = useState(false);
   const [selectedFriends, setSelectedFriends] = useState([]);
+  const [attachments, setAttachments] = useState([]);
   const [friends, setFriends] = useState([]);
 
   useEffect(() => {
@@ -216,6 +219,37 @@ export default function ContactInfo({
     });
   };
 
+  const getAttachments = async () => {
+    try {
+      const response = await fetch(`/api/messages/attachmentGet?conversationId=${conversationId}`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch attachments: ${response.status}`);
+      }
+      const data = await response.json();
+      setAttachments(data);
+    } catch (error) {
+      console.error("Error fetching attachments:", error);
+      setAttachments([]);
+    }
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (activeChat) {
+        await fetchConversationId();
+      }
+    };
+    fetchData();
+  }, [activeChat, fetchConversationId]);
+
+  useEffect(() => {
+    if (conversationId) {
+      getAttachments();
+    } else {
+      setAttachments([]);
+    }
+  }, [conversationId]);
+
   return (
     <div className={styles.mainView}>
       <header className={styles["sidebar-header"]}>
@@ -249,9 +283,8 @@ export default function ContactInfo({
           <>
             <span className={styles.profileId}>#{activeChat?.displayId}</span>
             <span
-              className={`${styles["status-badge"]} ${
-                activeChat?.isOnline ? styles["online"] : styles["offline"]
-              }`}
+              className={`${styles["status-badge"]} ${activeChat?.isOnline ? styles["online"] : styles["offline"]
+                }`}
             >
               {activeChat?.isOnline ? t("online") : t("offline")}
             </span>
@@ -284,7 +317,33 @@ export default function ContactInfo({
             </>
           )}
         </section>
+        {!isGroupChat && (
+          <div className={styles["profile-section"]}>
+            <h3 className={styles["profile-section-title"]}>{t("pictures")}</h3>
+          </div>
+        )}
       </div>
+
+
+      {!isGroupChat && (
+        <div className={styles.picturesGrid}>
+          {attachments.length > 0 ? (
+            attachments.map((attachment) => (
+              <div key={attachment.attachmentId} className={styles.pictureItem}>
+                <Image
+                  src={attachment.filePath}
+                  alt={`Attachment ${attachment.fileName}`}
+                  width={100}
+                  height={100}
+                  className={styles.picture}
+                />
+              </div>
+            ))
+          ) : (
+            <p className={styles.noAttachments}>{t("noAttachments")}</p>
+          )}
+        </div>
+      )}
 
       {isGroupChat && (
         <>
@@ -324,7 +383,7 @@ export default function ContactInfo({
                   <div className={styles.buttonsHolder}>
                     {member.isAdmin === 1 ? (
                       <button
-                      className={styles.goButton}
+                        className={styles.goButton}
                         onClick={() =>
                           switchMemberAdmin(
                             member.userId,
@@ -336,7 +395,7 @@ export default function ContactInfo({
                       </button>
                     ) : (
                       <button
-                      className={styles.goButton}
+                        className={styles.goButton}
                         onClick={() =>
                           switchMemberAdmin(
                             member.userId,
@@ -348,7 +407,7 @@ export default function ContactInfo({
                       </button>
                     )}
                     <button
-                    className={styles.backButton}
+                      className={styles.backButton}
                       onClick={() =>
                         kickMember(member.userId, activeChat.conversationId)
                       }
@@ -399,13 +458,12 @@ export default function ContactInfo({
                     {filteredPeople2.map((friend) => (
                       <button
                         key={friend.userId}
-                        className={`${styles2.friendItem} ${
-                          selectedFriends.some(
-                            (f) => f.userId === friend.userId
-                          )
-                            ? styles2.active
-                            : ""
-                        }`}
+                        className={`${styles2.friendItem} ${selectedFriends.some(
+                          (f) => f.userId === friend.userId
+                        )
+                          ? styles2.active
+                          : ""
+                          }`}
                         onClick={() => toggleFriendSelection(friend)}
                       >
                         <Image
