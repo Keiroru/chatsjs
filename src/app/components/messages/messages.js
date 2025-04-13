@@ -451,11 +451,9 @@ export default function Messages({
                     {message.senderUserId != userData.userId && (
                       <Image
                         src={
-                          message.senderUserId === userData.userId
-                            ? userData.profilePicPath ||
-                            "/images/user-icon-placeholder.png"
-                            : activeChat?.profilePicPath ||
-                            "/images/user-icon-placeholder.png"
+                          isGroupChat
+                            ? message.senderProfilePic || "/images/user-icon-placeholder.png"
+                            : activeChat?.profilePicPath || "/images/user-icon-placeholder.png"
                         }
                         width={40}
                         height={40}
