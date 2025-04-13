@@ -3,6 +3,7 @@ import "./globals.css";
 import { SocketProvider } from "@/lib/socket";
 import { TranslationProvider } from "@/contexts/TranslationContext";
 
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],

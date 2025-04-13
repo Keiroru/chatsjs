@@ -1,0 +1,23 @@
+.footer {
+    background-color: var(--light_black);
+    padding: 1rem 0;
+    margin-top: auto;
+    text-align: center;
+}
+
+.container {
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.link {
+    color: var(--off-white);
+    text-decoration: none;
+    margin: 0 15px;
+    transition: color 0.3s ease;
+}
+
+.link:hover {
+    color: var(--light-lavender);
+    text-decoration: none;
+}

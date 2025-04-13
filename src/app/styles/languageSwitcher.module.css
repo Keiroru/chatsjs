@@ -42,3 +42,9 @@
 .languageSwitcher::-ms-expand {
     display: none;
 }
+
+@media (max-width: 576px) {
+    .languageSwitcher {
+        width: 100% !important;
+    }
+}

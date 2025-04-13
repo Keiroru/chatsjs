@@ -5,25 +5,15 @@ import styles from "@/app/styles/page.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComments, faLock, faUserFriends, faGlobe } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "@/contexts/TranslationContext";
-import LanguageSwitcher from "@/app/components/LanguageSwitcher";
+import Footer from "./components/Footer";
+import Header from "./components/Header";
+
 export default function Home() {
   const { t } = useTranslation();
 
   return (
     <div className={styles.landingContainer}>
-      <div className={styles.navBar}>
-        <div className={styles.logo}>ChatJS</div>
-        <div className={styles.navButtons}>
-          <LanguageSwitcher />
-          <Link href="/login">
-            <button className={styles.loginButton}>{t("login")}</button>
-          </Link>
-          <Link href="/register">
-            <button className={styles.registerButton}>{t("register")}</button>
-          </Link>
-        </div>
-      </div>
-
+      <Header />
       <div className={styles.heroSection}>
         <div className={styles.heroContent}>
           <h1 className={styles.heroTitle}>{t("heroTitle")}</h1>
@@ -79,15 +69,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-
-      <footer className={styles.footer}>
-        <p>{t("footerTitle")}</p>
-        <div className={styles.footerLinks}>
-          <Link href="/terms">{t("terms")}</Link>
-          <Link href="/privacy">{t("privacy")}</Link>
-          <Link href="/contact">{t("contact")}</Link>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
