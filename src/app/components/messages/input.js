@@ -221,15 +221,18 @@ const Input = forwardRef(
               sentAt: formatMessageTime(messageData.sentAt),
             },
           ]);
-          setAttachments((prevAttachments) => [
-            ...prevAttachments,
-            {
-              fileName: messageData.fileName,
-              filePath: messageData.filePath,
-              fileSize: messageData.fileSize,
-              attachmentId: res.attachmentId,
-            },
-          ]);
+          if (res.attachmentId !== null) {
+            setAttachments((prevAttachments) => [
+              ...prevAttachments,
+              {
+                fileName: messageData.fileName,
+                filePath: messageData.filePath,
+                fileSize: messageData.fileSize,
+                attachmentId: res.attachmentId,
+              },
+            ]);
+          }
+
           setMessageInput("");
           setreplyTo(null);
           handleCancelAttachment();

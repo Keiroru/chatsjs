@@ -34,16 +34,18 @@ export default function ContactInfo({
   useEffect(() => {
     if (!socket) return;
     const handleReceiveMessage = (newMessage) => {
-      if (newMessage.fileName) {
-        const attachment = {
-          attachmentId: newMessage.attachmentId,
-          fileName: newMessage.fileName,
-          filePath: newMessage.filePath,
-          fileSize: newMessage.fileSize
-        };
-        setAttachments((prevAttachments) => [...prevAttachments, attachment]);
-      }
+      console.log(newMessage);
+      if (newMessage.attachmentId === null) return;
+
+      const attachment = {
+        attachmentId: newMessage.attachmentId,
+        fileName: newMessage.fileName,
+        filePath: newMessage.filePath,
+        fileSize: newMessage.fileSize
+      };
+      setAttachments((prevAttachments) => [...prevAttachments, attachment]);
     }
+
 
     socket.on("receive_message", handleReceiveMessage);
 
