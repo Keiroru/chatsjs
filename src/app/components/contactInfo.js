@@ -1,9 +1,15 @@
-import { useEffect, useState } from "react";
+import { act, useEffect, useState } from "react";
 import styles from "@/app/styles/contactInfo.module.css";
 import styles2 from "@/app/styles/groupChat.module.css";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes, faSearch } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTimes,
+  faSearch,
+  faEllipsisVertical,
+  faDownload,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "@/contexts/TranslationContext";
 import { useSocket } from "@/lib/socket";
 
@@ -16,7 +22,7 @@ export default function ContactInfo({
   conversationId,
   fetchConversationId,
   setAttachments,
-  attachments
+  attachments,
 }) {
   const { t } = useTranslation();
   const [members, setMembers] = useState([]);
@@ -26,10 +32,39 @@ export default function ContactInfo({
   const [filteredPeople, setFilteredPeople] = useState([]);
   const [filteredPeople2, setFilteredPeople2] = useState([]);
   const [addFriendsTab, setAddFriendsTab] = useState(false);
-  const [selectedFriends, setSelectedFriends] = useState([])
+  const [moreAction, setMoreAction] = useState(false);
+  const [imageOpen, setImageOpen] = useState(false);
+  const [imageView, setImageView] = useState(null);
+  const [selectedFriends, setSelectedFriends] = useState([]);
   const [friends, setFriends] = useState([]);
   const socket = useSocket();
 
+  const formatFileSize = (bytes) => {
+    if (bytes >= 1024 * 1024) {
+      return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+    } else {
+      return (bytes / 1024).toFixed(1) + " KB";
+    }
+  };
+
+  const downloadImage = async (image) => {
+    try {
+      const response = await fetch(image.filePath);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = image.fileName || "image.jpg";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Download failed:", error);
+    }
+  };
 
   useEffect(() => {
     if (!socket) return;
@@ -41,11 +76,10 @@ export default function ContactInfo({
         attachmentId: newMessage.attachmentId,
         fileName: newMessage.fileName,
         filePath: newMessage.filePath,
-        fileSize: newMessage.fileSize
+        fileSize: newMessage.fileSize,
       };
       setAttachments((prevAttachments) => [...prevAttachments, attachment]);
-    }
-
+    };
 
     socket.on("receive_message", handleReceiveMessage);
 
@@ -188,6 +222,32 @@ export default function ContactInfo({
     }
   };
 
+  const leaveGroupChat = async () => {
+    try {
+      const res = await fetch(`/api/friends/leaveGroupChat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: userData.userId,
+          conversationId: activeChat.conversationId,
+          otherMembers: members
+            .filter((member) => member.userId !== userData.userId)
+            .map((member) => member.userId),
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to leave group chat");
+      }
+
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const addFriendsPost = async () => {
     if (selectedFriends.length <= 0) {
       return;
@@ -236,6 +296,10 @@ export default function ContactInfo({
     setSearchQuery2("");
   };
 
+  const handleSetMoreAction = () => {
+    setMoreAction((prev) => !prev);
+  };
+
   const toggleFriendSelection = (friend) => {
     setSelectedFriends((prevSelected) => {
       if (prevSelected.some((f) => f.userId === friend.userId)) {
@@ -248,7 +312,9 @@ export default function ContactInfo({
 
   const getAttachments = async () => {
     try {
-      const response = await fetch(`/api/messages/attachmentGet?conversationId=${conversationId}`);
+      const response = await fetch(
+        `/api/messages/attachmentGet?conversationId=${conversationId}`
+      );
       if (!response.ok) {
         throw new Error(`Failed to fetch attachments: ${response.status}`);
       }
@@ -258,7 +324,7 @@ export default function ContactInfo({
       console.error("Error fetching attachments:", error);
       setAttachments([]);
     }
-  }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -310,8 +376,9 @@ export default function ContactInfo({
           <>
             <span className={styles.profileId}>#{activeChat?.displayId}</span>
             <span
-              className={`${styles["status-badge"]} ${activeChat?.isOnline ? styles["online"] : styles["offline"]
-                }`}
+              className={`${styles["status-badge"]} ${
+                activeChat?.isOnline ? styles["online"] : styles["offline"]
+              }`}
             >
               {activeChat?.isOnline ? t("online") : t("offline")}
             </span>
@@ -346,20 +413,26 @@ export default function ContactInfo({
         </section>
       </div>
 
-
       {!isGroupChat && (
         <>
           <h1 className={styles.attachmentsTitle}>{t("attachments")}</h1>
           {attachments.length > 0 ? (
             <div className={styles.picturesGrid}>
               {attachments.map((attachment) => (
-                <div key={attachment.attachmentId} className={styles.pictureItem}>
+                <div
+                  key={attachment.attachmentId}
+                  className={styles.pictureItem}
+                >
                   <Image
                     src={attachment.filePath}
                     alt={`Attachment ${attachment.fileName}`}
                     width={100}
                     height={100}
                     className={styles.picture}
+                    onClick={() => {
+                      setImageOpen(true);
+                      setImageView(attachment);
+                    }}
                   />
                 </div>
               ))}
@@ -367,14 +440,57 @@ export default function ContactInfo({
           ) : (
             <p className={styles.noAttachments}>{t("noAttachments")}</p>
           )}
-
         </>
+      )}
+
+      {imageOpen && (
+        <div
+          className={styles.imageViewerOverlay}
+          onClick={() => setImageOpen(false)}
+        >
+          <div
+            className={styles.imageViewerContent}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.imageViewerHeader}>
+              <button
+                className={styles.downloadButton}
+                onClick={async () => {
+                  downloadImage(imageView);
+                }}
+              >
+                <FontAwesomeIcon icon={faDownload} />
+              </button>
+              <button
+                className={styles.closeButton}
+                onClick={() => setImageOpen(false)}
+              >
+                <FontAwesomeIcon icon={faXmark} />
+              </button>
+            </div>
+
+            <Image
+              src={imageView.filePath}
+              alt={imageView.fileName}
+              width={500}
+              height={500}
+              className={styles.imageViewerImage}
+            />
+
+            <div className={styles.imageViewerDetails}>
+              <p className={styles.imageName}>{imageView.fileName}</p>
+              <p className={styles.imageSize}>
+                {formatFileSize(imageView.fileSize)}
+              </p>
+            </div>
+          </div>
+        </div>
       )}
 
       {isGroupChat && (
         <>
           <div className={styles.searchContainer}>
-            <div className={styles.searchInput}>
+            <div className={styles.searchInput2}>
               <input
                 type="text"
                 placeholder={t("search")}
@@ -404,49 +520,64 @@ export default function ContactInfo({
                   <h3 className={styles.friendName}>{member.displayName}</h3>
                   <p className={styles.displayId}>#{member.displayId}</p>
                 </div>
-                {member.isAdmin === 1 && <p className={styles.adminText}>ADMIN</p>}
-                {isUserAdmin === true && member.userId !== userData.userId && (
-                  <div className={styles.buttonsHolder}>
-                    {member.isAdmin === 1 ? (
-                      <button
-                        className={styles.goButton}
-                        onClick={() =>
-                          switchMemberAdmin(
-                            member.userId,
-                            activeChat.conversationId
-                          )
-                        }
-                      >
-                        {t("removeAdmin")}
-                      </button>
-                    ) : (
-                      <button
-                        className={styles.goButton}
-                        onClick={() =>
-                          switchMemberAdmin(
-                            member.userId,
-                            activeChat.conversationId
-                          )
-                        }
-                      >
-                        {t("makeAdmin")}
-                      </button>
-                    )}
-                    <button
-                      className={styles.backButton}
-                      onClick={() =>
-                        kickMember(member.userId, activeChat.conversationId)
-                      }
-                    >
-                      {t("kick")}
-                    </button>
-                  </div>
+                {member.isAdmin === 1 && (
+                  <p className={styles.adminText}>ADMIN</p>
                 )}
+                {moreAction === true &&
+                  isUserAdmin === true &&
+                  member.userId !== userData.userId && (
+                    <div className={styles.buttonsHolder}>
+                      {member.isAdmin === 1 ? (
+                        <button
+                          className={styles.goButton}
+                          onClick={() =>
+                            switchMemberAdmin(
+                              member.userId,
+                              activeChat.conversationId
+                            )
+                          }
+                        >
+                          {t("removeAdmin")}
+                        </button>
+                      ) : (
+                        <button
+                          className={styles.goButton}
+                          onClick={() =>
+                            switchMemberAdmin(
+                              member.userId,
+                              activeChat.conversationId
+                            )
+                          }
+                        >
+                          {t("makeAdmin")}
+                        </button>
+                      )}
+                      <button
+                        className={styles.backButton}
+                        onClick={() =>
+                          kickMember(member.userId, activeChat.conversationId)
+                        }
+                      >
+                        {t("kick")}
+                      </button>
+                    </div>
+                  )}
+                <button
+                  className={styles.moreButton}
+                  onClick={() => handleSetMoreAction()}
+                >
+                  <FontAwesomeIcon icon={faEllipsisVertical} />
+                </button>
               </div>
             ))}
           </div>
           <div className={styles.addButtonHolder}>
-            <button className={styles.goButton} onClick={handleAddFriends}>{t("pushButton")}</button>
+            <button className={styles.goButton} onClick={handleAddFriends}>
+              {t("pushButton")}
+            </button>
+            <button className={styles.backButton} onClick={leaveGroupChat}>
+              Leave Group Chat
+            </button>
           </div>
           {addFriendsTab && (
             <div className={styles2.createContainer} onClick={handleAddFriends}>
@@ -484,12 +615,13 @@ export default function ContactInfo({
                     {filteredPeople2.map((friend) => (
                       <button
                         key={friend.userId}
-                        className={`${styles2.friendItem} ${selectedFriends.some(
-                          (f) => f.userId === friend.userId
-                        )
-                          ? styles2.active
-                          : ""
-                          }`}
+                        className={`${styles2.friendItem} ${
+                          selectedFriends.some(
+                            (f) => f.userId === friend.userId
+                          )
+                            ? styles2.active
+                            : ""
+                        }`}
                         onClick={() => toggleFriendSelection(friend)}
                       >
                         <Image

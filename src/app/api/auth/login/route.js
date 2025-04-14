@@ -79,8 +79,7 @@ export async function POST(request) {
 
     let location = "unknown";
     try {
-      // const geoRes = await fetch(`https://ipapi.co/${ipAddress}/json/`);
-      const geoRes = await fetch(`https://ipapi.co/94.21.42.34/json/`);
+      const geoRes = await fetch(`https://ipapi.co/${ipAddress}/json/`);
       const geoData = await geoRes.json();
 
       if (geoData && geoData.city && geoData.country_name) {

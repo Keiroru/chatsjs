@@ -139,6 +139,13 @@
   width: 100%;
 }
 
+.searchInput2 {
+  position: relative;
+  width: 90%;
+  margin: auto;
+  padding: 10px 5px 10px 5px;
+}
+
 .searchField {
   width: 100%;
   padding: 12px 16px;
@@ -245,6 +252,23 @@
   justify-content: center;
   align-items: center;
   margin: 30px 0 30px 0;
+  gap: 30px;
+}
+
+.moreButton{
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  transition: all 0.1s ease-in-out;
+}
+
+.moreButton:hover{
+  background: #252525;
+  border-radius: 15px;
 }
 
 .goButton,
@@ -319,4 +343,94 @@
   font-size: 16px;
   color: var(--silver);
   text-align: center;
+}
+
+.imageViewerOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999999;
+}
+
+.imageViewerContent {
+  position: relative;
+  background: var(--light_black);
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  max-width: 90%;
+  max-height: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.imageViewerHeader {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  left: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.downloadButton {
+  background: var(--dark_purple);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--off-white);
+  transition: background 0.2s;
+}
+
+.downloadButton:hover {
+  background: var(--light_purple);
+}
+
+.closeButton {
+  background: var(--dark_red);
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  font-size: 1.3rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.closeButton:hover {
+  background: var(--error_red);
+}
+
+.imageViewerImage {
+  max-width: 100%;
+  max-height: 500px;
+  margin-top: 2rem;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.imageViewerDetails {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.imageName {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.imageSize {
+  font-size: 0.9rem;
+  color: #666;
 }
