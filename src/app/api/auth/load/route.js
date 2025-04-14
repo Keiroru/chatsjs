@@ -5,7 +5,7 @@ import { getConnection } from "@/lib/db";
 export async function POST(request) {
   const { searchParams } = new URL(request.url);
   const userId = searchParams.get("userId");
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const loginId = cookieStore.get("loginId")?.value;
 
   if (!userId || !loginId) {
@@ -18,7 +18,7 @@ export async function POST(request) {
   const connection = await getConnection();
 
   try {
-    await connection.execute("UPDATE users SET isOnline = 0 WHERE userId = ?", [
+    await connection.execute("UPDATE users SET isOnline = 1 WHERE userId = ?", [
       userId,
     ]);
 

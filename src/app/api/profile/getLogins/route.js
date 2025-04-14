@@ -9,7 +9,7 @@ export async function GET(request) {
         const connection = await getConnection();
 
         const [logins] = await connection.execute(
-            "SELECT * FROM logins WHERE userId = ? ORDER BY loginDate DESC",
+            "SELECT * FROM logins WHERE userId = ? ORDER BY isLoggedIn DESC, loginDate DESC",
             [userId]
         );
 

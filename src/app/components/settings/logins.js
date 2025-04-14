@@ -1,20 +1,20 @@
 import { useState, useEffect } from "react";
-import style from "@/app/styles/account.module.css";
+import style from "@/app/styles/logins.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSave } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "@/contexts/TranslationContext";
 
 export default function Logins({ userData }) {
   const { t } = useTranslation();
   const [logins, setLogins] = useState([]);
   const [loginId, setLoginId] = useState(null);
+  const [expandedRow, setExpandedRow] = useState(null);
 
   useEffect(() => {
     const cookieMatch = document.cookie.match(/(?:^|;\s*)loginId=([^;]*)/);
     if (cookieMatch) {
       setLoginId(cookieMatch[1]);
     }
-    console.log("Login ID from cookie:", cookieMatch[1]);
 
     fetchLogins();
   }, []);
@@ -31,55 +31,114 @@ export default function Logins({ userData }) {
     }
   };
 
+  const handleRowClick = (index) => {
+    setExpandedRow(expandedRow === index ? null : index);
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-GB", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
   return (
-    <div className={style.accountContainer}>
-      <h1 className={style.accountTitle}>{t("bugReport")}</h1>
-      <p className={style.accountDescription}>{t("bugReportDescription")}</p>
+    <div className={style.loginsContainer}>
+      <h1 className={style.loginsTitle}>{t("loginsSetting")}</h1>
 
-      <div className={style.accountSection}></div>
-
-      <div className={style.accountSection}>
-        <h2 className={style.accountSectionTitle}>{t("reportHistory")}</h2>
-        <div className={style.reportHistory}>
-          {logins.length > 0 ? (
+      <div className={style.loginsSection}>
+        <h2 className={style.loginSectionTitle}>{t("activeDevices")}</h2>
+        <div className={style.loginDevices}>
+          {logins.length > 0 && (
             <>
               <div className={style.gridContainer}>
-                <div className={style.gridHeader}>login date</div>
-                <div className={style.gridHeader}>logout date</div>
-                <div className={style.gridHeader}>location</div>
-                <div className={style.gridHeader}>ip address</div>
-                <div className={style.gridHeader}>device type</div>
-                <div className={style.gridHeader}>browser</div>
-                <div className={style.gridHeader}>device name</div>
-                <div className={style.gridHeader}>is logged in</div>
+                <div className={style.gridHeader}>Browser</div>
+                <div className={style.gridHeader}>Login Date</div>
+                <div className={style.gridHeader}>Status</div>
+                <div className={style.gridHeader}>More Info</div>
               </div>
               {logins.map((login, index) => (
-                <div key={index} className={style.reportItem}>
-                  <div className={style.gridContainer}>
-                    <div className={style.gridCell}>{login.loginDate}</div>
-                    <div className={style.gridCell}>{login.logoutDate}</div>
-                    <div className={style.gridCell}>{login.location}</div>
-                    <div className={style.gridCell}>{login.ipAddress}</div>
-                    <div className={style.gridCell}>{login.deviceType}</div>
-                    <div className={style.gridCell}>{login.userAgent}</div>
-                    <div className={style.gridCell}>{login.deviceName}</div>
-                    <div className={style.gridCell}>
-                      <span>
-                        {login.isLoggedIn === 1 ? "logged in" : "logged out"}
-                      </span>
-                    </div>
-                    <div className={style.gridCell}>
-                      <span>
-                        {Number(login.loginId) === Number(loginId) &&
-                          "THIS SESSION"}
-                      </span>
+                <div
+                  key={index}
+                  className={`${style.reportItem} ${
+                    index % 2 === 0 ? style.evenRow : style.oddRow
+                  }`}
+                >
+                  <div className={style.gridCell}>{login.userAgent}</div>
+                  <div className={style.gridCell}>
+                    {formatDate(login.loginDate)}
+                  </div>
+                  <div className={style.gridCell}>
+                    <span
+                      className={
+                        login.isLoggedIn === 1
+                          ? style.loggedIn
+                          : style.loggedOut
+                      }
+                    >
+                      {login.isLoggedIn === 1 ? "Online" : "Offline"}
+                    </span>
+                  </div>
+                  <div className={style.gridCell}>
+                    <div
+                      className={style.expandButton}
+                      onClick={() => handleRowClick(index)}
+                    >
+                      <FontAwesomeIcon
+                        icon={expandedRow === index ? faChevronUp : faChevronDown}
+                        className={style.expandIcon}
+                      />
                     </div>
                   </div>
+                  {expandedRow === index && (
+                    <div className={style.expandedDetails}>
+                      {login.logoutDate !== null && (
+                        <div className={style.detailsRow}>
+                          <div className={style.detailsLabel}>Logout Date:</div>
+                          <div className={style.detailsValue}>
+                            {formatDate(login.logoutDate)}
+                          </div>
+                        </div>
+                      )}
+                      {Number(login.loginId) === Number(loginId) && (
+                        <div className={style.detailsRow}>
+                          <div className={`${style.detailsLabel} ${style.thisSession}`}>
+                            Currently Active Device
+                          </div>
+                        </div>
+                      )}
+
+                      <div className={style.detailsRow}>
+                        <div className={style.detailsLabel}>Location:</div>
+                        <div className={style.detailsValue}>
+                          {login.location}
+                        </div>
+                      </div>
+                      <div className={style.detailsRow}>
+                        <div className={style.detailsLabel}>IP Address:</div>
+                        <div className={style.detailsValue}>
+                          {login.ipAddress}
+                        </div>
+                      </div>
+                      <div className={style.detailsRow}>
+                        <div className={style.detailsLabel}>Device Type:</div>
+                        <div className={style.detailsValue}>
+                          {login.deviceType}
+                        </div>
+                      </div>
+                      <div className={style.detailsRow}>
+                        <div className={style.detailsLabel}>Device Name:</div>
+                        <div className={style.detailsValue}>
+                          {login.deviceName}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </>
-          ) : (
-            <div className={style.noReports}>{t("noReports")}</div>
           )}
         </div>
       </div>

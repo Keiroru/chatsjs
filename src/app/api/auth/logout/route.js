@@ -5,7 +5,7 @@ import { getConnection } from "@/lib/db";
 export async function POST(request) {
   const { searchParams } = new URL(request.url);
   const userId = searchParams.get("userId");
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const loginId = cookieStore.get("loginId")?.value;
 
   if (!userId || !loginId) {

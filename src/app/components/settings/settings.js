@@ -81,18 +81,18 @@ export default function Settings({ userData, isMobile, toggleSettings }) {
               <span>{t("account")}</span>
             </li>
             <li
-              className={selectedOption === "logins" ? style.active : ""}
-              onClick={() => setSelectedOption("logins")}
-            >
-              <FontAwesomeIcon icon={faUser} />
-              <span>{t("account")} gergfreu login</span>
-            </li>
-            <li
               className={selectedOption === "profile" ? style.active : ""}
               onClick={() => setSelectedOption("profile")}
             >
               <FontAwesomeIcon icon={faUserCircle} />
               <span>{t("profile")}</span>
+            </li>
+            <li
+              className={selectedOption === "logins" ? style.active : ""}
+              onClick={() => setSelectedOption("logins")}
+            >
+              <FontAwesomeIcon icon={faUser} />
+              <span>{t("loginsMenu")}</span>
             </li>
           </ul>
           <h4>{t("appsettings")}</h4>
