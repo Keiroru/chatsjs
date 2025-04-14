@@ -32,7 +32,7 @@ export default function MyAccount({ userData }) {
     });
     if (response.ok) {
       setLookingForFriends(newValue);
-      userData.isLookingForFriends === newValue;
+      userData.isLookingForFriends = newValue;
     } else {
       console.error("Failed to update looking for friends");
     }
@@ -122,9 +122,7 @@ export default function MyAccount({ userData }) {
   return (
     <div className={style.accountContainer}>
       <h1 className={style.accountTitle}>{t("account")}</h1>
-      <p className={style.accountDescription}>
-        {t("accountDescription")}
-      </p>
+      <p className={style.accountDescription}>{t("accountDescription")}</p>
 
       <div className={style.accountSection}>
         <h2 className={style.accountSectionTitle}>{t("accountInformation")}</h2>
@@ -187,7 +185,9 @@ export default function MyAccount({ userData }) {
       </div>
 
       <div className={style.lookingForFriends}>
-        <h2 className={style.lookingForFriendsTitle}>{t("friendPreferences")}</h2>
+        <h2 className={style.lookingForFriendsTitle}>
+          {t("friendPreferences")}
+        </h2>
         <div className={style.lookingForFriendsStatus}>
           <span className={style.statusLabel}>{t("lookingForFriends")}:</span>
           <span className={style.statusValue}>
@@ -292,7 +292,9 @@ export default function MyAccount({ userData }) {
                   className={style.changePasswordInput}
                   id="newPassword"
                 />
-                <label htmlFor="confirmPassword">{t("confirmNewPassword")}</label>
+                <label htmlFor="confirmPassword">
+                  {t("confirmNewPassword")}
+                </label>
                 <input
                   type="password"
                   className={style.changePasswordInput}

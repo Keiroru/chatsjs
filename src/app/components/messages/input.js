@@ -132,11 +132,25 @@ const Input = forwardRef(
       let imageUrl = null;
       try {
         setFriends((prevFriends) =>
-          prevFriends.map((friend) =>
-            friend.userId === activeChat.userId
-              ? { ...friend, lastMessage: messageInput.trim() }
-              : friend
-          )
+          prevFriends
+            .map((friend) =>
+              friend.userId === activeChat.userId
+                ? {
+                    ...friend,
+                    lastMessage: messageInput.trim(),
+                    lastMessageAt: new Date(),
+                  }
+                : friend
+            )
+            .sort((a, b) => {
+              const dateA = a.lastMessageAt
+                ? new Date(a.lastMessageAt)
+                : new Date(0);
+              const dateB = b.lastMessageAt
+                ? new Date(b.lastMessageAt)
+                : new Date(0);
+              return dateB - dateA;
+            })
         );
 
         if (attachment) {

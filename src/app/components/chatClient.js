@@ -32,7 +32,7 @@ export default function ChatClient({ userData }) {
   const [block, setBlock] = useState([]);
   const [loading, setIsLoading] = useState(false);
   const [editMessage, setEditMessage] = useState(null);
-  const [activeTab, setActiveTab] = useState("friends");
+  const [activeTab, setActiveTab] = useState("people");
   const [friendRequests, setFriendRequests] = useState([]);
   const [conversationId, setConversationId] = useState(null);
   const { t } = useTranslation();
