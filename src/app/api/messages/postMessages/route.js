@@ -72,6 +72,7 @@ export async function POST(request) {
       message: "Message sent successfully",
       data: messages[0],
       receiver: actualReceiver,
+      attachmentId: attachmentId,
     });
   } catch (error) {
     console.error("Error sending message:", error);

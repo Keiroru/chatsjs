@@ -25,6 +25,7 @@ const Input = forwardRef(
       setFriends,
       attachment,
       setAttachment,
+      setAttachments,
     },
     ref
   ) => {
@@ -136,10 +137,10 @@ const Input = forwardRef(
             .map((friend) =>
               friend.userId === activeChat.userId
                 ? {
-                    ...friend,
-                    lastMessage: messageInput.trim(),
-                    lastMessageAt: new Date(),
-                  }
+                  ...friend,
+                  lastMessage: messageInput.trim(),
+                  lastMessageAt: new Date(),
+                }
                 : friend
             )
             .sort((a, b) => {
@@ -194,6 +195,7 @@ const Input = forwardRef(
         var res = await response.json();
 
         const messageData = {
+          attachmentId: res.attachmentId,
           conversationId: conversationId,
           messageId: res.data.messageId,
           senderUserId: userData.userId,
@@ -219,7 +221,15 @@ const Input = forwardRef(
               sentAt: formatMessageTime(messageData.sentAt),
             },
           ]);
-
+          setAttachments((prevAttachments) => [
+            ...prevAttachments,
+            {
+              fileName: messageData.fileName,
+              filePath: messageData.filePath,
+              fileSize: messageData.fileSize,
+              attachmentId: res.attachmentId,
+            },
+          ]);
           setMessageInput("");
           setreplyTo(null);
           handleCancelAttachment();

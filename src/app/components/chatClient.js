@@ -35,6 +35,7 @@ export default function ChatClient({ userData }) {
   const [activeTab, setActiveTab] = useState("people");
   const [friendRequests, setFriendRequests] = useState([]);
   const [conversationId, setConversationId] = useState(null);
+  const [attachments, setAttachments] = useState([]);
   const { t } = useTranslation();
   const socket = useSocket();
 
@@ -407,6 +408,7 @@ export default function ChatClient({ userData }) {
         conversationId={conversationId}
         setFriends={setFriends}
         canChat={canChat}
+        setAttachments={setAttachments}
       />
 
       <aside
@@ -422,6 +424,8 @@ export default function ChatClient({ userData }) {
           userData={userData}
           conversationId={conversationId}
           fetchConversationId={fetchConversationId}
+          attachments={attachments}
+          setAttachments={setAttachments}
         />
       </aside>
     </div>

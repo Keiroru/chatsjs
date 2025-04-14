@@ -5,6 +5,7 @@ import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "@/contexts/TranslationContext";
+import { useSocket } from "@/lib/socket";
 
 export default function ContactInfo({
   setRightPanelOpen,
@@ -13,7 +14,9 @@ export default function ContactInfo({
   formattedDate,
   userData,
   conversationId,
-  fetchConversationId
+  fetchConversationId,
+  setAttachments,
+  attachments
 }) {
   const { t } = useTranslation();
   const [members, setMembers] = useState([]);
@@ -23,9 +26,31 @@ export default function ContactInfo({
   const [filteredPeople, setFilteredPeople] = useState([]);
   const [filteredPeople2, setFilteredPeople2] = useState([]);
   const [addFriendsTab, setAddFriendsTab] = useState(false);
-  const [selectedFriends, setSelectedFriends] = useState([]);
-  const [attachments, setAttachments] = useState([]);
+  const [selectedFriends, setSelectedFriends] = useState([])
   const [friends, setFriends] = useState([]);
+  const socket = useSocket();
+
+
+  useEffect(() => {
+    if (!socket) return;
+    const handleReceiveMessage = (newMessage) => {
+      if (newMessage.fileName) {
+        const attachment = {
+          attachmentId: newMessage.attachmentId,
+          fileName: newMessage.fileName,
+          filePath: newMessage.filePath,
+          fileSize: newMessage.fileSize
+        };
+        setAttachments((prevAttachments) => [...prevAttachments, attachment]);
+      }
+    }
+
+    socket.on("receive_message", handleReceiveMessage);
+
+    return () => {
+      socket.off("receive_message", handleReceiveMessage);
+    };
+  }, [socket]);
 
   useEffect(() => {
     const fetchFriends = async () => {
