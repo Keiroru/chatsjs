@@ -137,10 +137,10 @@ const Input = forwardRef(
             .map((friend) =>
               friend.userId === activeChat.userId
                 ? {
-                  ...friend,
-                  lastMessage: messageInput.trim(),
-                  lastMessageAt: new Date(),
-                }
+                    ...friend,
+                    lastMessage: messageInput.trim(),
+                    lastMessageAt: new Date(),
+                  }
                 : friend
             )
             .sort((a, b) => {
@@ -254,7 +254,11 @@ const Input = forwardRef(
     };
 
     const handleKeyDown = (e) => {
-      if (e.key === "Enter" && !e.shiftKey && messageInput.trim()) {
+      if (
+        e.key === "Enter" &&
+        !e.shiftKey &&
+        (messageInput.trim() || attachment)
+      ) {
         e.preventDefault();
         handleSendMessage();
       }

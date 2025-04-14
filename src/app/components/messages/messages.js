@@ -414,8 +414,9 @@ export default function Messages({
         />
       ) : (
         <main
-          className={`${styles["chat-main"]} ${rightPanelOpen ? styles["right-open"] : ""
-            }`}
+          className={`${styles["chat-main"]} ${
+            rightPanelOpen ? styles["right-open"] : ""
+          }`}
         >
           <header className={styles["chat-header"]}>
             {isMobile && (
@@ -435,7 +436,9 @@ export default function Messages({
               <Image
                 src={
                   activeChat?.profilePicPath ||
-                  "/images/user-icon-placeholder.png"
+                  (isGroupChat === false
+                    ? "/images/user-icon-placeholder.png"
+                    : "/images/groupChat-icon-placeholder.png")
                 }
                 alt="Contact avatar"
                 width={60}
@@ -473,19 +476,20 @@ export default function Messages({
                   <div
                     id={`message-${message.messageId}`}
                     key={message.messageId}
-                    className={`${styles.message} ${message.senderUserId === userData.userId
-                      ? styles.outgoing
-                      : styles.incoming
-                      }`}
+                    className={`${styles.message} ${
+                      message.senderUserId === userData.userId
+                        ? styles.outgoing
+                        : styles.incoming
+                    }`}
                   >
                     {message.senderUserId != userData.userId && (
                       <Image
                         src={
                           isGroupChat
                             ? message.senderProfilePic ||
-                            "/images/user-icon-placeholder.png"
+                              "/images/user-icon-placeholder.png"
                             : activeChat?.profilePicPath ||
-                            "/images/user-icon-placeholder.png"
+                              "/images/user-icon-placeholder.png"
                         }
                         width={40}
                         height={40}
@@ -515,29 +519,30 @@ export default function Messages({
                             }}
                           >
                             <span
-                              className={`${originalMessage.isDeleted === 1
-                                ? styles["deleted-message"]
-                                : ""
-                                }`}
+                              className={`${
+                                originalMessage.isDeleted === 1
+                                  ? styles["deleted-message"]
+                                  : ""
+                              }`}
                             >
                               {originalMessage.isDeleted === 0
                                 ? originalMessage.messageText &&
                                   originalMessage.messageText.length > 0
                                   ? originalMessage.messageText.length > 40
                                     ? originalMessage.messageText.substring(
-                                      0,
-                                      37
-                                    ) + "..."
-                                    : originalMessage.messageText
-                                  : originalMessage.fileName &&
-                                    originalMessage.fileName.length > 0
-                                    ? originalMessage.fileName.length > 40
-                                      ? originalMessage.fileName.substring(
                                         0,
                                         37
                                       ) + "..."
-                                      : originalMessage.fileName
-                                    : t("deletedMessage")
+                                    : originalMessage.messageText
+                                  : originalMessage.fileName &&
+                                    originalMessage.fileName.length > 0
+                                  ? originalMessage.fileName.length > 40
+                                    ? originalMessage.fileName.substring(
+                                        0,
+                                        37
+                                      ) + "..."
+                                    : originalMessage.fileName
+                                  : t("deletedMessage")
                                 : t("deletedMessage")}
                             </span>
                           </div>
@@ -576,10 +581,11 @@ export default function Messages({
                           onClick={() => {
                             setContextMenu({ ...contextMenu, visible: false });
                           }}
-                          className={`${styles.messageContent} ${message.isDeleted === 1
-                            ? styles["deleted-message"]
-                            : ""
-                            }`}
+                          className={`${styles.messageContent} ${
+                            message.isDeleted === 1
+                              ? styles["deleted-message"]
+                              : ""
+                          }`}
                         >
                           {message.isDeleted === 1
                             ? t("deletedMessage")
@@ -626,9 +632,7 @@ export default function Messages({
                 );
               })
             ) : (
-              <div className={styles.emptyChat}>
-                {t("noMessagesYet")}
-              </div>
+              <div className={styles.emptyChat}>{t("noMessagesYet")}</div>
             )}
 
             {imageOpen && (
@@ -761,13 +765,13 @@ export default function Messages({
                 </span>
                 {t("replyTo")}:{" "}
                 {contextMenu.message?.messageText &&
-                  contextMenu.message?.messageText.length > 0
+                contextMenu.message?.messageText.length > 0
                   ? contextMenu.message.messageText.length > 20
                     ? contextMenu.message.messageText.substring(0, 17) + "..."
                     : contextMenu.message.messageText
                   : contextMenu.message?.fileName.length > 20
-                    ? contextMenu.message.fileName.substring(0, 17) + "..."
-                    : contextMenu.message?.fileName}
+                  ? contextMenu.message.fileName.substring(0, 17) + "..."
+                  : contextMenu.message?.fileName}
               </button>
 
               {contextMenu.message?.messageText.length > 0 && (

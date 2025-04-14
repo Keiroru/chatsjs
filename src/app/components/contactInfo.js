@@ -1,4 +1,4 @@
-import { act, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "@/app/styles/contactInfo.module.css";
 import styles2 from "@/app/styles/groupChat.module.css";
 import Image from "next/image";
@@ -37,6 +37,11 @@ export default function ContactInfo({
   const [imageView, setImageView] = useState(null);
   const [selectedFriends, setSelectedFriends] = useState([]);
   const [friends, setFriends] = useState([]);
+  const [showAllAttachments, setShowAllAttachments] = useState(false);
+  const reversedAttachments = [...attachments].reverse();
+  const visibleAttachments = showAllAttachments
+    ? reversedAttachments
+    : reversedAttachments.slice(0, 9);
   const socket = useSocket();
 
   const formatFileSize = (bytes) => {
@@ -65,6 +70,10 @@ export default function ContactInfo({
       console.error("Download failed:", error);
     }
   };
+
+  useEffect(() => {
+    setShowAllAttachments(false);
+  }, [activeChat]);
 
   useEffect(() => {
     if (!socket) return;
@@ -359,7 +368,10 @@ export default function ContactInfo({
       <div className={styles["contact-profile-container"]}>
         <Image
           src={
-            activeChat?.profilePicPath || "/images/user-icon-placeholder.png"
+            activeChat?.profilePicPath ||
+            (isGroupChat === false
+              ? "/images/user-icon-placeholder.png"
+              : "/images/groupChat-icon-placeholder.png")
           }
           alt="Contact profile"
           width={150}
@@ -388,14 +400,12 @@ export default function ContactInfo({
 
       <div className={styles["profile-details"]}>
         <section className={styles["profile-section"]}>
-          <h3 className={styles["profile-section-title"]}>{t("bio")}</h3>
-          <p className={styles["profile-section-content"]}>
-            {activeChat?.bio || t("noBioAvailable")}
-          </p>
-        </section>
-        <section className={styles["profile-section"]}>
           {!isGroupChat ? (
             <>
+              <h3 className={styles["profile-section-title"]}>{t("bio")}</h3>
+              <p className={styles["profile-section-content"]}>
+                {activeChat?.bio || t("noBioAvailable")}
+              </p>
               <h3 className={styles["profile-section-title"]}>
                 {t("memberSince")}
               </h3>
@@ -405,6 +415,7 @@ export default function ContactInfo({
             </>
           ) : (
             <>
+              <h3 className={styles["profile-section-title"]}>Created At:</h3>
               <p className={styles["profile-section-content"]}>
                 {formattedDate}
               </p>
@@ -416,9 +427,10 @@ export default function ContactInfo({
       {!isGroupChat && (
         <>
           <h1 className={styles.attachmentsTitle}>{t("attachments")}</h1>
+
           {attachments.length > 0 ? (
             <div className={styles.picturesGrid}>
-              {attachments.map((attachment) => (
+              {visibleAttachments.map((attachment) => (
                 <div
                   key={attachment.attachmentId}
                   className={styles.pictureItem}
@@ -439,6 +451,16 @@ export default function ContactInfo({
             </div>
           ) : (
             <p className={styles.noAttachments}>{t("noAttachments")}</p>
+          )}
+          {attachments.length > 9 && (
+            <div className={styles.showMoreButtonHolder}>
+              <button
+                className={styles.showMoreButton}
+                onClick={() => setShowAllAttachments(!showAllAttachments)}
+              >
+                {showAllAttachments ? t("showLess") : t("showMore")}
+              </button>
+            </div>
           )}
         </>
       )}

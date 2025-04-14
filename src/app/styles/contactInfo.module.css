@@ -315,14 +315,14 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 5px;
   cursor: pointer;
   transition: transform 0.2s ease;
   aspect-ratio: 1;
 }
 
 .pictureItem:hover {
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 .picture {
@@ -433,4 +433,27 @@
 .imageSize {
   font-size: 0.9rem;
   color: #666;
+}
+
+.showMoreButtonHolder{
+  display: flex;
+  justify-content: center;
+  align-self: center;
+}
+
+.showMoreButton {
+  margin: 30px 0 30px 0;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  background: none;
+  border: 2px solid var(--dark_purple);
+  color: white;
+}
+
+.showMoreButton:hover {
+  background-color: var(--dark_purple);
 }
