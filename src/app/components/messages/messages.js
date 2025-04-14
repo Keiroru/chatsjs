@@ -35,10 +35,10 @@ export default function Messages({
   editMessage,
   setBlock,
   block,
-  fetchConversationId,
   conversationId,
   setFriends,
   rightPanelOpen,
+  canChat,
 }) {
   const { t } = useTranslation();
   const messageEnd = useRef(null);
@@ -457,10 +457,10 @@ export default function Messages({
             className={styles["messages-container"]}
           >
             {!activeChat ? (
-              <div className={styles.emptyChat}>{t("selectacontact")}</div>
-            ) : conversationId === null ? (
+              <div className={styles.emptyChat}>{t("selectsomeone")}</div>
+            ) : canChat === false && userData.isLookingForFriends === 0 ? (
               <div className={styles.emptyChat}>
-                You are not friends with this user
+                You are not not looking for friends, cant send new messages
               </div>
             ) : messages.length > 0 ? (
               messages.map((message) => {
@@ -629,7 +629,7 @@ export default function Messages({
               })
             ) : (
               <div className={styles.emptyChat}>
-                {activeChat ? t("noMessagesYet") : t("selectsomeone")}
+                {t("noMessagesYet")}
               </div>
             )}
 
@@ -698,22 +698,24 @@ export default function Messages({
               <div className={styles.blocked}>{t("blockedBy")}</div>
             ) : activeChat.isDeleted === 1 ? (
               <div className={styles.blocked}>{t("userDeleted")}</div>
-            ) : userData.isLookingForFriends === 1 ? (
-              <Input
-                activeChat={activeChat}
-                userData={userData}
-                conversationId={conversationId}
-                ref={inputRef}
-                replyTo={replyTo}
-                setreplyTo={setreplyTo}
-                editMessage={editMessage}
-                setEditMessage={setEditMessage}
-                setMessages={setMessages}
-                formatMessageTime={formatMessageTime}
-                setFriends={setFriends}
-                attachment={attachment}
-                setAttachment={setAttachment}
-              />
+            ) : userData.isLookingForFriends === 0 ? (
+              canChat === true && (
+                <Input
+                  activeChat={activeChat}
+                  userData={userData}
+                  conversationId={conversationId}
+                  ref={inputRef}
+                  replyTo={replyTo}
+                  setreplyTo={setreplyTo}
+                  editMessage={editMessage}
+                  setEditMessage={setEditMessage}
+                  setMessages={setMessages}
+                  formatMessageTime={formatMessageTime}
+                  setFriends={setFriends}
+                  attachment={attachment}
+                  setAttachment={setAttachment}
+                />
+              )
             ) : (
               <Input
                 activeChat={activeChat}

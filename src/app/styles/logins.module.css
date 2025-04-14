@@ -6,10 +6,12 @@
 }
 
 .loginsTitle {
-  text-align: center;
+  font-size: 28px;
+  font-weight: 600;
   margin-bottom: 20px;
-  font-size: 2rem;
-  color: #333;
+  color: var(--off-white);
+  border-bottom: 1px solid var(--dark_blue);
+  padding-bottom: 10px;
 }
 
 .loginsSection {
@@ -17,8 +19,8 @@
 }
 
 .loginSectionTitle {
-  font-size: 1.5rem;
-  color: #555;
+  font-size: 1.2rem;
+  color: var(--medium-slate);
   margin-bottom: 10px;
 }
 
@@ -31,13 +33,13 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 10px;
-  background-color: #f4f4f4;
-  padding: 10px;
+  background-color: var(--rich-black);
+  padding: 15px;
 }
 
 .gridHeader {
   font-weight: bold;
-  color: #333;
+  color: var(--off-white);
 }
 
 .reportItem {
@@ -45,39 +47,38 @@
   grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 10px;
   padding: 10px;
-  background-color: #fff;
-  border-bottom: 1px solid #ddd;
+  background-color: var(--charcoal);
+  border-bottom: 1px solid var(--dark_purple);
 }
 
 .gridCell {
   font-size: 0.9rem;
-  color: #333;
+  color: var(--off-white);
   margin: 0 5px 0 5px;
 }
 
 .loggedIn {
-  color: green;
+  color: var(--dark_green);
 }
 
 .loggedOut {
-  color: red;
+  color: var(--error_red);
 }
 
 .expandButton {
   cursor: pointer;
   display: flex;
-
   align-items: center;
 }
 
 .expandIcon {
   font-size: 1.2rem;
-  color: #333;
+  color: var(--off-white);
 }
 
 .expandedDetails {
   padding: 10px;
-  background-color: #f9f9f9;
+  background-color: var(--medium-slate);
   margin-top: 10px;
   border-radius: 8px;
   grid-column: 1 / -1;
@@ -95,12 +96,15 @@
 
 .thisSession {
   margin: auto;
-  color: green;
+  color: var(--li);
   margin-bottom: 5px;
+  background-color: var(--dark_green);
+  padding: 3px;
+  border-radius: 10px;
 }
 
 .detailsValue {
-  color: #555;
+  color: var(--off-white);
 }
 
 /* Mobile Styles */

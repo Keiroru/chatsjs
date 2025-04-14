@@ -24,6 +24,7 @@ export default function ChatClient({ userData }) {
   const [addFriendTabOpen, setAddFriendTabOpen] = useState(false);
   const [acceptRequestTabOpen, setAcceptRequestTabOpen] = useState(false);
   const [isGroupChat, setIsGroupChat] = useState(false);
+  const [canChat, setCanChat] = useState(false);
   const [refresh, setRefresh] = useState(0);
   const [friends, setFriends] = useState([]);
   const [messages, setMessages] = useState([]);
@@ -353,6 +354,7 @@ export default function ChatClient({ userData }) {
           activeTab={activeTab}
           setActiveTab={setActiveTab}
           block={block}
+          setCanChat={setCanChat}
         />
 
         {activeTab === "groups" && (
@@ -405,6 +407,7 @@ export default function ChatClient({ userData }) {
         fetchConversationId={fetchConversationId}
         conversationId={conversationId}
         setFriends={setFriends}
+        canChat={canChat}
       />
 
       <aside
