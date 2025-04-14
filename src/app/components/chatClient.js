@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, act } from "react";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "@/app/styles/chat.module.css";
@@ -39,9 +39,9 @@ export default function ChatClient({ userData }) {
 
   const formattedDate = activeChat?.createdAt
     ? new Date(activeChat.createdAt)
-      .toISOString()
-      .split("T")[0]
-      .replace(/-/g, ".")
+        .toISOString()
+        .split("T")[0]
+        .replace(/-/g, ".")
     : "No contact selected";
 
   const fetchConversationId = useCallback(async () => {
@@ -76,16 +76,24 @@ export default function ChatClient({ userData }) {
           }),
         });
         const data = await response.json();
+        console.log("conversationId:", data);
 
         if (response.ok) {
           setConversationId(data.conversationId);
-          socket.emit("join_conversation", { conversationId: data.conversationId, userId: userData.userId });
+          socket.emit("join_conversation", {
+            conversationId: data.conversationId,
+            userId: userData.userId,
+          });
+          socket.emit("otherJoin_conversation", {
+            conversationId: data.conversationId,
+            userId: activeChat.userId,
+          });
         }
       }
     } catch (error) {
       console.error("Error fetching conversationId:", error);
     }
-  }, [activeChat, userData]);
+  }, [activeChat]);
 
   const fetchAllConversations = async () => {
     const response = await fetch("/api/messages/getAllConversation", {
@@ -155,10 +163,10 @@ export default function ChatClient({ userData }) {
         oldFriends.map((friend) =>
           friend.userId === userId
             ? {
-              ...friend,
-              status,
-              isOnline: status === "online",
-            }
+                ...friend,
+                status,
+                isOnline: status === "online",
+              }
             : friend
         )
       );
@@ -287,12 +295,14 @@ export default function ChatClient({ userData }) {
 
   return (
     <div
-      className={`${styles["chat-container"]} ${isMobile ? styles["mobile"] : ""
-        } ${rightPanelOpen ? styles["right-open"] : ""}`}
+      className={`${styles["chat-container"]} ${
+        isMobile ? styles["mobile"] : ""
+      } ${rightPanelOpen ? styles["right-open"] : ""}`}
     >
       <aside
-        className={`${styles["sidebar"]} ${styles["left-sidebar"]} ${leftPanelOpen ? styles["open"] : styles["closed"]
-          }`}
+        className={`${styles["sidebar"]} ${styles["left-sidebar"]} ${
+          leftPanelOpen ? styles["open"] : styles["closed"]
+        }`}
       >
         <header className={styles["sidebar-header"]}>
           <div className={styles["user-info"]}>
@@ -398,8 +408,9 @@ export default function ChatClient({ userData }) {
       />
 
       <aside
-        className={`${styles["sidebar"]} ${styles["right-sidebar"]} ${rightPanelOpen ? styles["open"] : ""
-          }`}
+        className={`${styles["sidebar"]} ${styles["right-sidebar"]} ${
+          rightPanelOpen ? styles["open"] : ""
+        }`}
       >
         <ContactInfo
           setRightPanelOpen={setRightPanelOpen}

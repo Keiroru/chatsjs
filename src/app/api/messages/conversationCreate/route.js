@@ -27,23 +27,6 @@ export async function POST(request) {
         });
       }
 
-      const [existingConversation] = await connection.execute(
-        `SELECT conversations.conversationId 
-         FROM conversations 
-         JOIN conversationusers cu1 ON conversations.conversationId = cu1.conversationId
-         JOIN conversationusers cu2 ON conversations.conversationId = cu2.conversationId
-         WHERE cu1.userId = ? AND cu2.userId = ? AND conversations.isGroupChat = 0
-         LIMIT 1`,
-        [userId1, userId2]
-      );
-
-      if (existingConversation.length > 0) {
-        await connection.end();
-        return NextResponse.json({
-          conversationId: existingConversation[0].conversationId,
-        });
-      }
-
       const [user1] = await connection.execute(
         `SELECT displayName FROM users WHERE userId = ?`,
         [userId1]
@@ -56,6 +39,24 @@ export async function POST(request) {
       const user1Name = user1[0].displayName;
       const user2Name = user2[0].displayName;
       const conversationName = `${user1Name} and ${user2Name}`;
+
+      const [existingConversation] = await connection.execute(
+        `
+        SELECT conversationName
+        from conversations
+        where conversationName = ?
+        or conversationName = ?        
+        `,
+        [conversationName, user2Name + " and " + user1Name]
+      );
+
+      console.log(existingConversation);
+      if (existingConversation.length > 0) {
+        await connection.end();
+        return NextResponse.json({
+          conversationId: existingConversation[0].conversationId,
+        });
+      }
 
       const [result] = await connection.execute(
         `INSERT INTO conversations (conversationName, isGroupChat) VALUES (?, ?)`,

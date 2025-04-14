@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import http from "http";
 import dotenv from "dotenv";
 import { Server } from "socket.io";
-import { getConnection } from './src/lib/db.js';
+import { getConnection } from "./src/lib/db.js";
 
 dotenv.config();
 
@@ -37,6 +37,21 @@ io.on("connection", (socket) => {
     socket.join(conversationId);
   });
 
+  socket.on("otherJoin_conversation", ({ conversationId, userId }) => {
+    const recipientSocket = connectedUsers[userId]?.socketId;
+    if (recipientSocket) {
+      const socketInstance = io.sockets.sockets.get(recipientSocket);
+      if (socketInstance) {
+        socketInstance.join(conversationId);
+        console.log(`User ${userId} joined conversation ${conversationId}`);
+      } else {
+        console.log(`Socket instance not found for userId: ${userId}`);
+      }
+    } else {
+      console.log(`Recipient socket not found for userId: ${userId}`);
+    }
+  });
+
   socket.on("joinAll_conversations", (data) => {
     data.forEach((conversationId) => {
       socket.join(conversationId);
@@ -55,7 +70,9 @@ io.on("connection", (socket) => {
   socket.on("message_seen", (data) => {
     const { messageId, conversationId, senderId } = data;
 
-    socket.to(conversationId).emit("message_seen", { messageId, conversationId, senderId });
+    socket
+      .to(conversationId)
+      .emit("message_seen", { messageId, conversationId, senderId });
   });
 
   socket.on("message_state_update", (data) => {
@@ -65,14 +82,13 @@ io.on("connection", (socket) => {
       messageId,
       conversationId,
       state,
-      senderId
+      senderId,
     });
   });
 
   socket.on("delete_message", (data) => {
     socket.to(data.conversationId).emit("delete", data);
   });
-
 
   socket.on("friend_request", (data) => {
     const recipientSocket = connectedUsers[data.receiverUserId]?.socketId;

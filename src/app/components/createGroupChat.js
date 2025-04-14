@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { useSocket } from "@/lib/socket";
 const profilePicture = "/public/images/user-icon-placeholder.png";
 
 export default function CreateGroupChat({
@@ -15,6 +16,7 @@ export default function CreateGroupChat({
   const [friends, setFriends] = useState([]);
   const [selectedFriends, setSelectedFriends] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const socket = useSocket();
   const [filteredPeople, setFilteredPeople] = useState([]);
 
   useEffect(() => {
@@ -72,10 +74,13 @@ export default function CreateGroupChat({
         }),
       });
 
+      const response = await res.json();
+
+      socket.emit();
+
       if (!res.ok) {
         throw new Error("Failed to create group chat");
       }
-      // const response = await res.json();
 
       handleContinueTab();
       handleNewTab();
