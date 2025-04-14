@@ -4,7 +4,6 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useSocket } from "@/lib/socket";
-const profilePicture = "/public/images/user-icon-placeholder.png";
 
 export default function CreateGroupChat({
   userData,
@@ -75,8 +74,15 @@ export default function CreateGroupChat({
       });
 
       const response = await res.json();
+      console.log("Group chat created:", response);
 
-      socket.emit();
+      socket.emit("create_group_chat", { conversationId: response.conversationId, userIds: allUsers });
+      socket.emit("show_group_chat", {
+        userIds: allUsers,
+        conversationName: groupChatName,
+        conversationId: response.conversationId,
+        createdAt: response.createdAt,
+      });
 
       if (!res.ok) {
         throw new Error("Failed to create group chat");
@@ -185,11 +191,10 @@ export default function CreateGroupChat({
                 {filteredPeople.map((friend) => (
                   <button
                     key={friend.userId}
-                    className={`${styles.friendItem} ${
-                      selectedFriends.some((f) => f.userId === friend.userId)
-                        ? styles.active
-                        : ""
-                    }`}
+                    className={`${styles.friendItem} ${selectedFriends.some((f) => f.userId === friend.userId)
+                      ? styles.active
+                      : ""
+                      }`}
                     onClick={() => toggleFriendSelection(friend)}
                   >
                     <Image

@@ -55,8 +55,48 @@ io.on("connection", (socket) => {
   socket.on("joinAll_conversations", (data) => {
     data.forEach((conversationId) => {
       socket.join(conversationId);
-      console.log("joined conversation", conversationId);
     });
+  });
+
+  socket.on("create_group_chat", (data) => {
+    const { conversationId, userIds } = data;
+    socket.join(conversationId);
+
+    if (Array.isArray(userIds)) {
+      userIds.forEach((userId) => {
+        const receiverSocket = connectedUsers[userId]?.socketId;
+        if (receiverSocket) {
+          const socketInstance = io.sockets.sockets.get(receiverSocket);
+          if (socketInstance) {
+            socketInstance.join(conversationId);
+          } else {
+            console.log(`user ${userId} is offline no further action needed`);
+          }
+        }
+      });
+    }
+  });
+
+  socket.on("show_group_chat", (data) => {
+    const { userIds, conversationName, conversationId, createdAt } = data;
+
+    if (Array.isArray(userIds)) {
+      userIds.forEach((userId) => {
+        const receiverSocket = connectedUsers[userId]?.socketId;
+        if (receiverSocket) {
+          const socketInstance = io.sockets.sockets.get(receiverSocket);
+          if (socketInstance) {
+            socketInstance.emit("render_group_chat", {
+              conversationName: conversationName,
+              conversationId: conversationId,
+              createdAt: createdAt
+            });
+          } else {
+            console.log(`user ${userId} is offline no further action needed`);
+          }
+        }
+      });
+    }
   });
 
   socket.on("leave_conversation", ({ conversationId }) => {

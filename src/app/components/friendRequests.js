@@ -12,6 +12,7 @@ export default function FriendRequests({
   friendRequests,
   fetchFriendRequests,
   setFriends,
+  activeTab,
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const Socket = useSocket();
@@ -58,15 +59,13 @@ export default function FriendRequests({
       const responseData = await response.json();
 
       const conversationId = await createConversation(responseData.sender.userId, responseData.receiver.userId);
-      console.log("conversationId", conversationId);
-
       Socket.emit("join_conversation", { conversationId: conversationId });
 
       fetchFriendRequests();
 
-      setFriends((prev) => [...prev, responseData.sender]);
-
-
+      if (activeTab === "friends") {
+        setFriends((prev) => [...prev, responseData.sender]);
+      }
 
       Socket.emit("accept_request", {
         sender: responseData.sender,

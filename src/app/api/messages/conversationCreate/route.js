@@ -72,9 +72,16 @@ export async function POST(request) {
         [userId2, result.insertId]
       );
 
+      const [conversation] = await connection.execute(
+        `SELECT * FROM conversations WHERE conversationId = ?`,
+        [result.insertId]
+      );
+
       await connection.end();
       return NextResponse.json({
         conversationId: result.insertId,
+        conversationName: conversation[0].conversationName,
+        createdAt: conversation[0].createdAt,
       });
     } catch (error) {
       console.error("Conversation error:", error);
