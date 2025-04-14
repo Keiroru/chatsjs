@@ -1,23 +1,78 @@
 .footer {
-    background-color: var(--light_black);
-    padding: 1rem 0;
-    margin-top: auto;
-    text-align: center;
+  background: linear-gradient(to right, var(--rich-black), var(--charcoal));
+  padding: 1rem 1rem;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .container {
-    margin: 0 auto;
-    padding: 0 15px;
+  margin: 0 auto;
+  padding: 0 15px;
 }
 
 .link {
-    color: var(--off-white);
-    text-decoration: none;
-    margin: 0 15px;
-    transition: color 0.3s ease;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
 }
 
 .link:hover {
-    color: var(--light-lavender);
-    text-decoration: none;
+  color: var(--off-white);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 0.5rem 0;
+}
+
+.footerText {
+  color: var(--off-white);
+  font-size: 1.3rem;
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.footer p {
+  color: var(--off-white);
+  font-size: 1.3rem;
+}
+
+.footerLinks {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.footerLinks a {
+  color: var(--off-white);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 0.5rem 0;
+}
+
+.footerLinks a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(
+    to right,
+    var(--dark_purple),
+    var(--light_purple)
+  );
+  transition: width 0.3s ease;
+}
+
+.footerLinks a:hover {
+  color: var(--light_purple);
+}
+
+.footerLinks a:hover::after {
+  width: 100%;
 }
