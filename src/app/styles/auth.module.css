@@ -105,6 +105,13 @@
   padding: 0 0 30px 0;
 }
 
+.backButton {
+  color: #fff;
+  text-decoration: "none";
+  display: "inline-flex";
+  align-items: "center";
+}
+
 .input {
   background: none;
   display: block;
@@ -193,6 +200,12 @@
   transform-origin: bottom left;
 }
 
+.small {
+  margin-top: -5px;
+  padding-top: 0;
+  font-size: 12px;
+}
+
 .errorMessage {
   color: var(--error_red);
   font-weight: 700;
@@ -239,5 +252,9 @@
 
   .link {
     padding-top: 0;
+  }
+
+  .input {
+    height: 23120px;
   }
 }

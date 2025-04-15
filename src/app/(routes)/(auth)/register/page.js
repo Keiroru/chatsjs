@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import styles from '@/app/styles/auth.module.css';
+import styles from "@/app/styles/auth.module.css";
 import { useTranslation } from "@/contexts/TranslationContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 function Register() {
   const router = useRouter();
@@ -85,6 +87,9 @@ function Register() {
 
   return (
     <div className={styles.box}>
+      <a href="/" className={styles.backButton}>
+        <FontAwesomeIcon icon={faArrowLeft} style={{ marginRight: '5px' }} />Home
+      </a>
       <h1>{t("signUp")}</h1>
       <form onSubmit={handleRegister}>
         <input
@@ -109,7 +114,9 @@ function Register() {
           required
           className={styles.input}
         />
-        {errorMap.email && <p className={styles.errorMessage}>{t(errorMap.email)}</p>}
+        {errorMap.email && (
+          <p className={styles.errorMessage}>{t(errorMap.email)}</p>
+        )}
         <input
           type="text"
           id="telephone"
@@ -119,7 +126,9 @@ function Register() {
           onChange={handleChange}
           className={styles.input}
         />
-        {errorMap.telephone && <p className={styles.errorMessage}>{t(errorMap.telephone)}</p>}
+        {errorMap.telephone && (
+          <p className={styles.errorMessage}>{t(errorMap.telephone)}</p>
+        )}
         <input
           type="password"
           id="password"
@@ -146,13 +155,24 @@ function Register() {
         {errorMap.confirmPassword && (
           <p className={styles.errorMessage}>{t(errorMap.confirmPassword)}</p>
         )}
-        <p className={styles.required}>
-          * {t("required")}
-        </p>
-        <input type="submit" value={t("signUp")} className={styles.submitButton} />
+        <p className={styles.required}>* {t("required")}</p>
+        <input
+          type="submit"
+          value={t("signUp")}
+          className={styles.submitButton}
+        />
       </form>
+      <p className={`${styles.link} ${styles.small}`}>
+        By signing up you agree to our{" "}
+        <a href="/login" className={`${styles.authLink} ${styles.small}`}>
+          Terms of service
+        </a>
+      </p>
       <p className={styles.link}>
-        {t("haveAccount")} <a href="/login" className={styles.authLink}>{t("loginHere")}</a>
+        {t("haveAccount")}{" "}
+        <a href="/login" className={styles.authLink}>
+          {t("loginHere")}
+        </a>
       </p>
     </div>
   );

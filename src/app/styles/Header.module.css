@@ -16,7 +16,7 @@
     font-weight: 600;
     text-decoration: none;
     color: var(--off-white);
-    background: linear-gradient(90deg, var(--dark_purple), var(--light_purple));
+    background: linear-gradient(90deg, var(--light_purple), var(--lighter_purple));
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import styles from "@/app/styles/page.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faComments, faLock, faUserFriends, faGlobe } from "@fortawesome/free-solid-svg-icons";
+import { faComments, faPeopleGroup, faUserFriends, faGlobe } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "@/contexts/TranslationContext";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
@@ -58,9 +58,9 @@ export default function Home() {
             <p>{t("realTimeChatSubtitle")}</p>
           </div>
           <div className={styles.featureCard}>
-            <FontAwesomeIcon icon={faLock} className={styles.featureIcon} />
-            <h3>{t("secureChats")}</h3>
-            <p>{t("secureChatsSubtitle")}</p>
+            <FontAwesomeIcon icon={faPeopleGroup} className={styles.featureIcon} />
+            <h3>{t("connectWithPeople")}</h3>
+            <p>{t("connectWithPeopleSubtitle")}</p>
           </div>
           <div className={styles.featureCard}>
             <FontAwesomeIcon icon={faGlobe} className={styles.featureIcon} />
