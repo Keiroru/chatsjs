@@ -1,9 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import style from "@/app/styles/account.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSave } from "@fortawesome/free-solid-svg-icons";
+import {
+  faSave,
+  faCamera,
+  faXmark,
+  faX,
+} from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "@/contexts/TranslationContext";
 
 export default function Report({ userData }) {
@@ -13,6 +18,22 @@ export default function Report({ userData }) {
     desc: "",
   });
   const [reports, setReports] = useState([]);
+  const fileInputRef = useRef(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    console.log(file);
+
+    setSelectedFile(file);
+    console.log(selectedFile);
+  };
+
+  const handleUploadButtonClick = () => {
+    fileInputRef.current?.click();
+  };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -25,19 +46,45 @@ export default function Report({ userData }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (reportForm.title.trim().length < 4) {
-      alert("Title is to short");
+      alert(t("titleAlert"));
       return;
     }
     if (reportForm.desc.trim().length < 10) {
-      alert("Description is too short");
+      alert(t("descriptionAlert"));
       return;
     }
 
-    setReports((prevReports) => [...prevReports, {
-      header: reportForm.title,
-      description: reportForm.desc.trim(),
-      isClosed: 0,
-    }]);
+    setReports((prevReports) => [
+      ...prevReports,
+      {
+        header: reportForm.title,
+        description: reportForm.desc.trim(),
+        isClosed: 0,
+      },
+    ]);
+
+    let imageUrl = null;
+
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append("image", selectedFile);
+
+      const response = await fetch(
+        `https://api.imgbb.com/1/upload?key=f739728c1d1aad2703d94f56d8af260b`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        imageUrl = data.data.display_url || data.data.url;
+      } else {
+        throw new Error(data.error?.message || "Upload failed");
+      }
+    }
 
     try {
       const response = await fetch("/api/profile/bugReport", {
@@ -49,10 +96,21 @@ export default function Report({ userData }) {
           title: reportForm.title,
           desc: reportForm.desc.trim(),
           senderId: userData.userId,
+          attachmentType: selectedFile?.type,
+          attachmentName: selectedFile?.name,
+          attachmentPath: imageUrl,
+          attachmentSize: selectedFile?.size,
         }),
       });
       if (response.ok) {
-        alert("Report submitted successfully!");
+        alert(t("reportSentAlert"));
+
+        setReportForm({
+          title: "",
+          desc: "",
+        });
+
+        setSelectedFile(null);
       }
     } catch (error) {
       console.error(error);
@@ -60,7 +118,9 @@ export default function Report({ userData }) {
   };
 
   const fetchReports = async () => {
-    const response = await fetch(`/api/profile/getReports?userId=${userData.userId}`);
+    const response = await fetch(
+      `/api/profile/getReports?userId=${userData.userId}`
+    );
     if (response.ok) {
       const data = await response.json();
       setReports(data.result);
@@ -76,9 +136,7 @@ export default function Report({ userData }) {
   return (
     <div className={style.accountContainer}>
       <h1 className={style.accountTitle}>{t("bugReport")}</h1>
-      <p className={style.accountDescription}>
-        {t("bugReportDescription")}
-      </p>
+      <p className={style.accountDescription}>{t("bugReportDescription")}</p>
 
       <div className={style.accountSection}>
         <h2 className={style.accountSectionTitle}>{t("reportDetails")}</h2>
@@ -118,6 +176,42 @@ export default function Report({ userData }) {
             />
             <div className={style.charCount}>{reportForm.desc.length}/1024</div>
           </div>
+
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            accept="image/*"
+            style={{ display: "none" }}
+          />
+
+          <label htmlFor="desc" className={style.fieldLabel}>
+            {t("attachmentDescription")}
+          </label>
+          <button
+            type="button"
+            className={style.defaultButton}
+            onClick={handleUploadButtonClick}
+            style={{backgroundColor:"rgb(99, 0, 129)"}}
+          >
+            <FontAwesomeIcon icon={faCamera} />
+          </button>
+
+          {selectedFile && (
+            <div className={style.selectedFileContainer}>
+              <div className={style.selectedFileInfo}>
+                {t("selected")}: {selectedFile.name}
+              </div>
+              <button
+                type="button"
+                className={style.closeButton}
+                onClick={() => setSelectedFile(null)}
+              >
+                <FontAwesomeIcon icon={faXmark} />
+              </button>
+            </div>
+          )}
+          <div className={style.charCount}>{selectedFile ? 1 : 0}/1</div>
 
           <div className={style.formActions}>
             <button type="submit" className={style.defaultButton}>

@@ -4,12 +4,14 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useSocket } from "@/lib/socket";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 export default function CreateGroupChat({
   userData,
   groupChatName,
   setGroupChatName,
 }) {
+  const { t } = useTranslation();
   const [newTabOpen, setNewTabOpen] = useState(false);
   const [continueTabOpen, setContinueTabOpen] = useState(false);
   const [friends, setFriends] = useState([]);
@@ -77,7 +79,6 @@ export default function CreateGroupChat({
       });
 
       const response = await res.json();
-      console.log("Group chat created:", response);
 
       socket.emit("create_group_chat", { conversationId: response.conversationId, userIds: allUsers });
       socket.emit("show_group_chat", {
@@ -126,7 +127,7 @@ export default function CreateGroupChat({
     <div className={styles.container}>
       {!newTabOpen ? (
         <button onClick={handleNewTab} className={styles.goButton}>
-          Create a new group
+          {t("createGroupChat")}
         </button>
       ) : (
         <>
@@ -134,14 +135,14 @@ export default function CreateGroupChat({
             onClick={handleNewTab}
             className={`${styles.backButton} ${styles.closeButton}`}
           >
-            Close
+            {t("back")}
           </button>
           <div>
             <div className={styles.createField}>
               <input
                 type="text"
                 maxLength="20"
-                placeholder="Group chat name"
+                placeholder={t("groupName")}
                 aria-label="groupChat"
                 onChange={(e) => setGroupChatName(e.target.value)}
                 className={styles.inputName}
@@ -152,7 +153,7 @@ export default function CreateGroupChat({
               className={styles.goButton}
               disabled={!groupChatName || !groupChatName.trim()}
             >
-              Continue
+             {t("continue")}
             </button>
           </div>
         </>
@@ -165,17 +166,17 @@ export default function CreateGroupChat({
           >
             <div className={styles.wrapper}>
               <p>
-                Create new group chat as{" "}
+              {t("createGroupAs")}{" "}
                 <span className={styles.groupChatName}>{groupChatName}</span>
               </p>
               <div className={styles.searchContainer}>
                 <div className={styles.searchInput}>
                   <input
                     type="text"
-                    placeholder="Search someone"
+                    placeholder={t("search")}
                     value={searchQuery}
                     onChange={handleSearch}
-                    aria-label="Search someone"
+                    aria-label={t("search")}
                     className={styles.searchField}
                   />
                   <FontAwesomeIcon
@@ -185,7 +186,7 @@ export default function CreateGroupChat({
                 </div>
               </div>
               <span className={styles.infotext}>
-                Select friends to join your group chat
+              {t("selectSomeone")}
               </span>
               <div className={styles.friendsList}>
                 {filteredPeople.map((friend) => (
@@ -221,10 +222,10 @@ export default function CreateGroupChat({
                   onClick={handleContinueTab}
                   className={styles.backButton}
                 >
-                  Back
+                  {t("back")}
                 </button>
                 <button onClick={createGroupChat} className={styles.goButton}>
-                  Create
+                {t("create")}
                 </button>
               </div>
             </div>

@@ -398,10 +398,10 @@ export default function PeopleList({
         <div className={styles.searchInput}>
           <input
             type="text"
-            placeholder="Search someone"
+            placeholder={t("search")}
             value={searchQuery}
             onChange={handleSearch}
-            aria-label="Search someone"
+            aria-label={t("search")}
             className={styles.searchField}
           />
           {isLoading ? null : (
@@ -441,7 +441,7 @@ export default function PeopleList({
         className={styles.friendsList}
       >
         {isLoading ? (
-          <div className={styles.loadingSpinner}>Loading friends...</div>
+          <div className={styles.loadingSpinner}>Loading...</div>
         ) : error ? (
           <div className={styles.errorMessage}>Error: {error}</div>
         ) : filteredPeople.length > 0 ? (
@@ -489,7 +489,7 @@ export default function PeopleList({
                     <p className={styles.lastMessage}>
                       {person.lastMessage === "deletedMessage"
                         ? t("deletedMessage")
-                        : person.lastMessage || "No messages yet"}
+                        : person.lastMessage || t("noMessages")}
                     </p>
                     {person.lastMessageAt && (
                       <span className={styles.messageTime}>
@@ -538,7 +538,7 @@ export default function PeopleList({
                   <p className={styles.lastMessage}>
                     {group.lastMessage === "deletedMessage"
                       ? t("deletedMessage")
-                      : group.lastMessage || "No messages yet"}
+                      : group.lastMessage || t("noMessages")}
                   </p>
                   {group.lastMessageAt && (
                     <span className={styles.messageTime}>
@@ -596,7 +596,7 @@ export default function PeopleList({
                     <p className={styles.lastMessage}>
                       {friend.lastMessage === "deletedMessage"
                         ? t("deletedMessage")
-                        : friend.lastMessage || "No messages yet"}
+                        : friend.lastMessage || t("noMessages")}
                     </p>
                     {friend.lastMessageAt && (
                       <span className={styles.messageTime}>
@@ -619,8 +619,8 @@ export default function PeopleList({
         ) : (
           <div className={styles.noFriends}>
             {activeTab === "groups"
-              ? "No group chats found"
-              : "No friends found"}
+              ? t("noGroups")
+              : t("noFriends")}
           </div>
         )}
 

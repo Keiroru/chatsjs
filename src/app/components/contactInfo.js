@@ -362,7 +362,7 @@ export default function ContactInfo({
         >
           <FontAwesomeIcon icon={faTimes} />
         </button>
-        {!isGroupChat ? <h2>Chat Info</h2> : <h2>Group Chat Info</h2>}
+        {!isGroupChat ? <h2>{t("chatInfo")}</h2> : <h2>{t("groupChatInfo")}</h2>}
       </header>
 
       <div className={styles["contact-profile-container"]}>
@@ -415,7 +415,7 @@ export default function ContactInfo({
             </>
           ) : (
             <>
-              <h3 className={styles["profile-section-title"]}>Created At:</h3>
+              <h3 className={styles["profile-section-title"]}>{t("createdAt")}:</h3>
               <p className={styles["profile-section-content"]}>
                 {formattedDate}
               </p>
@@ -518,7 +518,7 @@ export default function ContactInfo({
                 placeholder={t("search")}
                 value={searchQuery}
                 onChange={handleSearch}
-                aria-label="Search someone"
+                aria-label={t("search")}
                 className={styles.searchField}
               />
               <FontAwesomeIcon icon={faSearch} className={styles.searchIcon} />
@@ -598,7 +598,7 @@ export default function ContactInfo({
               {t("pushButton")}
             </button>
             <button className={styles.backButton} onClick={leaveGroupChat}>
-              Leave Group Chat
+              {t("leaveGroup")}
             </button>
           </div>
           {addFriendsTab && (
@@ -609,19 +609,19 @@ export default function ContactInfo({
               >
                 <div className={styles2.wrapper}>
                   <p>
-                    Add friends to{" "}
+                    {t("addFriendsTo")}{" "}
                     <span className={styles2.groupChatName}>
-                      {activeChat.groupChatName}
+                      {activeChat.conversationName}
                     </span>
                   </p>
                   <div className={styles2.searchContainer}>
                     <div className={styles2.searchInput}>
                       <input
                         type="text"
-                        placeholder="Search someone"
+                        placeholder={t("search")}
                         value={searchQuery2}
                         onChange={handleSearch2}
-                        aria-label="Search someone"
+                        aria-label={t("search")}
                         className={styles2.searchField}
                       />
                       <FontAwesomeIcon
@@ -630,9 +630,7 @@ export default function ContactInfo({
                       />
                     </div>
                   </div>
-                  <span className={styles2.infotext}>
-                    Select friends to join your group chat
-                  </span>
+                  <span className={styles2.infotext}>{t("selectSomeone")}</span>
                   <div className={styles2.friendsList}>
                     {filteredPeople2.map((friend) => (
                       <button
@@ -672,13 +670,13 @@ export default function ContactInfo({
                       onClick={handleAddFriends}
                       className={styles2.backButton}
                     >
-                      Back
+                     {t("close")}
                     </button>
                     <button
                       onClick={addFriendsPost}
                       className={styles2.goButton}
                     >
-                      Add
+                      {t("add")}
                     </button>
                   </div>
                 </div>

@@ -579,6 +579,33 @@
   text-align: left;
 }
 
+.selectedFileContainer{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+.selectedFileContainer .selectedFileInfo{
+  margin-top: 0;
+}
+
+.closeButton{
+  background-color: var(--error_red);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 7px 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover{
+  background-color: #ff2929;
+  transform: translateY(-2px);
+}
+
 @media (max-width: 1150px) {
   .accountGrid {
     grid-template-columns: 1fr;

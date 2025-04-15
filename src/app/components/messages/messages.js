@@ -396,9 +396,9 @@ export default function Messages({
       body: JSON.stringify({ messageId: message.messageId }),
     });
     if (response.ok) {
-      alert("Message reported successfully");
+      alert(t("messageReportAlert"));
     } else {
-      alert("Failed to report message");
+      alert(t("messageReportAlertError"));
     }
   };
 

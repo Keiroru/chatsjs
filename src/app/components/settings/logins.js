@@ -111,25 +111,25 @@ export default function Logins({ userData }) {
                       )}
 
                       <div className={style.detailsRow}>
-                        <div className={style.detailsLabel}>Location:</div>
+                        <div className={style.detailsLabel}>{t("location")}:</div>
                         <div className={style.detailsValue}>
                           {login.location}
                         </div>
                       </div>
                       <div className={style.detailsRow}>
-                        <div className={style.detailsLabel}>IP Address:</div>
+                        <div className={style.detailsLabel}>{t("ipAddress")}:</div>
                         <div className={style.detailsValue}>
                           {login.ipAddress}
                         </div>
                       </div>
                       <div className={style.detailsRow}>
-                        <div className={style.detailsLabel}>Device Type:</div>
+                        <div className={style.detailsLabel}>{t("deviceType")}:</div>
                         <div className={style.detailsValue}>
                           {login.deviceType}
                         </div>
                       </div>
                       <div className={style.detailsRow}>
-                        <div className={style.detailsLabel}>Device Name:</div>
+                        <div className={style.detailsLabel}>{t("deviceName")}:</div>
                         <div className={style.detailsValue}>
                           {login.deviceName}
                         </div>

@@ -110,6 +110,11 @@
   text-decoration: none;
   display: inline-flex;
   align-items: center;
+  transition: all 0.2s ease;
+}
+
+.backButton:hover{
+  color: var(--light_purple);
 }
 
 .input {

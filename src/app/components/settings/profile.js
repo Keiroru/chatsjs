@@ -168,7 +168,7 @@ export default function Profile({ userData }) {
 
             {selectedFile && (
               <div className={style.selectedFileInfo}>
-                Selected: {selectedFile.name}
+                {t("selected")}: {selectedFile.name}
               </div>
             )}
 
