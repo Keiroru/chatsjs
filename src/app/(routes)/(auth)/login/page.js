@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "@/app/styles/auth.module.css";
 import { useTranslation } from "@/contexts/TranslationContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 export default function Login() {
   const { t } = useTranslation();
@@ -51,6 +53,15 @@ export default function Login() {
 
   return (
     <div className={styles.box}>
+      <div style={{ width: "100%", display: "flex", alignItems: "flex-start" }}>
+        <a href="/" className={styles.backButton}>
+          <FontAwesomeIcon
+            icon={faArrowLeft}
+            style={{ marginRight: "5px", width: "1em", height: "1em" }}
+          />
+          Home
+        </a>
+      </div>
       <h1>{t("login")}</h1>
       {error && <p className={styles.errorMessage}>{t(error)}</p>}
       <form onSubmit={handleSubmit}>
@@ -70,10 +81,17 @@ export default function Login() {
           value={formData.password}
           onChange={handleChange}
         />
-        <input type="submit" value={t("login")} className={styles.submitButton} />
+        <input
+          type="submit"
+          value={t("login")}
+          className={styles.submitButton}
+        />
       </form>
       <div className={styles.link}>
-        {t("dontHaveAccount")} <a href="/register" className={styles.authLink}>{t("signUpHere")}</a>
+        {t("dontHaveAccount")}{" "}
+        <a href="/register" className={styles.authLink}>
+          {t("signUpHere")}
+        </a>
       </div>
     </div>
   );

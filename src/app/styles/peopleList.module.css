@@ -55,7 +55,7 @@
 }
 
 .tabButton:hover {
-  background: var(--lighter_black);
+  background: var(--charcoal);
 }
 
 .tabButton.active {
@@ -86,7 +86,7 @@
 }
 
 .friendItem:hover {
-  background: var(--lighter_black);
+  background: var(--charcoal);
 }
 
 .friendItem.active {

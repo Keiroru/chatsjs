@@ -20,6 +20,8 @@
   "privacy": "Adatvédelmi irányelvek",
   "contact": "Kapcsolatfelvétel",
   "signUp": "Regisztráció",
+  "bySigningUp": "A regisztrációval elfogadod a",
+  "back": "Vissza",
   "displayName": "Megjelenített név",
   "email": "E-mail",
   "telephone": "Telefonszám",
@@ -211,5 +213,15 @@
   "ppChildrenTitle": "7. Gyermekek adatvédelme",
   "ppChildren": "A ChatJS nem 14 év alatti felhasználók számára készült. Tudatosan nem gyűjtünk adatokat gyermekektől. Ha úgy gondolja, hogy egy gyermek személyes adatokat adott meg számunkra, kérjük, azonnal vegye fel velünk a kapcsolatot.",
   "ppChangesTitle": "8. Ezen irányelvek változásai",
-  "ppChanges": "Időről időre frissíthetjük ezt az Adatvédelmi irányelvet. Ha jelentős változtatásokat eszközölünk, értesítjük Önt az alkalmazáson belül vagy e-mailben. A Szolgáltatás további használata a változások után az új irányelvek elfogadását jelenti."
+  "ppChanges": "Időről időre frissíthetjük ezt az Adatvédelmi irányelvet. Ha jelentős változtatásokat eszközölünk, értesítjük Önt az alkalmazáson belül vagy e-mailben. A Szolgáltatás további használata a változások után az új irányelvek elfogadását jelenti.",
+  "browser": "Böngésző",
+  "loginDate": "Bejelentkezés Ideje",
+  "status": "Státusz",
+  "moreInfo": "Több",
+  "logoutDate": "Kijelentkezés ideje",
+  "currentlyActive": "Jelenleg aktív eszköz",
+  "location": "Location",
+  "ipAddress": "IP address",
+  "deviceType": "Device type",
+  "deviceName": "Device name"
 }

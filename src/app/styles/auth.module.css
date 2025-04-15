@@ -107,9 +107,9 @@
 
 .backButton {
   color: #fff;
-  text-decoration: "none";
-  display: "inline-flex";
-  align-items: "center";
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
 }
 
 .input {
@@ -236,7 +236,7 @@
   }
 }
 
-@media (max-height: 700px) {
+@media (max-height: 800px) {
   .box {
     padding: 0;
   }
@@ -255,6 +255,14 @@
   }
 
   .input {
-    height: 23120px;
+    height: 45px;
+  }
+
+  .backButton{
+    margin-top: 10px;
+  }
+
+  .small{
+    margin-top: 10px;
   }
 }

@@ -20,6 +20,8 @@
   "privacy": "Privacy Policy",
   "contact": "Contact Us",
   "signUp": "Sign Up",
+  "back": "Home",
+  "bySigningUp": "By signing up you agree to our",
   "displayName": "Display Name",
   "email": "Email",
   "telephone": "Phone Number",
@@ -211,5 +213,15 @@
   "ppChildrenTitle": "7. Children's Privacy",
   "ppChildren": "ChatJS is not intended for users under the age of 14. We do not knowingly collect data from children. If you believe a child has provided us with personal information, please contact us immediately.",
   "ppChangesTitle": "8. Changes to This Policy",
-  "ppChanges": "We may update this Privacy Policy from time to time. If we make significant changes, we will notify you within the app or via email. Continued use of the Service after changes indicates your acceptance of the new policy."
+  "ppChanges": "We may update this Privacy Policy from time to time. If we make significant changes, we will notify you within the app or via email. Continued use of the Service after changes indicates your acceptance of the new policy.",
+  "browser": "Browser",
+  "loginDate": "Login Date",
+  "status": "Status",
+  "moreInfo": "More Info",
+  "logoutDate": "Logout date",
+  "currentlyActive": "Currently Active Device",
+  "location": "Location",
+  "ipAddress": "IP address",
+  "deviceType": "Device type",
+  "deviceName": "Device name"
 }

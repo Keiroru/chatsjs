@@ -87,9 +87,15 @@ function Register() {
 
   return (
     <div className={styles.box}>
-      <a href="/" className={styles.backButton}>
-        <FontAwesomeIcon icon={faArrowLeft} style={{ marginRight: '5px' }} />Home
-      </a>
+      <div style={{ width: "100%", display: "flex", alignItems: "flex-start" }}>
+        <a href="/" className={styles.backButton}>
+          <FontAwesomeIcon
+            icon={faArrowLeft}
+            style={{ marginRight: "5px", width: "1em", height: "1em" }}
+          />
+          {t("back")}
+        </a>
+      </div>
       <h1>{t("signUp")}</h1>
       <form onSubmit={handleRegister}>
         <input
@@ -163,9 +169,13 @@ function Register() {
         />
       </form>
       <p className={`${styles.link} ${styles.small}`}>
-        By signing up you agree to our{" "}
-        <a href="/login" className={`${styles.authLink} ${styles.small}`}>
-          Terms of service
+        {t("bySigningUp")}{" "}
+        <a
+          href="/tos"
+          target="_blank"
+          className={`${styles.authLink} ${styles.small}`}
+        >
+          {t("terms")}
         </a>
       </p>
       <p className={styles.link}>

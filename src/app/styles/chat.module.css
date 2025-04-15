@@ -19,7 +19,7 @@
 
 .left-sidebar {
   grid-area: left-sidebar;
-  border-right: 1px solid var(--dark_purple);
+  border-right: 2px solid var(--dark_purple);
   width: 300px;
   overflow: hidden;
 }

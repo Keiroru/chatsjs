@@ -59,6 +59,9 @@ export default function CreateGroupChat({
       allUsers.push(friend.userId);
     });
 
+    handleContinueTab();
+    handleNewTab();
+
     try {
       const res = await fetch(`/api/messages/conversationCreate`, {
         method: "POST",
@@ -87,9 +90,6 @@ export default function CreateGroupChat({
       if (!res.ok) {
         throw new Error("Failed to create group chat");
       }
-
-      handleContinueTab();
-      handleNewTab();
     } catch (error) {
       console.error(error);
     }

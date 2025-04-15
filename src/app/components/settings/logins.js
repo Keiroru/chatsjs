@@ -54,10 +54,10 @@ export default function Logins({ userData }) {
           {logins.length > 0 && (
             <>
               <div className={style.gridContainer}>
-                <div className={style.gridHeader}>Browser</div>
-                <div className={style.gridHeader}>Login Date</div>
-                <div className={style.gridHeader}>Status</div>
-                <div className={style.gridHeader}>More Info</div>
+                <div className={style.gridHeader}>{t("browser")}</div>
+                <div className={style.gridHeader}>{t("loginDate")}</div>
+                <div className={style.gridHeader}>{t("status")}</div>
+                <div className={style.gridHeader}>{t("moreInfo")}</div>
               </div>
               {logins.map((login, index) => (
                 <div
@@ -78,7 +78,7 @@ export default function Logins({ userData }) {
                           : style.loggedOut
                       }
                     >
-                      {login.isLoggedIn === 1 ? "Online" : "Offline"}
+                      {login.isLoggedIn === 1 ? t("online") : t("offline")}
                     </span>
                   </div>
                   <div className={style.gridCell}>
@@ -96,7 +96,7 @@ export default function Logins({ userData }) {
                     <div className={style.expandedDetails}>
                       {login.logoutDate !== null && (
                         <div className={style.detailsRow}>
-                          <div className={style.detailsLabel}>Logout Date:</div>
+                          <div className={style.detailsLabel}>{t("logoutdate")}:</div>
                           <div className={style.detailsValue}>
                             {formatDate(login.logoutDate)}
                           </div>
@@ -105,7 +105,7 @@ export default function Logins({ userData }) {
                       {Number(login.loginId) === Number(loginId) && (
                         <div className={style.detailsRow}>
                           <div className={`${style.detailsLabel} ${style.thisSession}`}>
-                            Currently Active Device
+                          {t("currentlyActive")}
                           </div>
                         </div>
                       )}
