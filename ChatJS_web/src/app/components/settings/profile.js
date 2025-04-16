@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import Image from "next/image";
 import style from "@/app/styles/account.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCamera, faSave } from "@fortawesome/free-solid-svg-icons";
+import { faCamera, faSave, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "@/contexts/TranslationContext";
 
 export default function Profile({ userData }) {
@@ -22,6 +22,17 @@ export default function Profile({ userData }) {
   const fileInputRef = useRef(null);
   const formRef = useRef(null);
   const { t } = useTranslation();
+
+  const handleCancelAttachment = () => {
+    if (localPreviewUrl) {
+      URL.revokeObjectURL(localPreviewUrl);
+    }
+    setLocalPreviewUrl(null);
+    setSelectedFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null;
+    }
+  };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -130,9 +141,7 @@ export default function Profile({ userData }) {
   return (
     <div className={style.accountContainer}>
       <h1 className={style.accountTitle}>{t("editProfile")}</h1>
-      <p className={style.accountDescription}>
-        {t("profileText")}
-      </p>
+      <p className={style.accountDescription}>{t("profileText")}</p>
 
       <div className={style.accountSection}>
         <h2 className={style.accountSectionTitle}>{t("profileInformation")}</h2>
@@ -167,12 +176,27 @@ export default function Profile({ userData }) {
             </button>
 
             {selectedFile && (
-              <div className={style.selectedFileInfo}>
-                {t("selected")}: {selectedFile.name}
+              <div className={style.selectedFileContainer}>
+                <div className={style.selectedFileInfo}>
+                  {t("selected")}: {selectedFile.name}
+                </div>
+                <button
+                  type="button"
+                  className={style.closeButton}
+                  onClick={() => {
+                    setSelectedFile(null);
+                    setLocalPreviewUrl(null);
+                    handleCancelAttachment();
+                  }}
+                >
+                  <FontAwesomeIcon icon={faXmark} />
+                </button>
               </div>
             )}
 
-            {uploadError && <div className={style.errorText}>{uploadError}</div>}
+            {uploadError && (
+              <div className={style.errorText}>{uploadError}</div>
+            )}
 
             {isUploading && (
               <div className={style.progressBar}>

@@ -9,9 +9,10 @@ export async function POST(request) {
 
     try {
       if (groupChatName) {
+        const decodedGroup = decodeURIComponent(groupChatName);
         const [result] = await connection.execute(
           `INSERT INTO conversations (conversationName, isGroupChat) VALUES (?, ?)`,
-          [groupChatName, 1]
+          [decodedGroup, 1]
         );
 
         otherUsers.forEach((user, index) => {

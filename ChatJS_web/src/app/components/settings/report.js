@@ -28,6 +28,13 @@ export default function Report({ userData }) {
     setSelectedFile(file);
   };
 
+  const handleCancelAttachment = () => {
+    setSelectedFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null;
+    }
+  };
+
   const handleUploadButtonClick = () => {
     fileInputRef.current?.click();
   };
@@ -202,7 +209,10 @@ export default function Report({ userData }) {
               <button
                 type="button"
                 className={style.closeButton}
-                onClick={() => setSelectedFile(null)}
+                onClick={() => {
+                  setSelectedFile(null);
+                  handleCancelAttachment();
+                }}
               >
                 <FontAwesomeIcon icon={faXmark} />
               </button>
