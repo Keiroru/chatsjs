@@ -33,7 +33,7 @@ namespace chatjs_gui
 
             while (db.Reader.Read())
             {
-                usernameText.Text = $"Currently logged in as {db.Reader.GetString("displayName")} #{db.Reader.GetString("displayId")}";
+                usernameText.Text = $"{db.Reader.GetString("displayName")} #{db.Reader.GetString("displayId")}";
             }
 
             db.EndConnection();

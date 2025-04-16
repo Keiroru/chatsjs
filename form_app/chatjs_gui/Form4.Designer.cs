@@ -41,6 +41,7 @@
             groupBox1 = new GroupBox();
             closedTicketsRadioButton = new RadioButton();
             refreshButton = new Button();
+            openImageButton = new Button();
             ((System.ComponentModel.ISupportInitialize)reportsDataGrid).BeginInit();
             groupBox1.SuspendLayout();
             SuspendLayout();
@@ -121,7 +122,7 @@
             // doneButton
             // 
             doneButton.BackColor = Color.Green;
-            doneButton.Location = new Point(792, 417);
+            doneButton.Location = new Point(636, 417);
             doneButton.Name = "doneButton";
             doneButton.Size = new Size(134, 49);
             doneButton.TabIndex = 6;
@@ -175,11 +176,25 @@
             refreshButton.UseVisualStyleBackColor = false;
             refreshButton.Click += refreshButton_Click;
             // 
+            // openImageButton
+            // 
+            openImageButton.BackColor = Color.FromArgb(255, 128, 0);
+            openImageButton.Location = new Point(953, 387);
+            openImageButton.Margin = new Padding(3, 2, 3, 2);
+            openImageButton.Name = "openImageButton";
+            openImageButton.Size = new Size(117, 37);
+            openImageButton.TabIndex = 20;
+            openImageButton.Text = "Open Image";
+            openImageButton.UseVisualStyleBackColor = false;
+            openImageButton.Visible = false;
+            openImageButton.Click += openImageButton_Click;
+            // 
             // Form4
             // 
             AutoScaleMode = AutoScaleMode.None;
             BackColor = Color.FromArgb(64, 64, 64);
             ClientSize = new Size(1121, 501);
+            Controls.Add(openImageButton);
             Controls.Add(refreshButton);
             Controls.Add(groupBox1);
             Controls.Add(doneButton);
@@ -189,6 +204,8 @@
             Controls.Add(reportsDataGrid);
             Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             ForeColor = Color.White;
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
             Name = "Form4";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Reported Bugs";
@@ -213,5 +230,6 @@
         private DataGridViewTextBoxColumn bugReportName;
         private DataGridViewTextBoxColumn bugReportId;
         private Button refreshButton;
+        private Button openImageButton;
     }
 }

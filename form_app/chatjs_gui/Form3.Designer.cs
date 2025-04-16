@@ -38,6 +38,7 @@
             isBanned = new DataGridViewTextBoxColumn();
             backButton = new Button();
             controlsGroupBox = new GroupBox();
+            moreInfoButton = new Button();
             banButton = new Button();
             siteAdminButton = new Button();
             label1 = new Label();
@@ -126,6 +127,7 @@
             // 
             // controlsGroupBox
             // 
+            controlsGroupBox.Controls.Add(moreInfoButton);
             controlsGroupBox.Controls.Add(banButton);
             controlsGroupBox.Controls.Add(siteAdminButton);
             controlsGroupBox.Location = new Point(242, 328);
@@ -133,13 +135,23 @@
             controlsGroupBox.Size = new Size(532, 100);
             controlsGroupBox.TabIndex = 3;
             controlsGroupBox.TabStop = false;
-            controlsGroupBox.Text = "User Controls";
             controlsGroupBox.Visible = false;
+            // 
+            // moreInfoButton
+            // 
+            moreInfoButton.BackColor = Color.Green;
+            moreInfoButton.Location = new Point(21, 30);
+            moreInfoButton.Name = "moreInfoButton";
+            moreInfoButton.Size = new Size(134, 49);
+            moreInfoButton.TabIndex = 10;
+            moreInfoButton.Text = "More information";
+            moreInfoButton.UseVisualStyleBackColor = false;
+            moreInfoButton.Click += moreInfoButton_Click;
             // 
             // banButton
             // 
-            banButton.BackColor = Color.Navy;
-            banButton.Location = new Point(344, 30);
+            banButton.BackColor = Color.Red;
+            banButton.Location = new Point(369, 30);
             banButton.Name = "banButton";
             banButton.Size = new Size(134, 49);
             banButton.TabIndex = 9;
@@ -150,7 +162,7 @@
             // siteAdminButton
             // 
             siteAdminButton.BackColor = Color.Navy;
-            siteAdminButton.Location = new Point(56, 30);
+            siteAdminButton.Location = new Point(197, 30);
             siteAdminButton.Name = "siteAdminButton";
             siteAdminButton.Size = new Size(134, 49);
             siteAdminButton.TabIndex = 8;
@@ -223,6 +235,8 @@
             Controls.Add(usersDataGrid);
             Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             ForeColor = Color.White;
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
             Name = "Form3";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Users Panel";
@@ -250,5 +264,6 @@
         private Button banButton;
         private Button siteAdminButton;
         private Button andOrButton;
+        private Button moreInfoButton;
     }
 }

@@ -1,69 +1,14 @@
-adatkezelési tájékoztató és felhasználási feltételek
-bug report menu -- ongoing
 rendes szerveren való futtatás
 képek normális lekezelése
 end to end ecryption - ha lesz idő
-attachment upload
-reject friend request rework
-blocked people
-block user from using site
-message state (delivered, seen)
 forgot password
 better message loading
-new message notification
-better styling -- ongoing
 call function
-group chat set admin
 group chat profile pic, 
-admin can add and delete users, make others admin, change name and [delete others messages]?
 shift enter
 event notification popup
-better settings menu
-not looking for friends no message send
 adjust database: group chat icon and bio
-újra struktúrálás
+
 
 
 NINCS GONDOLKOZÁS!!!
-
-Adatkezelési Tájékoztató
-Bevezetés Az adatkezelési tájékoztató célja, hogy tájékoztassa felhasználóinkat az adataik gyűjtéséről, felhasználásáról és védelméről. Az Ön adatainak biztonsága a legfontosabb számunkra, ezért minden adatkezelési tevékenységünket az adatvédelmi törvényeknek megfelelően végezzük.
-
-Milyen adatokat gyűjtünk?
-
-Teljes név
-
-E-mail cím
-
-IP-cím
-
-Böngészési adatok
-
-Az adatkezelés céljai:
-
-A felhasználói élmény javítása.
-
-Hírlevelek és promóciók küldése (beleegyezés alapján).
-
-Technikai problémák elhárítása.
-
-Adatvédelem Az adatokat szigorúan bizalmasan kezeljük, és csak harmadik féllel osztjuk meg, ha az elengedhetetlen az oldal működéséhez (pl. fizetési szolgáltatók).
-
-Felhasználási Feltételek
-1. Általános feltételek Az oldal használatával Ön elfogadja az itt megfogalmazott szabályokat. Kérjük, figyelmesen olvassa el!
-
-2. Felhasználói fiók
-
-A regisztrációhoz érvényes e-mail cím szükséges.
-
-A felhasználók felelősséget vállalnak a fiókjuk biztonságáért.
-
-3. Tiltott tevékenységek
-
-Tilos az oldal bármely részének másolása vagy módosítása.
-
-Tilos törvénytelen tartalmak közzététele vagy terjesztése.
-
-4. Szolgáltatások elérhetősége Az oldal üzemeltetői fenntartják a jogot arra, hogy előzetes értesítés nélkül módosítsák vagy megszüntessék a szolgáltatások elérhetőségét.
-
-5. Felelősségkorlátozás Az oldal üzemeltetői nem vállalnak felelősséget technikai hibákból vagy harmadik felek tevékenységéből eredő károkért.

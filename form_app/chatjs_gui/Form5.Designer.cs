@@ -33,22 +33,22 @@
             messageText = new RichTextBox();
             backButton = new Button();
             reportsDataGrid = new DataGridView();
-            dateText = new Label();
-            banUserButton = new Button();
-            deleteMessageButton = new Button();
             displayName = new DataGridViewTextBoxColumn();
             displayId = new DataGridViewTextBoxColumn();
             reportedMessageId = new DataGridViewTextBoxColumn();
+            dateText = new Label();
+            banUserButton = new Button();
+            deleteMessageButton = new Button();
             ((System.ComponentModel.ISupportInitialize)reportsDataGrid).BeginInit();
             SuspendLayout();
             // 
             // refreshButton
             // 
             refreshButton.BackColor = Color.FromArgb(0, 0, 64);
-            refreshButton.Location = new Point(320, 330);
+            refreshButton.Location = new Point(304, 330);
             refreshButton.Margin = new Padding(3, 2, 3, 2);
             refreshButton.Name = "refreshButton";
-            refreshButton.Size = new Size(85, 37);
+            refreshButton.Size = new Size(101, 50);
             refreshButton.TabIndex = 16;
             refreshButton.Text = "Refresh";
             refreshButton.UseVisualStyleBackColor = false;
@@ -83,7 +83,7 @@
             backButton.Location = new Point(32, 330);
             backButton.Margin = new Padding(3, 2, 3, 2);
             backButton.Name = "backButton";
-            backButton.Size = new Size(117, 37);
+            backButton.Size = new Size(114, 50);
             backButton.TabIndex = 11;
             backButton.Text = "Go Back";
             backButton.UseVisualStyleBackColor = false;
@@ -104,6 +104,30 @@
             reportsDataGrid.TabIndex = 10;
             reportsDataGrid.CellClick += reportsDataGrid_CellClick;
             reportsDataGrid.CellContentClick += reportsDataGrid_CellContentClick;
+            // 
+            // displayName
+            // 
+            displayName.HeaderText = "Display Name";
+            displayName.MinimumWidth = 6;
+            displayName.Name = "displayName";
+            displayName.ReadOnly = true;
+            displayName.Width = 200;
+            // 
+            // displayId
+            // 
+            displayId.HeaderText = "Display ID";
+            displayId.MinimumWidth = 6;
+            displayId.Name = "displayId";
+            displayId.ReadOnly = true;
+            displayId.Width = 60;
+            // 
+            // reportedMessageId
+            // 
+            reportedMessageId.HeaderText = "ID";
+            reportedMessageId.MinimumWidth = 6;
+            reportedMessageId.Name = "reportedMessageId";
+            reportedMessageId.ReadOnly = true;
+            reportedMessageId.Width = 60;
             // 
             // dateText
             // 
@@ -142,30 +166,6 @@
             deleteMessageButton.Visible = false;
             deleteMessageButton.Click += deleteMessageButton_Click;
             // 
-            // displayName
-            // 
-            displayName.HeaderText = "Display Name";
-            displayName.MinimumWidth = 6;
-            displayName.Name = "displayName";
-            displayName.ReadOnly = true;
-            displayName.Width = 200;
-            // 
-            // displayId
-            // 
-            displayId.HeaderText = "Display ID";
-            displayId.MinimumWidth = 6;
-            displayId.Name = "displayId";
-            displayId.ReadOnly = true;
-            displayId.Width = 60;
-            // 
-            // reportedMessageId
-            // 
-            reportedMessageId.HeaderText = "ID";
-            reportedMessageId.MinimumWidth = 6;
-            reportedMessageId.Name = "reportedMessageId";
-            reportedMessageId.ReadOnly = true;
-            reportedMessageId.Width = 60;
-            // 
             // Form5
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -182,6 +182,8 @@
             Controls.Add(reportsDataGrid);
             Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             ForeColor = Color.White;
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
             Name = "Form5";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Reported Messages";

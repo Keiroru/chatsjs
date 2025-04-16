@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -49,7 +50,7 @@ namespace chatjs_gui
 
         private void usersDataGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            
+
         }
 
         private void usersDataGrid_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -181,6 +182,12 @@ namespace chatjs_gui
             }
 
             nameInputField_TextChanged(sender, e);
+        }
+
+        private void moreInfoButton_Click(object sender, EventArgs e)
+        {
+            Form6 form6 = new Form6(userId);
+            form6.ShowDialog();
         }
     }
 }

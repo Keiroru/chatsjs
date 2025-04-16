@@ -118,3 +118,6 @@ C:\Users\vigh.noel\Documents\GitHub\chatsjs\form_app\chatjs_gui\obj\Debug\net8.0
 C:\Users\vigh.noel\Documents\GitHub\chatsjs\form_app\chatjs_gui\obj\Debug\net8.0-windows\chatjs_gui.pdb
 C:\Users\vigh.noel\Documents\GitHub\chatsjs\form_app\chatjs_gui\obj\Debug\net8.0-windows\chatjs_gui.genruntimeconfig.cache
 C:\Users\vigh.noel\Documents\GitHub\chatsjs\form_app\chatjs_gui\obj\Debug\net8.0-windows\ref\chatjs_gui.dll
+C:\Users\Trixep11\Desktop\chatsjs\form_app\chatjs_gui\obj\Debug\net8.0-windows\chatjs_gui.ImageViewerForm.resources
+C:\Users\Trixep11\Desktop\chatsjs\form_app\chatjs_gui\obj\Debug\net8.0-windows\chatjs_gui.Properties.Resources.resources
+C:\Users\Trixep11\Desktop\chatsjs\form_app\chatjs_gui\obj\Debug\net8.0-windows\chatjs_gui.Form6.resources

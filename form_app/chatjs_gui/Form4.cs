@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -51,6 +52,7 @@ namespace chatjs_gui
 
             titleText.Visible = false;
             doneButton.Visible = false;
+            openImageButton.Visible = false;
             descriptionText.Text = "";
             prewRow = null;
         }
@@ -66,16 +68,25 @@ namespace chatjs_gui
             reportsDataGrid.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Yellow;
             prewRow = e;
 
-            string sql = $"select header, description from bugreports where bugreportId = {reportId}";
+            string sql = $"select header, description, attachmentId from bugreports where bugreportId = {reportId}";
 
             string title = "";
             string description = "";
+            string attachmentId = "";
 
             Database db = new Database(sql);
             while (db.Reader.Read())
             {
                 title = db.Reader.GetString("header");
                 description = db.Reader.GetString("description");
+                if (!db.Reader.IsDBNull(db.Reader.GetOrdinal("attachmentId")))
+                {
+                    attachmentId = db.Reader.GetInt32("attachmentId").ToString();
+                }
+                else
+                {
+                    attachmentId = "";
+                }
             }
             db.EndConnection();
 
@@ -83,6 +94,14 @@ namespace chatjs_gui
             descriptionText.Text = description;
 
             doneButton.Text = isClosedTickets ? "Re-open" : "Mark as done";
+            if(attachmentId == null || attachmentId == "")
+            {
+                openImageButton.Visible = false;
+            }
+            else
+            {
+                openImageButton.Visible = true;
+            }
 
             titleText.Visible = true;
             doneButton.Visible = true;
@@ -126,7 +145,24 @@ namespace chatjs_gui
 
         private void reportsDataGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-           
+
+        }
+
+        private void openImageButton_Click(object sender, EventArgs e)
+        {
+            string sql = $"select filePath from attachment JOIN bugreports ON bugreports.attachmentId = attachment.attachmentId" +
+                $" where bugreportId = {reportId}";
+            string url = "";
+
+            Database db = new Database(sql);
+            while (db.Reader.Read())
+            {
+                url = db.Reader.GetString("filePath");
+            }
+            db.EndConnection();
+
+            var viewer = new ImageViewerForm(url);
+            viewer.Show();
         }
     }
 }

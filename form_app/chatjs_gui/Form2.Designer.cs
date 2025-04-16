@@ -34,21 +34,23 @@
             goToUsersButton = new Button();
             goToBugReportsButton = new Button();
             reportedMessagesButton = new Button();
+            label1 = new Label();
             SuspendLayout();
             // 
             // usernameText
             // 
             usernameText.AutoSize = true;
-            usernameText.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            usernameText.Location = new Point(85, 48);
+            usernameText.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            usernameText.ForeColor = Color.White;
+            usernameText.Location = new Point(85, 129);
             usernameText.Name = "usernameText";
-            usernameText.Size = new Size(57, 21);
+            usernameText.Size = new Size(65, 25);
             usernameText.TabIndex = 0;
             usernameText.Text = "label1";
             // 
             // exitButton
             // 
-            exitButton.BackColor = Color.FromArgb(64, 0, 64);
+            exitButton.BackColor = Color.Red;
             exitButton.Location = new Point(85, 322);
             exitButton.Name = "exitButton";
             exitButton.Size = new Size(134, 49);
@@ -70,7 +72,7 @@
             // 
             // goToUsersButton
             // 
-            goToUsersButton.BackColor = Color.Navy;
+            goToUsersButton.BackColor = Color.FromArgb(0, 0, 192);
             goToUsersButton.Location = new Point(512, 60);
             goToUsersButton.Name = "goToUsersButton";
             goToUsersButton.Size = new Size(188, 70);
@@ -81,7 +83,7 @@
             // 
             // goToBugReportsButton
             // 
-            goToBugReportsButton.BackColor = Color.Navy;
+            goToBugReportsButton.BackColor = Color.FromArgb(0, 0, 192);
             goToBugReportsButton.Location = new Point(512, 182);
             goToBugReportsButton.Name = "goToBugReportsButton";
             goToBugReportsButton.Size = new Size(188, 70);
@@ -92,7 +94,7 @@
             // 
             // reportedMessagesButton
             // 
-            reportedMessagesButton.BackColor = Color.Navy;
+            reportedMessagesButton.BackColor = Color.FromArgb(0, 0, 192);
             reportedMessagesButton.Location = new Point(512, 306);
             reportedMessagesButton.Name = "reportedMessagesButton";
             reportedMessagesButton.Size = new Size(188, 70);
@@ -101,12 +103,24 @@
             reportedMessagesButton.UseVisualStyleBackColor = false;
             reportedMessagesButton.Click += customSqlButton_Click;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            label1.ForeColor = Color.FromArgb(224, 224, 224);
+            label1.Location = new Point(85, 83);
+            label1.Name = "label1";
+            label1.Size = new Size(178, 21);
+            label1.TabIndex = 6;
+            label1.Text = "Currently logged in as";
+            // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(30, 30, 30);
             ClientSize = new Size(800, 450);
+            Controls.Add(label1);
             Controls.Add(reportedMessagesButton);
             Controls.Add(goToBugReportsButton);
             Controls.Add(goToUsersButton);
@@ -115,6 +129,8 @@
             Controls.Add(usernameText);
             Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             ForeColor = Color.White;
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
             Name = "Form2";
             StartPosition = FormStartPosition.CenterParent;
             Text = "ChatJS Admin Panel";
@@ -131,5 +147,6 @@
         private Button goToUsersButton;
         private Button goToBugReportsButton;
         private Button reportedMessagesButton;
+        private Label label1;
     }
 }

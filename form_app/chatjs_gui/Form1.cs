@@ -8,8 +8,6 @@ namespace chatjs_gui
         {
             InitializeComponent();
             this.AcceptButton = loginButton;
-            usernameInputField.Text = "trixep11@gmail.com";
-            passwordInputField.Text = "Trixep11";
         }
 
         private void loginButton_Click(object sender, EventArgs e)
@@ -68,6 +66,11 @@ namespace chatjs_gui
         private void loginForm_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }
