@@ -41,14 +41,13 @@ export default function ChatClient({ userData }) {
 
   const formattedDate = activeChat?.createdAt
     ? new Date(activeChat.createdAt)
-      .toISOString()
-      .split("T")[0]
-      .replace(/-/g, ".")
+        .toISOString()
+        .split("T")[0]
+        .replace(/-/g, ".")
     : "No contact selected";
 
   const fetchConversationId = useCallback(async () => {
     try {
-      console.log("fetching conversationId:", activeChat, isGroupChat);
       const response = await fetch("/api/messages/conversationGet", {
         method: "POST",
         headers: {
@@ -78,8 +77,6 @@ export default function ChatClient({ userData }) {
           }),
         });
         const data = await response.json();
-        console.log("conversationId:", data);
-
         if (response.ok) {
           setConversationId(data.conversationId);
           socket.emit("join_conversation", {
@@ -121,7 +118,10 @@ export default function ChatClient({ userData }) {
       method: "POST",
     });
     if (res.ok) {
-      console.log("Unload successful");
+      socket.emit("user_status", {
+        userId: userData.userId,
+        status: "offline",
+      });
     } else {
       console.error("Unload failed");
     }
@@ -134,7 +134,6 @@ export default function ChatClient({ userData }) {
         method: "POST",
       });
       if (res.ok) {
-        console.log("Load successful");
         socket.emit("user_status", {
           userId: userData.userId,
           status: "online",
@@ -165,10 +164,10 @@ export default function ChatClient({ userData }) {
         oldFriends.map((friend) =>
           friend.userId === userId
             ? {
-              ...friend,
-              status,
-              isOnline: status === "online",
-            }
+                ...friend,
+                status,
+                isOnline: status === "online",
+              }
             : friend
         )
       );
@@ -297,12 +296,14 @@ export default function ChatClient({ userData }) {
 
   return (
     <div
-      className={`${styles["chat-container"]} ${isMobile ? styles["mobile"] : ""
-        } ${rightPanelOpen ? styles["right-open"] : ""}`}
+      className={`${styles["chat-container"]} ${
+        isMobile ? styles["mobile"] : ""
+      } ${rightPanelOpen ? styles["right-open"] : ""}`}
     >
       <aside
-        className={`${styles["sidebar"]} ${styles["left-sidebar"]} ${leftPanelOpen ? styles["open"] : styles["closed"]
-          }`}
+        className={`${styles["sidebar"]} ${styles["left-sidebar"]} ${
+          leftPanelOpen ? styles["open"] : styles["closed"]
+        }`}
       >
         <header className={styles["sidebar-header"]}>
           <div className={styles["user-info"]}>
@@ -412,8 +413,9 @@ export default function ChatClient({ userData }) {
       />
 
       <aside
-        className={`${styles["sidebar"]} ${styles["right-sidebar"]} ${rightPanelOpen ? styles["open"] : ""
-          }`}
+        className={`${styles["sidebar"]} ${styles["right-sidebar"]} ${
+          rightPanelOpen ? styles["open"] : ""
+        }`}
       >
         <ContactInfo
           setRightPanelOpen={setRightPanelOpen}

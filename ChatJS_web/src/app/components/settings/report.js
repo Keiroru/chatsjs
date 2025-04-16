@@ -25,10 +25,7 @@ export default function Report({ userData }) {
     const file = e.target.files[0];
     if (!file) return;
 
-    console.log(file);
-
     setSelectedFile(file);
-    console.log(selectedFile);
   };
 
   const handleUploadButtonClick = () => {
@@ -192,7 +189,7 @@ export default function Report({ userData }) {
             type="button"
             className={style.defaultButton}
             onClick={handleUploadButtonClick}
-            style={{backgroundColor:"rgb(99, 0, 129)"}}
+            style={{ backgroundColor: "rgb(99, 0, 129)" }}
           >
             <FontAwesomeIcon icon={faCamera} />
           </button>

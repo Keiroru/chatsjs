@@ -117,9 +117,7 @@ export default function Messages({
     if (!socket) return;
 
     const handleReceiveMessage = (newMessage) => {
-      console.log("newMessage", newMessage);
       if (newMessage.conversationId === conversationId) {
-        console.log(newMessage);
         const formattedMessage = {
           ...newMessage,
           sentAt: formatMessageTime(newMessage.sentAt),
@@ -309,8 +307,6 @@ export default function Messages({
           return message;
         })
       );
-
-      console.log(`Message ${messageId} deleted successfully.`);
     } catch (error) {
       console.error("Error deleting message:", error);
     }

@@ -78,7 +78,6 @@ export default function ContactInfo({
   useEffect(() => {
     if (!socket) return;
     const handleReceiveMessage = (newMessage) => {
-      console.log(newMessage);
       if (newMessage.attachmentId === null) return;
 
       const attachment = {
@@ -362,7 +361,11 @@ export default function ContactInfo({
         >
           <FontAwesomeIcon icon={faTimes} />
         </button>
-        {!isGroupChat ? <h2>{t("chatInfo")}</h2> : <h2>{t("groupChatInfo")}</h2>}
+        {!isGroupChat ? (
+          <h2>{t("chatInfo")}</h2>
+        ) : (
+          <h2>{t("groupChatInfo")}</h2>
+        )}
       </header>
 
       <div className={styles["contact-profile-container"]}>
@@ -415,7 +418,9 @@ export default function ContactInfo({
             </>
           ) : (
             <>
-              <h3 className={styles["profile-section-title"]}>{t("createdAt")}:</h3>
+              <h3 className={styles["profile-section-title"]}>
+                {t("createdAt")}:
+              </h3>
               <p className={styles["profile-section-content"]}>
                 {formattedDate}
               </p>
@@ -670,7 +675,7 @@ export default function ContactInfo({
                       onClick={handleAddFriends}
                       className={styles2.backButton}
                     >
-                     {t("close")}
+                      {t("close")}
                     </button>
                     <button
                       onClick={addFriendsPost}
